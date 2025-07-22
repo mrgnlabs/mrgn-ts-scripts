@@ -1,0 +1,4 @@
+account-cache.json
+activity-cache.json
+.env*
+node_modules
