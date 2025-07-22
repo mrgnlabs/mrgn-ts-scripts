@@ -1,9 +1,16 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import type { FetchedBank } from "../services/api";
 import { commonSetupBrowser, ReadOnlyWallet } from "../lib/commonSetup";
-import { loadSponsoredOracle } from "../lib/pyth-oracle-helpers";
+import {
+  findPythPushOracleAddress,
+  loadSponsoredOracle,
+} from "../lib/pyth-oracle-helpers";
 import { decodePriceUpdateV2, PriceUpdateV2 } from "../lib/utils_oracle";
 import { PublicKey } from "@solana/web3.js";
+import {
+  PYTH_PUSH_ORACLE_ID,
+  PYTH_SPONSORED_SHARD_ID,
+} from "../types/constants";
 
 interface OracleStatusPageProps {
   programId: string;
@@ -44,27 +51,28 @@ export function OracleStatusPage({
     [programId]
   );
 
-  // On banks change, compute feedMetas (once)
+  // Build feed metadata once
   useEffect(() => {
-    (async () => {
-      const metas: FeedMeta[] = [];
-      for (const b of banks) {
-        const os = (b.bankAcc.config as any).oracleSetup;
-        if ("pythPushOracle" in os) {
-          const sponsored = await loadSponsoredOracle(
-            b.bankAcc.config.oracleKeys[0],
-            connection
-          );
-          metas.push({
+    const metas = banks.flatMap((b) => {
+      const os = (b.bankAcc.config as any).oracleSetup;
+      if ("pythPushOracle" in os) {
+        const pda = findPythPushOracleAddress(
+          b.bankAcc.config.oracleKeys[0].toBuffer(),
+          PYTH_PUSH_ORACLE_ID,
+          PYTH_SPONSORED_SHARD_ID
+        );
+        return [
+          {
             tokenName: b.tokenName,
-            feedPubkey: sponsored.address,
+            feedPubkey: pda,
             maxAge: b.bankAcc.config.oracleMaxAge,
-          });
-        }
+          },
+        ];
       }
-      setFeedMetas(metas);
-    })();
-  }, [banks, connection]);
+      return [];
+    });
+    setFeedMetas(metas);
+  }, [banks]);
 
   // Poll feed data
   useEffect(() => {
@@ -156,8 +164,11 @@ export function OracleStatusPage({
                 </tr>
               </thead>
               <tbody>
-                {feedData.map((d) => (
-                  <tr key={d.feedPubkey} className="hover:bg-gray-50">
+                {feedData.map((d, idx) => (
+                  <tr
+                    key={`${d.feedPubkey}-${idx}`}
+                    className="hover:bg-gray-50"
+                  >
                     <td className="px-3 py-1 border">{d.tokenName}</td>
                     <td className="px-3 py-1 border">
                       {d.price.toLocaleString(undefined, {

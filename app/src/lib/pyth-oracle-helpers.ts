@@ -3,14 +3,14 @@ import { PublicKey, Connection } from "@solana/web3.js";
 import * as borsh from "borsh";
 import { PYTH_PUSH_ORACLE_ID } from "../types/constants";
 
-const PYTH_SPONSORED_SHARD_ID = 0;
-const MARGINFI_SPONSORED_SHARD_ID = 3301;
+export const PYTH_SPONSORED_SHARD_ID = 0;
+export const MARGINFI_SPONSORED_SHARD_ID = 3301;
 
 function feedIdToString(feedId: PublicKey): string {
   return feedId.toBuffer().toString("hex");
 }
 
-function findPythPushOracleAddress(
+export function findPythPushOracleAddress(
   feedId: Buffer,
   programId: PublicKey,
   shardId: number
