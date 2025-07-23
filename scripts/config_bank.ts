@@ -24,7 +24,7 @@ export type Config = {
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  BANK: new PublicKey("FDsf8sj6SoV313qrA91yms3u5b3P4hBxEPvanVs8LtJV"),
+  BANK: new PublicKey("Dj2CwMF3GM7mMT5hcyGXKuYSQ2kQ5zaVCkA1zX1qaTva"),
   ADMIN: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 
   MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
@@ -32,8 +32,8 @@ const config: Config = {
 
 export const bankConfigOpt = () => {
   let bankConfigOpt: BankConfigOptRaw = {
-    assetWeightInit: bigNumberToWrappedI80F48(0.9),
-    assetWeightMaint: bigNumberToWrappedI80F48(0.95),
+    assetWeightInit: null,
+    assetWeightMaint: null,
     liabilityWeightInit: null,
     liabilityWeightMaint: null,
     depositLimit: null,
@@ -43,8 +43,8 @@ export const bankConfigOpt = () => {
     totalAssetValueInitLimit: null,
     interestRateConfig: {
       protocolOriginationFee: null,
-      protocolIrFee: bigNumberToWrappedI80F48(0.06),
-      protocolFixedFeeApr: bigNumberToWrappedI80F48(0.000001),
+      protocolIrFee: null,
+      protocolFixedFeeApr: null,
       insuranceIrFee: null,
       insuranceFeeFixedApr: null,
       maxInterestRate: bigNumberToWrappedI80F48(1.25),
