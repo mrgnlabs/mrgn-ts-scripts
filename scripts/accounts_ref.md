@@ -52,7 +52,6 @@ TODO list of common banks and groups...
 - BONK - 8nEXi1CMFe17mf2AuogyLkDND8vVReJ93m9Gx9TamfBC
 - WIF - DM1d4fE7VYo4gNhYXKv9Bfq1tZ7Sv3kMhs1pSSPBtkmB
 
-
 ## ORACLES
 
 - PY USD (Pyth push) - A52UBHzxnKrH17zjhajRTgHcWwtxN7KYDAzBgraqFxQJ -OR- 9zXQxpYH3kYhtoybmZfUNNCRVuud7fY9jswTg1hLyT8k
@@ -88,8 +87,9 @@ TODO list of common banks and groups...
 - Phantom wallet (H4QMTHMVbJ3KrB5bz573cBBZKoYSZ2B4mSST1JKzPUrH) account - E3uJyxW232EQAVZ9P9V6CFkxzjqqVdbh8XvUmxtZdGUt
 - Staging deploy wallet (mfC1LoEk4mpM5yx1LjwR9QLZQ49AitxxWkK5Aciw7ZC) - F12SjiKaksVMJs7EQ2GBaWHLr5shFRei1seDDwFA2pek
 - zerotrade_admin - 725Z4QQUVhRiXcCdf4cQTrxXYmQXyW9zgVkW5PDVSJz4
-- Liquidation test (H4QMTHMVbJ3KrB5bz573cBBZKoYSZ2B4mSST1JKzPUrH owned)* - A2cNgW5o66rquaiWjnAKkbdimU3x82exrqCvKzzrP1Wy
-- Liquidation test (H4QMTHMVbJ3KrB5bz573cBBZKoYSZ2B4mSST1JKzPUrH owned)* - F7R6gDWoAoPFHtEpudW41MaxzTrpP5E4ghu6pppE7jYF
+- Liquidation test (H4QMTHMVbJ3KrB5bz573cBBZKoYSZ2B4mSST1JKzPUrH owned)\* - A2cNgW5o66rquaiWjnAKkbdimU3x82exrqCvKzzrP1Wy
+- Liquidation test (H4QMTHMVbJ3KrB5bz573cBBZKoYSZ2B4mSST1JKzPUrH owned)\* - F7R6gDWoAoPFHtEpudW41MaxzTrpP5E4ghu6pppE7jYF
+- Transfer test (H4QMTHMVbJ3KrB5bz573cBBZKoYSZ2B4mSST1JKzPUrH owned) - 12W8kr21RZX3tLR8CxZvnqo8fgFirKF3gNhAwSmhsuCg transfered to MS (CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw owned) at 8P6JTEqUW8RWopp1RU4jfbiVbnb9Dzuvtk3Kj6oa3tci
 
 * This account would be liquidated if emode wasn't enabled, but should NOT be eligible to be
   liquidated under mode

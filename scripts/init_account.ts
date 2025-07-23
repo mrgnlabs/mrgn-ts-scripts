@@ -37,7 +37,7 @@ async function main() {
   const connection = user.connection;
 
   const accountKeypair = Keypair.generate();
-  console.log(accountKeypair.publicKey);
+  console.log(accountKeypair.publicKey.toString());
   const transaction = new Transaction();
   transaction.add(
     await program.methods
