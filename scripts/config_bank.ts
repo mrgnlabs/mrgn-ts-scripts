@@ -1,42 +1,39 @@
 import {
-  Connection,
   PublicKey,
   Transaction,
   sendAndConfirmTransaction,
 } from "@solana/web3.js";
-import { Program, AnchorProvider, Wallet, BN } from "@coral-xyz/anchor";
-import { Marginfi } from "../../marginfi-client-v2/src/idl/marginfi-types_0.1.3";
-import marginfiIdl from "../../marginfi-client-v2/src/idl/marginfi_0.1.3.json";
-import { DEFAULT_API_URL, loadEnvFile, loadKeypairFromFile } from "./utils";
+import { BN } from "@coral-xyz/anchor";
 import { bigNumberToWrappedI80F48, WrappedI80F48 } from "@mrgnlabs/mrgn-common";
 import { InterestRateConfigRaw } from "@mrgnlabs/marginfi-client-v2";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
-import { BigNumber } from "bignumber.js";
-import { ReadOnlyWallet } from "../lib/utils";
+import { commonSetup } from "../lib/common-setup";
 
 /**
  * If true, send the tx. If false, output the unsigned b58 tx to console.
  */
-const sendTx = true;
+const sendTx = false;
 
 export type Config = {
   PROGRAM_ID: string;
   BANK: PublicKey;
+  ADMIN: PublicKey;
 
   MULTISIG_PAYER?: PublicKey; // May be omitted if not using squads
 };
 
 const config: Config = {
-  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-  BANK: new PublicKey("8nEXi1CMFe17mf2AuogyLkDND8vVReJ93m9Gx9TamfBC"),
+  PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
+  BANK: new PublicKey("FDsf8sj6SoV313qrA91yms3u5b3P4hBxEPvanVs8LtJV"),
+  ADMIN: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 
   MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 };
 
 export const bankConfigOpt = () => {
   let bankConfigOpt: BankConfigOptRaw = {
-    assetWeightInit: null,
-    assetWeightMaint: null,
+    assetWeightInit: bigNumberToWrappedI80F48(0.9),
+    assetWeightMaint: bigNumberToWrappedI80F48(0.95),
     liabilityWeightInit: null,
     liabilityWeightMaint: null,
     depositLimit: null,
@@ -46,11 +43,11 @@ export const bankConfigOpt = () => {
     totalAssetValueInitLimit: null,
     interestRateConfig: {
       protocolOriginationFee: null,
-      protocolIrFee: null,
-      protocolFixedFeeApr: null,
+      protocolIrFee: bigNumberToWrappedI80F48(0.06),
+      protocolFixedFeeApr: bigNumberToWrappedI80F48(0.000001),
       insuranceIrFee: null,
       insuranceFeeFixedApr: null,
-      maxInterestRate: null,
+      maxInterestRate: bigNumberToWrappedI80F48(1.25),
       optimalUtilizationRate: null,
       plateauInterestRate: null,
     },
@@ -67,29 +64,15 @@ export const bankConfigOpt = () => {
 async function main() {
   let bankConfig = bankConfigOpt();
 
-  marginfiIdl.address = config.PROGRAM_ID;
-  loadEnvFile(".env.api");
-  const apiUrl = process.env.API_URL || DEFAULT_API_URL;
-  console.log("api: " + apiUrl);
-  const connection = new Connection(apiUrl, "confirmed");
-
-  let wallet: ReadOnlyWallet | Wallet;
-  let provider: AnchorProvider;
-  if (sendTx) {
-    wallet = new Wallet(
-      loadKeypairFromFile(process.env.HOME + "/keys/zerotrade_admin.json")
-    );
-    provider = new AnchorProvider(connection, wallet, {
-      preflightCommitment: "confirmed",
-    });
-  } else {
-    wallet = new ReadOnlyWallet(config.MULTISIG_PAYER);
-    provider = new AnchorProvider(connection, wallet, {
-      preflightCommitment: "confirmed",
-    });
-  }
-
-  const program = new Program<Marginfi>(marginfiIdl as Marginfi, provider);
+  const user = commonSetup(
+    sendTx,
+    config.PROGRAM_ID,
+    "/keys/staging-deploy.json",
+    config.MULTISIG_PAYER,
+    "1.3"
+  );
+  const program = user.program;
+  const connection = user.connection;
 
   const transaction = new Transaction();
   transaction.add(
@@ -100,6 +83,9 @@ async function main() {
         // admin: config.ADMIN,
         bank: config.BANK,
       })
+      .accountsPartial({
+        admin: config.ADMIN,
+      })
       .instruction()
   );
 
@@ -108,7 +94,7 @@ async function main() {
       const signature = await sendAndConfirmTransaction(
         connection,
         transaction,
-        [wallet.payer]
+        [user.wallet.payer]
       );
       console.log("Transaction signature:", signature);
     } catch (error) {
@@ -152,6 +138,7 @@ type BankConfigOptRaw = {
     | null;
 
   oracleMaxAge: number | null;
+  // TODO new oracle confidence value in 1.4
   permissionlessBadDebtSettlement: boolean | null;
   freezeSettings: boolean | null;
 };
