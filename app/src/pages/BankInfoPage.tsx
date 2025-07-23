@@ -8,5 +8,8 @@ interface BankInfoPageProps {
 }
 
 export function BankInfoPage({ banks, error }: BankInfoPageProps) {
-  return <BankList banks={banks} error={error} />;
+  if (error) {
+    console.error(error);
+  }
+  return <BankList banks={banks} />;
 }
