@@ -7,7 +7,7 @@ export default defineConfig({
   resolve: {
     alias: {
       buffer: "buffer/",
-      process: "process/browser",
+      process: "process",
     },
   },
   optimizeDeps: {
@@ -18,9 +18,12 @@ export default defineConfig({
       plugins: [
         inject({
           Buffer: ["buffer", "Buffer"],
-          process: "process/browser",
+          process: "process",
         }),
       ],
     },
+  },
+  define: {
+    global: "globalThis",
   },
 });
