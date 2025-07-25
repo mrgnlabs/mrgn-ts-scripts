@@ -11,7 +11,7 @@ import { Marginfi } from "../idl/marginfi";
 import { Program } from "@coral-xyz/anchor";
 
 // If true, prints this bank's settings in a format to be copy-pasted into add_bank
-const printForCopy = true;
+const printForCopy = false;
 
 type Config = {
   PROGRAM_ID: string;
@@ -21,7 +21,7 @@ type Config = {
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
   BANKS: [
-    new PublicKey("61Qx9kgWo9RVtPHf8Rku6gbaUtcnzgkpAuifQBUcMRVK"),
+    new PublicKey("CCKtUs6Cgwo4aaQUmBPmyoApH2gUDErxNZCAntD6LYGh"),
     // new PublicKey("CCKtUs6Cgwo4aaQUmBPmyoApH2gUDErxNZCAntD6LYGh"),
   ],
 };

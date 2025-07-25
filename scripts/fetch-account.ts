@@ -10,7 +10,7 @@ type Config = {
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  ACCOUNT: new PublicKey("7r2V8sEE3Gebtw6A3Uyh2ZeNwZgLkZayA5kQuKmipfE7"),
+  ACCOUNT: new PublicKey("J7H8zFH8nP6Uf7oty7kWug31G7zPPxWQoXJ1Hr4jD3mB"),
 };
 
 async function main() {
@@ -18,9 +18,10 @@ async function main() {
   const program = user.program;
 
   let acc = await program.account.marginfiAccount.fetch(config.ACCOUNT);
+  console.log("authority: " + acc.authority);
   let balances = acc.lendingAccount.balances;
   let activeBalances = [];
-  dumpAccBalances(acc);
+  // dumpAccBalances(acc);
   for (let i = 0; i < balances.length; i++) {
     if (balances[i].active == 0) {
       // activeBalances.push({
@@ -36,9 +37,15 @@ async function main() {
     activeBalances.push({
       "Bank PK": balances[i].bankPk.toString(),
       Tag: balances[i].bankAssetTag,
-      "Liab Shares ": formatNumber(wrappedI80F48toBigNumber(balances[i].liabilityShares)),
-      "Asset Shares": formatNumber(wrappedI80F48toBigNumber(balances[i].assetShares)),
-      Emissions: formatNumber(wrappedI80F48toBigNumber(balances[i].emissionsOutstanding)),
+      "Liab Shares ": formatNumber(
+        wrappedI80F48toBigNumber(balances[i].liabilityShares)
+      ),
+      "Asset Shares": formatNumber(
+        wrappedI80F48toBigNumber(balances[i].assetShares)
+      ),
+      // Emissions: formatNumber(
+      //   wrappedI80F48toBigNumber(balances[i].emissionsOutstanding)
+      // ),
     });
 
     function formatNumber(num) {

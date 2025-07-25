@@ -74,8 +74,10 @@ TODO list of common banks and groups...
 
 - UXD - 7kbnvuGBxxj8AG9qp8Scn56muWGaRaFqxg1FsRp3PaFT
 - USDT - Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB
+- USDC - EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v
 - SOL - So11111111111111111111111111111111111111112
 - ezSOL (an LRT) - ezSoL6fY1PVdJcJsUpe5CM3xkfmy3zoVCABybm5WtiC
+- BONK - DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263
 
 ## VALIDATORS
 
@@ -85,6 +87,7 @@ TODO list of common banks and groups...
 ## USERS AND ACCOUNTS
 
 - Phantom wallet (H4QMTHMVbJ3KrB5bz573cBBZKoYSZ2B4mSST1JKzPUrH) account - E3uJyxW232EQAVZ9P9V6CFkxzjqqVdbh8XvUmxtZdGUt
+- Another acc for Phantom wallet on staging - 9oeseTmNecAoyLbA5j4UsRdUe53ajn9W1goRpEocYHbv
 - Staging deploy wallet (mfC1LoEk4mpM5yx1LjwR9QLZQ49AitxxWkK5Aciw7ZC) - F12SjiKaksVMJs7EQ2GBaWHLr5shFRei1seDDwFA2pek
 - zerotrade_admin - 725Z4QQUVhRiXcCdf4cQTrxXYmQXyW9zgVkW5PDVSJz4
 - Liquidation test (H4QMTHMVbJ3KrB5bz573cBBZKoYSZ2B4mSST1JKzPUrH owned)\* - A2cNgW5o66rquaiWjnAKkbdimU3x82exrqCvKzzrP1Wy

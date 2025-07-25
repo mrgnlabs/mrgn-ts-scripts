@@ -24,7 +24,14 @@ export type Config = {
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  BANK: new PublicKey("Dj2CwMF3GM7mMT5hcyGXKuYSQ2kQ5zaVCkA1zX1qaTva"),
+  BANK: new PublicKey("22DcjMZrMwC5Bpa5AGBsmjc5V9VuQrXG6N9ZtdUNyYGE"),
+  // 4YipZHMNQjip1LrG3uF2fj1G5ieWQ9QRQRy1jhAWWKUZ
+  // FVVKPocxQqJNjDTjzvT3HFXte5oarfp29vJ9tqjAPUW4
+  // 6hS9i46WyTq1KXcoa2Chas2Txh9TJAVr6n1t3tnrE23K
+  // Bohoc1ikHLD7xKJuzTyiTyCwzaL5N7ggJQu75A8mKYM8
+  // DMoqjmsuoru986HgfjqrKEvPv8YBufvBGADHUonkadC5
+  // CCKtUs6Cgwo4aaQUmBPmyoApH2gUDErxNZCAntD6LYGh
+  // 22DcjMZrMwC5Bpa5AGBsmjc5V9VuQrXG6N9ZtdUNyYGE
   ADMIN: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 
   MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
@@ -32,7 +39,7 @@ const config: Config = {
 
 export const bankConfigOpt = () => {
   let bankConfigOpt: BankConfigOptRaw = {
-    assetWeightInit: null,
+    assetWeightInit: null, // bigNumberToWrappedI80F48(.9)
     assetWeightMaint: null,
     liabilityWeightInit: null,
     liabilityWeightMaint: null,
@@ -47,13 +54,13 @@ export const bankConfigOpt = () => {
       protocolFixedFeeApr: null,
       insuranceIrFee: null,
       insuranceFeeFixedApr: null,
-      maxInterestRate: bigNumberToWrappedI80F48(1.25),
+      maxInterestRate: null,
       optimalUtilizationRate: null,
       plateauInterestRate: null,
     },
     operationalState: null, // { reduceOnly: {} },
     // TODO max conf here in 1.4
-    oracleMaxAge: null,
+    oracleMaxAge: 70,
     permissionlessBadDebtSettlement: null,
     freezeSettings: null,
   };
