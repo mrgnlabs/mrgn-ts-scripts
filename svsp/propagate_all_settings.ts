@@ -1,43 +1,48 @@
 // This propagates the fee state to all active staked collateral banks.
 
 // TODO add a LUT and send these all in one tx to avoid burning so many tx fees.
-import { Connection, PublicKey, sendAndConfirmTransaction, Transaction } from "@solana/web3.js";
-import { DEFAULT_API_URL, loadEnvFile, loadKeypairFromFile } from "../scripts/utils";
-import { Marginfi } from "@mrgnlabs/marginfi-client-v2/src/idl/marginfi-types_0.1.2";
-import marginfiIdl from "@mrgnlabs/marginfi-client-v2/src/idl/marginfi_0.1.2.json";
+import {
+  AccountMeta,
+  Connection,
+  PublicKey,
+  sendAndConfirmTransaction,
+  Transaction,
+} from "@solana/web3.js";
+import {
+  DEFAULT_API_URL,
+  loadEnvFile,
+  loadKeypairFromFile,
+} from "../scripts/utils";
 import { Program, AnchorProvider } from "@coral-xyz/anchor";
+import { commonSetup } from "../lib/common-setup";
 
 type Config = {
   PROGRAM_ID: string;
   GROUP: PublicKey;
+
+  ORACLE?: PublicKey;
 };
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
   GROUP: new PublicKey("4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8"),
+
+  // only required if changing the oracle, otherwise leave as undefined...
+  ORACLE: new PublicKey("7UVimffxr9ow1uXYxsr4LHAcV58mLzhmwaeKvJ1pjLiE"),
 };
 
 async function main() {
-  marginfiIdl.address = config.PROGRAM_ID;
-  loadEnvFile(".env.api");
-  const apiUrl = process.env.API_URL || DEFAULT_API_URL;
-  console.log("api: " + apiUrl);
-  const connection = new Connection(apiUrl, "confirmed");
-  const wallet = loadKeypairFromFile(process.env.HOME + "/keys/staging-deploy.json");
-  console.log("payer: " + wallet.publicKey);
-
-  // @ts-ignore
-  const provider = new AnchorProvider(connection, wallet, {
-    preflightCommitment: "confirmed",
-  });
-
-  const program = new Program<Marginfi>(
-    // @ts-ignore
-    marginfiIdl as Marginfi,
-    provider
+  const user = commonSetup(
+    true,
+    config.PROGRAM_ID,
+    "/keys/staging-deploy.json",
+    undefined
   );
+  const program = user.program;
+  const connection = user.connection;
 
-  const jsonUrl = "https://storage.googleapis.com/mrgn-public/mrgn-staked-bank-metadata-cache.json";
+  const jsonUrl =
+    "https://storage.googleapis.com/mrgn-public/mrgn-staked-bank-metadata-cache.json";
   const response = await fetch(jsonUrl);
   if (!response.ok) {
     throw new Error(`Failed to fetch JSON: ${response.statusText}`);
@@ -52,7 +57,20 @@ async function main() {
   for (let i = 0; i < pools.length; i++) {
     const bank = new PublicKey(pools[i].bankAddress);
 
-    let [stakedSettingsKey] = deriveStakedSettings(program.programId, config.GROUP);
+    let [stakedSettingsKey] = deriveStakedSettings(
+      program.programId,
+      config.GROUP
+    );
+    let remainingAccounts: AccountMeta[] = [];
+    if (config.ORACLE) {
+      console.log("updating oracle to: " + config.ORACLE);
+      const oracleMeta: AccountMeta = {
+        pubkey: config.ORACLE,
+        isSigner: false,
+        isWritable: false,
+      };
+      remainingAccounts.push(oracleMeta);
+    }
     let tx = new Transaction();
     const ix = await program.methods
       .propagateStakedSettings()
@@ -61,13 +79,15 @@ async function main() {
         stakedSettings: stakedSettingsKey,
         bank: bank,
       })
-      // TODO oracle in remaining accounts as needed...
+      .remainingAccounts(remainingAccounts)
       .instruction();
 
     tx.add(ix);
 
     try {
-      const signature = await sendAndConfirmTransaction(connection, tx, [wallet]);
+      const signature = await sendAndConfirmTransaction(connection, tx, [
+        user.wallet.payer,
+      ]);
       console.log("Transaction signature:", signature);
     } catch (error) {
       console.error("Transaction failed:", error);
@@ -84,7 +104,10 @@ main().catch((err) => {
 
 // TODO remove after package updates
 const deriveStakedSettings = (programId: PublicKey, group: PublicKey) => {
-  return PublicKey.findProgramAddressSync([Buffer.from("staked_settings", "utf-8"), group.toBuffer()], programId);
+  return PublicKey.findProgramAddressSync(
+    [Buffer.from("staked_settings", "utf-8"), group.toBuffer()],
+    programId
+  );
 };
 
 /**

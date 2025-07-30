@@ -6,11 +6,11 @@ import * as borsh from "borsh";
 const PYTH_SPONSORED_SHARD_ID = 0;
 const MARGINFI_SPONSORED_SHARD_ID = 3301;
 
-function feedIdToString(feedId: PublicKey): string {
+export function feedIdToString(feedId: PublicKey): string {
   return feedId.toBuffer().toString("hex");
 }
 
-function findPythPushOracleAddress(feedId: Buffer, programId: PublicKey, shardId: number): PublicKey {
+export function findPythPushOracleAddress(feedId: Buffer, programId: PublicKey, shardId: number): PublicKey {
   const shardBytes = u16ToArrayBufferLE(shardId);
   return PublicKey.findProgramAddressSync([shardBytes, feedId], programId)[0];
 }

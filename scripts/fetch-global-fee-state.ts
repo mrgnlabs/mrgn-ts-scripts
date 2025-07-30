@@ -1,12 +1,8 @@
-import { Connection, PublicKey, Transaction, sendAndConfirmTransaction } from "@solana/web3.js";
-import { Program, AnchorProvider } from "@coral-xyz/anchor";
+import { PublicKey } from "@solana/web3.js";
 
-import { loadKeypairFromFile } from "./utils";
-import { assertI80F48Approx, assertKeysEqual } from "./softTests";
 
 import { wrappedI80F48toBigNumber } from "@mrgnlabs/mrgn-common";
-import { Marginfi } from "@mrgnlabs/marginfi-client-v2/src/idl/marginfi-types_0.1.2";
-import marginfiIdl from "@mrgnlabs/marginfi-client-v2/src/idl/marginfi_0.1.2.json";
+import { commonSetup } from "../lib/common-setup";
 
 const verbose = true;
 
@@ -19,16 +15,9 @@ const config: Config = {
 };
 
 async function main() {
-  marginfiIdl.address = config.PROGRAM_ID;
-  const connection = new Connection("https://api.mainnet-beta.solana.com", "confirmed");
-  const wallet = loadKeypairFromFile(process.env.HOME + "/.config/solana/id.json");
-
-  // @ts-ignore
-  const provider = new AnchorProvider(connection, wallet, {
-    preflightCommitment: "confirmed",
-  });
-
-  const program = new Program<Marginfi>(marginfiIdl as Marginfi, provider);
+  const user = commonSetup(true, config.PROGRAM_ID, "/.config/solana/id.json");
+  const program = user.program;
+  
   const [feeStateKey] = deriveGlobalFeeState(program.programId);
   const gfs = await program.account.feeState.fetch(feeStateKey);
   console.log("***Fee state***");

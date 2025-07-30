@@ -1,5 +1,10 @@
 // Optionally set, then permissionlessly withdraw to, an emissions account.
-import { AccountMeta, PublicKey, sendAndConfirmTransaction, Transaction } from "@solana/web3.js";
+import {
+  AccountMeta,
+  PublicKey,
+  sendAndConfirmTransaction,
+  Transaction,
+} from "@solana/web3.js";
 import { BN } from "@coral-xyz/anchor";
 import {
   createAssociatedTokenAccountIdempotentInstruction,
@@ -31,30 +36,51 @@ export type Config = {
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
   BANK: new PublicKey("HmpMfL8942u22htC4EMiWgLX931g3sacXFR6KjuLgKLV"),
-  DESTINATION_WALLET: new PublicKey("J3oBkTkDXU3TcAggJEa3YeBZE5om5yNAdTtLVNXFD47"),
+  DESTINATION_WALLET: new PublicKey(
+    "J3oBkTkDXU3TcAggJEa3YeBZE5om5yNAdTtLVNXFD47"
+  ),
 
   MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 };
 
 async function main() {
-  const user = commonSetup(sendTx, config.PROGRAM_ID, "/keys/staging-deploy.json", config.MULTISIG_PAYER);
+  const user = commonSetup(
+    sendTx,
+    config.PROGRAM_ID,
+    "/keys/staging-deploy.json",
+    config.MULTISIG_PAYER
+  );
   const program = user.program;
   const connection = user.connection;
 
   let bankAcc = await program.account.bank.fetch(config.BANK);
   const mint = bankAcc.mint;
-  const feesUncollected = wrappedI80F48toBigNumber(bankAcc.collectedGroupFeesOutstanding).toNumber();
+  const feesUncollected = wrappedI80F48toBigNumber(
+    bankAcc.collectedGroupFeesOutstanding
+  ).toNumber();
   let mintAccInfo = await connection.getAccountInfo(mint);
   const tokenProgram = mintAccInfo.owner;
   let isT22 = tokenProgram.toString() == TOKEN_2022_PROGRAM_ID.toString();
   console.log("mint: " + mint + " is 22: " + isT22);
   const [feeVault] = deriveFeeVault(program.programId, config.BANK);
-  let feesVaultAcc = await getAccount(connection, feeVault, undefined, tokenProgram);
+  let feesVaultAcc = await getAccount(
+    connection,
+    feeVault,
+    undefined,
+    tokenProgram
+  );
   const feesAvailable = Number(feesVaultAcc.amount);
-  console.log("fees uncollected (in token): " + feesUncollected.toLocaleString());
+  console.log(
+    "fees uncollected (in token): " + feesUncollected.toLocaleString()
+  );
   console.log("fees available (in token): " + feesAvailable.toLocaleString());
   console.log("decimals: " + bankAcc.mintDecimals);
-  let dstAta = getAssociatedTokenAddressSync(mint, config.DESTINATION_WALLET, true, tokenProgram);
+  let dstAta = getAssociatedTokenAddressSync(
+    mint,
+    config.DESTINATION_WALLET,
+    true,
+    tokenProgram
+  );
   console.log("fee destination: " + dstAta);
 
   let createAtaIx = createAssociatedTokenAccountIdempotentInstruction(
@@ -106,7 +132,11 @@ async function main() {
 
   if (sendTx) {
     try {
-      const signature = await sendAndConfirmTransaction(connection, transaction, [user.wallet.payer]);
+      const signature = await sendAndConfirmTransaction(
+        connection,
+        transaction,
+        [user.wallet.payer]
+      );
       console.log("Transaction signature:", signature);
     } catch (error) {
       console.error("Transaction failed:", error);
@@ -125,7 +155,10 @@ async function main() {
 }
 
 const deriveFeeVault = (programId: PublicKey, bank: PublicKey) => {
-  return PublicKey.findProgramAddressSync([Buffer.from("fee_vault", "utf-8"), bank.toBuffer()], programId);
+  return PublicKey.findProgramAddressSync(
+    [Buffer.from("fee_vault", "utf-8"), bank.toBuffer()],
+    programId
+  );
 };
 
 main().catch((err) => {
