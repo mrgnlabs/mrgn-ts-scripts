@@ -4511,6 +4511,11 @@ export type Marginfi = {
       "code": 6081,
       "name": "bankCannotClose",
       "msg": "Banks cannot close when they have open positions or emissions outstanding"
+    },
+    {
+      "code": 6082,
+      "name": "accountAlreadyMigrated",
+      "msg": "Account already migrated"
     }
   ],
   "types": [
@@ -6800,13 +6805,6 @@ export type Marginfi = {
             "type": "pubkey"
           },
           {
-            "name": "migratedFrom",
-            "docs": [
-              "If this account was migrated from another one, store the original account key"
-            ],
-            "type": "pubkey"
-          },
-          {
             "name": "healthCache",
             "type": {
               "defined": {
@@ -6815,11 +6813,25 @@ export type Marginfi = {
             }
           },
           {
+            "name": "migratedFrom",
+            "docs": [
+              "If this account was migrated from another one, store the original account key"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "migratedTo",
+            "docs": [
+              "If this account has been migrated to another one, store the destination account key"
+            ],
+            "type": "pubkey"
+          },
+          {
             "name": "padding0",
             "type": {
               "array": [
                 "u64",
-                17
+                13
               ]
             }
           }

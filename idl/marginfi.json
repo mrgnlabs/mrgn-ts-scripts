@@ -4505,6 +4505,11 @@
       "code": 6081,
       "name": "BankCannotClose",
       "msg": "Banks cannot close when they have open positions or emissions outstanding"
+    },
+    {
+      "code": 6082,
+      "name": "AccountAlreadyMigrated",
+      "msg": "Account already migrated"
     }
   ],
   "types": [
@@ -6794,13 +6799,6 @@
             "type": "pubkey"
           },
           {
-            "name": "migrated_from",
-            "docs": [
-              "If this account was migrated from another one, store the original account key"
-            ],
-            "type": "pubkey"
-          },
-          {
             "name": "health_cache",
             "type": {
               "defined": {
@@ -6809,11 +6807,25 @@
             }
           },
           {
+            "name": "migrated_from",
+            "docs": [
+              "If this account was migrated from another one, store the original account key"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "migrated_to",
+            "docs": [
+              "If this account has been migrated to another one, store the destination account key"
+            ],
+            "type": "pubkey"
+          },
+          {
             "name": "_padding0",
             "type": {
               "array": [
                 "u64",
-                17
+                13
               ]
             }
           }

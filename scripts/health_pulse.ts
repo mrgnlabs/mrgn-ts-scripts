@@ -20,7 +20,7 @@ export type Config = {
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  ACCOUNT: new PublicKey("BT6jXNSmxHPjE3TgNfSiG6NnqASpbvATnwFKLrLVt9Kz"),
+  ACCOUNT: new PublicKey("4K45dnAyHvrishz5BryMYYMpqJeTA9v4mMyk7SvxCNZp"),
 };
 
 async function main() {
@@ -29,7 +29,7 @@ async function main() {
     config.PROGRAM_ID,
     "/keys/staging-deploy.json",
     undefined,
-    "1.3"
+    "current"
   );
   const program = user.program;
   const connection = user.connection;
@@ -101,11 +101,19 @@ async function main() {
   if (swbPullFeeds.length > 0) {
     try {
       const swbProgram = await sb.AnchorUtils.loadProgramFromConnection(
+        // TODO fix when web3 is bumped in swb?
+        // @ts-ignore
         connection
       );
+      const pullFeedInstances: sb.PullFeed[] = swbPullFeeds.map(
+        (pubkey) => new sb.PullFeed(swbProgram, pubkey)
+      );
+      const gateway = await pullFeedInstances[0].fetchGatewayUrl();
       const [pullIx, _luts] = await sb.PullFeed.fetchUpdateManyIx(swbProgram, {
-        feeds: swbPullFeeds,
+        feeds: pullFeedInstances,
+        gateway,
         numSignatures: 1,
+        payer: user.wallet.publicKey,
       });
       const crankTx = new Transaction();
       crankTx.add(...pullIx);
@@ -115,6 +123,7 @@ async function main() {
       console.log("Swb crank tx signature:", signature);
     } catch (err) {
       console.log("swb crank failed");
+      console.log(err);
     }
   }
 
@@ -183,7 +192,7 @@ async function main() {
   for (let i = 0; i < cache.prices.length; i++) {
     const price = bytesToF64(cache.prices[i]);
     if (price != 0) {
-      console.log("price of balance " + i + ": " + price);
+      console.log("price of balance " + i + ": " + price.toFixed(10));
     }
   }
 }
