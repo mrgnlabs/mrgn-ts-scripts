@@ -171,6 +171,19 @@ pnpm banks:get-accounts [options]
 
 ---
 
+### `simulate-swb-feed`
+
+**Description:**  
+Runs simulations for a Switchboard price feed in an infinite loop and saves simulation results in the `output
+
+**Usage:**
+
+```bash
+pnpm ts-node scripts/simulate-swb-feed.ts <Crossbar URL>
+```
+**Parameters:**
+- Crossbar URL - the Switchboard Crossbar instance URL. Example: `https://crossbar.switchboard.xyz`
+
 ## Additional Help
 
 Run any script with the `--help` flag for more details.
