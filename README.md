@@ -21,12 +21,18 @@ console.log("Environment supports crypto: ", !!global.crypto?.subtle);
 
 ## Create Env File
 
-- Under packages/tools create a `.env` file.
+- Under packages/tools create a `.env`  and `.env.api` files.
 
+.env
 ```
-PRIVATE_RPC_ENDPOINT="https://rpc.ironforge.network/mainnet?apiKey=WHATEVER"
+PRIVATE_RPC_ENDPOINT="https://rpc.ironforge.network/mainnet?apiKey=<API KEY>"
 MARGINFI_WALLET=home/user/keys/wallet.json
 MARGINFI_ENV="production"
+```
+
+.env.api - used by the Anchor framework
+```
+API_URL=https://mrgn.rpcpool.com/<API KEY>
 ```
 
 ## Available Tools
