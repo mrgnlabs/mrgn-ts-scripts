@@ -26,13 +26,10 @@ console.log("Environment supports crypto: ", !!global.crypto?.subtle);
 .env
 ```
 PRIVATE_RPC_ENDPOINT="https://rpc.ironforge.network/mainnet?apiKey=<API KEY>"
+
 MARGINFI_WALLET=home/user/keys/wallet.json
 MARGINFI_ENV="production"
-```
-
-.env.api - used by the Anchor framework
-```
-API_URL=https://mrgn.rpcpool.com/<API KEY>
+MARGINFI_PROGRAM_ID=MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA
 ```
 
 ## Available Tools

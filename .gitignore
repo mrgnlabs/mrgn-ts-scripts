@@ -2,6 +2,6 @@ account-cache.json
 activity-cache.json
 .env*
 node_modules
-output*.csv
+*output*.csv
 .vscode*
 pnpm-lock.yaml
