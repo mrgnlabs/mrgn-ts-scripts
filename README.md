@@ -20,9 +20,6 @@ console.log("Environment supports crypto: ", !!global.crypto?.subtle);
 - (Optional) A wallet (with SOL) at ~/keys/wallet.json
 
 ## Create Env File
-
-- Under packages/tools create a `.env`  and `.env.api` files.
-
 .env
 ```
 PRIVATE_RPC_ENDPOINT="https://rpc.ironforge.network/mainnet?apiKey=<API KEY>"

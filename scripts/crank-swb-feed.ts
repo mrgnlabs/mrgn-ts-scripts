@@ -5,7 +5,7 @@ import * as sb from "@switchboard-xyz/on-demand";
 
 import { CrossbarClient } from "@switchboard-xyz/common";
 import { appendFileSync } from "fs";
-import { Commitment, PublicKey, sendAndConfirmRawTransaction, BlockheightBasedTransactionConfirmationStrategy, Connection } from "@solana/web3.js";
+import { Commitment, sendAndConfirmRawTransaction, Connection } from "@solana/web3.js";
 import { Wallet } from "@coral-xyz/anchor";
 
 const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
