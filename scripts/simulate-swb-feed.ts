@@ -2,7 +2,7 @@ import { CrossbarClient } from "@switchboard-xyz/common";
 import { appendFileSync } from "fs";
 
 const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-const OUTPUT_FILE = `output-${timestamp}.csv`;
+const OUTPUT_FILE = `swb-sim-output-${timestamp}.csv`;
 
 async function fetch(crossbar: CrossbarClient,
     feeds: string[]
@@ -17,8 +17,7 @@ async function fetch(crossbar: CrossbarClient,
         const elapsed = Date.now() - start;
 
         for (let simulation of results) {
-            // const log_entry = `${elapsed}, ${simulation.feed},${simulation.feedHash}, ${simulation.results}`;
-            const log_entry = `${simulation.feed}, ${elapsed}, ${simulation.results}`;
+            const log_entry = `${new Date().toISOString()}, ${simulation.feed}, ${elapsed}, ${simulation.results}`;
             console.log(log_entry);
             appendFileSync(OUTPUT_FILE, log_entry + "\n");
         }
@@ -38,7 +37,7 @@ if (!crossbar_url) {
 }
 
 appendFileSync(OUTPUT_FILE, `Using Crossbar URL: ${crossbar_url}` + "\n");
-appendFileSync(OUTPUT_FILE, `Feed Address, Elapsed Time (ms), Results` + "\n");
+appendFileSync(OUTPUT_FILE, `DateTime, Feed Address, Elapsed Time (ms), Results` + "\n");
 
 const crossbar = new CrossbarClient(crossbar_url, true);
 

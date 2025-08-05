@@ -20,13 +20,13 @@ console.log("Environment supports crypto: ", !!global.crypto?.subtle);
 - (Optional) A wallet (with SOL) at ~/keys/wallet.json
 
 ## Create Env File
-
-- Under packages/tools create a `.env` file.
-
+.env
 ```
-PRIVATE_RPC_ENDPOINT="https://rpc.ironforge.network/mainnet?apiKey=WHATEVER"
+PRIVATE_RPC_ENDPOINT="https://rpc.ironforge.network/mainnet?apiKey=<API KEY>"
+
 MARGINFI_WALLET=home/user/keys/wallet.json
 MARGINFI_ENV="production"
+MARGINFI_PROGRAM_ID=MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA
 ```
 
 ## Available Tools
