@@ -116,7 +116,7 @@ console.log(`Using Crossbar URL: ${CROSSBAR_URL}`);
                 console.error(`Error ${errorCount} occurred while cranking:`, error);
             }
         }
-        await delay(10_000);
+        await delay(30_000);
     }
 
 })();
