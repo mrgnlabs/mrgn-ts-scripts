@@ -20,14 +20,7 @@ console.log("Environment supports crypto: ", !!global.crypto?.subtle);
 - (Optional) A wallet (with SOL) at ~/keys/wallet.json
 
 ## Create Env File
-.env
-```
-PRIVATE_RPC_ENDPOINT="https://rpc.ironforge.network/mainnet?apiKey=<API KEY>"
-
-MARGINFI_WALLET=home/user/keys/wallet.json
-MARGINFI_ENV="production"
-MARGINFI_PROGRAM_ID=MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA
-```
+Copy the [env.template](env.template) file to `.env` file and populate missing data.
 
 ## Available Tools
 
@@ -192,7 +185,7 @@ Runs simulations for a Switchboard price feed in an infinite loop and saves simu
 **Usage:**
 
 ```bash
-nohup pnpm ts-node scripts/crank-swb-feed.ts <Crossbar URL> > swb-crank.out 2>&1 &
+nohup pnpm ts-node scripts/crank-swb-feed.ts <Crossbar URL> [all] > swb-crank.out 2>&1 &
 ```
 **Parameters:**
 - Crossbar URL - the Switchboard Crossbar instance URL. Example: `https://crossbar.switchboard.xyz`

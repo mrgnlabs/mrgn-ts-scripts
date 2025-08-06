@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 import { loadKeypairFromFile } from "../lib/utils";
 
 import * as sb from "@switchboard-xyz/on-demand";
+import { PullFeed } from "@switchboard-xyz/on-demand";
 
 import { CrossbarClient } from "@switchboard-xyz/common";
 import { appendFileSync } from "fs";
@@ -52,6 +53,13 @@ if (!CROSSBAR_URL) {
 }
 console.log(`Using Crossbar URL: ${CROSSBAR_URL}`);
 
+const crank_all = process.argv[3] === "all";
+if (crank_all) {
+    console.log("Cranking all feeds at once.");
+} else {
+    console.log("Cranking feeds one by one.");
+}
+
 (async () => {
 
     const connection = new Connection(process.env.PRIVATE_RPC_ENDPOINT, "confirmed");
@@ -62,6 +70,48 @@ console.log(`Using Crossbar URL: ${CROSSBAR_URL}`);
     const crossbar = new CrossbarClient(CROSSBAR_URL, true);
     const queue = await sb.Queue.loadDefault(swbProgram!);
     const gateway = await queue.fetchGatewayFromCrossbar(crossbar);
+
+    async function fetch(feeds: PullFeed[]) {
+        try {
+            const feed_addresses = feeds.map(feed => feed.pubkey.toString());
+
+            console.log(`Fetching the feeds ${feed_addresses} Ix for cranking...`);
+            const fetch_start = Date.now();
+            const [pullIx, luts] = await sb.PullFeed.fetchUpdateManyIx(swbProgram, {
+                feeds,
+                gateway: gateway.gatewayUrl,
+                numSignatures: 1,
+                payer: wallet.publicKey,
+            });
+            const fetch_elapsed = Date.now() - fetch_start;
+
+            const tx = await sb.asV0Tx({
+                connection,
+                ixs: pullIx,
+                signers: [wallet.payer],
+                computeUnitLimitMultiple: 2,
+                lookupTables: luts,
+            });
+
+            console.log(`Cranking the feed ${feed_addresses} Tx...`);
+            const crank_start = Date.now();
+            const result = await sendAndConfirmRawTransaction(
+                connection,
+                Buffer.from(tx.serialize()),
+                TX_CONFIG
+            );
+            const crank_elapsed = Date.now() - crank_start;
+
+            const log_entry = `${new Date().toISOString()}, ${feed_addresses}, ${fetch_elapsed}, ${crank_elapsed}, ${result}`;
+            console.log(`Cranking successful: ${log_entry}`);
+            appendFileSync(OUTPUT_FILE, log_entry + "\n");
+
+        } catch (error) {
+            errorCount++;
+            console.error(`Error ${errorCount} occurred while cranking:`, error);
+        }
+
+    }
 
     const feed_addresses = [
         "EAsoLo2uSvBDx3a5grqzfqBMg5RqpJVHRtXmjsFEc4LL", // One
@@ -76,47 +126,15 @@ console.log(`Using Crossbar URL: ${CROSSBAR_URL}`);
 
     let errorCount = 0;
     while (true) {
-        for (const feed of feeds) {
-            try {
-                const feed_address = feed.pubkey.toString();
-
-                console.log(`Fetching the feed ${feed_address} Ix for cranking...`);
-                const fetch_start = Date.now();
-                const [pullIx, luts] = await sb.PullFeed.fetchUpdateManyIx(swbProgram, {
-                    feeds: [feed],
-                    gateway: gateway.gatewayUrl,
-                    numSignatures: 1,
-                    payer: wallet.publicKey,
-                });
-                const fetch_elapsed = Date.now() - fetch_start;
-
-                const tx = await sb.asV0Tx({
-                    connection,
-                    ixs: pullIx,
-                    signers: [wallet.payer],
-                    computeUnitLimitMultiple: 2,
-                    lookupTables: luts,
-                });
-
-                console.log(`Cranking the feed ${feed_address} Tx...`);
-                const crank_start = Date.now();
-                const result = await sendAndConfirmRawTransaction(
-                    connection,
-                    Buffer.from(tx.serialize()),
-                    TX_CONFIG
-                );
-                const crank_elapsed = Date.now() - crank_start;
-
-                const log_entry = `${new Date().toISOString()}, ${feed_address}, ${fetch_elapsed}, ${crank_elapsed}, ${result}`;
-                console.log(`Cranking successful: ${log_entry}`);
-                appendFileSync(OUTPUT_FILE, log_entry + "\n");
-
-            } catch (error) {
-                errorCount++;
-                console.error(`Error ${errorCount} occurred while cranking:`, error);
+        if (crank_all) {
+            await fetch(feeds);
+        } else {
+            for (const feed of feeds) {
+                await fetch([feed]);
             }
         }
         await delay(60_000);
     }
 
 })();
+
