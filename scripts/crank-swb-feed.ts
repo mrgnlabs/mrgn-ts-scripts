@@ -12,7 +12,7 @@ const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
 const OUTPUT_FILE = `swb-crank-output-${timestamp}.csv`;
 
 const TX_CONFIG = {
-    commitment: "finalized" as Commitment,
+    commitment: "confirmed" as Commitment,
     skipPreflight: true,
     maxRetries: 1,
 };
