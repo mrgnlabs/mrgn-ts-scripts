@@ -179,7 +179,20 @@ Runs simulations for a Switchboard price feed in an infinite loop and saves simu
 **Usage:**
 
 ```bash
-pnpm ts-node scripts/simulate-swb-feed.ts <Crossbar URL>
+nohup pnpm ts-node scripts/simulate-swb-feed.ts <Crossbar URL> > swb-sim.out 2>&1 &
+```
+**Parameters:**
+- Crossbar URL - the Switchboard Crossbar instance URL. Example: `https://crossbar.switchboard.xyz`
+
+### `crank-swb-feed`
+
+**Description:**  
+Runs simulations for a Switchboard price feed in an infinite loop and saves simulation results in the `output
+
+**Usage:**
+
+```bash
+nohup pnpm ts-node scripts/crank-swb-feed.ts <Crossbar URL> > swb-crank.out 2>&1 &
 ```
 **Parameters:**
 - Crossbar URL - the Switchboard Crossbar instance URL. Example: `https://crossbar.switchboard.xyz`

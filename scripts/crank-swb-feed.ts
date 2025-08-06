@@ -12,7 +12,7 @@ const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
 const OUTPUT_FILE = `swb-crank-output-${timestamp}.csv`;
 
 const TX_CONFIG = {
-    commitment: "finalized" as Commitment,
+    commitment: "confirmed" as Commitment,
     skipPreflight: true,
     maxRetries: 1,
 };
@@ -116,7 +116,7 @@ console.log(`Using Crossbar URL: ${CROSSBAR_URL}`);
                 console.error(`Error ${errorCount} occurred while cranking:`, error);
             }
         }
-        await delay(10_000);
+        await delay(60_000);
     }
 
 })();

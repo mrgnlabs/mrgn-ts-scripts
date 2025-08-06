@@ -44,16 +44,17 @@ const crossbar = new CrossbarClient(crossbar_url, true);
 const one = "EAsoLo2uSvBDx3a5grqzfqBMg5RqpJVHRtXmjsFEc4LL";
 const sol_usd_1 = "AAY5JGEmYT4WHx5KZCiiQg34GrCri1zbTTg9dfcprq5F";
 const sol_usd_2 = "C8BHeLfbEWD8nSMesqPrAKNuyC5UtTaBpXXABz6DbX62";
+const sol_usd_3 = "HpYEhRjQcJ1cbtf4dkTfmNznK9j3d8GQ8XrfyaS2cKo9";
 
 (async () => {
     let errorCount = 0;
     while (true) {
         try {
-            await fetch(crossbar, [one, sol_usd_1]);
+            await fetch(crossbar, [one, sol_usd_1, sol_usd_2, sol_usd_3]);
         } catch (error) {
             errorCount++;
             console.error(`Error ${errorCount} occurred while fetching feed data:`, error);
         }
-        await delay(5_000);
+        await delay(10_000);
     }
 })();
