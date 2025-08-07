@@ -3,5 +3,6 @@ activity-cache.json
 .env*
 node_modules
 *output*.csv
+swb*.out
 .vscode*
 pnpm-lock.yaml
