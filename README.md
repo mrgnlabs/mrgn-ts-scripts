@@ -197,7 +197,7 @@ pnpm ts-node scripts/crank-swb-feed.ts <SWB_FEEDS_FILE> <CROSSBAR_URL> [all]
 
 *Example*
 ```bash
-[ -f swb-sim.out ] && rm swb-sim.out; nohup pnpm ts-node scripts/crank-swb-feed.ts data/swb-feeds.kvp https://internal-crossbar.stage.mrgn.app > swb-sim.out 2>&1 &
+[ -f swb-crank.out ] && rm swb-crank.out; nohup pnpm ts-node scripts/crank-swb-feed.ts data/swb-feeds.kvp https://internal-crossbar.stage.mrgn.app > swb-crank.out 2>&1 &
 ```
 
 ## Additional Help
