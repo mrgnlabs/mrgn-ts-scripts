@@ -165,31 +165,40 @@ pnpm banks:get-accounts [options]
 ---
 
 ### `simulate-swb-feed`
+**Description**  
+Runs simulations for Switchboard price feeds in an infinite loop and saves simulation results in the `swb-sim-output-{DateTime}.csv` file.
 
-**Description:**  
-Runs simulations for a Switchboard price feed in an infinite loop and saves simulation results in the `output
-
-**Usage:**
-
+**Usage**
 ```bash
-nohup pnpm ts-node scripts/simulate-swb-feed.ts <Crossbar URL> > swb-sim.out 2>&1 &
+pnpm ts-node scripts/simulate-swb-feed.ts <SWB_FEEDS_FILE> <CROSSBAR_URL> [all]
 ```
-**Parameters:**
-- Crossbar URL - the Switchboard Crossbar instance URL. Example: `https://crossbar.switchboard.xyz`
+*Parameters:*
+- **`SWB_FEEDS_FILE`** *(required)* The KVP file with Switchboard price feed addresses. The [swb-feeds.kvp](data/swb-feeds.kvp) file can be taken as prototype.
+- **`CROSSBAR_URL`** - *(required)* the Switchboard Crossbar instance URL. Example: `https://crossbar.switchboard.xyz`
+- **`all`** - *(optional)* flag to crank all feeds in a single call
+
+*Example*
+```bash
+[ -f swb-sim.out ] && rm swb-sim.out; nohup pnpm ts-node scripts/simulate-swb-feed.ts data/swb-feeds.kvp https://internal-crossbar.stage.mrgn.app > swb-sim.out 2>&1 &
+```
 
 ### `crank-swb-feed`
+**Description**  
+Cranks Switchboard price feeds in an infinite loop and saves simulation results in the `swb-crank-output-{DateTime}.csv` file.
 
-**Description:**  
-Runs simulations for a Switchboard price feed in an infinite loop and saves simulation results in the `output
-
-**Usage:**
-
+**Usage**
 ```bash
-nohup pnpm ts-node scripts/crank-swb-feed.ts <SWB_FEEDS_FILE> <CROSSBAR_URL> [all] > swb-crank.out 2>&1 &
+pnpm ts-node scripts/crank-swb-feed.ts <SWB_FEEDS_FILE> <CROSSBAR_URL> [all]
 ```
-**Parameters:**
-- **`SWB_FEEDS_FILE`** The KVP file with Switchboard price feed addresses. The [swb-feeds.kvp](data/swb-feeds.kvp) file can be taken as prototype.
-- **`CROSSBAR_URL`** - the Switchboard Crossbar instance URL. Example: `https://crossbar.switchboard.xyz`
+*Parameters:*
+- **`SWB_FEEDS_FILE`** *(required)* The KVP file with Switchboard price feed addresses. The [swb-feeds.kvp](data/swb-feeds.kvp) file can be taken as prototype.
+- **`CROSSBAR_URL`** - *(required)* the Switchboard Crossbar instance URL. Example: `https://crossbar.switchboard.xyz`
+- **`all`** - *(optional)* flag to run simulation for all feeds in a single call
+
+*Example*
+```bash
+[ -f swb-sim.out ] && rm swb-sim.out; nohup pnpm ts-node scripts/crank-swb-feed.ts data/swb-feeds.kvp https://internal-crossbar.stage.mrgn.app > swb-sim.out 2>&1 &
+```
 
 ## Additional Help
 

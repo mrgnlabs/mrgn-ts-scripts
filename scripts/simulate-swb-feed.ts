@@ -26,7 +26,7 @@ async function fetch(crossbar: CrossbarClient,
 
 const delay = (ms: number) => new Promise(r => setTimeout(r, ms));
 
-// The Swb Feed addresses file
+// The Swb Feeds file
 if (!process.argv[2]) {
     console.error("❌ Missing the required Feeds file argument.");
     process.exit(1);

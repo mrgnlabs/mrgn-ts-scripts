@@ -5,9 +5,10 @@ import * as sb from "@switchboard-xyz/on-demand";
 import { PullFeed } from "@switchboard-xyz/on-demand";
 
 import { CrossbarClient } from "@switchboard-xyz/common";
-import { appendFileSync } from "fs";
+import { appendFileSync, readFileSync } from "fs";
 import { Commitment, sendAndConfirmRawTransaction, Connection } from "@solana/web3.js";
 import { Wallet } from "@coral-xyz/anchor";
+
 
 const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
 const OUTPUT_FILE = `swb-crank-output-${timestamp}.csv`;
@@ -42,7 +43,15 @@ console.log(`Using Private RPC Endpoint: ${process.env.PRIVATE_RPC_ENDPOINT}`);
 const MARGINFI_WALLET_FULL_PATH = process.env.HOME + process.env.MARGINFI_WALLET;
 console.log(`The Marginfi Wallet full path: ${MARGINFI_WALLET_FULL_PATH}`);
 
-const CROSSBAR_URL = process.argv[2];
+// The Swb Feeds file
+if (!process.argv[2]) {
+    console.error("❌ Missing the required Feeds file argument.");
+    process.exit(1);
+}
+console.log(`Using Feeds file: ${process.argv[2]}`);
+const feeds_map = new Map(Object.entries(dotenv.parse(readFileSync(process.argv[2], 'utf8'))));
+
+const CROSSBAR_URL = process.argv[3];
 // const CROSSBAR_URL = "https://crossbar.switchboard.xyz";
 // const CROSSBAR_URL = "https://staging.crossbar.switchboard.xyz";
 // const CROSSBAR_URL = "https://internal-crossbar.prod.mrgn.app";
@@ -53,7 +62,7 @@ if (!CROSSBAR_URL) {
 }
 console.log(`Using Crossbar URL: ${CROSSBAR_URL}`);
 
-const crank_all = process.argv[3] === "all";
+const crank_all = process.argv[4] === "all";
 if (crank_all) {
     console.log("Cranking all feeds at once.");
 } else {
@@ -113,13 +122,7 @@ if (crank_all) {
 
     }
 
-    const feed_addresses = [
-        "EAsoLo2uSvBDx3a5grqzfqBMg5RqpJVHRtXmjsFEc4LL", // One
-        "AAY5JGEmYT4WHx5KZCiiQg34GrCri1zbTTg9dfcprq5F", // SOL/USD Option 1
-        "C8BHeLfbEWD8nSMesqPrAKNuyC5UtTaBpXXABz6DbX62",  // SOL/USD Option 2
-        "HpYEhRjQcJ1cbtf4dkTfmNznK9j3d8GQ8XrfyaS2cKo9", // SOL/USD Option 3
-    ]
-    const feeds = feed_addresses.map((pubkey) => new sb.PullFeed(swbProgram, pubkey));
+    const feeds = [...feeds_map.values()].map((pubkey) => new sb.PullFeed(swbProgram, pubkey));
 
     appendFileSync(OUTPUT_FILE, `Using Crossbar URL: ${CROSSBAR_URL}` + "\n");
     appendFileSync(OUTPUT_FILE, `DateTime, Feed Address, Ix Fetch Time (ms), Tx Crank Time (ms), Tx Signature` + "\n");
