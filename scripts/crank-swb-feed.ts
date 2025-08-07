@@ -80,11 +80,11 @@ if (crank_all) {
     const queue = await sb.Queue.loadDefault(swbProgram!);
     const gateway = await queue.fetchGatewayFromCrossbar(crossbar);
 
-    async function fetch(feeds: PullFeed[]) {
+    async function crank(feeds: PullFeed[]) {
         try {
             const feed_addresses = feeds.map(feed => feed.pubkey.toString());
 
-            console.log(`Fetching the feeds ${feed_addresses} Ix for cranking...`);
+            console.log(`Fetch the feeds ${feed_addresses}...`);
             const fetch_start = Date.now();
             const [pullIx, luts] = await sb.PullFeed.fetchUpdateManyIx(swbProgram, {
                 feeds,
@@ -93,6 +93,7 @@ if (crank_all) {
                 payer: wallet.publicKey,
             });
             const fetch_elapsed = Date.now() - fetch_start;
+            console.log(`Fetch completed in ${fetch_elapsed} ms.`);
 
             const tx = await sb.asV0Tx({
                 connection,
@@ -102,18 +103,17 @@ if (crank_all) {
                 lookupTables: luts,
             });
 
-            console.log(`Cranking the feed ${feed_addresses} Tx...`);
-            const crank_start = Date.now();
+            console.log(`Submit the feed ${feed_addresses} Tx...`);
+            const submit_start = Date.now();
             const result = await sendAndConfirmRawTransaction(
                 connection,
                 Buffer.from(tx.serialize()),
                 TX_CONFIG
             );
-            const crank_elapsed = Date.now() - crank_start;
+            const submit_elapsed = Date.now() - submit_start;
 
-            const log_entry = `${new Date().toISOString()}, ${feed_addresses}, ${fetch_elapsed}, ${crank_elapsed}, ${result}`;
-            console.log(`Cranking successful: ${log_entry}`);
-            appendFileSync(OUTPUT_FILE, log_entry + "\n");
+            appendFileSync(OUTPUT_FILE, `${new Date().toISOString()}, ${feed_addresses}, ${fetch_elapsed}, ${submit_elapsed}, ${result}` + "\n");
+            console.log(`Submit completed in ${submit_elapsed} ms.`);
 
         } catch (error) {
             errorCount++;
@@ -125,15 +125,15 @@ if (crank_all) {
     const feeds = [...feeds_map.values()].map((pubkey) => new sb.PullFeed(swbProgram, pubkey));
 
     appendFileSync(OUTPUT_FILE, `Using Crossbar URL: ${CROSSBAR_URL}` + "\n");
-    appendFileSync(OUTPUT_FILE, `DateTime, Feed Address, Ix Fetch Time (ms), Tx Crank Time (ms), Tx Signature` + "\n");
+    appendFileSync(OUTPUT_FILE, `DateTime, Feed Address, Ix Fetch Time (ms), Tx Submit Time (ms), Tx Signature` + "\n");
 
     let errorCount = 0;
     while (true) {
         if (crank_all) {
-            await fetch(feeds);
+            await crank(feeds);
         } else {
             for (const feed of feeds) {
-                await fetch([feed]);
+                await crank([feed]);
             }
         }
         await delay(60_000);

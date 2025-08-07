@@ -18,10 +18,9 @@ async function fetch(crossbar: CrossbarClient,
     const elapsed = Date.now() - start;
 
     for (let simulation of results) {
-        const log_entry = `${new Date().toISOString()}, ${simulation.feed}, ${elapsed}, ${simulation.results}`;
-        console.log(log_entry);
-        appendFileSync(OUTPUT_FILE, log_entry + "\n");
+        appendFileSync(OUTPUT_FILE, `${new Date().toISOString()}, ${simulation.feed}, ${elapsed}, ${simulation.results}` + "\n");
     }
+    console.log(`Simulation completed in ${elapsed} ms.`);
 }
 
 const delay = (ms: number) => new Promise(r => setTimeout(r, ms));
