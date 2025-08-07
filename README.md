@@ -185,10 +185,11 @@ Runs simulations for a Switchboard price feed in an infinite loop and saves simu
 **Usage:**
 
 ```bash
-nohup pnpm ts-node scripts/crank-swb-feed.ts <Crossbar URL> [all] > swb-crank.out 2>&1 &
+nohup pnpm ts-node scripts/crank-swb-feed.ts <SWB_FEEDS_FILE> <CROSSBAR_URL> [all] > swb-crank.out 2>&1 &
 ```
 **Parameters:**
-- Crossbar URL - the Switchboard Crossbar instance URL. Example: `https://crossbar.switchboard.xyz`
+- **`SWB_FEEDS_FILE`** The KVP file with Switchboard price feed addresses. The [swb-feeds.kvp](data/swb-feeds.kvp) file can be taken as prototype.
+- **`CROSSBAR_URL`** - the Switchboard Crossbar instance URL. Example: `https://crossbar.switchboard.xyz`
 
 ## Additional Help
 
