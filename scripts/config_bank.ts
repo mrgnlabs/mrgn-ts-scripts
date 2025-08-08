@@ -8,6 +8,7 @@ import { bigNumberToWrappedI80F48, WrappedI80F48 } from "@mrgnlabs/mrgn-common";
 import { InterestRateConfigRaw } from "@mrgnlabs/marginfi-client-v2";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 import { commonSetup } from "../lib/common-setup";
+import { u32MAX } from "../lib/constants";
 
 /**
  * If true, send the tx. If false, output the unsigned b58 tx to console.
@@ -59,8 +60,8 @@ export const bankConfigOpt = () => {
       plateauInterestRate: null,
     },
     operationalState: null, // { reduceOnly: {} },
-    // TODO max conf here in 1.4
     oracleMaxAge: 70,
+    oracleMaxConfidence: null, // 10% = u32MAX * 0.10
     permissionlessBadDebtSettlement: null,
     freezeSettings: null,
   };
@@ -76,7 +77,7 @@ async function main() {
     config.PROGRAM_ID,
     "/keys/staging-deploy.json",
     config.MULTISIG_PAYER,
-    "1.3"
+    "current"
   );
   const program = user.program;
   const connection = user.connection;
@@ -145,7 +146,7 @@ type BankConfigOptRaw = {
     | null;
 
   oracleMaxAge: number | null;
-  // TODO new oracle confidence value in 1.4
+  oracleMaxConfidence: number | null;
   permissionlessBadDebtSettlement: boolean | null;
   freezeSettings: boolean | null;
 };
