@@ -1,12 +1,7 @@
-import { Connection, PublicKey, Transaction, sendAndConfirmTransaction } from "@solana/web3.js";
-import { Program, AnchorProvider, Wallet } from "@coral-xyz/anchor";
-
-import { loadKeypairFromFile } from "./utils";
-import { assertI80F48Approx, assertKeysEqual } from "./softTests";
+import { PublicKey } from "@solana/web3.js";
 
 import { wrappedI80F48toBigNumber } from "@mrgnlabs/mrgn-common";
-import { Marginfi } from "../idl/marginfi1.3";
-import marginfiIdl from "../idl/marginfi.json";
+import { commonSetup } from "../lib/common-setup";
 
 const verbose = true;
 
@@ -21,23 +16,40 @@ const config: Config = {
 };
 
 async function main() {
-  marginfiIdl.address = config.PROGRAM_ID;
-  const connection = new Connection("https://api.mainnet-beta.solana.com", "confirmed");
-  const wallet = new Wallet(loadKeypairFromFile(process.env.HOME + "/.config/solana/id.json"));
+  const user = commonSetup(
+    true,
+    config.PROGRAM_ID,
+    "/keys/staging-deploy.json",
+    undefined,
+    "current"
+  );
+  const program = user.program;
 
-  const provider = new AnchorProvider(connection, wallet, {
-    preflightCommitment: "confirmed",
-  });
-
-  const program = new Program<Marginfi>(marginfiIdl as Marginfi, provider);
   let group = await program.account.marginfiGroup.fetch(config.GROUP);
 
   console.log("admin: " + group.admin);
   console.log("emode admin: " + group.emodeAdmin);
+  console.log("curve admin: " + group.delegateCurveAdmin);
+  console.log("limit admin: " + group.delegateLimitAdmin);
+  console.log("emissions admin: " + group.delegateEmissionsAdmin);
+
   console.log("flags: " + group.groupFlags.toNumber());
   console.log("fee wallet: " + group.feeStateCache.globalFeeWallet);
-  console.log("interest to program (fixed): " + wrappedI80F48toBigNumber(group.feeStateCache.programFeeFixed));
-  console.log("interest to program (ir): " + wrappedI80F48toBigNumber(group.feeStateCache.programFeeRate));
+  console.log(
+    "interest to program (fixed): " +
+      wrappedI80F48toBigNumber(group.feeStateCache.programFeeFixed)
+  );
+  console.log(
+    "interest to program (ir): " +
+      wrappedI80F48toBigNumber(group.feeStateCache.programFeeRate)
+  );
+
+  let cache = group.feeStateCache;
+  console.log("cache values: ");
+  console.log(" wallet:    " + cache.globalFeeWallet);
+  console.log(" fixed:     " + wrappedI80F48toBigNumber(cache.programFeeFixed));
+  console.log(" rate       " + wrappedI80F48toBigNumber(cache.programFeeRate));
+  console.log(" last updated       " + cache.lastUpdate.toString());
 }
 
 main().catch((err) => {

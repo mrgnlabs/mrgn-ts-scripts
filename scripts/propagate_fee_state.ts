@@ -1,9 +1,13 @@
-import { Connection, PublicKey, Transaction, sendAndConfirmTransaction } from "@solana/web3.js";
+import {
+  Connection,
+  PublicKey,
+  Transaction,
+  sendAndConfirmTransaction,
+} from "@solana/web3.js";
 import { Program, AnchorProvider } from "@coral-xyz/anchor";
-import { Marginfi } from "../../marginfi-client-v2/src/idl/marginfi-types_0.1.2";
-import marginfiIdl from "../../marginfi-client-v2/src/idl/marginfi_0.1.2.json";
 import { DEFAULT_API_URL, loadEnvFile, loadKeypairFromFile } from "./utils";
 import { assertI80F48Approx, assertKeysEqual } from "./softTests";
+import { commonSetup } from "../lib/common-setup";
 
 const verbose = true;
 
@@ -13,35 +17,30 @@ type Config = {
 };
 
 const config: Config = {
-  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
+  PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
   GROUP_KEYS: [
-    new PublicKey("FCPfpHA69EbS8f9KKSreTRkXbzFpunsKuYf5qNmnJjpo"),
+    new PublicKey("4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8"),
     // Up to ~30 groups per script execution
   ],
 };
 
 const deriveGlobalFeeState = (programId: PublicKey) => {
-  return PublicKey.findProgramAddressSync([Buffer.from("feestate", "utf-8")], programId);
+  return PublicKey.findProgramAddressSync(
+    [Buffer.from("feestate", "utf-8")],
+    programId
+  );
 };
 
 async function main() {
-  marginfiIdl.address = config.PROGRAM_ID;
-  loadEnvFile(".env.api");
-  const apiUrl = process.env.API_URL || DEFAULT_API_URL;
-  console.log("api: " + apiUrl);
-  const connection = new Connection(apiUrl, "confirmed");
-  const wallet = loadKeypairFromFile(process.env.HOME + "/.config/solana/id.json");
-
-  // @ts-ignore
-  const provider = new AnchorProvider(connection, wallet, {
-    preflightCommitment: "confirmed",
-  });
-
-  const program = new Program<Marginfi>(
-    // @ts-ignore
-    marginfiIdl as Marginfi,
-    provider
+  const user = commonSetup(
+    true,
+    config.PROGRAM_ID,
+    "/keys/staging-deploy.json",
+    undefined,
+    "current"
   );
+  const program = user.program;
+
   const transaction = new Transaction();
   for (const groupKey of config.GROUP_KEYS) {
     const ix = await program.methods
@@ -56,7 +55,11 @@ async function main() {
   }
 
   try {
-    const signature = await sendAndConfirmTransaction(connection, transaction, [wallet]);
+    const signature = await sendAndConfirmTransaction(
+      user.connection,
+      transaction,
+      [user.wallet.payer]
+    );
     console.log("Transaction signature:", signature);
   } catch (error) {
     console.error("Transaction failed:", error);
@@ -64,7 +67,9 @@ async function main() {
 
   const [feeStateKey] = deriveGlobalFeeState(program.programId);
   const feeState = await program.account.feeState.fetch(feeStateKey);
-  const groups = await program.account.marginfiGroup.fetchMultiple(config.GROUP_KEYS);
+  const groups = await program.account.marginfiGroup.fetchMultiple(
+    config.GROUP_KEYS
+  );
 
   if (verbose) {
     console.log("fee state: " + feeStateKey);
