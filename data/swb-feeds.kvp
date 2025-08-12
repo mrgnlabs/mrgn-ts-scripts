@@ -1,14 +1,16 @@
 # The Switchboard price feeds. 
 # Note that the batch cranking threshold is 14 feeds due to the Solana tx size limitation.
 
-One=EAsoLo2uSvBDx3a5grqzfqBMg5RqpJVHRtXmjsFEc4LL
-SOL-USD-Option1=AAY5JGEmYT4WHx5KZCiiQg34GrCri1zbTTg9dfcprq5F
+#One=EAsoLo2uSvBDx3a5grqzfqBMg5RqpJVHRtXmjsFEc4LL
+#SOL-USD-Option1=AAY5JGEmYT4WHx5KZCiiQg34GrCri1zbTTg9dfcprq5F
 SOL-USD-Option2=C8BHeLfbEWD8nSMesqPrAKNuyC5UtTaBpXXABz6DbX62
-SOL-USD-Option3=HpYEhRjQcJ1cbtf4dkTfmNznK9j3d8GQ8XrfyaS2cKo9
-jupSOL=HX5WM3qzogAfRCjBUWwnniLByMfFrjm1b5yo4KoWGR27
-bonkSOL=4kuWw1kSxSnTK9PooCXyb4J9BbEKEbxELHPJg711BwbS
-hSOL=1snBjCaHejZqQsAqkELAKNaqUrDNNCr7zmNX6qaQCzg
-HONEY=5MoizCZy8XL2MXDmxgpYw2K2whvTDrRD1Mteewm7UoSS
+#SOL-USD-Option3=HpYEhRjQcJ1cbtf4dkTfmNznK9j3d8GQ8XrfyaS2cKo9
+#SOL-USD-Surge=8BhM22hCMGjDHweyUVAwfG7N4QwNTWGPeT8KAQgz4kdp
+JitoSOL-Option1=5htZ4vPKPjAEg8EJv6JHcaCetMM4XehZo8znQvrp6Ur3
+#jupSOL=HX5WM3qzogAfRCjBUWwnniLByMfFrjm1b5yo4KoWGR27
+#bonkSOL=4kuWw1kSxSnTK9PooCXyb4J9BbEKEbxELHPJg711BwbS
+#hSOL=1snBjCaHejZqQsAqkELAKNaqUrDNNCr7zmNX6qaQCzg
+#HONEY=5MoizCZy8XL2MXDmxgpYw2K2whvTDrRD1Mteewm7UoSS
 #JSOL=Hg8Kz1NaG3mnzJ34nzMRwTXByLTG1wrFnW4AgMfynoFz
 #META=5AqZjb1huRdQtic1KwUHKbRE7aiVohV9v9KVT1rdkrCE
 #UXD=CoEDGeYda7Mi6c1BAsHE2LL6zEVcitX43wPABSLgQfpB
