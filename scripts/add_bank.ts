@@ -217,7 +217,6 @@ async function main() {
             bankConfig.totalAssetValueInitLimit.toString()
           ),
           oracleMaxAge: bankConfig.oracleMaxAge,
-          // Note: Omitted in 1.3
           configFlags: 0,
           oracleMaxConfidence: bankConfig.oracleMaxConfidence,
         },
@@ -281,26 +280,6 @@ const deriveBankWithSeed = (
 main().catch((err) => {
   console.error(err);
 });
-
-// TODO remove in 1.4
-type BankConfigRaw_v1_3 = {
-  assetWeightInit: WrappedI80F48;
-  assetWeightMaint: WrappedI80F48;
-
-  liabilityWeightInit: WrappedI80F48;
-  liabilityWeightMaint: WrappedI80F48;
-
-  depositLimit: BN;
-  borrowLimit: BN;
-  riskTier: { collateral: {} } | { isolated: {} };
-  assetTag: number;
-  totalAssetValueInitLimit: BN;
-
-  interestRateConfig: InterestRateConfigRaw;
-  operationalState: { paused: {} } | { operational: {} } | { reduceOnly: {} };
-
-  oracleMaxAge: number;
-};
 
 type BankConfigRaw_v1_4 = {
   assetWeightInit: WrappedI80F48;
