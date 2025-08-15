@@ -136,7 +136,7 @@ if (crank_all) {
                 await crank([feed]);
             }
         }
-        await delay(60_000);
+        await delay(20_000);
     }
 
 })();
