@@ -73,10 +73,10 @@ const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
   GROUP: new PublicKey("4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8"),
   ACCOUNT: new PublicKey("GZxaVQQMp7Vv6rF4jYn3FBJwyNujVYibm6TM4ouRp5gR"),
-  BANK: new PublicKey("8UEiPmgZHXXEDrqLS3oiTxQxTbeYTtPbeMBxAd2XGbpu"),
-  MINT: new PublicKey("2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo"),
-  AMOUNT: new BN(0.000001 * 10 ** 6),
-  WITHDRAW_ALL: true,
+  BANK: new PublicKey("2s37akK2eyBbp8DZgCm7RtsaEz8eJP3Nxd4urLHQv7yB"),
+  MINT: new PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"),
+  AMOUNT: new BN(664_000 * 10 ** 6),
+  WITHDRAW_ALL: false,
   REMAINING: [
     [
       new PublicKey("HmpMfL8942u22htC4EMiWgLX931g3sacXFR6KjuLgKLV"),
