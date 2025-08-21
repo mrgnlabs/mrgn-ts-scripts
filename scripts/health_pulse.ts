@@ -6,7 +6,12 @@ import {
   Transaction,
   sendAndConfirmTransaction,
 } from "@solana/web3.js";
-import { BankAndOracles, bytesToF64, dumpAccBalances } from "../lib/utils";
+import {
+  BankAndOracles,
+  bytesToF64,
+  getOraclesAndCrankSwb,
+  dumpAccBalances,
+} from "../lib/utils";
 import { commonSetup } from "../lib/common-setup";
 import { loadSponsoredOracle } from "../lib/pyth-oracle-helpers";
 import { wrappedI80F48toBigNumber } from "@mrgnlabs/mrgn-common";
@@ -20,7 +25,7 @@ export type Config = {
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  ACCOUNT: new PublicKey("4K45dnAyHvrishz5BryMYYMpqJeTA9v4mMyk7SvxCNZp"),
+  ACCOUNT: new PublicKey("GZxaVQQMp7Vv6rF4jYn3FBJwyNujVYibm6TM4ouRp5gR"),
 };
 
 async function main() {
@@ -34,98 +39,12 @@ async function main() {
   const program = user.program;
   const connection = user.connection;
 
-  let swbPullFeeds: PublicKey[] = [];
-
-  let acc = await program.account.marginfiAccount.fetch(config.ACCOUNT);
-  dumpAccBalances(acc);
-  let balances = acc.lendingAccount.balances;
-  let activeBalances: BankAndOracles[] = [];
-  for (let i = 0; i < balances.length; i++) {
-    let bal = balances[i];
-    if (bal.active == 1) {
-      let bankAcc = await program.account.bank.fetch(bal.bankPk);
-      if ("switchboardPull" in bankAcc.config.oracleSetup) {
-        const oracle = bankAcc.config.oracleKeys[0];
-        console.log("[" + i + "] swb oracle: " + oracle);
-        swbPullFeeds.push(oracle);
-        activeBalances.push([bal.bankPk, oracle]);
-      } else if ("pythPushOracle" in bankAcc.config.oracleSetup) {
-        const oracle = bankAcc.config.oracleKeys[0];
-        console.log("[" + i + "] pyth oracle: " + oracle);
-        let feed = PublicKey.default;
-        try {
-          feed = (await loadSponsoredOracle(oracle, user.provider.connection))
-            .address;
-        } catch (err) {
-          console.error(
-            "bank: " +
-              bal.bankPk +
-              " has no pyth feed, falling back to mrgn feed"
-          );
-          feed = (
-            await loadSponsoredOracle(
-              oracle,
-              user.provider.connection,
-              MARGINFI_SPONSORED_SHARD_ID
-            )
-          ).address;
-        }
-        console.log(" feed: " + feed);
-        activeBalances.push([bal.bankPk, feed]);
-      } else if (
-        "[" + i + "] stakedWithPythPush" in
-        bankAcc.config.oracleSetup
-      ) {
-        const oracle = bankAcc.config.oracleKeys[0];
-        console.log("pyth oracle: " + oracle);
-        console.log(
-          "lst pool/mint: " +
-            bankAcc.config.oracleKeys[1] +
-            " " +
-            bankAcc.config.oracleKeys[2]
-        );
-        activeBalances.push([
-          bal.bankPk,
-          oracle,
-          bankAcc.config.oracleKeys[1],
-          bankAcc.config.oracleKeys[2],
-        ]);
-      } else {
-        const oracle = bankAcc.config.oracleKeys[0];
-        console.log("[" + i + "] other oracle: " + oracle);
-        activeBalances.push([bal.bankPk, oracle]);
-      }
-    }
-  }
-
-  if (swbPullFeeds.length > 0) {
-    try {
-      const swbProgram = await sb.AnchorUtils.loadProgramFromConnection(
-        // TODO fix when web3 is bumped in swb?
-        // @ts-ignore
-        connection
-      );
-      const pullFeedInstances: sb.PullFeed[] = swbPullFeeds.map(
-        (pubkey) => new sb.PullFeed(swbProgram, pubkey)
-      );
-      const gateway = await pullFeedInstances[0].fetchGatewayUrl();
-      const [pullIx, _luts] = await sb.PullFeed.fetchUpdateManyIx(swbProgram, {
-        feeds: pullFeedInstances,
-        gateway,
-        numSignatures: 1,
-        payer: user.wallet.publicKey,
-      });
-      const crankTx = new Transaction();
-      crankTx.add(...pullIx);
-      const signature = await sendAndConfirmTransaction(connection, crankTx, [
-        user.wallet.payer,
-      ]);
-      console.log("Swb crank tx signature:", signature);
-    } catch (err) {
-      console.log("swb crank failed");
-      console.log(err);
-    }
-  }
+  let activeBalances = await getOraclesAndCrankSwb(
+    program,
+    config.ACCOUNT,
+    connection,
+    user.wallet.payer
+  );
 
   const oracleMeta: AccountMeta[] = activeBalances.flat().map((pubkey) => {
     return { pubkey, isSigner: false, isWritable: false };

@@ -15,6 +15,10 @@ TODO list of common banks and groups...
 - Program v4 -J3oBkTkDXU3TcAggJEa3YeBZE5om5yNAdTtLVNXFD47
 - Inc Ops - ToM1VY97cMeAiyN3MUFKKLuPdG8CaNiqhoDDGJ3a9cg
 
+## MULTISIG HOLDINGS
+
+- Management v4's mrgn acc - GZxaVQQMp7Vv6rF4jYn3FBJwyNujVYibm6TM4ouRp5gR
+
 ## GROUPS
 
 - Main group - 4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8
@@ -78,6 +82,7 @@ TODO list of common banks and groups...
 - SOL - So11111111111111111111111111111111111111112
 - ezSOL (an LRT) - ezSoL6fY1PVdJcJsUpe5CM3xkfmy3zoVCABybm5WtiC
 - BONK - DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263
+- PyUSD- 2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo
 
 ## VALIDATORS
 

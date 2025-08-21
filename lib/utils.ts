@@ -2,11 +2,35 @@ import * as fs from "fs";
 import path from "path";
 import dotenv from "dotenv";
 import BigNumber from "bignumber.js";
-import { Keypair, PublicKey, Transaction, VersionedTransaction } from "@solana/web3.js";
-import { groupedNumberFormatterDyn, Wallet, wrappedI80F48toBigNumber } from "@mrgnlabs/mrgn-common";
-import { AccountCache, BankMetadata, BirdeyeTokenMetadataResponse, BirdeyePriceResponse } from "./types";
-import { PYTH_PUSH_ORACLE_ID, PYTH_SPONSORED_SHARD_ID, MARGINFI_SPONSORED_SHARD_ID } from "./constants";
+import {
+  Connection,
+  Keypair,
+  PublicKey,
+  sendAndConfirmTransaction,
+  Transaction,
+  VersionedTransaction,
+} from "@solana/web3.js";
+import {
+  groupedNumberFormatterDyn,
+  Wallet,
+  wrappedI80F48toBigNumber,
+} from "@mrgnlabs/mrgn-common";
+import {
+  AccountCache,
+  BankMetadata,
+  BirdeyeTokenMetadataResponse,
+  BirdeyePriceResponse,
+} from "./types";
+import {
+  PYTH_PUSH_ORACLE_ID,
+  PYTH_SPONSORED_SHARD_ID,
+  MARGINFI_SPONSORED_SHARD_ID,
+} from "./constants";
 import { Environment, MarginfiAccountRaw } from "@mrgnlabs/marginfi-client-v2";
+import { Marginfi } from "../idl/marginfi";
+import { Program } from "@coral-xyz/anchor";
+import { loadSponsoredOracle } from "./pyth-oracle-helpers";
+import * as sb from "@switchboard-xyz/on-demand";
 
 dotenv.config();
 
@@ -26,7 +50,9 @@ export function getCachedAccounts(): PublicKey[] {
   const CACHE_FILE = path.join(__dirname, "../account-cache.json");
 
   if (!fs.existsSync(CACHE_FILE)) {
-    throw new Error("Account cache not found. Please run 'pnpm accounts:cache' first.");
+    throw new Error(
+      "Account cache not found. Please run 'pnpm accounts:cache' first."
+    );
   }
 
   const cache: AccountCache = JSON.parse(fs.readFileSync(CACHE_FILE, "utf-8"));
@@ -38,7 +64,9 @@ export function getCachedActivity(): Record<string, any[]> {
   const CACHE_FILE = path.join(__dirname, "../activity-cache.json");
 
   if (!fs.existsSync(CACHE_FILE)) {
-    throw new Error("Activity cache not found. Please run 'pnpm activity:cache' first.");
+    throw new Error(
+      "Activity cache not found. Please run 'pnpm activity:cache' first."
+    );
   }
 
   return JSON.parse(fs.readFileSync(CACHE_FILE, "utf-8"));
@@ -56,36 +84,58 @@ function u16ToArrayBufferLE(value: number): Uint8Array {
   return new Uint8Array(buffer);
 }
 
-function findPythPushOracleAddress(feedId: Buffer, programId: PublicKey, shardId: number): PublicKey {
+function findPythPushOracleAddress(
+  feedId: Buffer,
+  programId: PublicKey,
+  shardId: number
+): PublicKey {
   const shardBytes = u16ToArrayBufferLE(shardId);
   return PublicKey.findProgramAddressSync([shardBytes, feedId], programId)[0];
 }
 
 export function getPythPushOracleAddresses(feedId: Buffer): PublicKey[] {
   return [
-    findPythPushOracleAddress(feedId, PYTH_PUSH_ORACLE_ID, PYTH_SPONSORED_SHARD_ID),
-    findPythPushOracleAddress(feedId, PYTH_PUSH_ORACLE_ID, MARGINFI_SPONSORED_SHARD_ID),
+    findPythPushOracleAddress(
+      feedId,
+      PYTH_PUSH_ORACLE_ID,
+      PYTH_SPONSORED_SHARD_ID
+    ),
+    findPythPushOracleAddress(
+      feedId,
+      PYTH_PUSH_ORACLE_ID,
+      MARGINFI_SPONSORED_SHARD_ID
+    ),
   ];
 }
 
-export async function getBankMetadata(env: Environment): Promise<BankMetadata[]> {
-  let bankMetadataUrl = "https://storage.googleapis.com/mrgn-public/mrgn-bank-metadata-cache.json";
-  let stakedBankMetadataUrl = "https://storage.googleapis.com/mrgn-public/mrgn-staked-bank-metadata-cache.json";
+export async function getBankMetadata(
+  env: Environment
+): Promise<BankMetadata[]> {
+  let bankMetadataUrl =
+    "https://storage.googleapis.com/mrgn-public/mrgn-bank-metadata-cache.json";
+  let stakedBankMetadataUrl =
+    "https://storage.googleapis.com/mrgn-public/mrgn-staked-bank-metadata-cache.json";
 
   if (env === "staging") {
-    bankMetadataUrl = "https://storage.googleapis.com/mrgn-public/mrgn-bank-metadata-cache-stage.json";
-    stakedBankMetadataUrl = "https://storage.googleapis.com/mrgn-public/mrgn-staked-bank-metadata-cache-stage.json";
+    bankMetadataUrl =
+      "https://storage.googleapis.com/mrgn-public/mrgn-bank-metadata-cache-stage.json";
+    stakedBankMetadataUrl =
+      "https://storage.googleapis.com/mrgn-public/mrgn-staked-bank-metadata-cache-stage.json";
   }
 
   const bankMetadataResponse = await fetch(bankMetadataUrl);
   const stakedBankMetadataResponse = await fetch(stakedBankMetadataUrl);
   const bankMetadata = (await bankMetadataResponse.json()) as BankMetadata[];
-  const stakedBankMetadata = (await stakedBankMetadataResponse.json()) as BankMetadata[];
+  const stakedBankMetadata =
+    (await stakedBankMetadataResponse.json()) as BankMetadata[];
 
   return [...bankMetadata, ...stakedBankMetadata];
 }
 
-export async function getBankMetadataFromBirdeye(bank: PublicKey, mint: PublicKey) {
+export async function getBankMetadataFromBirdeye(
+  bank: PublicKey,
+  mint: PublicKey
+) {
   const birdeyeApiResponse = await fetch(
     `https://public-api.birdeye.so/defi/v3/token/meta-data/single?address=${mint.toBase58()}`,
     {
@@ -95,7 +145,8 @@ export async function getBankMetadataFromBirdeye(bank: PublicKey, mint: PublicKe
       },
     }
   );
-  const birdeyeApiJson: BirdeyeTokenMetadataResponse = await birdeyeApiResponse.json();
+  const birdeyeApiJson: BirdeyeTokenMetadataResponse =
+    await birdeyeApiResponse.json();
 
   if (birdeyeApiResponse.ok && birdeyeApiJson.data) {
     return {
@@ -119,11 +170,15 @@ export class ReadOnlyWallet implements Wallet {
     this.payer = undefined;
   }
 
-  async signTransaction<T extends Transaction | VersionedTransaction>(tx: T): Promise<T> {
+  async signTransaction<T extends Transaction | VersionedTransaction>(
+    tx: T
+  ): Promise<T> {
     return tx;
   }
 
-  async signAllTransactions<T extends Transaction | VersionedTransaction>(txs: T[]): Promise<T[]> {
+  async signAllTransactions<T extends Transaction | VersionedTransaction>(
+    txs: T[]
+  ): Promise<T[]> {
     return txs;
   }
 }
@@ -145,7 +200,9 @@ export type BankAndOracles = PublicKey[]; // [bank, oracle, oracle_2...]
  * @returns Flattened array of public keys with inactive accounts at the end, ready for transaction
  *          composition
  */
-export const composeRemainingAccounts = (banksAndOracles: PublicKey[][]): PublicKey[] => {
+export const composeRemainingAccounts = (
+  banksAndOracles: PublicKey[][]
+): PublicKey[] => {
   banksAndOracles.sort((a, b) => {
     const A = a[0].toBytes();
     const B = b[0].toBytes();
@@ -185,8 +242,12 @@ export function dumpAccBalances(account: MarginfiAccountRaw) {
     activeBalances.push({
       "Bank PK": balances[i].bankPk.toString(),
       // Tag: balances[i].bankAssetTag,
-      "Liab Shares ": formatNumber(wrappedI80F48toBigNumber(balances[i].liabilityShares)),
-      "Asset Shares": formatNumber(wrappedI80F48toBigNumber(balances[i].assetShares)),
+      "Liab Shares ": formatNumber(
+        wrappedI80F48toBigNumber(balances[i].liabilityShares)
+      ),
+      "Asset Shares": formatNumber(
+        wrappedI80F48toBigNumber(balances[i].assetShares)
+      ),
       // Emissions: formatNumber(
       //   wrappedI80F48toBigNumber(balances[i].emissionsOutstanding)
       // ),
@@ -207,7 +268,8 @@ export function dumpAccBalances(account: MarginfiAccountRaw) {
  */
 export function bytesToF64(bytes: Uint8Array | number[]): number {
   // Normalize to a Uint8Array
-  const u8: Uint8Array = bytes instanceof Uint8Array ? bytes : new Uint8Array(bytes);
+  const u8: Uint8Array =
+    bytes instanceof Uint8Array ? bytes : new Uint8Array(bytes);
 
   if (u8.length !== 8) {
     throw new Error(`Invalid length ${u8.length}, expected exactly 8 bytes`);
@@ -223,7 +285,9 @@ export function bytesToF64(bytes: Uint8Array | number[]): number {
  * @param banks Array of bank objects containing mint property
  * @returns A map of token addresses to their prices
  */
-export async function getBankPrices(banks: any[]): Promise<Map<string, number>> {
+export async function getBankPrices(
+  banks: any[]
+): Promise<Map<string, number>> {
   // Extract token addresses from banks
   const tokenAddresses = banks.map((bank) => bank.mint.toBase58());
 
@@ -233,15 +297,18 @@ export async function getBankPrices(banks: any[]): Promise<Map<string, number>> 
   };
 
   // Make API request to Birdeye
-  const birdeyeApiResponse = await fetch("https://public-api.birdeye.so/defi/multi_price", {
-    method: "POST",
-    headers: {
-      "x-api-key": process.env.BIRDEYE_API_KEY,
-      "x-chain": "solana",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
-  });
+  const birdeyeApiResponse = await fetch(
+    "https://public-api.birdeye.so/defi/multi_price",
+    {
+      method: "POST",
+      headers: {
+        "x-api-key": process.env.BIRDEYE_API_KEY,
+        "x-chain": "solana",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    }
+  );
 
   // Parse response
   const birdeyeApiJson: BirdeyePriceResponse = await birdeyeApiResponse.json();
@@ -256,4 +323,89 @@ export async function getBankPrices(banks: any[]): Promise<Map<string, number>> 
   }
 
   return priceMap;
+}
+
+export async function getOraclesAndCrankSwb(
+  program: Program<Marginfi>,
+  account: PublicKey,
+  connection: Connection,
+  payer: Keypair
+): Promise<BankAndOracles[]> {
+  let swbPullFeeds: PublicKey[] = [];
+
+  let acc = await program.account.marginfiAccount.fetch(account);
+  dumpAccBalances(acc);
+  let balances = acc.lendingAccount.balances;
+  let activeBalances: BankAndOracles[] = [];
+  for (let i = 0; i < balances.length; i++) {
+    let bal = balances[i];
+    if (bal.active == 1) {
+      let bankAcc = await program.account.bank.fetch(bal.bankPk);
+      if ("switchboardPull" in bankAcc.config.oracleSetup) {
+        const oracle = bankAcc.config.oracleKeys[0];
+        console.log("[" + i + "] swb oracle: " + oracle);
+        swbPullFeeds.push(oracle);
+        activeBalances.push([bal.bankPk, oracle]);
+      } else if ("pythPushOracle" in bankAcc.config.oracleSetup) {
+        const oracle = bankAcc.config.oracleKeys[0];
+        console.log("[" + i + "] pyth oracle: " + oracle);
+        let feed = oracle;
+        console.log(" feed: " + feed);
+        activeBalances.push([bal.bankPk, feed]);
+      } else if (
+        "[" + i + "] stakedWithPythPush" in
+        bankAcc.config.oracleSetup
+      ) {
+        const oracle = bankAcc.config.oracleKeys[0];
+        console.log("pyth oracle: " + oracle);
+        console.log(
+          "lst pool/mint: " +
+            bankAcc.config.oracleKeys[1] +
+            " " +
+            bankAcc.config.oracleKeys[2]
+        );
+        activeBalances.push([
+          bal.bankPk,
+          oracle,
+          bankAcc.config.oracleKeys[1],
+          bankAcc.config.oracleKeys[2],
+        ]);
+      } else {
+        const oracle = bankAcc.config.oracleKeys[0];
+        console.log("[" + i + "] other oracle: " + oracle);
+        activeBalances.push([bal.bankPk, oracle]);
+      }
+    }
+  }
+
+  if (swbPullFeeds.length > 0) {
+    try {
+      const swbProgram = await sb.AnchorUtils.loadProgramFromConnection(
+        // TODO fix when web3 is bumped in swb?
+        // @ts-ignore
+        connection
+      );
+      const pullFeedInstances: sb.PullFeed[] = swbPullFeeds.map(
+        (pubkey) => new sb.PullFeed(swbProgram, pubkey)
+      );
+      const gateway = await pullFeedInstances[0].fetchGatewayUrl();
+      const [pullIx, _luts] = await sb.PullFeed.fetchUpdateManyIx(swbProgram, {
+        feeds: pullFeedInstances,
+        gateway,
+        numSignatures: 1,
+        payer: payer.publicKey,
+      });
+      const crankTx = new Transaction();
+      crankTx.add(...pullIx);
+      const signature = await sendAndConfirmTransaction(connection, crankTx, [
+        payer,
+      ]);
+      console.log("Swb crank tx signature:", signature);
+    } catch (err) {
+      console.log("swb crank failed");
+      console.log(err);
+    }
+  }
+
+  return activeBalances;
 }
