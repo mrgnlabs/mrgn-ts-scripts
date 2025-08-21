@@ -97,3 +97,7 @@ async function main() {
     console.log("Base58-encoded transaction:", base58Transaction);
   }
 }
+
+main().catch((err) => {
+  console.error(err);
+});
