@@ -1,3 +1,4 @@
+import { LENGTH_SIZE } from "@solana/spl-token";
 import dotenv from "dotenv";
 import { appendFileSync, readFileSync } from "fs";
 import fetch from "node-fetch";
@@ -23,11 +24,8 @@ type SimulationResponse = SimulationEntry[];
 async function simulate(feed: string) {
     console.log(`Simulating the feeds ${feed}...`);
 
-    const URL =
-        `https://internal-crossbar.stage.mrgn.app/simulate/solana/mainnet/${feed}`;
-
     const start = Date.now();
-    const response = await fetch(URL);
+    const response = await fetch(crossbar_url.replace("{feed}", feed));
     const elapsed = Date.now() - start;
 
     if (!response.ok) {
@@ -51,6 +49,18 @@ if (!process.argv[2]) {
 console.log(`Using Feeds file: ${process.argv[2]}`);
 const feeds = new Map(Object.entries(dotenv.parse(readFileSync(process.argv[2], 'utf8'))));
 
+// The Crossbar URL
+let crossbar_url = process.argv[3];
+if (!crossbar_url) {
+    console.error("❌ Missing the required Crossbar URL argument.");
+    process.exit(1);
+}
+crossbar_url = crossbar_url + "/simulate/solana/mainnet/{feed}"
+console.log(`Using Crossbar URL: ${crossbar_url}`);
+
+// The Simulation delay
+const SIM_DELAY = process.argv[4] ? parseInt(process.argv[4]) : 10;
+console.log(`Using Simulation delay: ${SIM_DELAY} seconds`);
 
 appendFileSync(OUTPUT_FILE, `DateTime, Feed Address, Elapsed Time (ms), Result, Stdev, Variance` + "\n");
 
@@ -65,7 +75,7 @@ appendFileSync(OUTPUT_FILE, `DateTime, Feed Address, Elapsed Time (ms), Result, 
             errorCount++;
             console.error(`Error ${errorCount} occurred while fetching feed data:`, error);
         }
-        await delay(10_000);
+        await delay(SIM_DELAY * 1000);
     }
 })();
 
