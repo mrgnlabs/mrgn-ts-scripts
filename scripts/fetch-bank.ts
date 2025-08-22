@@ -9,6 +9,7 @@ import BigNumber from "bignumber.js";
 import { commonSetup } from "../lib/common-setup";
 import { Marginfi } from "../idl/marginfi";
 import { Program } from "@coral-xyz/anchor";
+import { getTokenBalance } from "../lib/utils";
 
 // If true, prints this bank's settings in a format to be copy-pasted into add_bank
 const printForCopy = false;
@@ -21,7 +22,7 @@ type Config = {
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
   BANKS: [
-    new PublicKey("8g5qG6PVygcVSXV1cJnjXaD1yhrDwcWAMQCY2wR9VuAf"),
+    new PublicKey("Br3yzg2WSb81RaFWK9UsKtq8fD5viwooZG34mKqQWxdM"),
     // new PublicKey("CCKtUs6Cgwo4aaQUmBPmyoApH2gUDErxNZCAntD6LYGh"),
   ],
 };
@@ -40,6 +41,23 @@ async function printBankInfo(program: Program<Marginfi>, bankKey: PublicKey) {
   const formatBN = (bn: BigNumber, dp = 2): string => bn.toFormat(dp);
 
   console.groupCollapsed(`Bank: ${bankKey.toString()}`);
+
+  const [bankLiquidityVault] = deriveLiquidityVault(program.programId, bankKey);
+  const [bankInsuranceVault] = deriveInsuranceVault(program.programId, bankKey);
+  const [bankFeeVault] = deriveFeeVault(program.programId, bankKey);
+
+  const liquidityBalPromise = getTokenBalance(
+    program.provider,
+    bankLiquidityVault
+  );
+  const insuranceBalPromise = getTokenBalance(
+    program.provider,
+    bankInsuranceVault
+  );
+  const feePromise = getTokenBalance(program.provider, bankFeeVault);
+  const liquidityBal = await liquidityBalPromise;
+  const insuranceBal = await insuranceBalPromise;
+  const feeBal = await feePromise;
 
   // Metrics
   console.log("Metrics:");
@@ -74,6 +92,13 @@ async function printBankInfo(program: Program<Marginfi>, bankKey: PublicKey) {
       Metric: "Liab Weight Maint",
       Value: toStr(bank.config.liabilityWeightMaint),
     },
+  ]);
+
+  console.log("Vaults:");
+  console.table([
+    { Balance: "Liquidity Vault", Value: liquidityBal.toLocaleString() },
+    { Balance: "Insurance Vault", Value: insuranceBal.toLocaleString() },
+    { Balance: "Fee Vault", Value: feeBal.toLocaleString() },
   ]);
 
   // Oracle
@@ -214,6 +239,20 @@ async function main() {
     await printBankInfo(program, bankKey);
   }
 }
+
+const deriveLiquidityVault = (programId: PublicKey, bank: PublicKey) => {
+  return PublicKey.findProgramAddressSync(
+    [Buffer.from("liquidity_vault", "utf-8"), bank.toBuffer()],
+    programId
+  );
+};
+
+const deriveInsuranceVault = (programId: PublicKey, bank: PublicKey) => {
+  return PublicKey.findProgramAddressSync(
+    [Buffer.from("insurance_vault", "utf-8"), bank.toBuffer()],
+    programId
+  );
+};
 
 const deriveFeeVault = (programId: PublicKey, bank: PublicKey) =>
   PublicKey.findProgramAddressSync(

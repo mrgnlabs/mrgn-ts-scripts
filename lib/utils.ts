@@ -11,7 +11,9 @@ import {
   VersionedTransaction,
 } from "@solana/web3.js";
 import {
+  AccountLayout,
   groupedNumberFormatterDyn,
+  RawAccount,
   Wallet,
   wrappedI80F48toBigNumber,
 } from "@mrgnlabs/mrgn-common";
@@ -28,7 +30,7 @@ import {
 } from "./constants";
 import { Environment, MarginfiAccountRaw } from "@mrgnlabs/marginfi-client-v2";
 import { Marginfi } from "../idl/marginfi";
-import { Program } from "@coral-xyz/anchor";
+import { AnchorProvider, Program, Provider } from "@coral-xyz/anchor";
 import { loadSponsoredOracle } from "./pyth-oracle-helpers";
 import * as sb from "@switchboard-xyz/on-demand";
 
@@ -409,3 +411,20 @@ export async function getOraclesAndCrankSwb(
 
   return activeBalances;
 }
+
+export const getTokenBalance = async (
+  provider: Provider,
+  account: PublicKey
+) => {
+  const accountInfo = await provider.connection.getAccountInfo(account);
+  if (!accountInfo) {
+    console.error("Tried to balance of acc that doesn't exist");
+    return 0;
+  }
+  const data: RawAccount = AccountLayout.decode(accountInfo.data);
+  if (data === undefined || data.amount === undefined) {
+    return 0;
+  }
+  const amount: BigInt = data.amount;
+  return Number(amount);
+};
