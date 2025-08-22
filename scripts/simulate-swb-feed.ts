@@ -35,18 +35,18 @@ const feeds = new Map(Object.entries(dotenv.parse(readFileSync(process.argv[2], 
 
 // The Crossbar URL
 const crossbar_url = process.argv[3];
-// const crossbar_url = "https://crossbar.switchboard.xyz";
-// const crossbar_url = "https://staging.crossbar.switchboard.xyz";
-// const crossbar_url = "https://internal-crossbar.prod.mrgn.app";
-// const crossbar_url = "https://internal-crossbar.stage.mrgn.app";
 if (!crossbar_url) {
     console.error("❌ Missing the required Crossbar URL argument.");
     process.exit(1);
 }
-
 console.log(`Using Crossbar URL: ${crossbar_url}`);
 
-const sim_all = process.argv[4] === "all";
+// The Simulation delay
+const SIM_DELAY = process.argv[4] ? parseInt(process.argv[4]) : 10;
+console.log(`Using Simulation delay: ${SIM_DELAY} seconds`);
+
+
+const sim_all = process.argv[5] === "all";
 if (sim_all) {
     console.log("Simulating all feeds at once.");
 } else {
@@ -75,6 +75,6 @@ const crossbar = new CrossbarClient(crossbar_url, true);
             errorCount++;
             console.error(`Error ${errorCount} occurred while fetching feed data:`, error);
         }
-        await delay(10_000);
+        await delay(SIM_DELAY * 1000);
     }
 })();

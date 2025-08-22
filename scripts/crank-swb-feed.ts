@@ -51,18 +51,19 @@ if (!process.argv[2]) {
 console.log(`Using Feeds file: ${process.argv[2]}`);
 const feeds_map = new Map(Object.entries(dotenv.parse(readFileSync(process.argv[2], 'utf8'))));
 
+// The Crossbar URL
 const CROSSBAR_URL = process.argv[3];
-// const CROSSBAR_URL = "https://crossbar.switchboard.xyz";
-// const CROSSBAR_URL = "https://staging.crossbar.switchboard.xyz";
-// const CROSSBAR_URL = "https://internal-crossbar.prod.mrgn.app";
-// const CROSSBAR_URL = "https://internal-crossbar.stage.mrgn.app";
 if (!CROSSBAR_URL) {
     console.error("❌ Missing the required Crossbar URL argument.");
     process.exit(1);
 }
 console.log(`Using Crossbar URL: ${CROSSBAR_URL}`);
 
-const crank_all = process.argv[4] === "all";
+// The Cranking delay
+const CRANKING_DELAY = process.argv[4] ? parseInt(process.argv[4]) : 60;
+console.log(`Using Cranking delay: ${CRANKING_DELAY} seconds`);
+
+const crank_all = process.argv[5] === "all";
 if (crank_all) {
     console.log("Cranking all feeds at once.");
 } else {
@@ -136,7 +137,7 @@ if (crank_all) {
                 await crank([feed]);
             }
         }
-        await delay(20_000);
+        await delay(CRANKING_DELAY * 1000);
     }
 
 })();
