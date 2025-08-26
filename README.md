@@ -182,7 +182,7 @@ pnpm ts-node scripts/simulate-swb-feed.ts <SWB_FEEDS_FILE> <CROSSBAR_URL> [all]
 [ -f swb-sim.out ] && rm swb-sim.out; nohup pnpm ts-node scripts/simulate-swb-feed.ts data/swb-feeds.kvp https://internal-crossbar.stage.mrgn.app > swb-sim.out 2>&1 &
 ```
 
-### `simulate-swb-feed2`
+### `simulate-swb-feed-dev`
 tbd
 
 ### `crank-swb-feed`

@@ -50,7 +50,12 @@ if (!process.argv[2]) {
     process.exit(1);
 }
 console.log(`Using Feeds file: ${process.argv[2]}`);
-const feeds_map = new Map(Object.entries(dotenv.parse(readFileSync(process.argv[2], 'utf8'))));
+
+const feeds: string[] = readFileSync(process.argv[2], 'utf8')
+    .split("\n")
+    .map(line => line.trim())
+    .filter(line => line && !line.startsWith("#"))
+    .map(line => line.split("=").slice(1).join("="));
 
 // The Crossbar URL
 const CROSSBAR_URL = process.argv[3];
@@ -124,16 +129,16 @@ if (crank_all) {
 
     }
 
-    const feeds = [...feeds_map.values()].map((pubkey) => new sb.PullFeed(swbProgram, pubkey));
+    const pullFeeds = feeds.map((pubkey) => new sb.PullFeed(swbProgram, pubkey));
 
     appendFileSync(OUTPUT_FILE, `DateTime, Feed Address, Ix Fetch Time (ms), Tx Submit Time (ms), Tx Signature` + "\n");
 
     let errorCount = 0;
     while (true) {
         if (crank_all) {
-            await crank(feeds);
+            await crank(pullFeeds);
         } else {
-            for (const feed of feeds) {
+            for (const feed of pullFeeds) {
                 await crank([feed]);
             }
         }

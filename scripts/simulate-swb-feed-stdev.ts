@@ -10,7 +10,6 @@ function delay(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-
 interface SimulationEntry {
     feed: string;
     feedHash: string;
