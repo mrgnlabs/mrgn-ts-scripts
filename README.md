@@ -173,7 +173,7 @@ Runs simulations for Switchboard price feeds in an infinite loop and saves simul
 pnpm ts-node scripts/simulate-swb-feed.ts <SWB_FEEDS_FILE> <CROSSBAR_URL> [all]
 ```
 *Parameters:*
-- **`SWB_FEEDS_FILE`** *(required)* The KVP file with Switchboard price feed addresses. The [swb-feeds.kvp](data/swb-feeds.kvp) file can be taken as prototype.
+- **`SWB_FEEDS_FILE`** *(required)* The KVP file with Switchboard price feed addresses. The [swb-feeds.kvp](data/all-banks.kvp) file can be taken as prototype.
 - **`CROSSBAR_URL`** - *(required)* the Switchboard Crossbar instance URL. Example: `https://crossbar.switchboard.xyz`
 - **`all`** - *(optional)* flag to crank all feeds in a single call
 
@@ -181,6 +181,9 @@ pnpm ts-node scripts/simulate-swb-feed.ts <SWB_FEEDS_FILE> <CROSSBAR_URL> [all]
 ```bash
 [ -f swb-sim.out ] && rm swb-sim.out; nohup pnpm ts-node scripts/simulate-swb-feed.ts data/swb-feeds.kvp https://internal-crossbar.stage.mrgn.app > swb-sim.out 2>&1 &
 ```
+
+### `simulate-swb-feed2`
+tbd
 
 ### `crank-swb-feed`
 **Description**  
@@ -191,7 +194,7 @@ Cranks Switchboard price feeds in an infinite loop and saves simulation results 
 pnpm ts-node scripts/crank-swb-feed.ts <SWB_FEEDS_FILE> <CROSSBAR_URL> [all]
 ```
 *Parameters:*
-- **`SWB_FEEDS_FILE`** *(required)* The KVP file with Switchboard price feed addresses. The [swb-feeds.kvp](data/swb-feeds.kvp) file can be taken as prototype.
+- **`SWB_FEEDS_FILE`** *(required)* The KVP file with Switchboard price feed addresses. The [swb-feeds.kvp](data/all-banks.kvp) file can be taken as prototype.
 - **`CROSSBAR_URL`** - *(required)* the Switchboard Crossbar instance URL. Example: `https://crossbar.switchboard.xyz`
 - **`all`** - *(optional)* flag to run simulation for all feeds in a single call
 
@@ -199,6 +202,8 @@ pnpm ts-node scripts/crank-swb-feed.ts <SWB_FEEDS_FILE> <CROSSBAR_URL> [all]
 ```bash
 [ -f swb-crank.out ] && rm swb-crank.out; nohup pnpm ts-node scripts/crank-swb-feed.ts data/swb-feeds.kvp https://internal-crossbar.stage.mrgn.app > swb-crank.out 2>&1 &
 ```
+### `fetch-jup-prices`
+tbd
 
 ## Additional Help
 
