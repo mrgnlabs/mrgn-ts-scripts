@@ -50,7 +50,7 @@ async function fetchPrice(token: string) {
         entry.priceChange24h,
     ]);
 
-    const csvRows = rows.map((r) => r.join(",")).join("\n") + "\n";
+    const csvRows = rows.map((r) => r.join(",")) + "\n";
     appendFileSync(OUTPUT_FILE, csvRows);
 
 }
