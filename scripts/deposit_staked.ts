@@ -1,74 +1,97 @@
 // Run deposit_single_pool first to convert to LST. In production, these will likely be atomic.
-import { Connection, Keypair, PublicKey, Transaction, sendAndConfirmTransaction } from "@solana/web3.js";
+import {
+  Connection,
+  Keypair,
+  PublicKey,
+  Transaction,
+  sendAndConfirmTransaction,
+} from "@solana/web3.js";
 import { Program, AnchorProvider, BN } from "@coral-xyz/anchor";
-import { Marginfi } from "../../marginfi-client-v2/src/idl/marginfi-types_0.1.2";
-import marginfiIdl from "../../marginfi-client-v2/src/idl/marginfi_0.1.2.json";
 import { loadKeypairFromFile, SINGLE_POOL_PROGRAM_ID } from "./utils";
-import { getAssociatedTokenAddressSync, TOKEN_PROGRAM_ID } from "@solana/spl-token";
+import {
+  getAssociatedTokenAddressSync,
+  TOKEN_PROGRAM_ID,
+} from "@solana/spl-token";
+import { commonSetup } from "../lib/common-setup";
+import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
+
+/**
+ * If true, send the tx. If false, output the unsigned b58 tx to console.
+ */
+const sendTx = true;
 
 type Config = {
   PROGRAM_ID: string;
-  GROUP: PublicKey;
   ACCOUNT: PublicKey;
   BANK: PublicKey;
   STAKE_POOL: PublicKey;
   /** In native decimals */
   AMOUNT: BN;
+
+  MULTISIG?: PublicKey; // May be omitted if not using squads
 };
 
 const config: Config = {
   PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-  GROUP: new PublicKey("FCPfpHA69EbS8f9KKSreTRkXbzFpunsKuYf5qNmnJjpo"),
   ACCOUNT: new PublicKey("E3uJyxW232EQAVZ9P9V6CFkxzjqqVdbh8XvUmxtZdGUt"),
   BANK: new PublicKey("3jt43usVm7qL1N5qPvbzYHWQRxamPCRhri4CxwDrf6aL"),
   STAKE_POOL: new PublicKey("AvS4oXtxWdrJGCJwDbcZ7DqpSqNQtKjyXnbkDbrSk6Fq"),
-  AMOUNT: new BN(0.01 * 10 ** 9), // sol has 9 decimals
+  AMOUNT: new BN(0.0001 * 10 ** 9), // sol has 9 decimals
+
+  MULTISIG: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 };
 
 async function main() {
-  marginfiIdl.address = config.PROGRAM_ID;
-  const connection = new Connection("https://api.mainnet-beta.solana.com", "confirmed");
-  const wallet = loadKeypairFromFile(process.env.HOME + "/keys/phantom-wallet.json");
-  console.log("wallet: " + wallet.publicKey);
-
-  // @ts-ignore
-  const provider = new AnchorProvider(connection, wallet, {
-    preflightCommitment: "confirmed",
-  });
-
-  const program = new Program<Marginfi>(
-    // @ts-ignore
-    marginfiIdl as Marginfi,
-    provider
+  const user = commonSetup(
+    sendTx,
+    config.PROGRAM_ID,
+    "/keys/phantom-wallet.json",
+    config.MULTISIG,
+    "current"
   );
+  const program = user.program;
+  const connection = user.connection;
 
   const [lstMint] = PublicKey.findProgramAddressSync(
     [Buffer.from("mint"), config.STAKE_POOL.toBuffer()],
     SINGLE_POOL_PROGRAM_ID
   );
-  const lstAta = getAssociatedTokenAddressSync(lstMint, wallet.publicKey);
+  const lstAta = getAssociatedTokenAddressSync(lstMint, user.wallet.publicKey);
 
   const transaction = new Transaction();
   transaction.add(
     await program.methods
-      .lendingAccountDeposit(config.AMOUNT)
+      .lendingAccountDeposit(config.AMOUNT, false)
       .accounts({
-        marginfiGroup: config.GROUP,
         marginfiAccount: config.ACCOUNT,
-        signer: wallet.publicKey,
         bank: config.BANK,
         signerTokenAccount: lstAta,
-        // bankLiquidityVault = deriveLiquidityVault(id, bank)
         tokenProgram: TOKEN_PROGRAM_ID,
       })
       .instruction()
   );
 
-  try {
-    const signature = await sendAndConfirmTransaction(connection, transaction, [wallet]);
-    console.log("Transaction signature:", signature);
-  } catch (error) {
-    console.error("Transaction failed:", error);
+  if (sendTx) {
+    try {
+      const signature = await sendAndConfirmTransaction(
+        connection,
+        transaction,
+        [user.wallet.payer]
+      );
+      console.log("Transaction signature:", signature);
+    } catch (error) {
+      console.error("Transaction failed:", error);
+    }
+  } else {
+    transaction.feePayer = config.MULTISIG; // Set the fee payer to Squads wallet
+    const { blockhash } = await connection.getLatestBlockhash();
+    transaction.recentBlockhash = blockhash;
+    const serializedTransaction = transaction.serialize({
+      requireAllSignatures: false,
+      verifySignatures: false,
+    });
+    const base58Transaction = bs58.encode(serializedTransaction);
+    console.log("Base58-encoded transaction:", base58Transaction);
   }
 
   console.log("deposit: " + config.AMOUNT.toString() + " to " + config.BANK);

@@ -25,7 +25,7 @@ export type Config = {
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  ACCOUNT: new PublicKey("GZxaVQQMp7Vv6rF4jYn3FBJwyNujVYibm6TM4ouRp5gR"),
+  ACCOUNT: new PublicKey("4cjMrLqbmM1BWnWGYb1tbqpLN6UJnnbiVQsri32GoYpm"),
 };
 
 async function main() {
@@ -84,6 +84,7 @@ async function main() {
   console.log("err index: " + cache.errIndex);
   console.log("liq err: " + cache.internalLiqErr);
   console.log("bankrupt err: " + cache.internalBankruptcyErr);
+  console.log("flags: " + cache.flags);
   console.log("");
   console.log(
     "asset value: " + wrappedI80F48toBigNumber(cache.assetValue).toNumber()
