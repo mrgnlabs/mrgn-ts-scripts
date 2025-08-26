@@ -3,7 +3,7 @@ import { appendFileSync, readFileSync } from "fs";
 import fetch from "node-fetch";
 
 const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-const OUTPUT_FILE = `swb-sim2-output-${timestamp}.csv`;
+const OUTPUT_FILE = `swb-sim-stdev-output-${timestamp}.csv`;
 console.log(`Output file: ${OUTPUT_FILE}`);
 
 function delay(ms: number): Promise<void> {
