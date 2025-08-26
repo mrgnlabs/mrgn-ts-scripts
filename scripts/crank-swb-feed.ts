@@ -12,6 +12,7 @@ import { Wallet } from "@coral-xyz/anchor";
 
 const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
 const OUTPUT_FILE = `swb-crank-output-${timestamp}.csv`;
+console.log(`Output file: ${OUTPUT_FILE}`);
 
 const TX_CONFIG = {
     commitment: "confirmed" as Commitment,

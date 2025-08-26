@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 
 const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
 const OUTPUT_FILE = `swb-sim-output-${timestamp}.csv`;
+console.log(`Output file: ${OUTPUT_FILE}`);
 
 async function fetch(crossbar: CrossbarClient,
     feeds: string[]

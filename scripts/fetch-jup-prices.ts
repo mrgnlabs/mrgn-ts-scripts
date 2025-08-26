@@ -3,12 +3,14 @@ import { appendFileSync, readFileSync } from "fs";
 import fetch from "node-fetch";
 
 const FETCH_URL = "https://lite-api.jup.ag/price/v3?ids={token},EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v";
+console.log(`Fetch URL: ${FETCH_URL}`);
 
 // Jup API rate limit is 60 requests per minute: https://dev.jup.ag/docs/api-rate-limit
 const RATE_LIMIT = 60;
 
 const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
 const OUTPUT_FILE = `jup-prices-${timestamp}.csv`;
+console.log(`Output file: ${OUTPUT_FILE}`);
 
 function delay(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
