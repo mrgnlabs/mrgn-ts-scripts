@@ -18,7 +18,7 @@ import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 /**
  * If true, send the tx. If false, output the unsigned b58 tx to console.
  */
-const sendTx = true;
+const sendTx = false;
 
 type Config = {
   PROGRAM_ID: string;
@@ -32,13 +32,13 @@ type Config = {
 };
 
 const config: Config = {
-  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-  ACCOUNT: new PublicKey("E3uJyxW232EQAVZ9P9V6CFkxzjqqVdbh8XvUmxtZdGUt"),
-  BANK: new PublicKey("3jt43usVm7qL1N5qPvbzYHWQRxamPCRhri4CxwDrf6aL"),
-  STAKE_POOL: new PublicKey("AvS4oXtxWdrJGCJwDbcZ7DqpSqNQtKjyXnbkDbrSk6Fq"),
+  PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
+  ACCOUNT: new PublicKey("5CuUxApoh9r7niiZKtsAyhjGMYJjjGKDZqFXGT3HdAKk"),
+  BANK: new PublicKey("E5hZu5QQ1pRmGvyS4JHGXVQwzdUPaYM4yEiNKr64YzyG"),
+  STAKE_POOL: new PublicKey("5ggDh4yt9qBrArSsMbLbj5wdpinfNN5Z9LGMRAGryh4o"),
   AMOUNT: new BN(0.0001 * 10 ** 9), // sol has 9 decimals
 
-  MULTISIG: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
+  MULTISIG: new PublicKey("4yZ86JsaJZoccQNn6fCgtcfgnKTEGe1JGCbnHb7L5zeH"),
 };
 
 async function main() {
@@ -56,7 +56,11 @@ async function main() {
     [Buffer.from("mint"), config.STAKE_POOL.toBuffer()],
     SINGLE_POOL_PROGRAM_ID
   );
-  const lstAta = getAssociatedTokenAddressSync(lstMint, user.wallet.publicKey);
+  const lstAta = getAssociatedTokenAddressSync(
+    lstMint,
+    user.wallet.publicKey,
+    true
+  );
 
   const transaction = new Transaction();
   transaction.add(

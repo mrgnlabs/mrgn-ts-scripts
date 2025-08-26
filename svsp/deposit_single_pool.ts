@@ -23,7 +23,7 @@ import { createAssociatedTokenAccountIdempotentInstruction } from "@mrgnlabs/mrg
 /**
  * If true, send the tx. If false, output the unsigned b58 tx to console.
  */
-const sendTx = true;
+const sendTx = false;
 
 type Config = {
   PROGRAM_ID: string;
@@ -42,14 +42,14 @@ type Config = {
 };
 
 const config: Config = {
-  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
+  PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
   NATIVE_STAKE_ACCOUNT: new PublicKey(
-    "5eTEB4HHhK9ECHTMS5kCqZw8ggiFma2DxHATppPXESma"
+    "5eTEB4HHhK9ECHTMS5kCqZw8ggiFma2DxHATppPXESma" // TODO
   ),
-  STAKE_POOL: new PublicKey("AvS4oXtxWdrJGCJwDbcZ7DqpSqNQtKjyXnbkDbrSk6Fq"),
+  STAKE_POOL: new PublicKey("5ggDh4yt9qBrArSsMbLbj5wdpinfNN5Z9LGMRAGryh4o"),
 
   // Not required if sending without multisig.
-  MULTISIG: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
+  MULTISIG: new PublicKey("4yZ86JsaJZoccQNn6fCgtcfgnKTEGe1JGCbnHb7L5zeH"),
 };
 
 async function main() {
@@ -74,7 +74,7 @@ async function main() {
     [Buffer.from("stake_authority"), config.STAKE_POOL.toBuffer()],
     SINGLE_POOL_PROGRAM_ID
   );
-  const lstAta = getAssociatedTokenAddressSync(lstMint, wallet.publicKey);
+  const lstAta = getAssociatedTokenAddressSync(lstMint, wallet.publicKey, true);
 
   const ixes: TransactionInstruction[] = [];
   ixes.push(
