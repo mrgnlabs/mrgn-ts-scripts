@@ -85,7 +85,7 @@ if (crank_all) {
         try {
             const feed_addresses = feeds.map(feed => feed.pubkey.toString());
 
-            console.log(`Fetch the feeds ${feed_addresses}...`);
+            console.log(`[${new Date().toISOString()}]`, `Fetch the feeds ${feed_addresses}...`);
             const fetch_start = Date.now();
             const [pullIx, luts] = await sb.PullFeed.fetchUpdateManyIx(swbProgram, {
                 feeds,
@@ -94,7 +94,7 @@ if (crank_all) {
                 payer: wallet.publicKey,
             });
             const fetch_elapsed = Date.now() - fetch_start;
-            console.log(`Fetch completed in ${fetch_elapsed} ms.`);
+            console.log(`[${new Date().toISOString()}]`, `Fetch completed in ${fetch_elapsed} ms.`);
 
             const tx = await sb.asV0Tx({
                 connection,
@@ -104,7 +104,7 @@ if (crank_all) {
                 lookupTables: luts,
             });
 
-            console.log(`Submit the feed ${feed_addresses} Tx...`);
+            console.log(`[${new Date().toISOString()}]`, `Submit the feed ${feed_addresses} Tx...`);
             const submit_start = Date.now();
             const result = await sendAndConfirmRawTransaction(
                 connection,
@@ -114,18 +114,17 @@ if (crank_all) {
             const submit_elapsed = Date.now() - submit_start;
 
             appendFileSync(OUTPUT_FILE, `${new Date().toISOString()}, ${feed_addresses}, ${fetch_elapsed}, ${submit_elapsed}, ${result}` + "\n");
-            console.log(`Submit completed in ${submit_elapsed} ms.`);
+            console.log(`[${new Date().toISOString()}]`, `Submit completed in ${submit_elapsed} ms.`);
 
         } catch (error) {
             errorCount++;
-            console.error(`Error ${errorCount} occurred while cranking:`, error);
+            console.error(`[${new Date().toISOString()}]`, `Error ${errorCount} occurred while cranking:`, error);
         }
 
     }
 
     const feeds = [...feeds_map.values()].map((pubkey) => new sb.PullFeed(swbProgram, pubkey));
 
-    appendFileSync(OUTPUT_FILE, `Using Crossbar URL: ${CROSSBAR_URL}` + "\n");
     appendFileSync(OUTPUT_FILE, `DateTime, Feed Address, Ix Fetch Time (ms), Tx Submit Time (ms), Tx Signature` + "\n");
 
     let errorCount = 0;

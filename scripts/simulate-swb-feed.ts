@@ -9,7 +9,7 @@ async function fetch(crossbar: CrossbarClient,
     feeds: string[]
 ) {
 
-    console.log(`Simulating the feeds ${feeds}...`);
+    console.log(`[${new Date().toISOString()}]`, `Simulating the feeds ${feeds}...`);
     const start = Date.now();
     const results = await crossbar.simulateSolanaFeeds(
         "mainnet",
@@ -20,7 +20,7 @@ async function fetch(crossbar: CrossbarClient,
     for (let simulation of results) {
         appendFileSync(OUTPUT_FILE, `${new Date().toISOString()}, ${simulation.feed}, ${elapsed}, ${simulation.results}` + "\n");
     }
-    console.log(`Simulation completed in ${elapsed} ms.`);
+    console.log(`[${new Date().toISOString()}]`, `Simulation completed in ${elapsed} ms.`);
 }
 
 const delay = (ms: number) => new Promise(r => setTimeout(r, ms));
@@ -73,7 +73,7 @@ const crossbar = new CrossbarClient(crossbar_url, true);
 
         } catch (error) {
             errorCount++;
-            console.error(`Error ${errorCount} occurred while fetching feed data:`, error);
+            console.error(`[${new Date().toISOString()}]`, `Error ${errorCount} occurred while fetching feed data:`, error);
         }
         await delay(SIM_DELAY * 1000);
     }

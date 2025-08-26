@@ -1,7 +1,7 @@
-import { LENGTH_SIZE } from "@solana/spl-token";
 import dotenv from "dotenv";
 import { appendFileSync, readFileSync } from "fs";
 import fetch from "node-fetch";
+
 const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
 const OUTPUT_FILE = `swb-sim2-output-${timestamp}.csv`;
 
@@ -22,7 +22,7 @@ interface SimulationEntry {
 type SimulationResponse = SimulationEntry[];
 
 async function simulate(feed: string) {
-    console.log(`Simulating the feeds ${feed}...`);
+    console.log(`[${new Date().toISOString()}]`, `Simulating the feeds ${feed}...`);
 
     const start = Date.now();
     const response = await fetch(crossbar_url.replace("{feed}", feed));
@@ -38,7 +38,7 @@ async function simulate(feed: string) {
     data.forEach((entry) => {
         appendFileSync(OUTPUT_FILE, `${new Date().toISOString()}, ${entry.feed},  ${elapsed}, ${entry.result}, ${entry.stdev}, ${entry.variance}` + "\n");
     });
-    console.log(`Simulation completed in ${elapsed} ms.`);
+    console.log(`[${new Date().toISOString()}]`, `Simulation completed in ${elapsed} ms.`);
 }
 
 // The Swb Feeds file
@@ -73,7 +73,7 @@ appendFileSync(OUTPUT_FILE, `DateTime, Feed Address, Elapsed Time (ms), Result, 
             }
         } catch (error) {
             errorCount++;
-            console.error(`Error ${errorCount} occurred while fetching feed data:`, error);
+            console.error(`[${new Date().toISOString()}]`, `Error ${errorCount} occurred while simulating feed:`, error);
         }
         await delay(SIM_DELAY * 1000);
     }
