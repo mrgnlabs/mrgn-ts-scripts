@@ -33,8 +33,6 @@ if (FETCH_DELAY < MIN_DELAY) {
 }
 console.log(`Using the fetch delay: ${FETCH_DELAY} seconds`);
 
-appendFileSync(OUTPUT_FILE, `DateTime, Token Address, Elapsed Time (ms), Result` + "\n");
-
 async function fetchPrice(token: string) {
     const response = await fetch(FETCH_URL.replace("{token}", token));
     if (!response.ok) {
@@ -57,7 +55,7 @@ async function fetchPrice(token: string) {
 
 }
 
-const headers = ["fetchedAt", "mint", "usdPrice", "blockId", "decimals", "priceChange24h"];
+const headers = ["fetchedAt", "mint", "usdPrice", "blockId", "decimals", "priceChange24h", "mint", "usdPrice", "blockId", "decimals", "priceChange24h"];
 appendFileSync(OUTPUT_FILE, headers.join(",") + "\n");
 
 (async () => {
