@@ -19,7 +19,7 @@ import { u32MAX } from "../lib/constants";
 /**
  * If true, send the tx. If false, output the unsigned b58 tx to console.
  */
-const sendTx = true;
+const sendTx = false;
 
 const ASSET_TAG_DEFAULT = 0;
 
@@ -31,13 +31,6 @@ type Config = {
   GROUP_KEY: PublicKey;
   /** For Pyth, This is the feed, and is owned by rec5EKMGg6MxZYaMdyBfgwp4d5rB9T1VQH5pJv5LtFJ */
   ORACLE: PublicKey;
-  /**
-   * Pyth only, can be any arbitrary value for Switchboard.
-   *
-   * This will be oracles[0], and is the feed id of `ORACLE`, owned by
-   * FsJ3A3u2vn5cTVofAjvy6y5kwABJAqYWpe4975bi2epH
-   * */
-  ORACLE_FEED_ID: PublicKey;
   /** Generally 3 (Pyth) or 4 (Switchboard) */
   ORACLE_TYPE: number;
   /** Group admin (generally the MS on mainnet) */
@@ -51,126 +44,45 @@ type Config = {
 };
 
 const config: Config = {
-  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-  GROUP_KEY: new PublicKey("FCPfpHA69EbS8f9KKSreTRkXbzFpunsKuYf5qNmnJjpo"),
-  ORACLE: new PublicKey("HMm3GPbdnqGwbkTnUUqCFsH8AMHDdEC3Lg8gcPD3HJSH"),
-  ORACLE_FEED_ID: PublicKey.default,
+  PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
+  GROUP_KEY: new PublicKey("4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8"),
+  ORACLE: new PublicKey("4cSM2e6rvbGQUFiJbqytoVMi5GgghSMr8LwVrT9VPSPo"),
   ORACLE_TYPE: ORACLE_TYPE_PYTH,
-  ADMIN: new PublicKey("mfC1LoEk4mpM5yx1LjwR9QLZQ49AitxxWkK5Aciw7ZC"),
-  FEE_PAYER: new PublicKey("mfC1LoEk4mpM5yx1LjwR9QLZQ49AitxxWkK5Aciw7ZC"),
-  BANK_MINT: new PublicKey("pumpCmXqMfrsAkQ5r49WcJnRayYRqmXz6ae8H7H9Dfn"),
+  ADMIN: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
+  FEE_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
+  BANK_MINT: new PublicKey("zBTCug3er3tLyffELcvDNrKkCymbPWysGcWihESYfLg"),
   SEED: 0,
-  TOKEN_PROGRAM: TOKEN_2022_PROGRAM_ID,
+  TOKEN_PROGRAM: TOKEN_PROGRAM_ID,
 
   MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 };
 
 const rate: InterestRateConfigRaw = {
   optimalUtilizationRate: bigNumberToWrappedI80F48(0.5),
-  plateauInterestRate: bigNumberToWrappedI80F48(0.10000000000000142109),
-  maxInterestRate: bigNumberToWrappedI80F48(3),
+  plateauInterestRate: bigNumberToWrappedI80F48(0.01),
+  maxInterestRate: bigNumberToWrappedI80F48(0.5),
   insuranceFeeFixedApr: bigNumberToWrappedI80F48(0),
   insuranceIrFee: bigNumberToWrappedI80F48(0),
-  protocolFixedFeeApr: bigNumberToWrappedI80F48(0.010000000000001563194),
-  protocolIrFee: bigNumberToWrappedI80F48(0.050000000000000710543),
+  protocolFixedFeeApr: bigNumberToWrappedI80F48(0.0001),
+  protocolIrFee: bigNumberToWrappedI80F48(0.01),
   protocolOriginationFee: bigNumberToWrappedI80F48(0),
 };
 
 const bankConfig: BankConfigRaw_v1_4 = {
-  assetWeightInit: bigNumberToWrappedI80F48(0.39999999999999857891),
-  assetWeightMaint: bigNumberToWrappedI80F48(0.5),
-  liabilityWeightInit: bigNumberToWrappedI80F48(1.6000000000000014211),
-  liabilityWeightMaint: bigNumberToWrappedI80F48(1.4200000000000017053),
-  depositLimit: new BN(400000000000000),
+  assetWeightInit: bigNumberToWrappedI80F48(0.75),
+  assetWeightMaint: bigNumberToWrappedI80F48(0.85),
+  liabilityWeightInit: bigNumberToWrappedI80F48(1.15),
+  liabilityWeightMaint: bigNumberToWrappedI80F48(1.05),
+  depositLimit: new BN(20 * 10 ** 8),
   interestRateConfig: rate,
   operationalState: { operational: {} },
-  borrowLimit: new BN(40000000000000),
+  borrowLimit: new BN(10 * 10 ** 8),
   riskTier: { collateral: {} },
-  totalAssetValueInitLimit: new BN(2500000),
+  totalAssetValueInitLimit: new BN(3_000_000),
   oracleMaxAge: 70,
   assetTag: 0,
   oracleMaxConfidence: 0,
 };
-
-// Staging example (zerotrade)
-// const config: Config = {
-//   PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-//   GROUP_KEY: new PublicKey("FtG71Waj7zMDkJDJhLNmCDq9qtLJq1wy3TrzneXzBBQw"),
-//   ORACLE: new PublicKey("6B23K3tkb51vLZA14jcEQVCA1pfHptzEHFA93V5dYwbT"),
-//   ORACLE_FEED_ID: new PublicKey("6ABgrEZk8urs6kJ1JNdC1sspH5zKXRqxy8sg3ZG2cQps"),
-//   ORACLE_TYPE: ORACLE_TYPE_PYTH,
-//   ADMIN: new PublicKey("725Z4QQUVhRiXcCdf4cQTrxXYmQXyW9zgVkW5PDVSJz4"),
-//   FEE_PAYER: new PublicKey("725Z4QQUVhRiXcCdf4cQTrxXYmQXyW9zgVkW5PDVSJz4"),
-//   BANK_MINT: new PublicKey("EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm"),
-//   SEED: 0,
-//   MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
-// };
-
-// Mainnet example
-// const config: Config = {
-//   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-//   GROUP_KEY: new PublicKey("4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8"),
-//   ORACLE: new PublicKey("HMm3GPbdnqGwbkTnUUqCFsH8AMHDdEC3Lg8gcPD3HJSH"),
-//   ORACLE_FEED_ID: new PublicKey("9DGVna8NFhcVEQoswYx3qwhuKSvDUaCZikjMYs9jxZP6"),
-//   ORACLE_TYPE: ORACLE_TYPE_PYTH,
-//   ADMIN: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
-//   FEE_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
-//   BANK_MINT: new PublicKey("pumpCmXqMfrsAkQ5r49WcJnRayYRqmXz6ae8H7H9Dfn"),
-//   SEED: 0,
-//   TOKEN_PROGRAM: TOKEN_2022_PROGRAM_ID,
-//   MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
-// };
-
-// // Configurable settings...
-// const rate: InterestRateConfigRaw = {
-//   optimalUtilizationRate: bigNumberToWrappedI80F48(0.5),
-//   plateauInterestRate: bigNumberToWrappedI80F48(0.1),
-//   maxInterestRate: bigNumberToWrappedI80F48(3),
-//   insuranceFeeFixedApr: bigNumberToWrappedI80F48(0),
-//   insuranceIrFee: bigNumberToWrappedI80F48(0),
-//   protocolFixedFeeApr: bigNumberToWrappedI80F48(0.01),
-//   protocolIrFee: bigNumberToWrappedI80F48(0.05),
-//   protocolOriginationFee: bigNumberToWrappedI80F48(0),
-// };
-
-// const bankConfig: BankConfigRaw_v1_3 = {
-//   assetWeightInit: bigNumberToWrappedI80F48(0.4),
-//   assetWeightMaint: bigNumberToWrappedI80F48(0.5),
-//   liabilityWeightInit: bigNumberToWrappedI80F48(1.6),
-//   liabilityWeightMaint: bigNumberToWrappedI80F48(1.42),
-//   depositLimit: new BN(400_000_000_000_000),
-//   interestRateConfig: rate,
-//   operationalState: {
-//     operational: {},
-//   },
-//   borrowLimit: new BN(40_000_000_000_000),
-//   riskTier: {
-//     collateral: {},
-//   },
-//   totalAssetValueInitLimit: new BN(2_500_000),
-//   oracleMaxAge: 70,
-//   assetTag: ASSET_TAG_DEFAULT,
-// };
-
-// const bankConfig: BankConfigRaw_v1_4 = {
-//   assetWeightInit: I80F48_ZERO,
-//   assetWeightMaint: I80F48_ZERO,
-//   liabilityWeightInit: I80F48_ONE,
-//   liabilityWeightMaint: I80F48_ONE,
-//   depositLimit: new BN(10_000_000_000),
-//   interestRateConfig: rate,
-//   operationalState: {
-//     operational: undefined,
-//   },
-//   borrowLimit: new BN(10_000_000_000),
-//   riskTier: {
-//     collateral: undefined,
-//   },
-//   totalAssetValueInitLimit: new BN(100_000_000_000),
-//   oracleMaxAge: 100,
-//   assetTag: ASSET_TAG_DEFAULT,
-//   oracleMaxConfidence: u32MAX * 0.15, // a %, 0-100, multiplied by u32MAX
-// };
 
 async function main() {
   console.log("adding bank to group: " + config.GROUP_KEY);

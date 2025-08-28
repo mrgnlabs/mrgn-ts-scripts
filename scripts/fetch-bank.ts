@@ -22,7 +22,7 @@ type Config = {
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
   BANKS: [
-    new PublicKey("Br3yzg2WSb81RaFWK9UsKtq8fD5viwooZG34mKqQWxdM"),
+    new PublicKey("BKsfDJCMbYep6gr9pq8PsmJbb5XGLHbAJzUV8vmorz7a"),
     // new PublicKey("CCKtUs6Cgwo4aaQUmBPmyoApH2gUDErxNZCAntD6LYGh"),
   ],
 };
