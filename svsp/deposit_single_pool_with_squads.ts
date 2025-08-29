@@ -98,7 +98,7 @@ async function main() {
   // Check if ATA exists
   const ataInfo = await connection.getAccountInfo(lstAta);
   if (!ataInfo) {
-    console.log("\nAdding: Create LST ATA");
+    console.log("Adding: Create LST ATA");
     
     // Manually construct the instruction with correct writability flags
     const createAtaIx = new TransactionInstruction({
@@ -197,10 +197,10 @@ async function main() {
   });
   const base58Transaction = bs58.encode(serializedTransaction);
   
-  console.log("\n=== Base58 Transaction ===");
+  console.log("=== Base58 Transaction ===");
   console.log(base58Transaction);
   
-  console.log("\n=== Transaction Summary ===");
+  console.log("=== Transaction Summary ===");
   console.log("Instructions:", ixes.length);
   if (!ataInfo) console.log("- Create ATA");
   if (needsStakerAuth || needsWithdrawerAuth) console.log("- Transfer authorities to pool");
