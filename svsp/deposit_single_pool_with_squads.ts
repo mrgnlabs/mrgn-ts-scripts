@@ -204,7 +204,7 @@ async function main() {
   console.log("Instructions:", ixes.length);
   if (!ataInfo) console.log("- Create ATA");
   if (needsStakerAuth || needsWithdrawerAuth) console.log("- Transfer authorities to pool");
-  console.log("- Deposit stake with corrected account order");
+  console.log("- Deposit stake");
 }
 
 main().catch((err) => {
