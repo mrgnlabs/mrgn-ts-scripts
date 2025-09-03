@@ -1,7 +1,11 @@
-import { AccountMeta, Connection, PublicKey, Transaction, sendAndConfirmTransaction } from "@solana/web3.js";
+import {
+  AccountMeta,
+  Connection,
+  PublicKey,
+  Transaction,
+  sendAndConfirmTransaction,
+} from "@solana/web3.js";
 import { Program, AnchorProvider, Wallet, BN } from "@coral-xyz/anchor";
-import { Marginfi } from "../../marginfi-client-v2/src/idl/marginfi-types_0.1.2";
-import marginfiIdl from "../../marginfi-client-v2/src/idl/marginfi_0.1.2.json";
 import { loadKeypairFromFile } from "./utils";
 import { WrappedI80F48 } from "@mrgnlabs/mrgn-common";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
@@ -17,17 +21,9 @@ const ORACLE_TYPE_SWB = 4;
 
 type Config = {
   PROGRAM_ID: string;
-  GROUP_KEY: PublicKey;
   BANK: PublicKey;
   /** For Pyth, This is the feed, and is owned by rec5EKMGg6MxZYaMdyBfgwp4d5rB9T1VQH5pJv5LtFJ */
   ORACLE: PublicKey;
-  /**
-   * Pyth only, can be any arbitrary value for Switchboard.
-   *
-   * This will be oracles[0], and is the feed id of `ORACLE`, owned by
-   * FsJ3A3u2vn5cTVofAjvy6y5kwABJAqYWpe4975bi2epH
-   * */
-  ORACLE_FEED_ID: PublicKey;
   /** Generally 3 (Pyth) or 4 (Switchboard) */
   ORACLE_TYPE: number;
   ADMIN: PublicKey;
@@ -37,10 +33,8 @@ type Config = {
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  GROUP_KEY: new PublicKey("4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8"),
-  BANK: new PublicKey("GZcUY6egnYuXHGWPukTo8iKEZiv5CVKXutcphRuKryNE"),
-  ORACLE: new PublicKey("Ct5RHK1ZBJni58mTai45k5ucSRhYY1h6gesWpQPwbRSY"),
-  ORACLE_FEED_ID: new PublicKey("Ct5RHK1ZBJni58mTai45k5ucSRhYY1h6gesWpQPwbRSY"),
+  BANK: new PublicKey("2ZScBCNKfE6X6fGcBtB2uBuvZqUE3cjKQmRv8wVXTN5B"),
+  ORACLE: new PublicKey("4VmpF3ndsZiXn89PMcg7S9LcuXHsPY4n1XC7fvgrJTva"),
   ORACLE_TYPE: ORACLE_TYPE_SWB,
   ADMIN: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 
@@ -48,27 +42,23 @@ const config: Config = {
 };
 
 async function main() {
-  const user = commonSetup(sendTx, config.PROGRAM_ID, "/keys/staging-deploy.json", config.MULTISIG);
+  const user = commonSetup(
+    sendTx,
+    config.PROGRAM_ID,
+    "/keys/staging-deploy.json",
+    config.MULTISIG
+  );
   const program = user.program;
   const connection = user.connection;
 
   let oraclePassed: PublicKey;
   let oracleMeta: AccountMeta;
-  if (config.ORACLE_TYPE == ORACLE_TYPE_PYTH) {
-    oraclePassed = config.ORACLE_FEED_ID;
-    oracleMeta = {
-      pubkey: config.ORACLE,
-      isSigner: false,
-      isWritable: false,
-    };
-  } else {
-    oraclePassed = config.ORACLE;
-    oracleMeta = {
-      pubkey: config.ORACLE,
-      isSigner: false,
-      isWritable: false,
-    };
-  }
+  oraclePassed = config.ORACLE;
+  oracleMeta = {
+    pubkey: config.ORACLE,
+    isSigner: false,
+    isWritable: false,
+  };
 
   let transaction = new Transaction().add(
     await program.methods
@@ -84,7 +74,11 @@ async function main() {
 
   if (sendTx) {
     try {
-      const signature = await sendAndConfirmTransaction(connection, transaction, [user.wallet.payer]);
+      const signature = await sendAndConfirmTransaction(
+        connection,
+        transaction,
+        [user.wallet.payer]
+      );
       console.log("Transaction signature:", signature);
     } catch (error) {
       console.error("Transaction failed:", error);

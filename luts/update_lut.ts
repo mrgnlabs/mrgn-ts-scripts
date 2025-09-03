@@ -7,10 +7,12 @@ import {
   sendAndConfirmTransaction,
 } from "@solana/web3.js";
 
-import { DEFAULT_API_URL, loadEnvFile, loadKeypairFromFile } from "../scripts/utils";
+import {
+  DEFAULT_API_URL,
+  loadEnvFile,
+  loadKeypairFromFile,
+} from "../scripts/utils";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
-import { SYSTEM_PROGRAM_ID } from "@coral-xyz/anchor/dist/cjs/native/system";
-import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
 
 /**
  * If true, send the tx. If false, output the unsigned b58 tx to console.
@@ -27,12 +29,12 @@ type Config = {
 const config: Config = {
   LUT: new PublicKey("CQ8omkUwDtsszuJLo9grtXCeEyDU4QqBLRv9AjRDaUZ3"),
   KEYS: [
-    new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
-    new PublicKey("4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8"),
-    new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
-    new PublicKey("MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA"),
-    new PublicKey("9DGVna8NFhcVEQoswYx3qwhuKSvDUaCZikjMYs9jxZP6"),
-    new PublicKey("pumpCmXqMfrsAkQ5r49WcJnRayYRqmXz6ae8H7H9Dfn"),
+    new PublicKey("Guu5uBc8k1WK1U2ihGosNaCy57LSgCkpWAabtzQqrQf8"),
+    new PublicKey("G1pNtooUWPad3zCJLGAtjD3Zu9K56PrRpmvVB6AED1Tr"),
+    new PublicKey("EdB7YADw4XUt6wErT8kHGCUok4mnTpWGzPUU9rWDebzb"),
+    new PublicKey("EYp4j7oHV2SfEGSE3GJ4MjsCL33CzmqLTdvTCdacQ9uG"),
+    new PublicKey("E4td8i8PT2BZkMygzW4MGHCv2KPPs57dvz5W2ZXf9Twu"),
+    new PublicKey("DeyH7QxWvnbbaVB4zFrf4hoq7Q8z1ZT14co42BGwGtfM"),
   ],
 };
 
@@ -41,7 +43,9 @@ async function main() {
   const apiUrl = process.env.API_URL || DEFAULT_API_URL;
   console.log("api: " + apiUrl);
   const connection = new Connection(apiUrl, "confirmed");
-  const wallet = loadKeypairFromFile(process.env.HOME + "/keys/phantom-wallet.json");
+  const wallet = loadKeypairFromFile(
+    process.env.HOME + "/keys/phantom-wallet.json"
+  );
 
   const transaction = new Transaction();
 
@@ -52,12 +56,18 @@ async function main() {
 
   // Extract the existing addresses from the lookup table
   const existingAddresses = lutAccount.value.state.addresses;
-  const existingSet = new Set(existingAddresses.map((addr: PublicKey) => addr.toBase58()));
+  const existingSet = new Set(
+    existingAddresses.map((addr: PublicKey) => addr.toBase58())
+  );
 
   // Filter out keys that are already in the lookup table
-  const keysToAdd = config.KEYS.filter((key) => !existingSet.has(key.toBase58()));
+  const keysToAdd = config.KEYS.filter(
+    (key) => !existingSet.has(key.toBase58())
+  );
   if (keysToAdd.length === 0) {
-    console.log("No new keys to add, lookup table is already up to date, aborting.");
+    console.log(
+      "No new keys to add, lookup table is already up to date, aborting."
+    );
     return;
   } else {
     console.log("Adding the following new keys, others already in the LUT");
@@ -78,7 +88,11 @@ async function main() {
 
   if (sendTx) {
     try {
-      const signature = await sendAndConfirmTransaction(connection, transaction, [wallet]);
+      const signature = await sendAndConfirmTransaction(
+        connection,
+        transaction,
+        [wallet]
+      );
       console.log("Transaction signature:", signature);
     } catch (error) {
       console.error("Transaction failed:", error);

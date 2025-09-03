@@ -1,3 +1,4 @@
+import { BN } from "@coral-xyz/anchor";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 import { bigNumberToWrappedI80F48 } from "@mrgnlabs/mrgn-common";
 import { Keypair, PublicKey } from "@solana/web3.js";
@@ -65,3 +66,7 @@ export function chunk<T>(array: T[], size: number): T[][] {
   }
   return batches;
 }
+
+/** makes a BN = cap * 10^decimals */
+export const cap = (units: number | string, decimals: number) =>
+  new BN(units.toString()).mul(new BN(10).pow(new BN(decimals)));

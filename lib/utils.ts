@@ -8,6 +8,7 @@ import {
   PublicKey,
   sendAndConfirmTransaction,
   Transaction,
+  TransactionMessage,
   VersionedTransaction,
 } from "@solana/web3.js";
 import {
@@ -387,22 +388,41 @@ export async function getOraclesAndCrankSwb(
         // @ts-ignore
         connection
       );
+
       const pullFeedInstances: sb.PullFeed[] = swbPullFeeds.map(
         (pubkey) => new sb.PullFeed(swbProgram, pubkey)
       );
+
       const gateway = await pullFeedInstances[0].fetchGatewayUrl();
-      const [pullIx, _luts] = await sb.PullFeed.fetchUpdateManyIx(swbProgram, {
+
+      const [pullIx, luts] = await sb.PullFeed.fetchUpdateManyIx(swbProgram, {
         feeds: pullFeedInstances,
         gateway,
         numSignatures: 1,
         payer: payer.publicKey,
       });
-      const crankTx = new Transaction();
-      crankTx.add(...pullIx);
-      const signature = await sendAndConfirmTransaction(connection, crankTx, [
-        payer,
-      ]);
-      console.log("Swb crank tx signature:", signature);
+
+      const { blockhash, lastValidBlockHeight } =
+        await connection.getLatestBlockhash();
+
+      const v0Message = new TransactionMessage({
+        payerKey: payer.publicKey,
+        recentBlockhash: blockhash,
+        instructions: pullIx,
+      }).compileToV0Message(luts ?? []);
+
+      const v0Tx = new VersionedTransaction(v0Message);
+      v0Tx.sign([payer]);
+
+      const signature = await connection.sendTransaction(v0Tx, {
+        maxRetries: 5,
+      });
+      await connection.confirmTransaction(
+        { signature, blockhash, lastValidBlockHeight },
+        "confirmed"
+      );
+
+      console.log("Swb crank (v0) tx signature:", signature);
     } catch (err) {
       console.log("swb crank failed");
       console.log(err);

@@ -4,6 +4,8 @@ import {
   ComputeBudgetProgram,
   PublicKey,
   Transaction,
+  TransactionMessage,
+  VersionedTransaction,
   sendAndConfirmTransaction,
 } from "@solana/web3.js";
 import {
@@ -21,11 +23,16 @@ import { MARGINFI_SPONSORED_SHARD_ID } from "../lib/constants";
 export type Config = {
   PROGRAM_ID: string;
   ACCOUNT: PublicKey;
+
+  /** Optional */
+  LUT: PublicKey | undefined;
 };
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  ACCOUNT: new PublicKey("4cjMrLqbmM1BWnWGYb1tbqpLN6UJnnbiVQsri32GoYpm"),
+  ACCOUNT: new PublicKey("F1whU9neZbs2PjcFfERJphHTYYmz6iy2frJ7GbQf1FKM"),
+
+  LUT: new PublicKey("CQ8omkUwDtsszuJLo9grtXCeEyDU4QqBLRv9AjRDaUZ3"),
 };
 
 async function main() {
@@ -62,15 +69,28 @@ async function main() {
   );
 
   try {
+    const { blockhash, lastValidBlockHeight } =
+      await connection.getLatestBlockhash();
+    const lut = config.LUT
+      ? [(await connection.getAddressLookupTable(config.LUT)).value]
+      : [];
+
+    const v0Message = new TransactionMessage({
+      payerKey: user.wallet.publicKey,
+      recentBlockhash: blockhash,
+      instructions: transaction.instructions,
+    }).compileToV0Message(lut);
+
     const commitment: Commitment = "finalized";
-    const signature = await sendAndConfirmTransaction(
-      connection,
-      transaction,
-      [user.wallet.payer],
-      {
-        preflightCommitment: commitment,
-        commitment: commitment,
-      }
+    const v0Tx = new VersionedTransaction(v0Message);
+    v0Tx.sign([user.wallet.payer]);
+
+    const signature = await connection.sendTransaction(v0Tx, {
+      maxRetries: 2,
+    });
+    await connection.confirmTransaction(
+      { signature, blockhash, lastValidBlockHeight },
+      commitment
     );
     console.log("Transaction signature:", signature);
   } catch (error) {
