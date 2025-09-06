@@ -25,7 +25,7 @@ export type Config = {
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  BANK: new PublicKey("9KbkQsu4EGAeM7ZxvwsZcpxoekZyg5LTk1BF5SAMPXdY"),
+  BANK: new PublicKey("H6bfRmfZPoxDDs8eoVBgouTPowwyv7opfBbHd5KUmuUz"),
   // 4YipZHMNQjip1LrG3uF2fj1G5ieWQ9QRQRy1jhAWWKUZ
   // FVVKPocxQqJNjDTjzvT3HFXte5oarfp29vJ9tqjAPUW4
   // 6hS9i46WyTq1KXcoa2Chas2Txh9TJAVr6n1t3tnrE23K
@@ -59,8 +59,8 @@ export const bankConfigOpt = () => {
       optimalUtilizationRate: null,
       plateauInterestRate: null,
     },
-    operationalState: null, // { reduceOnly: {} },
-    oracleMaxAge: 70,
+    operationalState: { reduceOnly: {} }, // { reduceOnly: {} },
+    oracleMaxAge: 16_000,
     oracleMaxConfidence: null, // 10% = u32MAX * 0.10
     permissionlessBadDebtSettlement: null,
     freezeSettings: null,

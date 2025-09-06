@@ -10,7 +10,7 @@ type Config = {
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  ACCOUNT: new PublicKey("F1whU9neZbs2PjcFfERJphHTYYmz6iy2frJ7GbQf1FKM"),
+  ACCOUNT: new PublicKey("3kNrME7BWKNbZDebQasY9FiWpM1ujFAvJt4vMxC1ZAsr"),
 };
 
 async function main() {
@@ -54,6 +54,8 @@ async function main() {
     }
   }
   console.table(activeBalances);
+  console.log("migrated from: " + acc.migratedFrom);
+  console.log("migrated to: " + acc.migratedTo);
 }
 
 main().catch((err) => {

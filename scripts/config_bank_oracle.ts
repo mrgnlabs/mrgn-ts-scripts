@@ -1,13 +1,9 @@
 import {
   AccountMeta,
-  Connection,
   PublicKey,
   Transaction,
   sendAndConfirmTransaction,
 } from "@solana/web3.js";
-import { Program, AnchorProvider, Wallet, BN } from "@coral-xyz/anchor";
-import { loadKeypairFromFile } from "./utils";
-import { WrappedI80F48 } from "@mrgnlabs/mrgn-common";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 import { commonSetup } from "../lib/common-setup";
 
@@ -19,58 +15,77 @@ const sendTx = false;
 const ORACLE_TYPE_PYTH = 3;
 const ORACLE_TYPE_SWB = 4;
 
-type Config = {
+/** Shared settings across all entries */
+type SharedConfig = {
   PROGRAM_ID: string;
-  BANK: PublicKey;
-  /** For Pyth, This is the feed, and is owned by rec5EKMGg6MxZYaMdyBfgwp4d5rB9T1VQH5pJv5LtFJ */
-  ORACLE: PublicKey;
-  /** Generally 3 (Pyth) or 4 (Switchboard) */
-  ORACLE_TYPE: number;
   ADMIN: PublicKey;
-
   MULTISIG?: PublicKey; // May be omitted if not using squads
 };
 
-const config: Config = {
+const configCommon: SharedConfig = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  BANK: new PublicKey("2ZScBCNKfE6X6fGcBtB2uBuvZqUE3cjKQmRv8wVXTN5B"),
-  ORACLE: new PublicKey("4VmpF3ndsZiXn89PMcg7S9LcuXHsPY4n1XC7fvgrJTva"),
-  ORACLE_TYPE: ORACLE_TYPE_SWB,
   ADMIN: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
-
   MULTISIG: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 };
+
+type BankOracleConfig = {
+  bank: PublicKey;
+  oracle: PublicKey;
+  /** Generally 3 (Pyth) or 4 (Switchboard) */
+  oracleType: number;
+};
+
+/** One entry per bank to update */
+const configs: BankOracleConfig[] = [
+  {
+    bank: new PublicKey("H6bfRmfZPoxDDs8eoVBgouTPowwyv7opfBbHd5KUmuUz"),
+    oracle: new PublicKey("DMhGWtLAKE5d56WdyHQxqeFncwUeqMEnuC2RvvZfbuur"),
+    oracleType: ORACLE_TYPE_SWB,
+  },
+  {
+    bank: new PublicKey("2ZScBCNKfE6X6fGcBtB2uBuvZqUE3cjKQmRv8wVXTN5B"),
+    oracle: new PublicKey("CXuu5iMvjTZpJ7x2PquWKnxcArHmwqmaZDqEef7iXgnF"),
+    oracleType: ORACLE_TYPE_SWB,
+  },
+  {
+    bank: new PublicKey("4kNXetv8hSv9PzvzPZzEs1CTH6ARRRi2b8h6jk1ad1nP"),
+    oracle: new PublicKey("9QuaHQ8xtrAH3sEJH1GZzmUmLkxUC472UZYjSswk4c8D"),
+    oracleType: ORACLE_TYPE_SWB,
+  },
+  // ...More entries here as needed. The limit even without using LUTs is fairly high (at least 6)
+];
 
 async function main() {
   const user = commonSetup(
     sendTx,
-    config.PROGRAM_ID,
+    configCommon.PROGRAM_ID,
     "/keys/staging-deploy.json",
-    config.MULTISIG
+    configCommon.MULTISIG
   );
   const program = user.program;
   const connection = user.connection;
 
-  let oraclePassed: PublicKey;
-  let oracleMeta: AccountMeta;
-  oraclePassed = config.ORACLE;
-  oracleMeta = {
-    pubkey: config.ORACLE,
-    isSigner: false,
-    isWritable: false,
-  };
+  // Build a single transaction with one instruction per configs[] entry
+  const transaction = new Transaction();
 
-  let transaction = new Transaction().add(
-    await program.methods
-      .lendingPoolConfigureBankOracle(config.ORACLE_TYPE, oraclePassed)
+  for (const cfg of configs) {
+    const oracleMeta: AccountMeta = {
+      pubkey: cfg.oracle,
+      isSigner: false,
+      isWritable: false,
+    };
+
+    const ix = await program.methods
+      .lendingPoolConfigureBankOracle(cfg.oracleType, cfg.oracle)
       .accountsPartial({
-        // group: config.GROUP_KEY,
-        admin: config.ADMIN,
-        bank: config.BANK,
+        admin: configCommon.ADMIN,
+        bank: cfg.bank,
       })
       .remainingAccounts([oracleMeta])
-      .instruction()
-  );
+      .instruction();
+
+    transaction.add(ix);
+  }
 
   if (sendTx) {
     try {
@@ -84,9 +99,12 @@ async function main() {
       console.error("Transaction failed:", error);
     }
   } else {
-    transaction.feePayer = config.MULTISIG; // Set the fee payer to Squads wallet
+    if (configCommon.MULTISIG) {
+      transaction.feePayer = configCommon.MULTISIG;
+    }
     const { blockhash } = await connection.getLatestBlockhash();
     transaction.recentBlockhash = blockhash;
+
     const serializedTransaction = transaction.serialize({
       requireAllSignatures: false,
       verifySignatures: false,
