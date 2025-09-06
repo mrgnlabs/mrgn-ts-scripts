@@ -13,7 +13,11 @@ import {
   TOKEN_PROGRAM_ID,
 } from "@mrgnlabs/mrgn-common";
 import { commonSetup } from "../lib/common-setup";
-import { composeRemainingAccounts } from "../lib/utils";
+import {
+  BankAndOracles,
+  composeRemainingAccounts,
+  getOraclesAndCrankSwb,
+} from "../lib/utils";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 
 const sendTx = true;
@@ -26,31 +30,10 @@ type Config = {
   MINT: PublicKey;
   /** In native decimals */
   AMOUNT: BN;
-  /** For each balance the user has, in order, pass
-   * * bank0, oracle0, bank1, oracle1, etc
-   * 
-   * in any order
-   * 
-   * if a bank is a STAKED COLLATERAL bank, also pass the LST mint and SOL pool, like:
-   * * bank0, oracle0, lstMint0, solPool0, bank1, oracle1
-   * 
-   * You can derive these with:
-    ```
-    const [lstMint] = PublicKey.findProgramAddressSync(
-        [Buffer.from("mint"), config.STAKE_POOL.toBuffer()],
-        SINGLE_POOL_PROGRAM_ID
-    );
-    ```
-     and
-    ```
-    const [pool] = PublicKey.findProgramAddressSync(
-        [Buffer.from("stake"), config.STAKE_POOL.toBuffer()],
-        SINGLE_POOL_PROGRAM_ID
-    );
-    ```
-   * or read them from the bank directly (oracles[1] and oracles[2])
+  /**
+   * If this borrow is opening a NEW POSITION, add the bank and oracle here, in that order
    * */
-  REMAINING: PublicKey[][];
+  NEW_REMAINING: BankAndOracles;
   ADD_COMPUTE_UNITS: boolean;
 
   // Optional, omit if not using MS.
@@ -58,23 +41,15 @@ type Config = {
 };
 
 const config: Config = {
-  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-  GROUP: new PublicKey("FCPfpHA69EbS8f9KKSreTRkXbzFpunsKuYf5qNmnJjpo"),
-  ACCOUNT: new PublicKey("9oeseTmNecAoyLbA5j4UsRdUe53ajn9W1goRpEocYHbv"),
-  BANK: new PublicKey("Ek5JSFJFD8QgXM6rPDCzf31XhDp1q3xezaWYSkJWqbqc"),
+  PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
+  GROUP: new PublicKey("4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8"),
+  ACCOUNT: new PublicKey("7bHYygHUb12RXWpv8W31q6dE9kB9UXNxgbNDAy4eEHw9"),
+  BANK: new PublicKey("2s37akK2eyBbp8DZgCm7RtsaEz8eJP3Nxd4urLHQv7yB"),
   MINT: new PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"),
-  AMOUNT: new BN(0.000001 * 10 ** 6),
-  REMAINING: [
-    // BONK
-    [
-      new PublicKey("Ds4ZD4M1rLjo4anQnkhCRU9tkmjzx9AsmMkPdPCo4U1t"),
-      new PublicKey("DBE3N8uNjhKPRHfANdwGvCZghWXyLPdqdSbEW2XFwBiX"),
-    ],
-    // USDC
-    [
-      new PublicKey("Ek5JSFJFD8QgXM6rPDCzf31XhDp1q3xezaWYSkJWqbqc"),
-      new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
-    ],
+  AMOUNT: new BN(1 * 10 ** 6),
+  NEW_REMAINING: [
+    new PublicKey("2s37akK2eyBbp8DZgCm7RtsaEz8eJP3Nxd4urLHQv7yB"),
+    new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
   ],
   ADD_COMPUTE_UNITS: false,
   MULTISIG: PublicKey.default,
@@ -156,12 +131,17 @@ async function main() {
   const program = user.program;
   const connection = user.connection;
 
-  const remaining = composeRemainingAccounts(config.REMAINING);
-  const meta: AccountMeta[] = remaining.map((pubkey) => ({
-    pubkey,
-    isSigner: false,
-    isWritable: false,
-  }));
+  let activeBalances = await getOraclesAndCrankSwb(
+    program,
+    config.ACCOUNT,
+    connection,
+    user.wallet.payer
+  );
+  activeBalances.push(config.NEW_REMAINING);
+
+  const oracleMeta: AccountMeta[] = activeBalances.flat().map((pubkey) => {
+    return { pubkey, isSigner: false, isWritable: false };
+  });
 
   const ata = getAssociatedTokenAddressSync(config.MINT, user.wallet.publicKey);
   const transaction = new Transaction();
@@ -194,7 +174,7 @@ async function main() {
         // bankLiquidityVault = deriveLiquidityVault(id, bank)
         tokenProgram: TOKEN_PROGRAM_ID,
       })
-      .remainingAccounts(meta)
+      .remainingAccounts(oracleMeta)
       .instruction()
   );
 
