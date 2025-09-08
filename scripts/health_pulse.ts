@@ -6,19 +6,13 @@ import {
   Transaction,
   TransactionMessage,
   VersionedTransaction,
-  sendAndConfirmTransaction,
 } from "@solana/web3.js";
 import {
-  BankAndOracles,
   bytesToF64,
   getOraclesAndCrankSwb,
-  dumpAccBalances,
 } from "../lib/utils";
 import { commonSetup } from "../lib/common-setup";
-import { loadSponsoredOracle } from "../lib/pyth-oracle-helpers";
 import { wrappedI80F48toBigNumber } from "@mrgnlabs/mrgn-common";
-import * as sb from "@switchboard-xyz/on-demand";
-import { MARGINFI_SPONSORED_SHARD_ID } from "../lib/constants";
 
 export type Config = {
   PROGRAM_ID: string;
@@ -30,7 +24,7 @@ export type Config = {
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  ACCOUNT: new PublicKey("7bHYygHUb12RXWpv8W31q6dE9kB9UXNxgbNDAy4eEHw9"),
+  ACCOUNT: new PublicKey("D9th3DDnhr89Pm5Cw8ToXSwF2ccU37xMUVKaLv2Lx2gk"),
 
   LUT: new PublicKey("CQ8omkUwDtsszuJLo9grtXCeEyDU4QqBLRv9AjRDaUZ3"),
 };
