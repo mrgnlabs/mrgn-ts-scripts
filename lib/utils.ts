@@ -34,6 +34,7 @@ import { Marginfi } from "../idl/marginfi";
 import { AnchorProvider, Program, Provider } from "@coral-xyz/anchor";
 import { loadSponsoredOracle } from "./pyth-oracle-helpers";
 import * as sb from "@switchboard-xyz/on-demand";
+import { CrossbarClient } from "@switchboard-xyz/common";
 
 dotenv.config();
 
@@ -332,7 +333,8 @@ export async function getOraclesAndCrankSwb(
   program: Program<Marginfi>,
   account: PublicKey,
   connection: Connection,
-  payer: Keypair
+  payer: Keypair,
+  crankedSwbOracles: Set<PublicKey> = new Set(),
 ): Promise<BankAndOracles[]> {
   let swbPullFeeds: PublicKey[] = [];
 
@@ -347,7 +349,9 @@ export async function getOraclesAndCrankSwb(
       if ("switchboardPull" in bankAcc.config.oracleSetup) {
         const oracle = bankAcc.config.oracleKeys[0];
         console.log("[" + i + "] swb oracle: " + oracle);
-        swbPullFeeds.push(oracle);
+        if (!crankedSwbOracles.has(oracle)) {
+          swbPullFeeds.push(oracle);
+        }
         activeBalances.push([bal.bankPk, oracle]);
       } else if ("pythPushOracle" in bankAcc.config.oracleSetup) {
         const oracle = bankAcc.config.oracleKeys[0];
@@ -393,7 +397,9 @@ export async function getOraclesAndCrankSwb(
         (pubkey) => new sb.PullFeed(swbProgram, pubkey)
       );
 
-      const gateway = await pullFeedInstances[0].fetchGatewayUrl();
+      const crossbarClient = new CrossbarClient(process.env.CROSSBAR_API_URL || "https://integrator-crossbar.mrgn.app/");
+
+      const gateway = await pullFeedInstances[0].fetchGatewayUrl(crossbarClient);
 
       const [pullIx, luts] = await sb.PullFeed.fetchUpdateManyIx(swbProgram, {
         feeds: pullFeedInstances,
@@ -422,6 +428,9 @@ export async function getOraclesAndCrankSwb(
         "confirmed"
       );
 
+      swbPullFeeds.forEach((oracle) => {
+        crankedSwbOracles.add(oracle);
+      });
       console.log("Swb crank (v0) tx signature:", signature);
     } catch (err) {
       console.log("swb crank failed");

@@ -14,16 +14,7 @@
         "group admin to sign: the global fee state admin can turn program fees on or off for any",
         "group"
       ],
-      "discriminator": [
-        231,
-        205,
-        66,
-        242,
-        220,
-        87,
-        145,
-        38
-      ],
+      "discriminator": [231, 205, 66, 242, 220, 87, 145, 38],
       "accounts": [
         {
           "name": "marginfi_group",
@@ -31,13 +22,9 @@
         },
         {
           "name": "global_fee_admin",
-          "docs": [
-            "`global_fee_admin` of the FeeState"
-          ],
+          "docs": ["`global_fee_admin` of the FeeState"],
           "signer": true,
-          "relations": [
-            "fee_state"
-          ]
+          "relations": ["fee_state"]
         },
         {
           "name": "fee_state",
@@ -45,16 +32,7 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [
-                  102,
-                  101,
-                  101,
-                  115,
-                  116,
-                  97,
-                  116,
-                  101
-                ]
+                "value": [102, 101, 101, 115, 116, 97, 116, 101]
               }
             ]
           }
@@ -69,30 +47,15 @@
     },
     {
       "name": "edit_global_fee_state",
-      "docs": [
-        "(global fee admin only) Adjust fees, admin, or the destination wallet"
-      ],
-      "discriminator": [
-        52,
-        62,
-        35,
-        129,
-        93,
-        69,
-        165,
-        202
-      ],
+      "docs": ["(global fee admin only) Adjust fees, admin, or the destination wallet"],
+      "discriminator": [52, 62, 35, 129, 93, 69, 165, 202],
       "accounts": [
         {
           "name": "global_fee_admin",
-          "docs": [
-            "Admin of the global FeeState"
-          ],
+          "docs": ["Admin of the global FeeState"],
           "writable": true,
           "signer": true,
-          "relations": [
-            "fee_state"
-          ]
+          "relations": ["fee_state"]
         },
         {
           "name": "fee_state",
@@ -101,16 +64,7 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [
-                  102,
-                  101,
-                  101,
-                  115,
-                  116,
-                  97,
-                  116,
-                  101
-                ]
+                "value": [102, 101, 101, 115, 116, 97, 116, 101]
               }
             ]
           }
@@ -149,29 +103,16 @@
     },
     {
       "name": "edit_staked_settings",
-      "discriminator": [
-        11,
-        108,
-        215,
-        87,
-        240,
-        9,
-        66,
-        241
-      ],
+      "discriminator": [11, 108, 215, 87, 240, 9, 66, 241],
       "accounts": [
         {
           "name": "marginfi_group",
-          "relations": [
-            "staked_settings"
-          ]
+          "relations": ["staked_settings"]
         },
         {
           "name": "admin",
           "signer": true,
-          "relations": [
-            "marginfi_group"
-          ]
+          "relations": ["marginfi_group"]
         },
         {
           "name": "staked_settings",
@@ -195,22 +136,11 @@
         "(Runs once per program) Configures the fee state account, where the global admin sets fees",
         "that are assessed to the protocol"
       ],
-      "discriminator": [
-        82,
-        48,
-        247,
-        59,
-        220,
-        109,
-        231,
-        44
-      ],
+      "discriminator": [82, 48, 247, 59, 220, 109, 231, 44],
       "accounts": [
         {
           "name": "payer",
-          "docs": [
-            "Pays the init fee"
-          ],
+          "docs": ["Pays the init fee"],
           "writable": true,
           "signer": true
         },
@@ -221,16 +151,7 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [
-                  102,
-                  101,
-                  101,
-                  115,
-                  116,
-                  97,
-                  116,
-                  101
-                ]
+                "value": [102, 101, 101, 115, 116, 97, 116, 101]
               }
             ]
           }
@@ -283,16 +204,7 @@
         "`add_pool_permissionless`. Running this ix effectively opts the group into the staked",
         "collateral feature."
       ],
-      "discriminator": [
-        52,
-        35,
-        149,
-        44,
-        69,
-        86,
-        69,
-        80
-      ],
+      "discriminator": [52, 35, 149, 44, 69, 86, 69, 80],
       "accounts": [
         {
           "name": "marginfi_group"
@@ -300,15 +212,11 @@
         {
           "name": "admin",
           "signer": true,
-          "relations": [
-            "marginfi_group"
-          ]
+          "relations": ["marginfi_group"]
         },
         {
           "name": "fee_payer",
-          "docs": [
-            "Pays the init fee"
-          ],
+          "docs": ["Pays the init fee"],
           "writable": true,
           "signer": true
         },
@@ -319,23 +227,7 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [
-                  115,
-                  116,
-                  97,
-                  107,
-                  101,
-                  100,
-                  95,
-                  115,
-                  101,
-                  116,
-                  116,
-                  105,
-                  110,
-                  103,
-                  115
-                ]
+                "value": [115, 116, 97, 107, 101, 100, 95, 115, 101, 116, 116, 105, 110, 103, 115]
               },
               {
                 "kind": "account",
@@ -366,23 +258,11 @@
     },
     {
       "name": "lending_account_borrow",
-      "discriminator": [
-        4,
-        126,
-        116,
-        53,
-        48,
-        5,
-        212,
-        31
-      ],
+      "discriminator": [4, 126, 116, 53, 48, 5, 212, 31],
       "accounts": [
         {
           "name": "group",
-          "relations": [
-            "marginfi_account",
-            "bank"
-          ]
+          "relations": ["marginfi_account", "bank"]
         },
         {
           "name": "marginfi_account",
@@ -391,9 +271,7 @@
         {
           "name": "authority",
           "signer": true,
-          "relations": [
-            "marginfi_account"
-          ]
+          "relations": ["marginfi_account"]
         },
         {
           "name": "bank",
@@ -411,26 +289,7 @@
               {
                 "kind": "const",
                 "value": [
-                  108,
-                  105,
-                  113,
-                  117,
-                  105,
-                  100,
-                  105,
-                  116,
-                  121,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116,
-                  95,
-                  97,
-                  117,
-                  116,
-                  104
+                  108, 105, 113, 117, 105, 100, 105, 116, 121, 95, 118, 97, 117, 108, 116, 95, 97, 117, 116, 104
                 ]
               },
               {
@@ -443,9 +302,7 @@
         {
           "name": "liquidity_vault",
           "writable": true,
-          "relations": [
-            "bank"
-          ]
+          "relations": ["bank"]
         },
         {
           "name": "token_program"
@@ -460,23 +317,11 @@
     },
     {
       "name": "lending_account_close_balance",
-      "discriminator": [
-        245,
-        54,
-        41,
-        4,
-        243,
-        202,
-        31,
-        17
-      ],
+      "discriminator": [245, 54, 41, 4, 243, 202, 31, 17],
       "accounts": [
         {
           "name": "group",
-          "relations": [
-            "marginfi_account",
-            "bank"
-          ]
+          "relations": ["marginfi_account", "bank"]
         },
         {
           "name": "marginfi_account",
@@ -485,9 +330,7 @@
         {
           "name": "authority",
           "signer": true,
-          "relations": [
-            "marginfi_account"
-          ]
+          "relations": ["marginfi_account"]
         },
         {
           "name": "bank",
@@ -498,23 +341,11 @@
     },
     {
       "name": "lending_account_deposit",
-      "discriminator": [
-        171,
-        94,
-        235,
-        103,
-        82,
-        64,
-        212,
-        140
-      ],
+      "discriminator": [171, 94, 235, 103, 82, 64, 212, 140],
       "accounts": [
         {
           "name": "group",
-          "relations": [
-            "marginfi_account",
-            "bank"
-          ]
+          "relations": ["marginfi_account", "bank"]
         },
         {
           "name": "marginfi_account",
@@ -523,9 +354,7 @@
         {
           "name": "authority",
           "signer": true,
-          "relations": [
-            "marginfi_account"
-          ]
+          "relations": ["marginfi_account"]
         },
         {
           "name": "bank",
@@ -538,9 +367,7 @@
         {
           "name": "liquidity_vault",
           "writable": true,
-          "relations": [
-            "bank"
-          ]
+          "relations": ["bank"]
         },
         {
           "name": "token_program"
@@ -561,16 +388,7 @@
     },
     {
       "name": "lending_account_end_flashloan",
-      "discriminator": [
-        105,
-        124,
-        201,
-        106,
-        153,
-        2,
-        8,
-        156
-      ],
+      "discriminator": [105, 124, 201, 106, 153, 2, 8, 156],
       "accounts": [
         {
           "name": "marginfi_account",
@@ -579,37 +397,19 @@
         {
           "name": "authority",
           "signer": true,
-          "relations": [
-            "marginfi_account"
-          ]
+          "relations": ["marginfi_account"]
         }
       ],
       "args": []
     },
     {
       "name": "lending_account_liquidate",
-      "docs": [
-        "Liquidate a lending account balance of an unhealthy marginfi account"
-      ],
-      "discriminator": [
-        214,
-        169,
-        151,
-        213,
-        251,
-        167,
-        86,
-        219
-      ],
+      "docs": ["Liquidate a lending account balance of an unhealthy marginfi account"],
+      "discriminator": [214, 169, 151, 213, 251, 167, 86, 219],
       "accounts": [
         {
           "name": "group",
-          "relations": [
-            "asset_bank",
-            "liab_bank",
-            "liquidator_marginfi_account",
-            "liquidatee_marginfi_account"
-          ]
+          "relations": ["asset_bank", "liab_bank", "liquidator_marginfi_account", "liquidatee_marginfi_account"]
         },
         {
           "name": "asset_bank",
@@ -626,9 +426,7 @@
         {
           "name": "authority",
           "signer": true,
-          "relations": [
-            "liquidator_marginfi_account"
-          ]
+          "relations": ["liquidator_marginfi_account"]
         },
         {
           "name": "liquidatee_marginfi_account",
@@ -642,26 +440,7 @@
               {
                 "kind": "const",
                 "value": [
-                  108,
-                  105,
-                  113,
-                  117,
-                  105,
-                  100,
-                  105,
-                  116,
-                  121,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116,
-                  95,
-                  97,
-                  117,
-                  116,
-                  104
+                  108, 105, 113, 117, 105, 100, 105, 116, 121, 95, 118, 97, 117, 108, 116, 95, 97, 117, 116, 104
                 ]
               },
               {
@@ -678,23 +457,7 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [
-                  108,
-                  105,
-                  113,
-                  117,
-                  105,
-                  100,
-                  105,
-                  116,
-                  121,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116
-                ]
+                "value": [108, 105, 113, 117, 105, 100, 105, 116, 121, 95, 118, 97, 117, 108, 116]
               },
               {
                 "kind": "account",
@@ -710,23 +473,7 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [
-                  105,
-                  110,
-                  115,
-                  117,
-                  114,
-                  97,
-                  110,
-                  99,
-                  101,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116
-                ]
+                "value": [105, 110, 115, 117, 114, 97, 110, 99, 101, 95, 118, 97, 117, 108, 116]
               },
               {
                 "kind": "account",
@@ -755,16 +502,7 @@
         "* remaining accounts expected in the same order as borrow, etc. I.e., for each balance the",
         "user has, pass bank and oracle: <bank1, oracle1, bank2, oracle2>"
       ],
-      "discriminator": [
-        186,
-        52,
-        117,
-        97,
-        34,
-        74,
-        39,
-        253
-      ],
+      "discriminator": [186, 52, 117, 97, 34, 74, 39, 253],
       "accounts": [
         {
           "name": "marginfi_account",
@@ -775,23 +513,11 @@
     },
     {
       "name": "lending_account_repay",
-      "discriminator": [
-        79,
-        209,
-        172,
-        177,
-        222,
-        51,
-        173,
-        151
-      ],
+      "discriminator": [79, 209, 172, 177, 222, 51, 173, 151],
       "accounts": [
         {
           "name": "group",
-          "relations": [
-            "marginfi_account",
-            "bank"
-          ]
+          "relations": ["marginfi_account", "bank"]
         },
         {
           "name": "marginfi_account",
@@ -800,9 +526,7 @@
         {
           "name": "authority",
           "signer": true,
-          "relations": [
-            "marginfi_account"
-          ]
+          "relations": ["marginfi_account"]
         },
         {
           "name": "bank",
@@ -815,9 +539,7 @@
         {
           "name": "liquidity_vault",
           "writable": true,
-          "relations": [
-            "bank"
-          ]
+          "relations": ["bank"]
         },
         {
           "name": "token_program"
@@ -838,16 +560,7 @@
     },
     {
       "name": "lending_account_settle_emissions",
-      "discriminator": [
-        161,
-        58,
-        136,
-        174,
-        242,
-        223,
-        156,
-        176
-      ],
+      "discriminator": [161, 58, 136, 174, 242, 223, 156, 176],
       "accounts": [
         {
           "name": "marginfi_account",
@@ -868,16 +581,7 @@
         "This is necessary to ensure any legacy marginfi accounts are compliant with the",
         "\"gapless and sorted\" requirements we now have."
       ],
-      "discriminator": [
-        187,
-        194,
-        110,
-        84,
-        82,
-        170,
-        204,
-        9
-      ],
+      "discriminator": [187, 194, 110, 84, 82, 170, 204, 9],
       "accounts": [
         {
           "name": "marginfi_account",
@@ -888,16 +592,7 @@
     },
     {
       "name": "lending_account_start_flashloan",
-      "discriminator": [
-        14,
-        131,
-        33,
-        220,
-        81,
-        186,
-        180,
-        107
-      ],
+      "discriminator": [14, 131, 33, 220, 81, 186, 180, 107],
       "accounts": [
         {
           "name": "marginfi_account",
@@ -906,9 +601,7 @@
         {
           "name": "authority",
           "signer": true,
-          "relations": [
-            "marginfi_account"
-          ]
+          "relations": ["marginfi_account"]
         },
         {
           "name": "ixs_sysvar",
@@ -924,23 +617,11 @@
     },
     {
       "name": "lending_account_withdraw",
-      "discriminator": [
-        36,
-        72,
-        74,
-        19,
-        210,
-        210,
-        192,
-        192
-      ],
+      "discriminator": [36, 72, 74, 19, 210, 210, 192, 192],
       "accounts": [
         {
           "name": "group",
-          "relations": [
-            "marginfi_account",
-            "bank"
-          ]
+          "relations": ["marginfi_account", "bank"]
         },
         {
           "name": "marginfi_account",
@@ -949,9 +630,7 @@
         {
           "name": "authority",
           "signer": true,
-          "relations": [
-            "marginfi_account"
-          ]
+          "relations": ["marginfi_account"]
         },
         {
           "name": "bank",
@@ -968,26 +647,7 @@
               {
                 "kind": "const",
                 "value": [
-                  108,
-                  105,
-                  113,
-                  117,
-                  105,
-                  100,
-                  105,
-                  116,
-                  121,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116,
-                  95,
-                  97,
-                  117,
-                  116,
-                  104
+                  108, 105, 113, 117, 105, 100, 105, 116, 121, 95, 118, 97, 117, 108, 116, 95, 97, 117, 116, 104
                 ]
               },
               {
@@ -1000,9 +660,7 @@
         {
           "name": "liquidity_vault",
           "writable": true,
-          "relations": [
-            "bank"
-          ]
+          "relations": ["bank"]
         },
         {
           "name": "token_program"
@@ -1023,23 +681,11 @@
     },
     {
       "name": "lending_account_withdraw_emissions",
-      "discriminator": [
-        234,
-        22,
-        84,
-        214,
-        118,
-        176,
-        140,
-        170
-      ],
+      "discriminator": [234, 22, 84, 214, 118, 176, 140, 170],
       "accounts": [
         {
           "name": "group",
-          "relations": [
-            "marginfi_account",
-            "bank"
-          ]
+          "relations": ["marginfi_account", "bank"]
         },
         {
           "name": "marginfi_account",
@@ -1048,9 +694,7 @@
         {
           "name": "authority",
           "signer": true,
-          "relations": [
-            "marginfi_account"
-          ]
+          "relations": ["marginfi_account"]
         },
         {
           "name": "bank",
@@ -1058,9 +702,7 @@
         },
         {
           "name": "emissions_mint",
-          "relations": [
-            "bank"
-          ]
+          "relations": ["bank"]
         },
         {
           "name": "emissions_auth",
@@ -1068,27 +710,7 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [
-                  101,
-                  109,
-                  105,
-                  115,
-                  115,
-                  105,
-                  111,
-                  110,
-                  115,
-                  95,
-                  97,
-                  117,
-                  116,
-                  104,
-                  95,
-                  115,
-                  101,
-                  101,
-                  100
-                ]
+                "value": [101, 109, 105, 115, 115, 105, 111, 110, 115, 95, 97, 117, 116, 104, 95, 115, 101, 101, 100]
               },
               {
                 "kind": "account",
@@ -1109,34 +731,8 @@
               {
                 "kind": "const",
                 "value": [
-                  101,
-                  109,
-                  105,
-                  115,
-                  115,
-                  105,
-                  111,
-                  110,
-                  115,
-                  95,
-                  116,
-                  111,
-                  107,
-                  101,
-                  110,
-                  95,
-                  97,
-                  99,
-                  99,
-                  111,
-                  117,
-                  110,
-                  116,
-                  95,
-                  115,
-                  101,
-                  101,
-                  100
+                  101, 109, 105, 115, 115, 105, 111, 110, 115, 95, 116, 111, 107, 101, 110, 95, 97, 99, 99, 111, 117,
+                  110, 116, 95, 115, 101, 101, 100
                 ]
               },
               {
@@ -1162,23 +758,11 @@
     },
     {
       "name": "lending_account_withdraw_emissions_permissionless",
-      "discriminator": [
-        4,
-        174,
-        124,
-        203,
-        44,
-        49,
-        145,
-        150
-      ],
+      "discriminator": [4, 174, 124, 203, 44, 49, 145, 150],
       "accounts": [
         {
           "name": "group",
-          "relations": [
-            "marginfi_account",
-            "bank"
-          ]
+          "relations": ["marginfi_account", "bank"]
         },
         {
           "name": "marginfi_account",
@@ -1190,9 +774,7 @@
         },
         {
           "name": "emissions_mint",
-          "relations": [
-            "bank"
-          ]
+          "relations": ["bank"]
         },
         {
           "name": "emissions_auth",
@@ -1200,27 +782,7 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [
-                  101,
-                  109,
-                  105,
-                  115,
-                  115,
-                  105,
-                  111,
-                  110,
-                  115,
-                  95,
-                  97,
-                  117,
-                  116,
-                  104,
-                  95,
-                  115,
-                  101,
-                  101,
-                  100
-                ]
+                "value": [101, 109, 105, 115, 115, 105, 111, 110, 115, 95, 97, 117, 116, 104, 95, 115, 101, 101, 100]
               },
               {
                 "kind": "account",
@@ -1241,34 +803,8 @@
               {
                 "kind": "const",
                 "value": [
-                  101,
-                  109,
-                  105,
-                  115,
-                  115,
-                  105,
-                  111,
-                  110,
-                  115,
-                  95,
-                  116,
-                  111,
-                  107,
-                  101,
-                  110,
-                  95,
-                  97,
-                  99,
-                  99,
-                  111,
-                  117,
-                  110,
-                  116,
-                  95,
-                  115,
-                  101,
-                  101,
-                  100
+                  101, 109, 105, 115, 115, 105, 111, 110, 115, 95, 116, 111, 107, 101, 110, 95, 97, 99, 99, 111, 117,
+                  110, 116, 95, 115, 101, 101, 100
                 ]
               },
               {
@@ -1284,9 +820,7 @@
         },
         {
           "name": "destination_account",
-          "docs": [
-            "registered on `marginfi_account`"
-          ],
+          "docs": ["registered on `marginfi_account`"],
           "writable": true
         },
         {
@@ -1297,22 +831,11 @@
     },
     {
       "name": "lending_pool_accrue_bank_interest",
-      "discriminator": [
-        108,
-        201,
-        30,
-        87,
-        47,
-        65,
-        97,
-        188
-      ],
+      "discriminator": [108, 201, 30, 87, 47, 65, 97, 188],
       "accounts": [
         {
           "name": "group",
-          "relations": [
-            "bank"
-          ]
+          "relations": ["bank"]
         },
         {
           "name": "bank",
@@ -1323,16 +846,7 @@
     },
     {
       "name": "lending_pool_add_bank",
-      "discriminator": [
-        215,
-        68,
-        72,
-        78,
-        208,
-        218,
-        103,
-        182
-      ],
+      "discriminator": [215, 68, 72, 78, 208, 218, 103, 182],
       "accounts": [
         {
           "name": "marginfi_group",
@@ -1342,15 +856,11 @@
           "name": "admin",
           "writable": true,
           "signer": true,
-          "relations": [
-            "marginfi_group"
-          ]
+          "relations": ["marginfi_group"]
         },
         {
           "name": "fee_payer",
-          "docs": [
-            "Pays to init accounts and pays `fee_state.bank_init_flat_sol_fee` lamports to the protocol"
-          ],
+          "docs": ["Pays to init accounts and pays `fee_state.bank_init_flat_sol_fee` lamports to the protocol"],
           "writable": true,
           "signer": true
         },
@@ -1360,16 +870,7 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [
-                  102,
-                  101,
-                  101,
-                  115,
-                  116,
-                  97,
-                  116,
-                  101
-                ]
+                "value": [102, 101, 101, 115, 116, 97, 116, 101]
               }
             ]
           }
@@ -1377,9 +878,7 @@
         {
           "name": "global_fee_wallet",
           "writable": true,
-          "relations": [
-            "fee_state"
-          ]
+          "relations": ["fee_state"]
         },
         {
           "name": "bank_mint"
@@ -1396,26 +895,7 @@
               {
                 "kind": "const",
                 "value": [
-                  108,
-                  105,
-                  113,
-                  117,
-                  105,
-                  100,
-                  105,
-                  116,
-                  121,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116,
-                  95,
-                  97,
-                  117,
-                  116,
-                  104
+                  108, 105, 113, 117, 105, 100, 105, 116, 121, 95, 118, 97, 117, 108, 116, 95, 97, 117, 116, 104
                 ]
               },
               {
@@ -1432,23 +912,7 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [
-                  108,
-                  105,
-                  113,
-                  117,
-                  105,
-                  100,
-                  105,
-                  116,
-                  121,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116
-                ]
+                "value": [108, 105, 113, 117, 105, 100, 105, 116, 121, 95, 118, 97, 117, 108, 116]
               },
               {
                 "kind": "account",
@@ -1463,28 +927,7 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [
-                  105,
-                  110,
-                  115,
-                  117,
-                  114,
-                  97,
-                  110,
-                  99,
-                  101,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116,
-                  95,
-                  97,
-                  117,
-                  116,
-                  104
-                ]
+                "value": [105, 110, 115, 117, 114, 97, 110, 99, 101, 95, 118, 97, 117, 108, 116, 95, 97, 117, 116, 104]
               },
               {
                 "kind": "account",
@@ -1500,23 +943,7 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [
-                  105,
-                  110,
-                  115,
-                  117,
-                  114,
-                  97,
-                  110,
-                  99,
-                  101,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116
-                ]
+                "value": [105, 110, 115, 117, 114, 97, 110, 99, 101, 95, 118, 97, 117, 108, 116]
               },
               {
                 "kind": "account",
@@ -1531,22 +958,7 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [
-                  102,
-                  101,
-                  101,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116,
-                  95,
-                  97,
-                  117,
-                  116,
-                  104
-                ]
+                "value": [102, 101, 101, 95, 118, 97, 117, 108, 116, 95, 97, 117, 116, 104]
               },
               {
                 "kind": "account",
@@ -1562,17 +974,7 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [
-                  102,
-                  101,
-                  101,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116
-                ]
+                "value": [102, 101, 101, 95, 118, 97, 117, 108, 116]
               },
               {
                 "kind": "account",
@@ -1606,23 +1008,12 @@
     },
     {
       "name": "lending_pool_add_bank_permissionless",
-      "discriminator": [
-        127,
-        187,
-        121,
-        34,
-        187,
-        167,
-        238,
-        102
-      ],
+      "discriminator": [127, 187, 121, 34, 187, 167, 238, 102],
       "accounts": [
         {
           "name": "marginfi_group",
           "writable": true,
-          "relations": [
-            "staked_settings"
-          ]
+          "relations": ["staked_settings"]
         },
         {
           "name": "staked_settings"
@@ -1680,26 +1071,7 @@
               {
                 "kind": "const",
                 "value": [
-                  108,
-                  105,
-                  113,
-                  117,
-                  105,
-                  100,
-                  105,
-                  116,
-                  121,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116,
-                  95,
-                  97,
-                  117,
-                  116,
-                  104
+                  108, 105, 113, 117, 105, 100, 105, 116, 121, 95, 118, 97, 117, 108, 116, 95, 97, 117, 116, 104
                 ]
               },
               {
@@ -1716,23 +1088,7 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [
-                  108,
-                  105,
-                  113,
-                  117,
-                  105,
-                  100,
-                  105,
-                  116,
-                  121,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116
-                ]
+                "value": [108, 105, 113, 117, 105, 100, 105, 116, 121, 95, 118, 97, 117, 108, 116]
               },
               {
                 "kind": "account",
@@ -1747,28 +1103,7 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [
-                  105,
-                  110,
-                  115,
-                  117,
-                  114,
-                  97,
-                  110,
-                  99,
-                  101,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116,
-                  95,
-                  97,
-                  117,
-                  116,
-                  104
-                ]
+                "value": [105, 110, 115, 117, 114, 97, 110, 99, 101, 95, 118, 97, 117, 108, 116, 95, 97, 117, 116, 104]
               },
               {
                 "kind": "account",
@@ -1784,23 +1119,7 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [
-                  105,
-                  110,
-                  115,
-                  117,
-                  114,
-                  97,
-                  110,
-                  99,
-                  101,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116
-                ]
+                "value": [105, 110, 115, 117, 114, 97, 110, 99, 101, 95, 118, 97, 117, 108, 116]
               },
               {
                 "kind": "account",
@@ -1815,22 +1134,7 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [
-                  102,
-                  101,
-                  101,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116,
-                  95,
-                  97,
-                  117,
-                  116,
-                  104
-                ]
+                "value": [102, 101, 101, 95, 118, 97, 117, 108, 116, 95, 97, 117, 116, 104]
               },
               {
                 "kind": "account",
@@ -1846,17 +1150,7 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [
-                  102,
-                  101,
-                  101,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116
-                ]
+                "value": [102, 101, 101, 95, 118, 97, 117, 108, 116]
               },
               {
                 "kind": "account",
@@ -1891,16 +1185,7 @@
         "This seed is used to create a PDA for the bank's signature.",
         "lending_pool_add_bank is preserved for backwards compatibility."
       ],
-      "discriminator": [
-        76,
-        211,
-        213,
-        171,
-        117,
-        78,
-        158,
-        76
-      ],
+      "discriminator": [76, 211, 213, 171, 117, 78, 158, 76],
       "accounts": [
         {
           "name": "marginfi_group",
@@ -1910,15 +1195,11 @@
           "name": "admin",
           "writable": true,
           "signer": true,
-          "relations": [
-            "marginfi_group"
-          ]
+          "relations": ["marginfi_group"]
         },
         {
           "name": "fee_payer",
-          "docs": [
-            "Pays to init accounts and pays `fee_state.bank_init_flat_sol_fee` lamports to the protocol"
-          ],
+          "docs": ["Pays to init accounts and pays `fee_state.bank_init_flat_sol_fee` lamports to the protocol"],
           "writable": true,
           "signer": true
         },
@@ -1928,16 +1209,7 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [
-                  102,
-                  101,
-                  101,
-                  115,
-                  116,
-                  97,
-                  116,
-                  101
-                ]
+                "value": [102, 101, 101, 115, 116, 97, 116, 101]
               }
             ]
           }
@@ -1945,9 +1217,7 @@
         {
           "name": "global_fee_wallet",
           "writable": true,
-          "relations": [
-            "fee_state"
-          ]
+          "relations": ["fee_state"]
         },
         {
           "name": "bank_mint"
@@ -1979,26 +1249,7 @@
               {
                 "kind": "const",
                 "value": [
-                  108,
-                  105,
-                  113,
-                  117,
-                  105,
-                  100,
-                  105,
-                  116,
-                  121,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116,
-                  95,
-                  97,
-                  117,
-                  116,
-                  104
+                  108, 105, 113, 117, 105, 100, 105, 116, 121, 95, 118, 97, 117, 108, 116, 95, 97, 117, 116, 104
                 ]
               },
               {
@@ -2015,23 +1266,7 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [
-                  108,
-                  105,
-                  113,
-                  117,
-                  105,
-                  100,
-                  105,
-                  116,
-                  121,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116
-                ]
+                "value": [108, 105, 113, 117, 105, 100, 105, 116, 121, 95, 118, 97, 117, 108, 116]
               },
               {
                 "kind": "account",
@@ -2046,28 +1281,7 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [
-                  105,
-                  110,
-                  115,
-                  117,
-                  114,
-                  97,
-                  110,
-                  99,
-                  101,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116,
-                  95,
-                  97,
-                  117,
-                  116,
-                  104
-                ]
+                "value": [105, 110, 115, 117, 114, 97, 110, 99, 101, 95, 118, 97, 117, 108, 116, 95, 97, 117, 116, 104]
               },
               {
                 "kind": "account",
@@ -2083,23 +1297,7 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [
-                  105,
-                  110,
-                  115,
-                  117,
-                  114,
-                  97,
-                  110,
-                  99,
-                  101,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116
-                ]
+                "value": [105, 110, 115, 117, 114, 97, 110, 99, 101, 95, 118, 97, 117, 108, 116]
               },
               {
                 "kind": "account",
@@ -2114,22 +1312,7 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [
-                  102,
-                  101,
-                  101,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116,
-                  95,
-                  97,
-                  117,
-                  116,
-                  104
-                ]
+                "value": [102, 101, 101, 95, 118, 97, 117, 108, 116, 95, 97, 117, 116, 104]
               },
               {
                 "kind": "account",
@@ -2145,17 +1328,7 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [
-                  102,
-                  101,
-                  101,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116
-                ]
+                "value": [102, 101, 101, 95, 118, 97, 117, 108, 116]
               },
               {
                 "kind": "account",
@@ -2193,23 +1366,12 @@
     },
     {
       "name": "lending_pool_close_bank",
-      "discriminator": [
-        22,
-        115,
-        7,
-        130,
-        227,
-        85,
-        0,
-        47
-      ],
+      "discriminator": [22, 115, 7, 130, 227, 85, 0, 47],
       "accounts": [
         {
           "name": "group",
           "writable": true,
-          "relations": [
-            "bank"
-          ]
+          "relations": ["bank"]
         },
         {
           "name": "bank",
@@ -2219,31 +1381,18 @@
           "name": "admin",
           "writable": true,
           "signer": true,
-          "relations": [
-            "group"
-          ]
+          "relations": ["group"]
         }
       ],
       "args": []
     },
     {
       "name": "lending_pool_collect_bank_fees",
-      "discriminator": [
-        201,
-        5,
-        215,
-        116,
-        230,
-        92,
-        75,
-        150
-      ],
+      "discriminator": [201, 5, 215, 116, 230, 92, 75, 150],
       "accounts": [
         {
           "name": "group",
-          "relations": [
-            "bank"
-          ]
+          "relations": ["bank"]
         },
         {
           "name": "bank",
@@ -2256,26 +1405,7 @@
               {
                 "kind": "const",
                 "value": [
-                  108,
-                  105,
-                  113,
-                  117,
-                  105,
-                  100,
-                  105,
-                  116,
-                  121,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116,
-                  95,
-                  97,
-                  117,
-                  116,
-                  104
+                  108, 105, 113, 117, 105, 100, 105, 116, 121, 95, 118, 97, 117, 108, 116, 95, 97, 117, 116, 104
                 ]
               },
               {
@@ -2292,23 +1422,7 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [
-                  108,
-                  105,
-                  113,
-                  117,
-                  105,
-                  100,
-                  105,
-                  116,
-                  121,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116
-                ]
+                "value": [108, 105, 113, 117, 105, 100, 105, 116, 121, 95, 118, 97, 117, 108, 116]
               },
               {
                 "kind": "account",
@@ -2324,23 +1438,7 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [
-                  105,
-                  110,
-                  115,
-                  117,
-                  114,
-                  97,
-                  110,
-                  99,
-                  101,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116
-                ]
+                "value": [105, 110, 115, 117, 114, 97, 110, 99, 101, 95, 118, 97, 117, 108, 116]
               },
               {
                 "kind": "account",
@@ -2356,17 +1454,7 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [
-                  102,
-                  101,
-                  101,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116
-                ]
+                "value": [102, 101, 101, 95, 118, 97, 117, 108, 116]
               },
               {
                 "kind": "account",
@@ -2381,16 +1469,7 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [
-                  102,
-                  101,
-                  101,
-                  115,
-                  116,
-                  97,
-                  116,
-                  101
-                ]
+                "value": [102, 101, 101, 115, 116, 97, 116, 101]
               }
             ]
           }
@@ -2411,33 +1490,18 @@
     },
     {
       "name": "lending_pool_configure_bank",
-      "docs": [
-        "(admin only)"
-      ],
-      "discriminator": [
-        121,
-        173,
-        156,
-        40,
-        93,
-        148,
-        56,
-        237
-      ],
+      "docs": ["(admin only)"],
+      "discriminator": [121, 173, 156, 40, 93, 148, 56, 237],
       "accounts": [
         {
           "name": "group",
           "writable": true,
-          "relations": [
-            "bank"
-          ]
+          "relations": ["bank"]
         },
         {
           "name": "admin",
           "signer": true,
-          "relations": [
-            "group"
-          ]
+          "relations": ["group"]
         },
         {
           "name": "bank",
@@ -2457,32 +1521,17 @@
     },
     {
       "name": "lending_pool_configure_bank_emode",
-      "docs": [
-        "(emode_admin only)"
-      ],
-      "discriminator": [
-        17,
-        175,
-        91,
-        57,
-        239,
-        86,
-        49,
-        71
-      ],
+      "docs": ["(emode_admin only)"],
+      "discriminator": [17, 175, 91, 57, 239, 86, 49, 71],
       "accounts": [
         {
           "name": "group",
-          "relations": [
-            "bank"
-          ]
+          "relations": ["bank"]
         },
         {
           "name": "emode_admin",
           "signer": true,
-          "relations": [
-            "group"
-          ]
+          "relations": ["group"]
         },
         {
           "name": "bank",
@@ -2511,33 +1560,18 @@
     },
     {
       "name": "lending_pool_configure_bank_interest_only",
-      "docs": [
-        "(delegate_curve_admin only)"
-      ],
-      "discriminator": [
-        245,
-        107,
-        83,
-        38,
-        103,
-        219,
-        163,
-        241
-      ],
+      "docs": ["(delegate_curve_admin only)"],
+      "discriminator": [245, 107, 83, 38, 103, 219, 163, 241],
       "accounts": [
         {
           "name": "group",
           "writable": true,
-          "relations": [
-            "bank"
-          ]
+          "relations": ["bank"]
         },
         {
           "name": "delegate_curve_admin",
           "signer": true,
-          "relations": [
-            "group"
-          ]
+          "relations": ["group"]
         },
         {
           "name": "bank",
@@ -2557,33 +1591,18 @@
     },
     {
       "name": "lending_pool_configure_bank_limits_only",
-      "docs": [
-        "(delegate_limits_admin only)"
-      ],
-      "discriminator": [
-        157,
-        196,
-        221,
-        200,
-        202,
-        62,
-        84,
-        21
-      ],
+      "docs": ["(delegate_limits_admin only)"],
+      "discriminator": [157, 196, 221, 200, 202, 62, 84, 21],
       "accounts": [
         {
           "name": "group",
           "writable": true,
-          "relations": [
-            "bank"
-          ]
+          "relations": ["bank"]
         },
         {
           "name": "delegate_limit_admin",
           "signer": true,
-          "relations": [
-            "group"
-          ]
+          "relations": ["group"]
         },
         {
           "name": "bank",
@@ -2613,32 +1632,17 @@
     },
     {
       "name": "lending_pool_configure_bank_oracle",
-      "docs": [
-        "(admin only)"
-      ],
-      "discriminator": [
-        209,
-        82,
-        255,
-        171,
-        124,
-        21,
-        71,
-        81
-      ],
+      "docs": ["(admin only)"],
+      "discriminator": [209, 82, 255, 171, 124, 21, 71, 81],
       "accounts": [
         {
           "name": "group",
-          "relations": [
-            "bank"
-          ]
+          "relations": ["bank"]
         },
         {
           "name": "admin",
           "signer": true,
-          "relations": [
-            "group"
-          ]
+          "relations": ["group"]
         },
         {
           "name": "bank",
@@ -2658,32 +1662,16 @@
     },
     {
       "name": "lending_pool_handle_bankruptcy",
-      "docs": [
-        "Handle bad debt of a bankrupt marginfi account for a given bank."
-      ],
-      "discriminator": [
-        162,
-        11,
-        56,
-        139,
-        90,
-        128,
-        70,
-        173
-      ],
+      "docs": ["Handle bad debt of a bankrupt marginfi account for a given bank."],
+      "discriminator": [162, 11, 56, 139, 90, 128, 70, 173],
       "accounts": [
         {
           "name": "group",
-          "relations": [
-            "bank",
-            "marginfi_account"
-          ]
+          "relations": ["bank", "marginfi_account"]
         },
         {
           "name": "signer",
-          "docs": [
-            "PERMISSIONLESS_BAD_DEBT_SETTLEMENT_FLAG is not set"
-          ],
+          "docs": ["PERMISSIONLESS_BAD_DEBT_SETTLEMENT_FLAG is not set"],
           "signer": true
         },
         {
@@ -2701,23 +1689,7 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [
-                  108,
-                  105,
-                  113,
-                  117,
-                  105,
-                  100,
-                  105,
-                  116,
-                  121,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116
-                ]
+                "value": [108, 105, 113, 117, 105, 100, 105, 116, 121, 95, 118, 97, 117, 108, 116]
               },
               {
                 "kind": "account",
@@ -2733,23 +1705,7 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [
-                  105,
-                  110,
-                  115,
-                  117,
-                  114,
-                  97,
-                  110,
-                  99,
-                  101,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116
-                ]
+                "value": [105, 110, 115, 117, 114, 97, 110, 99, 101, 95, 118, 97, 117, 108, 116]
               },
               {
                 "kind": "account",
@@ -2764,28 +1720,7 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [
-                  105,
-                  110,
-                  115,
-                  117,
-                  114,
-                  97,
-                  110,
-                  99,
-                  101,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116,
-                  95,
-                  97,
-                  117,
-                  116,
-                  104
-                ]
+                "value": [105, 110, 115, 117, 114, 97, 110, 99, 101, 95, 118, 97, 117, 108, 116, 95, 97, 117, 116, 104]
               },
               {
                 "kind": "account",
@@ -2802,34 +1737,19 @@
     },
     {
       "name": "lending_pool_setup_emissions",
-      "docs": [
-        "(delegate_emissions_admin only)"
-      ],
-      "discriminator": [
-        206,
-        97,
-        120,
-        172,
-        113,
-        204,
-        169,
-        70
-      ],
+      "docs": ["(delegate_emissions_admin only)"],
+      "discriminator": [206, 97, 120, 172, 113, 204, 169, 70],
       "accounts": [
         {
           "name": "group",
           "writable": true,
-          "relations": [
-            "bank"
-          ]
+          "relations": ["bank"]
         },
         {
           "name": "delegate_emissions_admin",
           "writable": true,
           "signer": true,
-          "relations": [
-            "group"
-          ]
+          "relations": ["group"]
         },
         {
           "name": "bank",
@@ -2844,27 +1764,7 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [
-                  101,
-                  109,
-                  105,
-                  115,
-                  115,
-                  105,
-                  111,
-                  110,
-                  115,
-                  95,
-                  97,
-                  117,
-                  116,
-                  104,
-                  95,
-                  115,
-                  101,
-                  101,
-                  100
-                ]
+                "value": [101, 109, 105, 115, 115, 105, 111, 110, 115, 95, 97, 117, 116, 104, 95, 115, 101, 101, 100]
               },
               {
                 "kind": "account",
@@ -2885,34 +1785,8 @@
               {
                 "kind": "const",
                 "value": [
-                  101,
-                  109,
-                  105,
-                  115,
-                  115,
-                  105,
-                  111,
-                  110,
-                  115,
-                  95,
-                  116,
-                  111,
-                  107,
-                  101,
-                  110,
-                  95,
-                  97,
-                  99,
-                  99,
-                  111,
-                  117,
-                  110,
-                  116,
-                  95,
-                  115,
-                  101,
-                  101,
-                  100
+                  101, 109, 105, 115, 115, 105, 111, 110, 115, 95, 116, 111, 107, 101, 110, 95, 97, 99, 99, 111, 117,
+                  110, 116, 95, 115, 101, 101, 100
                 ]
               },
               {
@@ -2928,10 +1802,7 @@
         },
         {
           "name": "emissions_funding_account",
-          "docs": [
-            "NOTE: This is a TokenAccount, spl transfer will validate it.",
-            ""
-          ],
+          "docs": ["NOTE: This is a TokenAccount, spl transfer will validate it.", ""],
           "writable": true
         },
         {
@@ -2959,34 +1830,19 @@
     },
     {
       "name": "lending_pool_update_emissions_parameters",
-      "docs": [
-        "(delegate_emissions_admin only)"
-      ],
-      "discriminator": [
-        55,
-        213,
-        224,
-        168,
-        153,
-        53,
-        197,
-        40
-      ],
+      "docs": ["(delegate_emissions_admin only)"],
+      "discriminator": [55, 213, 224, 168, 153, 53, 197, 40],
       "accounts": [
         {
           "name": "group",
           "writable": true,
-          "relations": [
-            "bank"
-          ]
+          "relations": ["bank"]
         },
         {
           "name": "delegate_emissions_admin",
           "writable": true,
           "signer": true,
-          "relations": [
-            "group"
-          ]
+          "relations": ["group"]
         },
         {
           "name": "bank",
@@ -3003,34 +1859,8 @@
               {
                 "kind": "const",
                 "value": [
-                  101,
-                  109,
-                  105,
-                  115,
-                  115,
-                  105,
-                  111,
-                  110,
-                  115,
-                  95,
-                  116,
-                  111,
-                  107,
-                  101,
-                  110,
-                  95,
-                  97,
-                  99,
-                  99,
-                  111,
-                  117,
-                  110,
-                  116,
-                  95,
-                  115,
-                  101,
-                  101,
-                  100
+                  101, 109, 105, 115, 115, 105, 111, 110, 115, 95, 116, 111, 107, 101, 110, 95, 97, 99, 99, 111, 117,
+                  110, 116, 95, 115, 101, 101, 100
                 ]
               },
               {
@@ -3075,22 +1905,11 @@
     },
     {
       "name": "lending_pool_update_fees_destination_account",
-      "discriminator": [
-        102,
-        4,
-        121,
-        243,
-        237,
-        110,
-        95,
-        13
-      ],
+      "discriminator": [102, 4, 121, 243, 237, 110, 95, 13],
       "accounts": [
         {
           "name": "group",
-          "relations": [
-            "bank"
-          ]
+          "relations": ["bank"]
         },
         {
           "name": "bank",
@@ -3099,37 +1918,22 @@
         {
           "name": "admin",
           "signer": true,
-          "relations": [
-            "group"
-          ]
+          "relations": ["group"]
         },
         {
           "name": "destination_account",
-          "docs": [
-            "Bank fees will be sent to this account which must be an ATA of the bank's mint."
-          ]
+          "docs": ["Bank fees will be sent to this account which must be an ATA of the bank's mint."]
         }
       ],
       "args": []
     },
     {
       "name": "lending_pool_withdraw_fees",
-      "discriminator": [
-        92,
-        140,
-        215,
-        254,
-        170,
-        0,
-        83,
-        174
-      ],
+      "discriminator": [92, 140, 215, 254, 170, 0, 83, 174],
       "accounts": [
         {
           "name": "group",
-          "relations": [
-            "bank"
-          ]
+          "relations": ["bank"]
         },
         {
           "name": "bank"
@@ -3137,9 +1941,7 @@
         {
           "name": "admin",
           "signer": true,
-          "relations": [
-            "group"
-          ]
+          "relations": ["group"]
         },
         {
           "name": "fee_vault",
@@ -3148,17 +1950,7 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [
-                  102,
-                  101,
-                  101,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116
-                ]
+                "value": [102, 101, 101, 95, 118, 97, 117, 108, 116]
               },
               {
                 "kind": "account",
@@ -3173,22 +1965,7 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [
-                  102,
-                  101,
-                  101,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116,
-                  95,
-                  97,
-                  117,
-                  116,
-                  104
-                ]
+                "value": [102, 101, 101, 95, 118, 97, 117, 108, 116, 95, 97, 117, 116, 104]
               },
               {
                 "kind": "account",
@@ -3214,22 +1991,11 @@
     },
     {
       "name": "lending_pool_withdraw_fees_permissionless",
-      "discriminator": [
-        57,
-        245,
-        1,
-        208,
-        130,
-        18,
-        145,
-        113
-      ],
+      "discriminator": [57, 245, 1, 208, 130, 18, 145, 113],
       "accounts": [
         {
           "name": "group",
-          "relations": [
-            "bank"
-          ]
+          "relations": ["bank"]
         },
         {
           "name": "bank"
@@ -3241,17 +2007,7 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [
-                  102,
-                  101,
-                  101,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116
-                ]
+                "value": [102, 101, 101, 95, 118, 97, 117, 108, 116]
               },
               {
                 "kind": "account",
@@ -3266,22 +2022,7 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [
-                  102,
-                  101,
-                  101,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116,
-                  95,
-                  97,
-                  117,
-                  116,
-                  104
-                ]
+                "value": [102, 101, 101, 95, 118, 97, 117, 108, 116, 95, 97, 117, 116, 104]
               },
               {
                 "kind": "account",
@@ -3293,9 +2034,7 @@
         {
           "name": "fees_destination_account",
           "writable": true,
-          "relations": [
-            "bank"
-          ]
+          "relations": ["bank"]
         },
         {
           "name": "token_program"
@@ -3310,22 +2049,11 @@
     },
     {
       "name": "lending_pool_withdraw_insurance",
-      "discriminator": [
-        108,
-        60,
-        60,
-        246,
-        104,
-        79,
-        159,
-        243
-      ],
+      "discriminator": [108, 60, 60, 246, 104, 79, 159, 243],
       "accounts": [
         {
           "name": "group",
-          "relations": [
-            "bank"
-          ]
+          "relations": ["bank"]
         },
         {
           "name": "bank"
@@ -3333,9 +2061,7 @@
         {
           "name": "admin",
           "signer": true,
-          "relations": [
-            "group"
-          ]
+          "relations": ["group"]
         },
         {
           "name": "insurance_vault",
@@ -3344,23 +2070,7 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [
-                  105,
-                  110,
-                  115,
-                  117,
-                  114,
-                  97,
-                  110,
-                  99,
-                  101,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116
-                ]
+                "value": [105, 110, 115, 117, 114, 97, 110, 99, 101, 95, 118, 97, 117, 108, 116]
               },
               {
                 "kind": "account",
@@ -3375,28 +2085,7 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [
-                  105,
-                  110,
-                  115,
-                  117,
-                  114,
-                  97,
-                  110,
-                  99,
-                  101,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116,
-                  95,
-                  97,
-                  117,
-                  116,
-                  104
-                ]
+                "value": [105, 110, 115, 117, 114, 97, 110, 99, 101, 95, 118, 97, 117, 108, 116, 95, 97, 117, 116, 104]
               },
               {
                 "kind": "account",
@@ -3422,16 +2111,7 @@
     },
     {
       "name": "marginfi_account_close",
-      "discriminator": [
-        186,
-        221,
-        93,
-        34,
-        50,
-        97,
-        194,
-        241
-      ],
+      "discriminator": [186, 221, 93, 34, 50, 97, 194, 241],
       "accounts": [
         {
           "name": "marginfi_account",
@@ -3440,9 +2120,7 @@
         {
           "name": "authority",
           "signer": true,
-          "relations": [
-            "marginfi_account"
-          ]
+          "relations": ["marginfi_account"]
         },
         {
           "name": "fee_payer",
@@ -3454,19 +2132,8 @@
     },
     {
       "name": "marginfi_account_initialize",
-      "docs": [
-        "Initialize a marginfi account for a given group"
-      ],
-      "discriminator": [
-        43,
-        78,
-        61,
-        255,
-        148,
-        52,
-        249,
-        154
-      ],
+      "docs": ["Initialize a marginfi account for a given group"],
+      "discriminator": [43, 78, 61, 255, 148, 52, 249, 154],
       "accounts": [
         {
           "name": "marginfi_group"
@@ -3494,16 +2161,7 @@
     },
     {
       "name": "marginfi_account_update_emissions_destination_account",
-      "discriminator": [
-        73,
-        185,
-        162,
-        201,
-        111,
-        24,
-        116,
-        185
-      ],
+      "discriminator": [73, 185, 162, 201, 111, 24, 116, 185],
       "accounts": [
         {
           "name": "marginfi_account",
@@ -3512,32 +2170,18 @@
         {
           "name": "authority",
           "signer": true,
-          "relations": [
-            "marginfi_account"
-          ]
+          "relations": ["marginfi_account"]
         },
         {
           "name": "destination_account",
-          "docs": [
-            "User's earned emissions will be sent to the canonical ATA of this wallet.",
-            ""
-          ]
+          "docs": ["User's earned emissions will be sent to the canonical ATA of this wallet.", ""]
         }
       ],
       "args": []
     },
     {
       "name": "marginfi_group_configure",
-      "discriminator": [
-        62,
-        199,
-        81,
-        78,
-        33,
-        13,
-        236,
-        61
-      ],
+      "discriminator": [62, 199, 81, 78, 33, 13, 236, 61],
       "accounts": [
         {
           "name": "marginfi_group",
@@ -3546,9 +2190,7 @@
         {
           "name": "admin",
           "signer": true,
-          "relations": [
-            "marginfi_group"
-          ]
+          "relations": ["marginfi_group"]
         }
       ],
       "args": [
@@ -3580,16 +2222,7 @@
     },
     {
       "name": "marginfi_group_initialize",
-      "discriminator": [
-        255,
-        67,
-        67,
-        26,
-        94,
-        31,
-        34,
-        20
-      ],
+      "discriminator": [255, 67, 67, 26, 94, 31, 34, 20],
       "accounts": [
         {
           "name": "marginfi_group",
@@ -3607,16 +2240,7 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [
-                  102,
-                  101,
-                  101,
-                  115,
-                  116,
-                  97,
-                  116,
-                  101
-                ]
+                "value": [102, 101, 101, 115, 116, 97, 116, 101]
               }
             ]
           }
@@ -3635,22 +2259,11 @@
     },
     {
       "name": "migrate_pyth_push_oracle",
-      "discriminator": [
-        139,
-        58,
-        192,
-        167,
-        217,
-        110,
-        247,
-        152
-      ],
+      "discriminator": [139, 58, 192, 167, 217, 110, 247, 152],
       "accounts": [
         {
           "name": "group",
-          "relations": [
-            "bank"
-          ]
+          "relations": ["bank"]
         },
         {
           "name": "bank",
@@ -3658,29 +2271,15 @@
         },
         {
           "name": "oracle",
-          "docs": [
-            "Must use the Pyth Sponsored shard ID (0) or mrgn's (3301)",
-            ""
-          ]
+          "docs": ["Must use the Pyth Sponsored shard ID (0) or mrgn's (3301)", ""]
         }
       ],
       "args": []
     },
     {
       "name": "propagate_fee_state",
-      "docs": [
-        "(Permissionless) Force any group to adopt the current FeeState settings"
-      ],
-      "discriminator": [
-        64,
-        3,
-        166,
-        194,
-        129,
-        21,
-        101,
-        155
-      ],
+      "docs": ["(Permissionless) Force any group to adopt the current FeeState settings"],
+      "discriminator": [64, 3, 166, 194, 129, 21, 101, 155],
       "accounts": [
         {
           "name": "fee_state",
@@ -3688,25 +2287,14 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [
-                  102,
-                  101,
-                  101,
-                  115,
-                  116,
-                  97,
-                  116,
-                  101
-                ]
+                "value": [102, 101, 101, 115, 116, 97, 116, 101]
               }
             ]
           }
         },
         {
           "name": "marginfi_group",
-          "docs": [
-            "Any group, this ix is permisionless and can propogate the fee to any group"
-          ],
+          "docs": ["Any group, this ix is permisionless and can propogate the fee to any group"],
           "writable": true
         }
       ],
@@ -3714,22 +2302,11 @@
     },
     {
       "name": "propagate_staked_settings",
-      "discriminator": [
-        210,
-        30,
-        152,
-        69,
-        130,
-        99,
-        222,
-        170
-      ],
+      "discriminator": [210, 30, 152, 69, 130, 99, 222, 170],
       "accounts": [
         {
           "name": "marginfi_group",
-          "relations": [
-            "staked_settings"
-          ]
+          "relations": ["staked_settings"]
         },
         {
           "name": "staked_settings"
@@ -3743,22 +2320,11 @@
     },
     {
       "name": "transfer_to_new_account",
-      "discriminator": [
-        28,
-        79,
-        129,
-        231,
-        169,
-        69,
-        69,
-        65
-      ],
+      "discriminator": [28, 79, 129, 231, 169, 69, 69, 65],
       "accounts": [
         {
           "name": "group",
-          "relations": [
-            "old_marginfi_account"
-          ]
+          "relations": ["old_marginfi_account"]
         },
         {
           "name": "old_marginfi_account",
@@ -3773,9 +2339,7 @@
           "name": "authority",
           "writable": true,
           "signer": true,
-          "relations": [
-            "old_marginfi_account"
-          ]
+          "relations": ["old_marginfi_account"]
         },
         {
           "name": "new_authority"
@@ -3795,304 +2359,97 @@
   "accounts": [
     {
       "name": "Bank",
-      "discriminator": [
-        142,
-        49,
-        166,
-        242,
-        50,
-        66,
-        97,
-        188
-      ]
+      "discriminator": [142, 49, 166, 242, 50, 66, 97, 188]
     },
     {
       "name": "FeeState",
-      "discriminator": [
-        63,
-        224,
-        16,
-        85,
-        193,
-        36,
-        235,
-        220
-      ]
+      "discriminator": [63, 224, 16, 85, 193, 36, 235, 220]
     },
     {
       "name": "MarginfiAccount",
-      "discriminator": [
-        67,
-        178,
-        130,
-        109,
-        126,
-        114,
-        28,
-        42
-      ]
+      "discriminator": [67, 178, 130, 109, 126, 114, 28, 42]
     },
     {
       "name": "MarginfiGroup",
-      "discriminator": [
-        182,
-        23,
-        173,
-        240,
-        151,
-        206,
-        182,
-        67
-      ]
+      "discriminator": [182, 23, 173, 240, 151, 206, 182, 67]
     },
     {
       "name": "StakedSettings",
-      "discriminator": [
-        157,
-        140,
-        6,
-        77,
-        89,
-        173,
-        173,
-        125
-      ]
+      "discriminator": [157, 140, 6, 77, 89, 173, 173, 125]
     }
   ],
   "events": [
     {
       "name": "EditStakedSettingsEvent",
-      "discriminator": [
-        29,
-        58,
-        155,
-        191,
-        75,
-        220,
-        145,
-        206
-      ]
+      "discriminator": [29, 58, 155, 191, 75, 220, 145, 206]
     },
     {
       "name": "HealthPulseEvent",
-      "discriminator": [
-        183,
-        159,
-        218,
-        110,
-        61,
-        220,
-        65,
-        1
-      ]
+      "discriminator": [183, 159, 218, 110, 61, 220, 65, 1]
     },
     {
       "name": "LendingAccountBorrowEvent",
-      "discriminator": [
-        223,
-        96,
-        81,
-        10,
-        156,
-        99,
-        26,
-        59
-      ]
+      "discriminator": [223, 96, 81, 10, 156, 99, 26, 59]
     },
     {
       "name": "LendingAccountDepositEvent",
-      "discriminator": [
-        161,
-        54,
-        237,
-        217,
-        105,
-        248,
-        122,
-        151
-      ]
+      "discriminator": [161, 54, 237, 217, 105, 248, 122, 151]
     },
     {
       "name": "LendingAccountLiquidateEvent",
-      "discriminator": [
-        166,
-        160,
-        249,
-        154,
-        183,
-        39,
-        23,
-        242
-      ]
+      "discriminator": [166, 160, 249, 154, 183, 39, 23, 242]
     },
     {
       "name": "LendingAccountRepayEvent",
-      "discriminator": [
-        16,
-        220,
-        55,
-        111,
-        7,
-        80,
-        16,
-        25
-      ]
+      "discriminator": [16, 220, 55, 111, 7, 80, 16, 25]
     },
     {
       "name": "LendingAccountWithdrawEvent",
-      "discriminator": [
-        3,
-        220,
-        148,
-        243,
-        33,
-        249,
-        54,
-        88
-      ]
+      "discriminator": [3, 220, 148, 243, 33, 249, 54, 88]
     },
     {
       "name": "LendingPoolBankAccrueInterestEvent",
-      "discriminator": [
-        104,
-        117,
-        187,
-        156,
-        111,
-        154,
-        106,
-        186
-      ]
+      "discriminator": [104, 117, 187, 156, 111, 154, 106, 186]
     },
     {
       "name": "LendingPoolBankCollectFeesEvent",
-      "discriminator": [
-        101,
-        119,
-        97,
-        250,
-        169,
-        175,
-        156,
-        253
-      ]
+      "discriminator": [101, 119, 97, 250, 169, 175, 156, 253]
     },
     {
       "name": "LendingPoolBankConfigureEvent",
-      "discriminator": [
-        246,
-        35,
-        233,
-        110,
-        93,
-        152,
-        235,
-        40
-      ]
+      "discriminator": [246, 35, 233, 110, 93, 152, 235, 40]
     },
     {
       "name": "LendingPoolBankConfigureFrozenEvent",
-      "discriminator": [
-        24,
-        10,
-        55,
-        18,
-        49,
-        150,
-        157,
-        179
-      ]
+      "discriminator": [24, 10, 55, 18, 49, 150, 157, 179]
     },
     {
       "name": "LendingPoolBankConfigureOracleEvent",
-      "discriminator": [
-        119,
-        140,
-        110,
-        253,
-        150,
-        64,
-        210,
-        62
-      ]
+      "discriminator": [119, 140, 110, 253, 150, 64, 210, 62]
     },
     {
       "name": "LendingPoolBankCreateEvent",
-      "discriminator": [
-        236,
-        220,
-        201,
-        63,
-        239,
-        126,
-        136,
-        249
-      ]
+      "discriminator": [236, 220, 201, 63, 239, 126, 136, 249]
     },
     {
       "name": "LendingPoolBankHandleBankruptcyEvent",
-      "discriminator": [
-        166,
-        77,
-        41,
-        140,
-        36,
-        94,
-        10,
-        57
-      ]
+      "discriminator": [166, 77, 41, 140, 36, 94, 10, 57]
     },
     {
       "name": "MarginfiAccountCreateEvent",
-      "discriminator": [
-        183,
-        5,
-        117,
-        104,
-        122,
-        199,
-        68,
-        51
-      ]
+      "discriminator": [183, 5, 117, 104, 122, 199, 68, 51]
     },
     {
       "name": "MarginfiAccountTransferToNewAccount",
-      "discriminator": [
-        59,
-        105,
-        171,
-        110,
-        223,
-        136,
-        80,
-        89
-      ]
+      "discriminator": [59, 105, 171, 110, 223, 136, 80, 89]
     },
     {
       "name": "MarginfiGroupConfigureEvent",
-      "discriminator": [
-        241,
-        104,
-        172,
-        167,
-        41,
-        195,
-        199,
-        170
-      ]
+      "discriminator": [241, 104, 172, 167, 41, 195, 199, 170]
     },
     {
       "name": "MarginfiGroupCreateEvent",
-      "discriminator": [
-        233,
-        125,
-        61,
-        14,
-        98,
-        240,
-        136,
-        253
-      ]
+      "discriminator": [233, 125, 61, 14, 98, 240, 136, 253]
     }
   ],
   "errors": [
@@ -4505,11 +2862,6 @@
       "code": 6081,
       "name": "BankCannotClose",
       "msg": "Banks cannot close when they have open positions or emissions outstanding"
-    },
-    {
-      "code": 6082,
-      "name": "AccountAlreadyMigrated",
-      "msg": "Account already migrated"
     }
   ],
   "types": [
@@ -4566,10 +2918,7 @@
           {
             "name": "_pad0",
             "type": {
-              "array": [
-                "u8",
-                6
-              ]
+              "array": ["u8", 6]
             }
           },
           {
@@ -4603,10 +2952,7 @@
           {
             "name": "_padding",
             "type": {
-              "array": [
-                "u64",
-                1
-              ]
+              "array": ["u64", 1]
             }
           }
         ]
@@ -4636,10 +2982,7 @@
           {
             "name": "_pad0",
             "type": {
-              "array": [
-                "u8",
-                7
-              ]
+              "array": ["u8", 7]
             }
           },
           {
@@ -4685,17 +3028,12 @@
           {
             "name": "_pad1",
             "type": {
-              "array": [
-                "u8",
-                4
-              ]
+              "array": ["u8", 4]
             }
           },
           {
             "name": "collected_insurance_fees_outstanding",
-            "docs": [
-              "Fees collected and pending withdraw for the `insurance_vault`"
-            ],
+            "docs": ["Fees collected and pending withdraw for the `insurance_vault`"],
             "type": {
               "defined": {
                 "name": "WrappedI80F48"
@@ -4717,17 +3055,12 @@
           {
             "name": "_pad2",
             "type": {
-              "array": [
-                "u8",
-                6
-              ]
+              "array": ["u8", 6]
             }
           },
           {
             "name": "collected_group_fees_outstanding",
-            "docs": [
-              "Fees collected and pending withdraw for the `fee_vault`"
-            ],
+            "docs": ["Fees collected and pending withdraw for the `fee_vault`"],
             "type": {
               "defined": {
                 "name": "WrappedI80F48"
@@ -4862,10 +3195,7 @@
           {
             "name": "_padding_0",
             "type": {
-              "array": [
-                "u8",
-                16
-              ]
+              "array": ["u8", 16]
             }
           },
           {
@@ -4873,10 +3203,7 @@
             "type": {
               "array": [
                 {
-                  "array": [
-                    "u64",
-                    2
-                  ]
+                  "array": ["u64", 2]
                 },
                 19
               ]
@@ -4887,9 +3214,7 @@
     },
     {
       "name": "BankCache",
-      "docs": [
-        "A read-only cache of the bank's key metrics, e.g. spot interest/fee rates."
-      ],
+      "docs": ["A read-only cache of the bank's key metrics, e.g. spot interest/fee rates."],
       "repr": {
         "kind": "c"
       },
@@ -4923,9 +3248,7 @@
           },
           {
             "name": "interest_accumulated_for",
-            "docs": [
-              "* in seconds"
-            ],
+            "docs": ["* in seconds"],
             "type": "u32"
           },
           {
@@ -4947,10 +3270,7 @@
           {
             "name": "_reserved0",
             "type": {
-              "array": [
-                "u8",
-                128
-              ]
+              "array": ["u8", 128]
             }
           }
         ]
@@ -4958,9 +3278,7 @@
     },
     {
       "name": "BankConfig",
-      "docs": [
-        "TODO: Convert weights to (u64, u64) to avoid precision loss (maybe?)"
-      ],
+      "docs": ["TODO: Convert weights to (u64, u64) to avoid precision loss (maybe?)"],
       "repr": {
         "kind": "c"
       },
@@ -5030,19 +3348,13 @@
           {
             "name": "oracle_keys",
             "type": {
-              "array": [
-                "pubkey",
-                5
-              ]
+              "array": ["pubkey", 5]
             }
           },
           {
             "name": "_pad0",
             "type": {
-              "array": [
-                "u8",
-                6
-              ]
+              "array": ["u8", 6]
             }
           },
           {
@@ -5085,10 +3397,7 @@
           {
             "name": "_pad1",
             "type": {
-              "array": [
-                "u8",
-                5
-              ]
+              "array": ["u8", 5]
             }
           },
           {
@@ -5107,18 +3416,13 @@
           },
           {
             "name": "oracle_max_age",
-            "docs": [
-              "Time window in seconds for the oracle price feed to be considered live."
-            ],
+            "docs": ["Time window in seconds for the oracle price feed to be considered live."],
             "type": "u16"
           },
           {
             "name": "_padding0",
             "type": {
-              "array": [
-                "u8",
-                2
-              ]
+              "array": ["u8", 2]
             }
           },
           {
@@ -5134,10 +3438,7 @@
           {
             "name": "_padding1",
             "type": {
-              "array": [
-                "u8",
-                32
-              ]
+              "array": ["u8", 32]
             }
           }
         ]
@@ -5145,9 +3446,7 @@
     },
     {
       "name": "BankConfigCompact",
-      "docs": [
-        "TODO: Convert weights to (u64, u64) to avoid precision loss (maybe?)"
-      ],
+      "docs": ["TODO: Convert weights to (u64, u64) to avoid precision loss (maybe?)"],
       "repr": {
         "kind": "c"
       },
@@ -5245,10 +3544,7 @@
           {
             "name": "_pad0",
             "type": {
-              "array": [
-                "u8",
-                5
-              ]
+              "array": ["u8", 5]
             }
           },
           {
@@ -5267,9 +3563,7 @@
           },
           {
             "name": "oracle_max_age",
-            "docs": [
-              "Time window in seconds for the oracle price feed to be considered live."
-            ],
+            "docs": ["Time window in seconds for the oracle price feed to be considered live."],
             "type": "u16"
           },
           {
@@ -5491,9 +3785,7 @@
         "fields": [
           {
             "name": "collateral_bank_emode_tag",
-            "docs": [
-              "emode_tag of the bank(s) whose collateral you wish to treat preferentially."
-            ],
+            "docs": ["emode_tag of the bank(s) whose collateral you wish to treat preferentially."],
             "type": "u16"
           },
           {
@@ -5509,17 +3801,12 @@
           {
             "name": "pad0",
             "type": {
-              "array": [
-                "u8",
-                5
-              ]
+              "array": ["u8", 5]
             }
           },
           {
             "name": "asset_weight_init",
-            "docs": [
-              "Note: If set below the collateral bank's weight, does nothing."
-            ],
+            "docs": ["Note: If set below the collateral bank's weight, does nothing."],
             "type": {
               "defined": {
                 "name": "WrappedI80F48"
@@ -5528,9 +3815,7 @@
           },
           {
             "name": "asset_weight_maint",
-            "docs": [
-              "Note: If set below the collateral bank's weight, does nothing."
-            ],
+            "docs": ["Note: If set below the collateral bank's weight, does nothing."],
             "type": {
               "defined": {
                 "name": "WrappedI80F48"
@@ -5571,17 +3856,12 @@
           {
             "name": "pad0",
             "type": {
-              "array": [
-                "u8",
-                6
-              ]
+              "array": ["u8", 6]
             }
           },
           {
             "name": "timestamp",
-            "docs": [
-              "Unix timestamp from the system clock when emode state was last updated"
-            ],
+            "docs": ["Unix timestamp from the system clock when emode state was last updated"],
             "type": "i64"
           },
           {
@@ -5618,16 +3898,12 @@
         "fields": [
           {
             "name": "key",
-            "docs": [
-              "The fee state's own key. A PDA derived from just `b\"feestate\"`"
-            ],
+            "docs": ["The fee state's own key. A PDA derived from just `b\"feestate\"`"],
             "type": "pubkey"
           },
           {
             "name": "global_fee_admin",
-            "docs": [
-              "Can modify fees"
-            ],
+            "docs": ["Can modify fees"],
             "type": "pubkey"
           },
           {
@@ -5644,10 +3920,7 @@
           },
           {
             "name": "bank_init_flat_sol_fee",
-            "docs": [
-              "Flat fee assessed when a new bank is initialized, in lamports.",
-              "* In SOL, in native decimals."
-            ],
+            "docs": ["Flat fee assessed when a new bank is initialized, in lamports.", "* In SOL, in native decimals."],
             "type": "u32"
           },
           {
@@ -5657,26 +3930,18 @@
           {
             "name": "_padding0",
             "type": {
-              "array": [
-                "u8",
-                4
-              ]
+              "array": ["u8", 4]
             }
           },
           {
             "name": "_padding1",
             "type": {
-              "array": [
-                "u8",
-                15
-              ]
+              "array": ["u8", 15]
             }
           },
           {
             "name": "program_fee_fixed",
-            "docs": [
-              "Fee collected by the program owner from all groups"
-            ],
+            "docs": ["Fee collected by the program owner from all groups"],
             "type": {
               "defined": {
                 "name": "WrappedI80F48"
@@ -5685,9 +3950,7 @@
           },
           {
             "name": "program_fee_rate",
-            "docs": [
-              "Fee collected by the program owner from all groups"
-            ],
+            "docs": ["Fee collected by the program owner from all groups"],
             "type": {
               "defined": {
                 "name": "WrappedI80F48"
@@ -5697,19 +3960,13 @@
           {
             "name": "_reserved0",
             "type": {
-              "array": [
-                "u8",
-                32
-              ]
+              "array": ["u8", 32]
             }
           },
           {
             "name": "_reserved1",
             "type": {
-              "array": [
-                "u8",
-                64
-              ]
+              "array": ["u8", 64]
             }
           }
         ]
@@ -5871,9 +4128,7 @@
           },
           {
             "name": "timestamp",
-            "docs": [
-              "Unix timestamp from the system clock when this cache was last updated"
-            ],
+            "docs": ["Unix timestamp from the system clock when this cache was last updated"],
             "type": "i64"
           },
           {
@@ -5915,10 +4170,7 @@
             "type": {
               "array": [
                 {
-                  "array": [
-                    "u8",
-                    8
-                  ]
+                  "array": ["u8", 8]
                 },
                 16
               ]
@@ -5934,25 +4186,18 @@
           },
           {
             "name": "err_index",
-            "docs": [
-              "Index in `balances` where `internal_err` appeared"
-            ],
+            "docs": ["Index in `balances` where `internal_err` appeared"],
             "type": "u8"
           },
           {
             "name": "program_version",
-            "docs": [
-              "Since 0.1.3, the version will be encoded here. See PROGRAM_VERSION."
-            ],
+            "docs": ["Since 0.1.3, the version will be encoded here. See PROGRAM_VERSION."],
             "type": "u8"
           },
           {
             "name": "pad0",
             "type": {
-              "array": [
-                "u8",
-                2
-              ]
+              "array": ["u8", 2]
             }
           },
           {
@@ -5966,19 +4211,13 @@
           {
             "name": "reserved0",
             "type": {
-              "array": [
-                "u8",
-                32
-              ]
+              "array": ["u8", 32]
             }
           },
           {
             "name": "reserved1",
             "type": {
-              "array": [
-                "u8",
-                16
-              ]
+              "array": ["u8", 16]
             }
           }
         ]
@@ -6038,9 +4277,7 @@
           },
           {
             "name": "insurance_fee_fixed_apr",
-            "docs": [
-              "Goes to insurance, funds `collected_insurance_fees_outstanding`"
-            ],
+            "docs": ["Goes to insurance, funds `collected_insurance_fees_outstanding`"],
             "type": {
               "defined": {
                 "name": "WrappedI80F48"
@@ -6049,9 +4286,7 @@
           },
           {
             "name": "insurance_ir_fee",
-            "docs": [
-              "Goes to insurance, funds `collected_insurance_fees_outstanding`"
-            ],
+            "docs": ["Goes to insurance, funds `collected_insurance_fees_outstanding`"],
             "type": {
               "defined": {
                 "name": "WrappedI80F48"
@@ -6060,9 +4295,7 @@
           },
           {
             "name": "protocol_fixed_fee_apr",
-            "docs": [
-              "Earned by the group, goes to `collected_group_fees_outstanding`"
-            ],
+            "docs": ["Earned by the group, goes to `collected_group_fees_outstanding`"],
             "type": {
               "defined": {
                 "name": "WrappedI80F48"
@@ -6071,9 +4304,7 @@
           },
           {
             "name": "protocol_ir_fee",
-            "docs": [
-              "Earned by the group, goes to `collected_group_fees_outstanding`"
-            ],
+            "docs": ["Earned by the group, goes to `collected_group_fees_outstanding`"],
             "type": {
               "defined": {
                 "name": "WrappedI80F48"
@@ -6091,10 +4322,7 @@
           {
             "name": "_padding0",
             "type": {
-              "array": [
-                "u8",
-                16
-              ]
+              "array": ["u8", 16]
             }
           },
           {
@@ -6102,10 +4330,7 @@
             "type": {
               "array": [
                 {
-                  "array": [
-                    "u8",
-                    32
-                  ]
+                  "array": ["u8", 32]
                 },
                 3
               ]
@@ -6301,10 +4526,7 @@
           {
             "name": "_padding",
             "type": {
-              "array": [
-                "u64",
-                8
-              ]
+              "array": ["u64", 8]
             }
           }
         ]
@@ -6808,25 +5030,13 @@
           },
           {
             "name": "migrated_from",
-            "docs": [
-              "If this account was migrated from another one, store the original account key"
-            ],
-            "type": "pubkey"
-          },
-          {
-            "name": "migrated_to",
-            "docs": [
-              "If this account has been migrated to another one, store the destination account key"
-            ],
+            "docs": ["If this account was migrated from another one, store the original account key"],
             "type": "pubkey"
           },
           {
             "name": "_padding0",
             "type": {
-              "array": [
-                "u64",
-                13
-              ]
+              "array": ["u64", 17]
             }
           }
         ]
@@ -6887,9 +5097,7 @@
         "fields": [
           {
             "name": "admin",
-            "docs": [
-              "Broadly able to modify anything, and can set/remove other admins at will."
-            ],
+            "docs": ["Broadly able to modify anything, and can set/remove other admins at will."],
             "type": "pubkey"
           },
           {
@@ -6904,9 +5112,7 @@
           },
           {
             "name": "fee_state_cache",
-            "docs": [
-              "Caches information from the global `FeeState` so the FeeState can be omitted on certain ixes"
-            ],
+            "docs": ["Caches information from the global `FeeState` so the FeeState can be omitted on certain ixes"],
             "type": {
               "defined": {
                 "name": "FeeStateCache"
@@ -6920,10 +5126,7 @@
           {
             "name": "pad0",
             "type": {
-              "array": [
-                "u8",
-                6
-              ]
+              "array": ["u8", 6]
             }
           },
           {
@@ -6964,10 +5167,7 @@
             "type": {
               "array": [
                 {
-                  "array": [
-                    "u64",
-                    2
-                  ]
+                  "array": ["u64", 2]
                 },
                 18
               ]
@@ -6978,10 +5178,7 @@
             "type": {
               "array": [
                 {
-                  "array": [
-                    "u64",
-                    2
-                  ]
+                  "array": ["u64", 2]
                 },
                 32
               ]
@@ -7098,23 +5295,17 @@
         "fields": [
           {
             "name": "key",
-            "docs": [
-              "This account's own key. A PDA derived from `marginfi_group` and `STAKED_SETTINGS_SEED`"
-            ],
+            "docs": ["This account's own key. A PDA derived from `marginfi_group` and `STAKED_SETTINGS_SEED`"],
             "type": "pubkey"
           },
           {
             "name": "marginfi_group",
-            "docs": [
-              "Group for which these settings apply"
-            ],
+            "docs": ["Group for which these settings apply"],
             "type": "pubkey"
           },
           {
             "name": "oracle",
-            "docs": [
-              "Generally, the Pyth push oracle for SOL"
-            ],
+            "docs": ["Generally, the Pyth push oracle for SOL"],
             "type": "pubkey"
           },
           {
@@ -7156,10 +5347,7 @@
           {
             "name": "_pad0",
             "type": {
-              "array": [
-                "u8",
-                5
-              ]
+              "array": ["u8", 5]
             }
           },
           {
@@ -7169,28 +5357,19 @@
               "borrowing."
             ],
             "type": {
-              "array": [
-                "u8",
-                8
-              ]
+              "array": ["u8", 8]
             }
           },
           {
             "name": "_reserved1",
             "type": {
-              "array": [
-                "u8",
-                32
-              ]
+              "array": ["u8", 32]
             }
           },
           {
             "name": "_reserved2",
             "type": {
-              "array": [
-                "u8",
-                64
-              ]
+              "array": ["u8", 64]
             }
           }
         ]
@@ -7329,10 +5508,7 @@
           {
             "name": "value",
             "type": {
-              "array": [
-                "u8",
-                16
-              ]
+              "array": ["u8", 16]
             }
           }
         ]
