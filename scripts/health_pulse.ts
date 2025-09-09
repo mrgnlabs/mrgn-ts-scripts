@@ -131,61 +131,10 @@ async function massive_pulse(user: User<Marginfi>) {
       }
 
       results.push({ pubkey: page[i], account: userAccount });
-      config.ACCOUNT = page[i];
-
-      health_pulse(config, user, false, crankedSwbOracles);
-
-      console.log("address: " + page[i].toBase58());
-      console.log("group: " + userAccount.group.toBase58());
-      console.log("authority: " + userAccount.authority.toBase58());
-      console.log(
-        "lendingAccount balance 0: " +
-          userAccount.lendingAccount.balances[0].bankPk.toBase58()
-      );
-      console.log(
-        "healthCache assetValue: " +
-          wrappedI80F48toBigNumber(
-            userAccount.healthCache.assetValue
-          ).toNumber()
-      );
-      console.log(
-        "healthCache liabilityValue: " +
-          wrappedI80F48toBigNumber(
-            userAccount.healthCache.liabilityValue
-          ).toNumber()
-      );
-      console.log(
-        "healthCache assetValueMaint: " +
-          wrappedI80F48toBigNumber(
-            userAccount.healthCache.assetValueMaint
-          ).toNumber()
-      );
-      console.log(
-        "healthCache liabilityValueMaint: " +
-          wrappedI80F48toBigNumber(
-            userAccount.healthCache.liabilityValueMaint
-          ).toNumber()
-      );
-      console.log(
-        "healthCache timestamp: " + userAccount.healthCache.timestamp
-      );
-      console.log("healthCache mrgnErr: " + userAccount.healthCache.mrgnErr);
-      console.log(
-        "healthCache internalErr: " + userAccount.healthCache.internalErr
-      );
-      console.log("healthCache errIndex: " + userAccount.healthCache.errIndex);
-      console.log(
-        "healthCache internalLiqErr: " + userAccount.healthCache.internalLiqErr
-      );
-      console.log(
-        "healthCache internalBankruptcyErr: " +
-          userAccount.healthCache.internalBankruptcyErr
-      );
-      console.log("healthCache flags: " + userAccount.healthCache.flags);
-      console.log("healthCache prices: " + userAccount.healthCache.prices);
-
-      console.log("accountFlags: " + userAccount.accountFlags);
+      const localCfg = { ...config, ACCOUNT: page[i] };
+      await health_pulse(localCfg, user, false, crankedSwbOracles);
     }
+    break;
   }
 
   //const users = await user.program.account.marginfiAccount.all([{ memcmp: { offset: 8, bytes: groupKey.toBase58() }}]);
@@ -256,14 +205,43 @@ async function health_pulse(
     }
     accAfter = await program.account.marginfiAccount.fetch(config.ACCOUNT);
   } else {
-    const health = await program.provider.connection.simulateTransaction(v0Tx, {
-      accounts: { encoding: "base64", addresses: [config.ACCOUNT.toBase58()] },
-      sigVerify: false,
-    });
-    accAfter = MarginfiAccount.decodeAccountRaw(
-      Buffer.from(health.value.accounts[0].data[0], "base64"),
-      program.idl
+    const { value } = await program.provider.connection.simulateTransaction(
+      v0Tx,
+      {
+        accounts: {
+          encoding: "base64",
+          addresses: [config.ACCOUNT.toBase58()],
+        },
+        sigVerify: false,
+        replaceRecentBlockhash: true,
+      }
     );
+
+    const logs = (value.logs ?? []).join("\n");
+
+    if (value.err) {
+      console.log(
+        `simulateTransaction failed: ${JSON.stringify(value.err)}\n${logs}`
+      );
+      return;
+    }
+
+    const acc = value.accounts?.[0];
+    if (!acc || !Array.isArray((acc as any).data)) {
+      console.log(
+        `simulateTransaction returned no post-state for ${config.ACCOUNT.toBase58()}\n${logs}`
+      );
+      return;
+    }
+
+    const [b64, enc] = (acc as any).data as [string, string];
+    if (enc !== "base64") {
+      console.log(`Unexpected encoding "${enc}" in simulateTransaction result`);
+      return;
+    }
+
+    const buf = Buffer.from(b64, "base64");
+    accAfter = MarginfiAccount.decodeAccountRaw(buf, program.idl);
   }
 
   let cache = accAfter.healthCache;
