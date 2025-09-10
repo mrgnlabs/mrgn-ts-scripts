@@ -50,7 +50,7 @@ const config: Config = {
   ORACLE_TYPE: ORACLE_TYPE_PYTH,
   ADMIN: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
   FEE_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
-  BANK_MINT: new PublicKey("zBTCug3er3tLyffELcvDNrKkCymbPWysGcWihESYfLg"),
+  BANK_MINT: new PublicKey("cbbtcf3aa214zXHbiAZQwf4122FBYbraNdFqgw4iMij"),
   SEED: 0,
   TOKEN_PROGRAM: TOKEN_PROGRAM_ID,
 

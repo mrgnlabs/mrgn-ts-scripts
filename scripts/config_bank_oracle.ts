@@ -38,18 +38,13 @@ type BankOracleConfig = {
 /** One entry per bank to update */
 const configs: BankOracleConfig[] = [
   {
-    bank: new PublicKey("H6bfRmfZPoxDDs8eoVBgouTPowwyv7opfBbHd5KUmuUz"),
-    oracle: new PublicKey("DMhGWtLAKE5d56WdyHQxqeFncwUeqMEnuC2RvvZfbuur"),
-    oracleType: ORACLE_TYPE_SWB,
-  },
-  {
     bank: new PublicKey("2ZScBCNKfE6X6fGcBtB2uBuvZqUE3cjKQmRv8wVXTN5B"),
-    oracle: new PublicKey("CXuu5iMvjTZpJ7x2PquWKnxcArHmwqmaZDqEef7iXgnF"),
+    oracle: new PublicKey("CcG8NYSrZTtGCVCARa3qMwAPgJNEzdpdoEYkLJuAW9xp"),
     oracleType: ORACLE_TYPE_SWB,
   },
   {
-    bank: new PublicKey("4kNXetv8hSv9PzvzPZzEs1CTH6ARRRi2b8h6jk1ad1nP"),
-    oracle: new PublicKey("9QuaHQ8xtrAH3sEJH1GZzmUmLkxUC472UZYjSswk4c8D"),
+    bank: new PublicKey("FWZbU8TSPyjyrWQASzujo7FjgF9f3GEkjaFAtbKWqjMH"),
+    oracle: new PublicKey("GWdsst8erxTHMrzD4NXrinGJVs3PgCex9yu6GiDELZ2H"),
     oracleType: ORACLE_TYPE_SWB,
   },
   // ...More entries here as needed. The limit even without using LUTs is fairly high (at least 6)

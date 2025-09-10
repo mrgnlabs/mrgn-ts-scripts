@@ -69,13 +69,15 @@ export const bankConfigOpt = () => {
   return bankConfigOpt;
 };
 
+// Example input
+
 // export const bankConfigOpt = () => {
 //   let bankConfigOpt: BankConfigOptRaw = {
 //     assetWeightInit: null, // bigNumberToWrappedI80F48(.9)
 //     assetWeightMaint: null,
 //     liabilityWeightInit: bigNumberToWrappedI80F48(1.15),
 //     liabilityWeightMaint: bigNumberToWrappedI80F48(1.05),
-//     depositLimit: null,
+//     depositLimit: new BN(10000000),
 //     borrowLimit: null,
 //     riskTier: null, // { collateral: {} }
 //     assetTag: null,
