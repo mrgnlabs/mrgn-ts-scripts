@@ -50,7 +50,7 @@ const config: Config = {
   ORACLE_TYPE: ORACLE_TYPE_PYTH,
   ADMIN: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
   FEE_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
-  BANK_MINT: new PublicKey("cbbtcf3aa214zXHbiAZQwf4122FBYbraNdFqgw4iMij"),
+  BANK_MINT: new PublicKey("CtzPWv73Sn1dMGVU3ZtLv9yWSyUAanBni19YWDaznnkn"),
   SEED: 0,
   TOKEN_PROGRAM: TOKEN_PROGRAM_ID,
 
@@ -69,16 +69,16 @@ const rate: InterestRateConfigRaw = {
 };
 
 const bankConfig: BankConfigRaw_v1_4 = {
-  assetWeightInit: bigNumberToWrappedI80F48(0.75),
-  assetWeightMaint: bigNumberToWrappedI80F48(0.85),
+  assetWeightInit: bigNumberToWrappedI80F48(0.82),
+  assetWeightMaint: bigNumberToWrappedI80F48(0.87),
   liabilityWeightInit: bigNumberToWrappedI80F48(1.15),
   liabilityWeightMaint: bigNumberToWrappedI80F48(1.05),
-  depositLimit: new BN(20 * 10 ** 8),
+  depositLimit: new BN(50 * 10 ** 8),
   interestRateConfig: rate,
   operationalState: { operational: {} },
-  borrowLimit: new BN(10 * 10 ** 8),
+  borrowLimit: new BN(25 * 10 ** 8),
   riskTier: { collateral: {} },
-  totalAssetValueInitLimit: new BN(3_000_000),
+  totalAssetValueInitLimit: new BN(10_000_000),
   oracleMaxAge: 70,
   assetTag: 0,
   oracleMaxConfidence: 0,
