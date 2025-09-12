@@ -1,6 +1,6 @@
 import { PublicKey } from "@solana/web3.js";
 import { BN } from "@coral-xyz/anchor";
-import { Config, BankConfigOptRaw, updateBankConfig, bankConfigOpt } from "./config_bank";
+import { Config, BankConfigOptRaw, updateBankConfig, bankConfigOptDefault } from "./config_bank";
 import { bigNumberToWrappedI80F48, WrappedI80F48 } from "@mrgnlabs/mrgn-common";
 import fs from "fs";
 import dotenv from "dotenv";
@@ -49,7 +49,7 @@ async function processConfiguration(
     console.log("Bank:", bankInput.config.BANK);
 
     const parsedConfig = parseConfig(bankInput.config);
-    const defaultBankConfig = bankConfigOpt();
+    const defaultBankConfig = bankConfigOptDefault();
 
     await updateBankConfig(defaultBankConfig, bankInput.config.root_wallet_path + bankInput.config.wallet_path, parsedConfig, {
         simulate: true,
