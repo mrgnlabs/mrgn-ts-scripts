@@ -25,7 +25,7 @@ export type Config = {
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  BANK: new PublicKey("H6bfRmfZPoxDDs8eoVBgouTPowwyv7opfBbHd5KUmuUz"),
+  BANK: new PublicKey("BeNBJrAh1tZg5sqgt8D6AWKJLD5KkBrfZvtcgd7EuiAR"),
   // 4YipZHMNQjip1LrG3uF2fj1G5ieWQ9QRQRy1jhAWWKUZ
   // FVVKPocxQqJNjDTjzvT3HFXte5oarfp29vJ9tqjAPUW4
   // 6hS9i46WyTq1KXcoa2Chas2Txh9TJAVr6n1t3tnrE23K
@@ -44,8 +44,8 @@ export const bankConfigOpt = () => {
     assetWeightMaint: null,
     liabilityWeightInit: null,
     liabilityWeightMaint: null,
-    depositLimit: null,
-    borrowLimit: null,
+    depositLimit: new BN(455_000 * 10 ** 6),
+    borrowLimit: new BN(385_000 * 10 ** 6),
     riskTier: null, // { collateral: {} }
     assetTag: null,
     totalAssetValueInitLimit: null,
@@ -59,8 +59,8 @@ export const bankConfigOpt = () => {
       optimalUtilizationRate: null,
       plateauInterestRate: null,
     },
-    operationalState: { reduceOnly: {} }, // { reduceOnly: {} },
-    oracleMaxAge: 16_000,
+    operationalState: { operational: {} }, // { reduceOnly: {} },
+    oracleMaxAge: null,
     oracleMaxConfidence: null, // 10% = u32MAX * 0.10
     permissionlessBadDebtSettlement: null,
     freezeSettings: null,
