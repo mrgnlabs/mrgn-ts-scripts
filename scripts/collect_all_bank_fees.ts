@@ -1,11 +1,11 @@
-// This propagates the fee state to all active staked collateral banks.
-
 // TODO add a LUT and send these all in one tx to avoid burning so many tx fees.
-import { AccountMeta, Connection, PublicKey, sendAndConfirmTransaction, Transaction } from "@solana/web3.js";
-import { DEFAULT_API_URL, loadEnvFile, loadKeypairFromFile } from "./utils";
-import { Marginfi } from "@mrgnlabs/marginfi-client-v2/src/idl/marginfi-types_0.1.3";
-import marginfiIdl from "@mrgnlabs/marginfi-client-v2/src/idl/marginfi_0.1.3.json";
-import { Program, AnchorProvider } from "@coral-xyz/anchor";
+import {
+  AccountMeta,
+  Connection,
+  PublicKey,
+  sendAndConfirmTransaction,
+  Transaction,
+} from "@solana/web3.js";
 import {
   createAssociatedTokenAccountIdempotentInstruction,
   getAssociatedTokenAddressSync,
@@ -26,11 +26,16 @@ const config: Config = {
 };
 
 async function main() {
-  const user = commonSetup(true, config.PROGRAM_ID, "/keys/staging-deploy.json");
+  const user = commonSetup(
+    true,
+    config.PROGRAM_ID,
+    "/keys/staging-deploy.json"
+  );
   const program = user.program;
   const connection = user.connection;
 
-  const jsonUrl = "https://storage.googleapis.com/mrgn-public/mrgn-bank-metadata-cache.json";
+  const jsonUrl =
+    "https://storage.googleapis.com/mrgn-public/mrgn-bank-metadata-cache.json";
   const response = await fetch(jsonUrl);
   if (!response.ok) {
     throw new Error(`Failed to fetch JSON: ${response.statusText}`);
@@ -52,7 +57,12 @@ async function main() {
     let mintAccInfo = await connection.getAccountInfo(mint);
     const tokenProgram = mintAccInfo.owner;
 
-    let feeAta = getAssociatedTokenAddressSync(mint, globalFeeWallet, true, tokenProgram);
+    let feeAta = getAssociatedTokenAddressSync(
+      mint,
+      globalFeeWallet,
+      true,
+      tokenProgram
+    );
 
     let createAtaIx = createAssociatedTokenAccountIdempotentInstruction(
       user.wallet.publicKey,
@@ -86,7 +96,9 @@ async function main() {
     tx.add(ix);
 
     try {
-      const signature = await sendAndConfirmTransaction(connection, tx, [user.wallet.payer]);
+      const signature = await sendAndConfirmTransaction(connection, tx, [
+        user.wallet.payer,
+      ]);
       console.log("Transaction signature:", signature);
     } catch (error) {
       console.error("Transaction failed:", error);
@@ -101,9 +113,11 @@ main().catch((err) => {
   console.error(err);
 });
 
-// TODO remove after package updates
 const deriveGlobalFeeState = (programId: PublicKey) => {
-  return PublicKey.findProgramAddressSync([Buffer.from("feestate", "utf-8")], programId);
+  return PublicKey.findProgramAddressSync(
+    [Buffer.from("feestate", "utf-8")],
+    programId
+  );
 };
 
 /**

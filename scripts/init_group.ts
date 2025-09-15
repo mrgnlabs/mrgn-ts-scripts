@@ -1,8 +1,9 @@
-import { Connection, Keypair, PublicKey, Transaction, sendAndConfirmTransaction } from "@solana/web3.js";
-import { Program, AnchorProvider } from "@coral-xyz/anchor";
-import { Marginfi } from "../../marginfi-client-v2/src/idl/marginfi-types_0.1.3";
-import { loadKeypairFromFile } from "./utils";
-import { assertI80F48Approx, assertKeysEqual } from "./softTests";
+import {
+  Keypair,
+  PublicKey,
+  Transaction,
+  sendAndConfirmTransaction,
+} from "@solana/web3.js";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 import { commonSetup } from "../lib/common-setup";
 
@@ -10,7 +11,6 @@ import { commonSetup } from "../lib/common-setup";
  * If true, send the tx. If false, output the unsigned b58 tx to console.
  */
 const sendTx = true;
-const verbose = true;
 
 type Config = {
   PROGRAM_ID: string;
@@ -20,18 +20,25 @@ type Config = {
 };
 
 const config: Config = {
-  PROGRAM_ID: "5UDghkpgW1HfYSrmEj2iAApHShqU44H6PKTAar9LL9bY",
+  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
   ADMIN_KEY: new PublicKey("725Z4QQUVhRiXcCdf4cQTrxXYmQXyW9zgVkW5PDVSJz4"),
 
   MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 };
 
 const deriveGlobalFeeState = (programId: PublicKey) => {
-  return PublicKey.findProgramAddressSync([Buffer.from("feestate", "utf-8")], programId);
+  return PublicKey.findProgramAddressSync(
+    [Buffer.from("feestate", "utf-8")],
+    programId
+  );
 };
 
 async function main() {
-  const user = commonSetup(sendTx, config.PROGRAM_ID, "/keys/zerotrade_admin.json");
+  const user = commonSetup(
+    sendTx,
+    config.PROGRAM_ID,
+    "/keys/zerotrade_admin.json"
+  );
   const program = user.program;
   const connection = user.connection;
 
@@ -52,7 +59,11 @@ async function main() {
 
   if (sendTx) {
     try {
-      const signature = await sendAndConfirmTransaction(connection, transaction, [user.wallet.payer, marginfiGroup]);
+      const signature = await sendAndConfirmTransaction(
+        connection,
+        transaction,
+        [user.wallet.payer, marginfiGroup]
+      );
       console.log("Transaction signature:", signature);
     } catch (error) {
       console.error("Transaction failed:", error);

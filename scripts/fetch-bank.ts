@@ -22,7 +22,10 @@ type Config = {
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
   BANKS: [
-    new PublicKey("Fe5QkKPVAh629UPP5aJ8sDZu8HTfe6M26jDQkKyXVhoA"),
+    new PublicKey("2s37akK2eyBbp8DZgCm7RtsaEz8eJP3Nxd4urLHQv7yB"),
+    new PublicKey("HmpMfL8942u22htC4EMiWgLX931g3sacXFR6KjuLgKLV"),
+    new PublicKey("CCKtUs6Cgwo4aaQUmBPmyoApH2gUDErxNZCAntD6LYGh"),
+    new PublicKey("DeyH7QxWvnbbaVB4zFrf4hoq7Q8z1ZT14co42BGwGtfM"),
     // new PublicKey("CCKtUs6Cgwo4aaQUmBPmyoApH2gUDErxNZCAntD6LYGh"),
   ],
 };
@@ -65,6 +68,7 @@ async function printBankInfo(program: Program<Marginfi>, bankKey: PublicKey) {
     { Property: "is T22 Mint", Value: isT22 },
     { Property: "Group", Value: bank.group.toString() },
     { Property: "Mint", Value: bank.mint.toString() },
+    { Property: "Fee Dest", Value: bank.feesDestinationAccount.toString() },
     { Property: "Mint Decimals", Value: decimals },
     { Property: "Bank Flags", Value: bank.flags.toNumber() },
     { Property: "Config Flags", Value: bank.config.configFlags },
@@ -96,9 +100,15 @@ async function printBankInfo(program: Program<Marginfi>, bankKey: PublicKey) {
 
   console.log("Vaults:");
   console.table([
-    { Balance: "Liquidity Vault", Value: liquidityBal.toLocaleString() },
-    { Balance: "Insurance Vault", Value: insuranceBal.toLocaleString() },
-    { Balance: "Fee Vault", Value: feeBal.toLocaleString() },
+    {
+      Balance: "Liquidity Vault",
+      Value: (liquidityBal / 10 ** decimals).toLocaleString(),
+    },
+    {
+      Balance: "Insurance Vault",
+      Value: (insuranceBal / 10 ** decimals).toLocaleString(),
+    },
+    { Balance: "Fee Vault", Value: (feeBal / 10 ** decimals).toLocaleString() },
   ]);
 
   // Oracle

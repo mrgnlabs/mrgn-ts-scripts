@@ -24,6 +24,7 @@
 
 - Main group - 4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8
 - Staging - FCPfpHA69EbS8f9KKSreTRkXbzFpunsKuYf5qNmnJjpo
+- Staging mainnet clone - Diu1q9gniR1qR4Daaej3rcHd6949HMmxLGsnQ94Z3rLz
 - Zerotrade - FtG71Waj7zMDkJDJhLNmCDq9qtLJq1wy3TrzneXzBBQw
 
 ## STAKED SETTINGS
@@ -35,6 +36,16 @@
 - BONK - DeyH7QxWvnbbaVB4zFrf4hoq7Q8z1ZT14co42BGwGtfM
 - SOL (legacy, pre asset tag) - CCKtUs6Cgwo4aaQUmBPmyoApH2gUDErxNZCAntD6LYGh
 - PYTH - E4td8i8PT2BZkMygzW4MGHCv2KPPs57dvz5W2ZXf9Twu
+
+## STAGING MAINNET CLONE BANKS
+
+- BONK (copy of DeyH7QxWvnbbaVB4zFrf4hoq7Q8z1ZT14co42BGwGtfM) -
+  4VruFgvunJcU1C23tAXWQbfuXT4P97vDm9fXzTvMrFLG
+- USDC (copy of 2s37akK2eyBbp8DZgCm7RtsaEz8eJP3Nxd4urLHQv7yB) - 2s37akK2eyBbp8DZgCm7RtsaEz8eJP3Nxd4urLHQv7yB
+- SOL (copy of CCKtUs6Cgwo4aaQUmBPmyoApH2gUDErxNZCAntD6LYGh) - 9rhsPZVrya9aqdFRUi9RoSNZTqsmYuU1fdPWLreS4fNo
+- PyUSD (copy of 8UEiPmgZHXXEDrqLS3oiTxQxTbeYTtPbeMBxAd2XGbpu) - GeGesgruPoU5BpfDismYiZGYLiF2Mi194QpS76aSspbi
+- ORCA (copy of 3Hd1VzDCd8xEzcqj6CHqqjeKdzKQPMczGnkSbpaubf3W) - 43UdT1HipqqC5DQoGKbKMzsCFQs6oUm12PFS1TYWZfJS
+- COOL (copy of 8g5qG6PVygcVSXV1cJnjXaD1yhrDwcWAMQCY2wR9VuAf) - b87yGEB4998pV82LHruftbtbVSCaQABRfGbbaJhbs4S
 
 ## STAGING BANKS
 
@@ -95,7 +106,8 @@
 - Phantom wallet (H4QMTHMVbJ3KrB5bz573cBBZKoYSZ2B4mSST1JKzPUrH) account - E3uJyxW232EQAVZ9P9V6CFkxzjqqVdbh8XvUmxtZdGUt
 - Another acc for Phantom wallet on staging - 9oeseTmNecAoyLbA5j4UsRdUe53ajn9W1goRpEocYHbv
 - Staging deploy wallet (mfC1LoEk4mpM5yx1LjwR9QLZQ49AitxxWkK5Aciw7ZC) - F12SjiKaksVMJs7EQ2GBaWHLr5shFRei1seDDwFA2pek
-- zerotrade_admin - 725Z4QQUVhRiXcCdf4cQTrxXYmQXyW9zgVkW5PDVSJz4
+- zerotrade_admin (also owns staging mainnet clone group) -
+  725Z4QQUVhRiXcCdf4cQTrxXYmQXyW9zgVkW5PDVSJz4
 - Liquidation test (H4QMTHMVbJ3KrB5bz573cBBZKoYSZ2B4mSST1JKzPUrH owned)\* - A2cNgW5o66rquaiWjnAKkbdimU3x82exrqCvKzzrP1Wy
 - Liquidation test (H4QMTHMVbJ3KrB5bz573cBBZKoYSZ2B4mSST1JKzPUrH owned)\* - F7R6gDWoAoPFHtEpudW41MaxzTrpP5E4ghu6pppE7jYF
 - Transfer test (H4QMTHMVbJ3KrB5bz573cBBZKoYSZ2B4mSST1JKzPUrH owned) - 12W8kr21RZX3tLR8CxZvnqo8fgFirKF3gNhAwSmhsuCg transfered to MS (CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw owned) at 8P6JTEqUW8RWopp1RU4jfbiVbnb9Dzuvtk3Kj6oa3tci

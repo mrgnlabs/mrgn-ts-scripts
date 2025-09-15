@@ -108,11 +108,11 @@ const PAIR_TABLE: PairConfig[] = [
   { lend: EmodeTag.SOL, borrow: EmodeTag.LST_T1, appIso: true, init: 0.9, maint: 0.95 },
   { lend: EmodeTag.SOL, borrow: EmodeTag.LST_T2, appIso: true, init: 0.85, maint: 0.95 },
 
-  { lend: EmodeTag.LST_T1, borrow: EmodeTag.SOL, appIso: true, init: 0.9, maint: 0.95 },
+  { lend: EmodeTag.LST_T1, borrow: EmodeTag.SOL, appIso: true, init: 0.992, maint: 0.999 }, // UPDATE
   { lend: EmodeTag.LST_T1, borrow: EmodeTag.LST_T1, appIso: true, init: 0.88, maint: 0.93 },
   { lend: EmodeTag.LST_T1, borrow: EmodeTag.LST_T2, appIso: true, init: 0.85, maint: 0.9 },
 
-  { lend: EmodeTag.LST_T2, borrow: EmodeTag.SOL, appIso: true, init: 0.85, maint: 0.9 },
+  { lend: EmodeTag.LST_T2, borrow: EmodeTag.SOL, appIso: true, init: 0.955, maint: 0.985 }, // UPDATE
   { lend: EmodeTag.LST_T2, borrow: EmodeTag.LST_T1, appIso: true, init: 0.8, maint: 0.85 },
   { lend: EmodeTag.LST_T2, borrow: EmodeTag.LST_T2, appIso: true, init: 0.75, maint: 0.85 },
 ];

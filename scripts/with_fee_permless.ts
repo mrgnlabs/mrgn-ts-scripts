@@ -19,11 +19,11 @@ import { commonSetup } from "../lib/common-setup";
 /**
  * If true, send the tx. If false, output the unsigned b58 tx to console.
  */
-const sendTx = false;
+const sendTx = true;
 /**
  * If true, set emissions destination. If false, skip that step and just withdraw.
  */
-const setDestination = true;
+const setDestination = false;
 
 export type Config = {
   PROGRAM_ID: string;
@@ -35,7 +35,7 @@ export type Config = {
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  BANK: new PublicKey("HmpMfL8942u22htC4EMiWgLX931g3sacXFR6KjuLgKLV"),
+  BANK: new PublicKey("2s37akK2eyBbp8DZgCm7RtsaEz8eJP3Nxd4urLHQv7yB"),
   DESTINATION_WALLET: new PublicKey(
     "J3oBkTkDXU3TcAggJEa3YeBZE5om5yNAdTtLVNXFD47"
   ),
