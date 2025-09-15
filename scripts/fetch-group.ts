@@ -12,7 +12,7 @@ type Config = {
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  GROUP: new PublicKey("FCPfpHA69EbS8f9KKSreTRkXbzFpunsKuYf5qNmnJjpo"),
+  GROUP: new PublicKey("4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8"),
 };
 
 async function main() {
@@ -50,6 +50,22 @@ async function main() {
   console.log(" fixed:     " + wrappedI80F48toBigNumber(cache.programFeeFixed));
   console.log(" rate       " + wrappedI80F48toBigNumber(cache.programFeeRate));
   console.log(" last updated       " + cache.lastUpdate.toString());
+
+  console.log("\nBank addresses:");
+
+  // Fetch all banks that belong to this group
+  const banks = await program.account.bank.all([
+    {
+      memcmp: {
+        offset: 8 + 32 + 1, // Discriminator + Pubkey + u8 (matches Rust: 8 + size_of::<Pubkey>() + size_of::<u8>())
+        bytes: config.GROUP.toBase58(),
+      },
+    },
+  ]);
+
+  banks.forEach((bank, index) => {
+    console.log(`${index}: ${bank.publicKey.toString()}`);
+  });
 }
 
 main().catch((err) => {
