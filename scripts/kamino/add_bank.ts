@@ -46,6 +46,8 @@ type Config = {
   BANK_MINT: PublicKey;
   KAMINO_RESERVE: PublicKey;
   KAMINO_MARKET: PublicKey;
+  /** Oracle address the Kamino Reserve uses (typically read from config.tokenInfo.scope) */
+  RESERVE_ORACLE: PublicKey;
   SEED: number;
   TOKEN_PROGRAM: PublicKey;
   MULTISIG_PAYER?: PublicKey; // May be omitted if not using squads
@@ -54,13 +56,14 @@ type Config = {
 const config: Config = {
   PROGRAM_ID: "5UDghkpgW1HfYSrmEj2iAApHShqU44H6PKTAar9LL9bY",
   GROUP_KEY: new PublicKey("ERBiJdWtnVBBd4gFm7YVHT3a776x5NbGbJBR5BDvsxtj"),
-  ORACLE: new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
+  ORACLE: new PublicKey("HyBsZY1UiGttbQ3ppBmnFVss9rmDAEvEbtYxdfjNAqBZ"),
   ORACLE_TYPE: { kaminoPythPush: {} },
   ADMIN: new PublicKey("725Z4QQUVhRiXcCdf4cQTrxXYmQXyW9zgVkW5PDVSJz4"),
   FEE_PAYER: new PublicKey("725Z4QQUVhRiXcCdf4cQTrxXYmQXyW9zgVkW5PDVSJz4"),
-  BANK_MINT: new PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"),
-  KAMINO_RESERVE: new PublicKey("D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59"),
+  BANK_MINT: new PublicKey("HzwqbKZw8HxMN6bF2yFZNrht3c2iXXzpKcFu7uBEDKtr"),
+  KAMINO_RESERVE: new PublicKey("EGPE45iPkme8G8C1xFDNZoZeHdP3aRYtaAfAQuuwrcGZ"),
   KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"),
+  RESERVE_ORACLE: new PublicKey("3NJYftD5sjVfxSnUdZ1wVML8f3aC6mp1CXCL6L7TnU8C"),
   SEED: 0,
   TOKEN_PROGRAM: TOKEN_PROGRAM_ID,
 
@@ -132,6 +135,8 @@ async function main() {
     )
   );
 
+  // TODO farm accounts init?
+
   let initObligationTx = new Transaction().add(
     ComputeBudgetProgram.setComputeUnitLimit({ units: 1_400_000 }),
     await makeInitObligationIx(
@@ -143,7 +148,7 @@ async function main() {
         lendingMarket: config.KAMINO_MARKET,
         reserveLiquidityMint: config.BANK_MINT,
         reserve: config.KAMINO_RESERVE,
-        pythOracle: config.ORACLE,
+        scopePrices: config.RESERVE_ORACLE,
         // reserveFarmState: farmState,
         // obligationFarmUserState: userState,
       },
