@@ -11,8 +11,8 @@ type Config = {
 };
 
 const config: Config = {
-  PROGRAM_ID: "5UDghkpgW1HfYSrmEj2iAApHShqU44H6PKTAar9LL9bY",
-  GROUP: new PublicKey("FtG71Waj7zMDkJDJhLNmCDq9qtLJq1wy3TrzneXzBBQw"),
+  PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
+  GROUP: new PublicKey("4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8"),
 };
 
 async function main() {
@@ -28,10 +28,10 @@ async function main() {
   let group = await program.account.marginfiGroup.fetch(config.GROUP);
 
   console.log("admin: " + group.admin);
-  console.log("emode admin: " + group.emodeAdmin);
-  console.log("curve admin: " + group.delegateCurveAdmin);
-  console.log("limit admin: " + group.delegateLimitAdmin);
-  console.log("emissions admin: " + group.delegateEmissionsAdmin);
+  console.log("emode admin:....." + group.emodeAdmin);
+  console.log("curve admin:....." + group.delegateCurveAdmin);
+  console.log("limit admin:....." + group.delegateLimitAdmin);
+  console.log("emissions admin:." + group.delegateEmissionsAdmin);
 
   console.log("flags: " + group.groupFlags.toNumber());
   console.log("fee wallet: " + group.feeStateCache.globalFeeWallet);
@@ -46,10 +46,10 @@ async function main() {
 
   let cache = group.feeStateCache;
   console.log("cache values: ");
-  console.log(" wallet:    " + cache.globalFeeWallet);
-  console.log(" fixed:     " + wrappedI80F48toBigNumber(cache.programFeeFixed));
-  console.log(" rate       " + wrappedI80F48toBigNumber(cache.programFeeRate));
-  console.log(" last updated       " + cache.lastUpdate.toString());
+  console.log(" wallet:...." + cache.globalFeeWallet);
+  console.log(" fixed:....." + wrappedI80F48toBigNumber(cache.programFeeFixed));
+  console.log(" rate:......" + wrappedI80F48toBigNumber(cache.programFeeRate));
+  console.log(" updated:..." + cache.lastUpdate.toString());
 
   console.log("\nBank addresses:");
 

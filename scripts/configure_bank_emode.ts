@@ -1,11 +1,15 @@
 import { Program } from "@coral-xyz/anchor";
 import { bigNumberToWrappedI80F48, WrappedI80F48 } from "@mrgnlabs/mrgn-common";
-import { PublicKey, Transaction, sendAndConfirmTransaction } from "@solana/web3.js";
-import { Marginfi } from "../idl/marginfi1.3";
+import {
+  PublicKey,
+  Transaction,
+  sendAndConfirmTransaction,
+} from "@solana/web3.js";
 import { commonSetup } from "../lib/common-setup";
 import { EmodeTag, MAX_EMODE_ENTRIES } from "../lib/constants";
 import { I80F48_ZERO } from "./utils";
 import { entriesIn, groupBy } from "lodash";
+import { Marginfi } from "../idl/marginfi";
 
 /**
  * If true, send the tx. If false, output the unsigned b58 tx to console.
@@ -33,9 +37,6 @@ interface PairConfig {
   maint: number;
 }
 
-// // STEP 1: Map each tag to the bank PublicKeys that will use that tag. NOTE: If a bank currently has
-// // an emode entry and you want to REMOVE IT, make sure that bank appears here too (with a dummy
-// // value for the tag)
 // const BANK_KEYS: Record<EmodeTag, PublicKey[]> = {
 //   // SOL
 //   [EmodeTag.SOL]: [new PublicKey("3evdJSa25nsUiZzEUzd92UNa13TPRJrje1dRyiQP5Lhp")],
@@ -62,7 +63,6 @@ interface PairConfig {
 //   ],
 // };
 
-// // STEP 2: Construct the pairs of Emode advantages that will be offered
 // const PAIR_TABLE: PairConfig[] = [
 //   // In plain English, when lending X and borrowing Y, offer rate A/B
 //   { lend: EmodeTag.SOL, borrow: EmodeTag.LST, appIso: true, init: 0.9, maint: 0.95 },
@@ -83,6 +83,10 @@ interface PairConfig {
 //   { lend: EmodeTag.STAKE, borrow: EmodeTag.SOL, appIso: true, init: 0.98, maint: 1 },
 // ];
 
+// STEP 1: Map each tag to the bank PublicKeys that will use that tag. NOTE: If a bank currently has
+// an emode entry and you want to REMOVE IT, make sure that bank appears here too (with a dummy
+// value for the tag)
+// prettier-ignore
 const BANK_KEYS: Record<EmodeTag, PublicKey[]> = {
   // SOL
   [EmodeTag.SOL]: [new PublicKey("CCKtUs6Cgwo4aaQUmBPmyoApH2gUDErxNZCAntD6LYGh")],
@@ -99,10 +103,13 @@ const BANK_KEYS: Record<EmodeTag, PublicKey[]> = {
     new PublicKey("GJCi1uj3kYPZ64puA5sLUiCQfFapxT2xnREzrbDzFkYY"), // hsol
     new PublicKey("4YipZHMNQjip1LrG3uF2fj1G5ieWQ9QRQRy1jhAWWKUZ"), // bbSol
     new PublicKey("FVVKPocxQqJNjDTjzvT3HFXte5oarfp29vJ9tqjAPUW4"), // bnSol
+    new PublicKey("AwLRW3aPMMftXEjgWhTkYwM9CGBHdtKecvahCJZBwAqY"), // inf
+    new PublicKey("4gQYBXPg4GuUQ58pyRebJrtUt6TvFdznwMu7RLfNsipH"), // dfdvSOL
   ],
 };
 
 // STEP 2: Construct the pairs of Emode advantages that will be offered
+// prettier-ignore
 const PAIR_TABLE: PairConfig[] = [
   // In plain English, when lending X and borrowing Y, offer rate A/B
   { lend: EmodeTag.SOL, borrow: EmodeTag.LST_T1, appIso: true, init: 0.9, maint: 0.95 },
@@ -118,13 +125,21 @@ const PAIR_TABLE: PairConfig[] = [
 ];
 
 async function main() {
-  const user = commonSetup(sendTx, config.PROGRAM_ID, "/keys/emode-admin.json", config.MULTISIG, "1.3");
+  const user = commonSetup(
+    sendTx,
+    config.PROGRAM_ID,
+    "/keys/emode-admin.json",
+    config.MULTISIG,
+    "current"
+  );
   const program = user.program;
   const connection = user.connection;
 
   const setups: ConfigureBankEmodeArgs[] = [];
 
-  for (const [borrowTagStr, pairs] of Object.entries(groupBy(PAIR_TABLE, (p) => p.borrow))) {
+  for (const [borrowTagStr, pairs] of Object.entries(
+    groupBy(PAIR_TABLE, (p) => p.borrow)
+  )) {
     const borrowTag = Number(borrowTagStr) as EmodeTag;
     const entries: EmodeEntry[] = (pairs as PairConfig[]).map((p) => ({
       collateralBankEmodeTag: p.lend,
@@ -136,7 +151,9 @@ async function main() {
 
     // One setup per bank key under this borrow tag
     for (const bankPubkey of BANK_KEYS[borrowTag] || []) {
-      console.log("preparing to add tag " + borrowTag + " to bank " + bankPubkey);
+      console.log(
+        "preparing to add tag " + borrowTag + " to bank " + bankPubkey
+      );
       setups.push({
         bank: bankPubkey,
         tag: borrowTag,
@@ -151,7 +168,9 @@ async function main() {
     const borrowTag = Number(borrowTagKey) as EmodeTag;
     if (!setups.some((s) => s.tag === borrowTag)) {
       for (const bankPubkey of BANK_KEYS[borrowTag]) {
-        console.log(`preparing to add tag ${borrowTag} to bank ${bankPubkey} with EMPTY entries`);
+        console.log(
+          `preparing to add tag ${borrowTag} to bank ${bankPubkey} with EMPTY entries`
+        );
         setups.push({
           bank: bankPubkey,
           tag: borrowTag,
@@ -164,7 +183,11 @@ async function main() {
   if (sendTx) {
     for (const setup of setups) {
       const tx = new Transaction();
-      console.log(`Configuring ${setup.bank.toString()} with tag (${setup.tag}) using ${setup.entries.length} entries`);
+      console.log(
+        `Configuring ${setup.bank.toString()} with tag (${setup.tag}) using ${
+          setup.entries.length
+        } entries`
+      );
       tx.add(
         await configBankEmode(program, {
           bank: setup.bank,
@@ -174,7 +197,9 @@ async function main() {
       );
 
       try {
-        const signature = await sendAndConfirmTransaction(connection, tx, [user.wallet.payer]);
+        const signature = await sendAndConfirmTransaction(connection, tx, [
+          user.wallet.payer,
+        ]);
         console.log("✅ Transaction signature:", signature);
       } catch (error) {
         console.error("❌ Transaction failed:", error);
@@ -205,7 +230,10 @@ type ConfigureBankEmodeArgs = {
   entries: EmodeEntry[];
 };
 
-function configBankEmode(program: Program<Marginfi>, args: ConfigureBankEmodeArgs) {
+function configBankEmode(
+  program: Program<Marginfi>,
+  args: ConfigureBankEmodeArgs
+) {
   const paddedEntries = padEmodeEntries(args.entries);
 
   const ix = program.methods
@@ -222,7 +250,9 @@ function configBankEmode(program: Program<Marginfi>, args: ConfigureBankEmodeArg
 
 function padEmodeEntries(entries: EmodeEntry[]): EmodeEntry[] {
   if (entries.length > MAX_EMODE_ENTRIES) {
-    throw new Error(`Too many entries provided. Maximum allowed is ${MAX_EMODE_ENTRIES}`);
+    throw new Error(
+      `Too many entries provided. Maximum allowed is ${MAX_EMODE_ENTRIES}`
+    );
   }
   const padded = [...entries];
   while (padded.length < MAX_EMODE_ENTRIES) {
