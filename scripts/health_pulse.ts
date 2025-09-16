@@ -12,7 +12,7 @@ import { commonSetup, User } from "../lib/common-setup";
 import { wrappedI80F48toBigNumber } from "@mrgnlabs/mrgn-common";
 import { MarginfiAccount } from "@mrgnlabs/marginfi-client-v2";
 import { Marginfi } from "../idl/marginfi";
-import { chunk } from "./utils";
+import { chunk, runConcurrent } from "./utils";
 import { createHash } from "crypto";
 import { promises as fs } from "fs";
 import * as path from "path";
@@ -92,11 +92,6 @@ async function massive_pulse(user: User<Marginfi>) {
 
   const GROUP_OFFSET = 8;
   const DATA_SIZE = user.program.account.marginfiAccount.size;
-  const name = "marginfiAccount";
-  const disc = createHash("sha256")
-    .update(`account:${name}`)
-    .digest()
-    .slice(0, 8);
 
   // 1) List keys only (small response)
   const gpa = await user.connection.getProgramAccounts(user.program.programId, {
@@ -109,11 +104,12 @@ async function massive_pulse(user: User<Marginfi>) {
   });
 
   // 2) Fetch & decode in batches
-  const keys = gpa.map((a) => a.pubkey); //[new PublicKey("F1sdbgu1FpDsKHGmG7RBNtehVC4M19KxAPSruvS5EXf8")]; //gpa.map((a) => a.pubkey);
-  const pages = chunk(keys, 100); // 100–200 is friendly to most RPCs
+  const keys = gpa.map((a) => a.pubkey); //[new PublicKey("F1sdbgu1FpDsKHGmG7RBNtehVC4M19KxAPSruvS5EXf8")];
+  const pages = chunk(keys, 96);
 
-  const results: Array<{ pubkey: PublicKey; account: any }> = [];
+  let totalProcessed = 0;
   for (const page of pages) {
+    const results: Array<PublicKey> = [];
     const infos = await user.connection.getMultipleAccountsInfo(
       page,
       "confirmed"
@@ -129,16 +125,22 @@ async function massive_pulse(user: User<Marginfi>) {
         // ignore disabled accounts
         continue;
       }
+      if (userAccount.lendingAccount.balances[0].active == 0) {
+        continue;
+      }
 
-      results.push({ pubkey: page[i], account: userAccount });
-      const localCfg = { ...config, ACCOUNT: page[i] };
-      await health_pulse(localCfg, user, false, crankedSwbOracles);
+      totalProcessed += 1;
+      results.push(page[i]);
     }
-    break;
+
+    await runConcurrent(results, 32, async (pk) => {
+      const localCfg = { ...config, ACCOUNT: pk }; // don't mutate shared config
+      await health_pulse(localCfg, user, false, crankedSwbOracles);
+    });
   }
 
   //const users = await user.program.account.marginfiAccount.all([{ memcmp: { offset: 8, bytes: groupKey.toBase58() }}]);
-  console.log("users from main pool: " + results.length);
+  console.log("users from main pool: " + totalProcessed);
 }
 
 async function health_pulse(
@@ -199,7 +201,7 @@ async function health_pulse(
         { signature, blockhash, lastValidBlockHeight },
         commitment
       );
-      console.log("Transaction signature:", signature);
+      //console.log("Transaction signature:", signature);
     } catch (error) {
       console.error("Transaction failed:", error);
     }
@@ -220,23 +222,23 @@ async function health_pulse(
     const logs = (value.logs ?? []).join("\n");
 
     if (value.err) {
-      console.log(
-        `simulateTransaction failed: ${JSON.stringify(value.err)}\n${logs}`
-      );
+      // console.log(
+      //   `simulateTransaction failed: ${JSON.stringify(value.err)}\n${logs}`
+      // );
       return;
     }
 
     const acc = value.accounts?.[0];
     if (!acc || !Array.isArray((acc as any).data)) {
-      console.log(
-        `simulateTransaction returned no post-state for ${config.ACCOUNT.toBase58()}\n${logs}`
-      );
+      // console.log(
+      //   `simulateTransaction returned no post-state for ${config.ACCOUNT.toBase58()}\n${logs}`
+      // );
       return;
     }
 
     const [b64, enc] = (acc as any).data as [string, string];
     if (enc !== "base64") {
-      console.log(`Unexpected encoding "${enc}" in simulateTransaction result`);
+      //      console.log(`Unexpected encoding "${enc}" in simulateTransaction result`);
       return;
     }
 
