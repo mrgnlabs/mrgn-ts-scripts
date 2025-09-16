@@ -64,8 +64,9 @@
 
 ## KAMINO INTEGRATION BANKS
 
-- EURC - HzwqbKZw8HxMN6bF2yFZNrht3c2iXXzpKcFu7uBEDKtr
-- USDC - 4iApZwbuTCkxgeg67sQsvSAPxWdWkkT5XVgv3R29s6JU
+- EURC (kamino) - HzwqbKZw8HxMN6bF2yFZNrht3c2iXXzpKcFu7uBEDKtr
+- USDC (kamino) - 4iApZwbuTCkxgeg67sQsvSAPxWdWkkT5XVgv3R29s6JU
+- zenBTC (mrgn) - GgVBHPgS7zyYXESHQnfrU3LFTGqv7LUjysSweEGSiBoz
 
 ## ORACLES
 
