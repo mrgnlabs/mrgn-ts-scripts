@@ -25,7 +25,7 @@
 - Main group - 4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8
 - Staging - FCPfpHA69EbS8f9KKSreTRkXbzFpunsKuYf5qNmnJjpo
 - Staging mainnet clone - Diu1q9gniR1qR4Daaej3rcHd6949HMmxLGsnQ94Z3rLz
-- Zerotrade - FtG71Waj7zMDkJDJhLNmCDq9qtLJq1wy3TrzneXzBBQw
+- Kamino Integration - ERBiJdWtnVBBd4gFm7YVHT3a776x5NbGbJBR5BDvsxtj
 
 ## STAKED SETTINGS
 
@@ -62,11 +62,9 @@
 - BONK - Ds4ZD4M1rLjo4anQnkhCRU9tkmjzx9AsmMkPdPCo4U1t
 - PUMP - B72N46iVnhfX8b3oAPGZL6mrfJj5V684cStXv7XTMw9Q
 
-## ZEROTRADE BANKS
+## KAMINO INTEGRATION BANKS
 
-- USDC - 6rB9HUt3ASKKRrKHUvDf5zCMf2CFVeDqeMPEmToERT4X
-- BONK - 8nEXi1CMFe17mf2AuogyLkDND8vVReJ93m9Gx9TamfBC
-- WIF - DM1d4fE7VYo4gNhYXKv9Bfq1tZ7Sv3kMhs1pSSPBtkmB
+- 
 
 ## ORACLES
 

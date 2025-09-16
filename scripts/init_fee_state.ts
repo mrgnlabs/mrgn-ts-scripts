@@ -1,9 +1,10 @@
-import { Connection, PublicKey, Transaction, sendAndConfirmTransaction } from "@solana/web3.js";
-import { bigNumberToWrappedI80F48, WrappedI80F48 } from "@mrgnlabs/mrgn-common";
-import { AnchorProvider, Program } from "@coral-xyz/anchor";
-import { I80F48_ZERO, loadKeypairFromFile } from "./utils";
-import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
-import { Keypair } from "@solana/web3.js";
+import {
+  PublicKey,
+  Transaction,
+  sendAndConfirmTransaction,
+} from "@solana/web3.js";
+import { WrappedI80F48 } from "@mrgnlabs/mrgn-common";
+import { I80F48_ZERO } from "./utils";
 import { commonSetup } from "../lib/common-setup";
 
 type Config = {
@@ -18,7 +19,7 @@ type Config = {
 };
 const config: Config = {
   PROGRAM_ID: "5UDghkpgW1HfYSrmEj2iAApHShqU44H6PKTAar9LL9bY",
-  ADMIN_PUBKEY: new PublicKey("FtG71Waj7zMDkJDJhLNmCDq9qtLJq1wy3TrzneXzBBQw"),
+  ADMIN_PUBKEY: new PublicKey("725Z4QQUVhRiXcCdf4cQTrxXYmQXyW9zgVkW5PDVSJz4"),
   FLAT_SOL_FEE: 1000,
   PROGRAM_FEE_FIXED: I80F48_ZERO,
   PROGRAM_FEE_RATE: I80F48_ZERO,
@@ -40,7 +41,13 @@ async function main() {
 }
 
 async function initGlobalFeeState() {
-  const user = commonSetup(true, config.PROGRAM_ID, "/keys/zerotrade_admin.json");
+  const user = commonSetup(
+    true,
+    config.PROGRAM_ID,
+    "/keys/zerotrade_admin.json",
+    config.MULTISIG_PAYER,
+    "kamino"
+  );
   const program = user.program;
   const connection = user.connection;
 
@@ -63,7 +70,9 @@ async function initGlobalFeeState() {
   );
 
   try {
-    const signature = await sendAndConfirmTransaction(connection, transaction, [user.wallet.payer]);
+    const signature = await sendAndConfirmTransaction(connection, transaction, [
+      user.wallet.payer,
+    ]);
     console.log("Transaction signature:", signature);
   } catch (error) {
     console.error("Transaction failed:", error);

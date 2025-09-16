@@ -6,6 +6,7 @@ import * as fs from "fs";
 
 export const I80F48_ZERO = bigNumberToWrappedI80F48(0);
 export const I80F48_ONE = bigNumberToWrappedI80F48(1);
+export const PYTH_PULL_MIGRATED = 1;
 
 /**
  * Load local wallet keypair at given path if you have a bs58 encoded keypair stored as an array

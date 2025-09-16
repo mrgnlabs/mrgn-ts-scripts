@@ -5,6 +5,9 @@ import { Program, AnchorProvider, Wallet, Idl } from "@coral-xyz/anchor";
 import { Marginfi as MarginfiCurrent } from "../idl/marginfi";
 import marginfiIdlCurrent from "../idl/marginfi.json";
 
+import { Marginfi as Marginfi_Kamino } from "../idl/marginfi_kamino";
+import marginfiIdl_Kamino from "../idl/marginfi_kamino.json";
+
 import { Marginfi as MarginfiV1_4 } from "../idl/marginfi1.4";
 import marginfiIdlV1_4 from "../idl/marginfi1.4.json";
 
@@ -31,6 +34,7 @@ type Versions = {
   current: MarginfiCurrent;
   "1.3": MarginfiV1_3;
   "1.4": MarginfiV1_4;
+  kamino: Marginfi_Kamino;
 };
 
 // Map each version to its corresponding JSON IDL object.
@@ -38,6 +42,7 @@ const idlJsonMap: Record<keyof Versions, Idl> = {
   current: marginfiIdlCurrent as Idl,
   "1.3": marginfiIdlV1_3 as Idl,
   "1.4": marginfiIdlV1_4 as Idl,
+  kamino: marginfiIdl_Kamino as Idl,
 };
 
 /**
@@ -74,8 +79,19 @@ export function commonSetup(
   programId: string,
   walletPath?: string,
   multisig?: PublicKey,
+  version?: "kamino"
+): User<Marginfi_Kamino>;
+export function commonSetup(
+  sendTx: boolean,
+  programId: string,
+  walletPath?: string,
+  multisig?: PublicKey,
   version: keyof Versions = "current"
-): User<MarginfiCurrent> | User<MarginfiV1_3> | User<MarginfiV1_4> {
+):
+  | User<MarginfiCurrent>
+  | User<MarginfiV1_3>
+  | User<MarginfiV1_4>
+  | User<Marginfi_Kamino> {
   const selectedJsonIdl = idlJsonMap[version];
   selectedJsonIdl.address = programId;
 
@@ -113,6 +129,13 @@ export function commonSetup(
   } else if (version === "1.4") {
     return {
       program: new Program<MarginfiV1_4>(selectedJsonIdl as any, provider),
+      wallet,
+      provider,
+      connection,
+    };
+  } else if (version === "kamino") {
+    return {
+      program: new Program<Marginfi_Kamino>(selectedJsonIdl as any, provider),
       wallet,
       provider,
       connection,
