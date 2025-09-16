@@ -2,6 +2,9 @@
 import { Connection, PublicKey } from "@solana/web3.js";
 import { Program, AnchorProvider, Wallet, Idl } from "@coral-xyz/anchor";
 
+import { KaminoLending } from "../idl/kamino_lending";
+import KaminoLendingIdl from "../idl/kamino_lending.json";
+
 import { Marginfi as MarginfiCurrent } from "../idl/marginfi";
 import marginfiIdlCurrent from "../idl/marginfi.json";
 
@@ -22,6 +25,7 @@ import { DEFAULT_API_URL, loadEnvFile } from "../scripts/utils";
  */
 export type User<IDL extends Idl> = {
   program: Program<IDL>;
+  kaminoProgram: Program<KaminoLending>;
   wallet: ReadOnlyWallet | Wallet;
   provider: AnchorProvider;
   connection: Connection;
@@ -122,6 +126,7 @@ export function commonSetup(
   if (version === "1.3") {
     return {
       program: new Program<MarginfiV1_3>(selectedJsonIdl as any, provider),
+      kaminoProgram: undefined,
       wallet,
       provider,
       connection,
@@ -129,6 +134,7 @@ export function commonSetup(
   } else if (version === "1.4") {
     return {
       program: new Program<MarginfiV1_4>(selectedJsonIdl as any, provider),
+      kaminoProgram: undefined,
       wallet,
       provider,
       connection,
@@ -136,6 +142,7 @@ export function commonSetup(
   } else if (version === "kamino") {
     return {
       program: new Program<Marginfi_Kamino>(selectedJsonIdl as any, provider),
+      kaminoProgram: undefined,
       wallet,
       provider,
       connection,
@@ -143,9 +150,21 @@ export function commonSetup(
   } else {
     return {
       program: new Program<MarginfiCurrent>(selectedJsonIdl as any, provider),
+      kaminoProgram: undefined,
       wallet,
       provider,
       connection,
     };
   }
+}
+
+export function registerKaminoProgram<IDL extends Idl>(
+  user: User<IDL>,
+  kaminoProgramId: string
+): void {
+  const kaminoIdl = { ...(KaminoLendingIdl as Idl), address: kaminoProgramId };
+  user.kaminoProgram = new Program<KaminoLending>(
+    kaminoIdl as any,
+    user.provider
+  );
 }

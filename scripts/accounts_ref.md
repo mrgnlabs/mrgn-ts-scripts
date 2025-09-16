@@ -64,7 +64,8 @@
 
 ## KAMINO INTEGRATION BANKS
 
-- 
+- EURC - HzwqbKZw8HxMN6bF2yFZNrht3c2iXXzpKcFu7uBEDKtr
+- USDC - 4iApZwbuTCkxgeg67sQsvSAPxWdWkkT5XVgv3R29s6JU
 
 ## ORACLES
 
@@ -101,14 +102,22 @@
 
 ## USERS AND ACCOUNTS
 
-- Phantom wallet (H4QMTHMVbJ3KrB5bz573cBBZKoYSZ2B4mSST1JKzPUrH) account - E3uJyxW232EQAVZ9P9V6CFkxzjqqVdbh8XvUmxtZdGUt
+- Phantom wallet (H4QMTHMVbJ3KrB5bz573cBBZKoYSZ2B4mSST1JKzPUrH) account -
+  E3uJyxW232EQAVZ9P9V6CFkxzjqqVdbh8XvUmxtZdGUt
 - Another acc for Phantom wallet on staging - 9oeseTmNecAoyLbA5j4UsRdUe53ajn9W1goRpEocYHbv
-- Staging deploy wallet (mfC1LoEk4mpM5yx1LjwR9QLZQ49AitxxWkK5Aciw7ZC) - F12SjiKaksVMJs7EQ2GBaWHLr5shFRei1seDDwFA2pek
+- Staging deploy wallet (mfC1LoEk4mpM5yx1LjwR9QLZQ49AitxxWkK5Aciw7ZC) -
+  F12SjiKaksVMJs7EQ2GBaWHLr5shFRei1seDDwFA2pek
 - zerotrade_admin (also owns staging mainnet clone group) -
   725Z4QQUVhRiXcCdf4cQTrxXYmQXyW9zgVkW5PDVSJz4
-- Liquidation test (H4QMTHMVbJ3KrB5bz573cBBZKoYSZ2B4mSST1JKzPUrH owned)\* - A2cNgW5o66rquaiWjnAKkbdimU3x82exrqCvKzzrP1Wy
-- Liquidation test (H4QMTHMVbJ3KrB5bz573cBBZKoYSZ2B4mSST1JKzPUrH owned)\* - F7R6gDWoAoPFHtEpudW41MaxzTrpP5E4ghu6pppE7jYF
-- Transfer test (H4QMTHMVbJ3KrB5bz573cBBZKoYSZ2B4mSST1JKzPUrH owned) - 12W8kr21RZX3tLR8CxZvnqo8fgFirKF3gNhAwSmhsuCg transfered to MS (CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw owned) at 8P6JTEqUW8RWopp1RU4jfbiVbnb9Dzuvtk3Kj6oa3tci
+- zerotrade admin's account on kamino integration group - BBb8HhbzJzN9LvQEqamJFw2rW29BQGq2RndsvQaWEQ4M
+- Liquidation test (H4QMTHMVbJ3KrB5bz573cBBZKoYSZ2B4mSST1JKzPUrH owned)\* -
+  A2cNgW5o66rquaiWjnAKkbdimU3x82exrqCvKzzrP1Wy
+- Liquidation test (H4QMTHMVbJ3KrB5bz573cBBZKoYSZ2B4mSST1JKzPUrH owned)\* -
+  F7R6gDWoAoPFHtEpudW41MaxzTrpP5E4ghu6pppE7jYF
+- Transfer test (H4QMTHMVbJ3KrB5bz573cBBZKoYSZ2B4mSST1JKzPUrH owned) -
+  12W8kr21RZX3tLR8CxZvnqo8fgFirKF3gNhAwSmhsuCg transfered to MS
+  (CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw owned) at
+  8P6JTEqUW8RWopp1RU4jfbiVbnb9Dzuvtk3Kj6oa3tci
 
 * This account would be liquidated if emode wasn't enabled, but should NOT be eligible to be
   liquidated under mode
@@ -118,7 +127,8 @@
 These are test LUTs to be used for any purpose, they contain a variety of accounts with no
 particular organization.
 
-- CQ8omkUwDtsszuJLo9grtXCeEyDU4QqBLRv9AjRDaUZ3 (owned by Phantom wallet H4QMTHMVbJ3KrB5bz573cBBZKoYSZ2B4mSST1JKzPUrH)
+- CQ8omkUwDtsszuJLo9grtXCeEyDU4QqBLRv9AjRDaUZ3 (owned by Phantom wallet
+  H4QMTHMVbJ3KrB5bz573cBBZKoYSZ2B4mSST1JKzPUrH)
 
 ## DESTROYED ACCOUNTS
 

@@ -20,6 +20,7 @@ import {
   deriveReserveLiquiditySupply,
   deriveUserMetadata,
 } from "./pdas";
+import { KaminoLending } from "../../idl/kamino_lending";
 
 export interface AddKaminoBankArgs {
   seed: BN;
@@ -197,6 +198,131 @@ export const makeInitObligationIx = async (
       // kaminoObligation: baseObligation,
       // mint: accounts.reserveLiquidityMint,
     })
+    .instruction();
+
+  return ix;
+};
+
+const DEFAULT_KAMINO_DEPOSIT_OPTIONAL_ACCOUNTS = {
+  obligationFarmUserState: null,
+  reserveFarmState: null,
+} as const;
+
+export interface KaminoDepositAccounts {
+  marginfiAccount: PublicKey;
+  bank: PublicKey;
+  signerTokenAccount: PublicKey;
+  lendingMarket: PublicKey;
+  reserveLiquidityMint: PublicKey;
+
+  obligationFarmUserState?: PublicKey | null;
+  reserveFarmState?: PublicKey | null;
+}
+
+export const makeKaminoDepositIx = async (
+  program: Program<Marginfi>,
+  accounts: KaminoDepositAccounts,
+  amount: BN
+): Promise<TransactionInstruction> => {
+  // Merge with defaults...
+  const accs = {
+    ...DEFAULT_KAMINO_DEPOSIT_OPTIONAL_ACCOUNTS,
+    ...accounts,
+  };
+
+  const [lendingMarketAuthority] = deriveLendingMarketAuthority(
+    KLEND_PROGRAM_ID,
+    accounts.lendingMarket
+  );
+  const [reserveLiquiditySupply] = deriveReserveLiquiditySupply(
+    KLEND_PROGRAM_ID,
+    accounts.lendingMarket,
+    accounts.reserveLiquidityMint
+  );
+  const [reserveCollateralMint] = deriveReserveCollateralMint(
+    KLEND_PROGRAM_ID,
+    accounts.lendingMarket,
+    accounts.reserveLiquidityMint
+  );
+  const [reserveCollateralSupply] = deriveReserveCollateralSupply(
+    KLEND_PROGRAM_ID,
+    accounts.lendingMarket,
+    accounts.reserveLiquidityMint
+  );
+
+  return program.methods
+    .kaminoDeposit(amount)
+    .accounts({
+      lendingMarketAuthority,
+      reserveLiquiditySupply,
+      reserveCollateralMint,
+      reserveDestinationDepositCollateral: reserveCollateralSupply,
+      liquidityTokenProgram: TOKEN_PROGRAM_ID,
+      ...accs,
+    })
+    .instruction();
+};
+
+// Note:  The vast majority (maybe all) Kamino reserves use scope so we do not bother to support
+// other types
+/**
+ * Refresh a generic Kamino reserve with a scope oracle.
+ * @param program
+ * @param reserve
+ * @param market
+ * @param oracle
+ * @returns
+ */
+export const simpleRefreshReserve = (
+  program: Program<KaminoLending>,
+  reserve: PublicKey,
+  market: PublicKey,
+  oracle: PublicKey
+) => {
+  const ix = program.methods
+    .refreshReserve()
+    .accounts({
+      reserve: reserve,
+      lendingMarket: market,
+      pythOracle: null,
+      switchboardPriceOracle: null,
+      switchboardTwapOracle: null,
+      scopePrices: oracle,
+    })
+    .instruction();
+
+  return ix;
+};
+
+/**
+ * Refresh a generic Kamino obligation
+ * @param program
+ * @param market
+ * @param obligation
+ * @param remaining - pack the reserves used in this obligation, in the order they appear, starting
+ * with lending reserves. For example, a user lending USDC at index 0, SOL at index 1, borrowing
+ * BONK at index 0, pass [USDC, SOL, BONK] reserves
+ * @returns
+ */
+export const simpleRefreshObligation = (
+  program: Program<KaminoLending>,
+  market: PublicKey,
+  obligation: PublicKey,
+  remaining: PublicKey[] = []
+) => {
+  const accMeta: AccountMeta[] = remaining.map((pubkey) => ({
+    pubkey,
+    isSigner: false,
+    isWritable: false,
+  }));
+
+  const ix = program.methods
+    .refreshObligation()
+    .accounts({
+      lendingMarket: market,
+      obligation: obligation,
+    })
+    .remainingAccounts(accMeta)
     .instruction();
 
   return ix;

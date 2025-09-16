@@ -1,6 +1,5 @@
+// Note: don't forget to call init_bank_obligation after!
 import {
-  AccountMeta,
-  ComputeBudgetProgram,
   PublicKey,
   Transaction,
   sendAndConfirmTransaction,
@@ -8,29 +7,21 @@ import {
 import { BN } from "@coral-xyz/anchor";
 import {
   bigNumberToWrappedI80F48,
-  TOKEN_2022_PROGRAM_ID,
   TOKEN_PROGRAM_ID,
-  WrappedI80F48,
 } from "@mrgnlabs/mrgn-common";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 import {
-  defaultKaminoBankConfig,
   KaminoConfigCompact,
-  KLEND_PROGRAM_ID,
   OracleSetupRawWithKamino,
 } from "./kamino-types";
 import { commonSetup } from "../../lib/common-setup";
-import { makeAddKaminoBankIx, makeInitObligationIx } from "./ixes-common";
-import { getAssociatedTokenAddressSync } from "@solana/spl-token";
-import { deriveBaseObligation } from "./pdas";
+import { makeAddKaminoBankIx } from "./ixes-common";
+import { deriveBankWithSeed } from "../common/pdas";
 
 /**
  * If true, send the tx. If false, output the unsigned b58 tx to console.
  */
 const sendTx = true;
-
-const createBank = false;
-const createObligation = true;
 
 type Config = {
   PROGRAM_ID: string;
@@ -46,8 +37,6 @@ type Config = {
   BANK_MINT: PublicKey;
   KAMINO_RESERVE: PublicKey;
   KAMINO_MARKET: PublicKey;
-  /** Oracle address the Kamino Reserve uses (typically read from config.tokenInfo.scope) */
-  RESERVE_ORACLE: PublicKey;
   SEED: number;
   TOKEN_PROGRAM: PublicKey;
   MULTISIG_PAYER?: PublicKey; // May be omitted if not using squads
@@ -63,7 +52,6 @@ const config: Config = {
   BANK_MINT: new PublicKey("HzwqbKZw8HxMN6bF2yFZNrht3c2iXXzpKcFu7uBEDKtr"),
   KAMINO_RESERVE: new PublicKey("EGPE45iPkme8G8C1xFDNZoZeHdP3aRYtaAfAQuuwrcGZ"),
   KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"),
-  RESERVE_ORACLE: new PublicKey("3NJYftD5sjVfxSnUdZ1wVML8f3aC6mp1CXCL6L7TnU8C"),
   SEED: 0,
   TOKEN_PROGRAM: TOKEN_PROGRAM_ID,
 
@@ -102,18 +90,6 @@ async function main() {
     config.BANK_MINT,
     new BN(config.SEED)
   );
-  const [baseObligation] = deriveBaseObligation(
-    bankKey,
-    config.KAMINO_MARKET,
-    KLEND_PROGRAM_ID
-  );
-
-  const ata = getAssociatedTokenAddressSync(
-    config.BANK_MINT,
-    user.wallet.publicKey,
-    true,
-    config.TOKEN_PROGRAM
-  );
 
   const initBankTx = new Transaction().add(
     await makeAddKaminoBankIx(
@@ -135,48 +111,13 @@ async function main() {
     )
   );
 
-  // TODO farm accounts init?
-
-  let initObligationTx = new Transaction().add(
-    ComputeBudgetProgram.setComputeUnitLimit({ units: 1_400_000 }),
-    await makeInitObligationIx(
-      program,
-      {
-        feePayer: config.FEE_PAYER,
-        bank: bankKey,
-        signerTokenAccount: ata,
-        lendingMarket: config.KAMINO_MARKET,
-        reserveLiquidityMint: config.BANK_MINT,
-        reserve: config.KAMINO_RESERVE,
-        scopePrices: config.RESERVE_ORACLE,
-        // reserveFarmState: farmState,
-        // obligationFarmUserState: userState,
-      },
-      new BN(100)
-    )
-  );
-
   if (sendTx) {
     try {
-      if (createBank) {
-        const sigInit = await sendAndConfirmTransaction(
-          connection,
-          initBankTx,
-          [user.wallet.payer]
-        );
-        console.log("bank key: " + bankKey);
-        console.log("Transaction signature:", sigInit);
-      }
-
-      if (createObligation) {
-        const sigObligation = await sendAndConfirmTransaction(
-          connection,
-          initObligationTx,
-          [user.wallet.payer]
-        );
-        console.log("obligation key: " + baseObligation);
-        console.log("Transaction signature:", sigObligation);
-      }
+      const sigInit = await sendAndConfirmTransaction(connection, initBankTx, [
+        user.wallet.payer,
+      ]);
+      console.log("bank key: " + bankKey);
+      console.log("Transaction signature:", sigInit);
     } catch (error) {
       console.error("Transaction failed:", error);
     }
@@ -193,18 +134,6 @@ async function main() {
     console.log("Base58-encoded transaction:", base58Transaction);
   }
 }
-
-const deriveBankWithSeed = (
-  programId: PublicKey,
-  group: PublicKey,
-  bankMint: PublicKey,
-  seed: BN
-) => {
-  return PublicKey.findProgramAddressSync(
-    [group.toBuffer(), bankMint.toBuffer(), seed.toArrayLike(Buffer, "le", 8)],
-    programId
-  );
-};
 
 main().catch((err) => {
   console.error(err);
