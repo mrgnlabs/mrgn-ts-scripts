@@ -7,11 +7,11 @@ import { commonSetup } from "../lib/common-setup";
 
 type Config = {
   PROGRAM_ID: string;
-  BANK_KEY: PublicKey;
+  ACCOUNT: PublicKey;
 };
 const config: Config = {
-  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-  BANK_KEY: new PublicKey("Fe5QkKPVAh629UPP5aJ8sDZu8HTfe6M26jDQkKyXVhoA"),
+  PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
+  ACCOUNT: new PublicKey("FEK5G85noQnYcvBjA58anuUPC9M1pJsPW8bEVurK8QRh"),
 };
 
 async function main() {
@@ -20,9 +20,9 @@ async function main() {
 
   const transaction = new Transaction().add(
     await program.methods
-      .lendingPoolAccrueBankInterest()
+      .lendingAccountSortBalances()
       .accounts({
-        bank: config.BANK_KEY,
+        marginfiAccount: config.ACCOUNT,
       })
       .instruction()
   );
