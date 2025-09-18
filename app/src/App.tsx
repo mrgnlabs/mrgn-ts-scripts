@@ -58,7 +58,7 @@ export default function App() {
 
       {/* Page Content */}
       <main className="max-w-6xl mx-auto p-4">
-        {page === "bank" && <BankInfoPage banks={banks} error={error} />}
+        {page === "bank" && <BankInfoPage banks={banks}/>}
         {page === "oracle" && (
           <OracleStatusPage
             programId={PROGRAM_ID}

@@ -61,15 +61,10 @@ export function OracleStatusPage({
     const metas = banks.flatMap((b) => {
       const os = (b.bankAcc.config as any).oracleSetup;
       if ("pythPushOracle" in os) {
-        const pda = findPythPushOracleAddress(
-          b.bankAcc.config.oracleKeys[0].toBuffer(),
-          PYTH_PUSH_ORACLE_ID,
-          PYTH_SPONSORED_SHARD_ID
-        );
         return [
           {
             tokenName: b.tokenName,
-            feedPubkey: pda,
+            feedPubkey: b.bankAcc.config.oracleKeys[0],
             maxAge: b.bankAcc.config.oracleMaxAge,
           },
         ];

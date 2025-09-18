@@ -4,9 +4,8 @@ import type { FetchedBank } from "../services/api";
 
 interface BankInfoPageProps {
   banks: FetchedBank[];
-  error: string | null;
 }
 
-export function BankInfoPage({ banks, error }: BankInfoPageProps) {
-  return <BankList banks={banks} error={error} />;
+export function BankInfoPage({ banks }: BankInfoPageProps) {
+  return <BankList banks={banks} />;
 }
