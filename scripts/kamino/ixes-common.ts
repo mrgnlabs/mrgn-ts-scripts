@@ -104,6 +104,7 @@ export interface InitObligationAccounts {
   lendingMarket: PublicKey;
   reserveLiquidityMint: PublicKey;
   reserve?: PublicKey;
+  liquidityTokenProgram?: PublicKey;
 
   obligationFarmUserState?: PublicKey | null;
   reserveFarmState?: PublicKey | null;
@@ -187,7 +188,9 @@ export const makeInitObligationIx = async (
       reserveLiquiditySupply,
       reserveCollateralMint,
       reserveDestinationDepositCollateral: reserveCollateralSupply,
-      liquidityTokenProgram: TOKEN_PROGRAM_ID,
+      liquidityTokenProgram: accounts.liquidityTokenProgram
+        ? accounts.liquidityTokenProgram
+        : TOKEN_PROGRAM_ID,
       ...accs,
     })
     .accountsPartial({

@@ -64,13 +64,16 @@
 
 ## KAMINO INTEGRATION BANKS
 
-- EURC (kamino) - HzwqbKZw8HxMN6bF2yFZNrht3c2iXXzpKcFu7uBEDKtr
+- EURC (kamino) - 4TAjQVpmwKX3Zp2pRHa14W5eoPHyXk7jYbhzfZtBiHym
+- USDC (mrgn) - DQ8AKQxPbB9iAyTqtt6UiRH8BANKTztHph9yBnPU72p9
 - USDC (kamino) - 4iApZwbuTCkxgeg67sQsvSAPxWdWkkT5XVgv3R29s6JU
 - zenBTC (mrgn) - GgVBHPgS7zyYXESHQnfrU3LFTGqv7LUjysSweEGSiBoz
+- pyUSD (kamino) - JCUFFWfKJPJ5FeqwtMkfnfC7b2Dq6x9WJE4gEmYYm1ec
+- pyUSD (mrgn) - 2xSD6DiLxEweueLmgJyYKJmLXJXqguqEn4VPERHdsVRY
 
 ## ORACLES
 
-- PY USD (Pyth push) - A52UBHzxnKrH17zjhajRTgHcWwtxN7KYDAzBgraqFxQJ -OR- 9zXQxpYH3kYhtoybmZfUNNCRVuud7fY9jswTg1hLyT8k
+- PY USD (Pyth push) - 9zXQxpYH3kYhtoybmZfUNNCRVuud7fY9jswTg1hLyT8k
 - USDC (Pyth push) - Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX
 - USDT (Pyth push) - HT2PLQBcG5EiCcNSaMHAjSgd9F98ecpATbk4Sk5oYuM
 - SOL (Pyth Push) - H6ARHf6YXhGYeQfUzQNGk6rDNnLBQKrenN712K4AQJEG

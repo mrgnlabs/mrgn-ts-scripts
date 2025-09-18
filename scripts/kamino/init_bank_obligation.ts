@@ -15,9 +15,15 @@ import {
 } from "./kamino-types";
 import { commonSetup } from "../../lib/common-setup";
 import { makeInitObligationIx } from "./ixes-common";
-import { getAssociatedTokenAddressSync } from "@solana/spl-token";
+import {
+  getAssociatedTokenAddressSync,
+  TOKEN_2022_PROGRAM_ID,
+} from "@solana/spl-token";
 import { deriveBaseObligation, deriveUserState } from "./pdas";
-import { deriveBankWithSeed, deriveLiquidityVaultAuthority } from "../common/pdas";
+import {
+  deriveBankWithSeed,
+  deriveLiquidityVaultAuthority,
+} from "../common/pdas";
 
 /**
  * If true, send the tx. If false, output the unsigned b58 tx to console.
@@ -51,13 +57,13 @@ const config: Config = {
 
   ADMIN: new PublicKey("725Z4QQUVhRiXcCdf4cQTrxXYmQXyW9zgVkW5PDVSJz4"),
   FEE_PAYER: new PublicKey("725Z4QQUVhRiXcCdf4cQTrxXYmQXyW9zgVkW5PDVSJz4"),
-  BANK_MINT: new PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"),
-  KAMINO_RESERVE: new PublicKey("D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59"),
+  BANK_MINT: new PublicKey("2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo"),
+  KAMINO_RESERVE: new PublicKey("2gc9Dm1eB6UgVYFBUN9bWks6Kes9PbWSaPaa9DqyvEiN"),
   KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"),
   RESERVE_ORACLE: new PublicKey("3NJYftD5sjVfxSnUdZ1wVML8f3aC6mp1CXCL6L7TnU8C"),
-  FARM_STATE: new PublicKey("JAvnB9AKtgPsTEoKmn24Bq64UMoYcrtWtq42HHBdsPkh"),
+  FARM_STATE: new PublicKey("DEe2NZ5dAXGxC7M8Gs9Esd9wZRPdQzG8jNamXqhL5yku"),
   SEED: 0,
-  TOKEN_PROGRAM: TOKEN_PROGRAM_ID,
+  TOKEN_PROGRAM: TOKEN_2022_PROGRAM_ID,
 
   MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 };
@@ -117,6 +123,7 @@ async function main() {
         scopePrices: config.RESERVE_ORACLE,
         reserveFarmState: config.FARM_STATE,
         obligationFarmUserState: userState,
+        liquidityTokenProgram: config.TOKEN_PROGRAM,
       },
       new BN(100)
     )

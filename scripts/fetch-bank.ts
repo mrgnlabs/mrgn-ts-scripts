@@ -20,9 +20,9 @@ type Config = {
 };
 
 const config: Config = {
-  PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
+  PROGRAM_ID: "5UDghkpgW1HfYSrmEj2iAApHShqU44H6PKTAar9LL9bY",
   BANKS: [
-    new PublicKey("GJCi1uj3kYPZ64puA5sLUiCQfFapxT2xnREzrbDzFkYY"),
+    new PublicKey("DQ8AKQxPbB9iAyTqtt6UiRH8BANKTztHph9yBnPU72p9"),
     // new PublicKey("HmpMfL8942u22htC4EMiWgLX931g3sacXFR6KjuLgKLV"),
     // new PublicKey("CCKtUs6Cgwo4aaQUmBPmyoApH2gUDErxNZCAntD6LYGh"),
     // new PublicKey("DeyH7QxWvnbbaVB4zFrf4hoq7Q8z1ZT14co42BGwGtfM"),
@@ -241,7 +241,13 @@ async function printBankInfo(program: Program<Marginfi>, bankKey: PublicKey) {
 }
 
 async function main() {
-  const user = commonSetup(true, config.PROGRAM_ID, "/.config/solana/id.json");
+  const user = commonSetup(
+    true,
+    config.PROGRAM_ID,
+    "/.config/solana/id.json",
+    undefined,
+    "current"
+  );
   const program = user.program;
 
   console.log("====================================");

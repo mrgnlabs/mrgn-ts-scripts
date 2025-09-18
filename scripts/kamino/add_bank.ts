@@ -10,13 +10,11 @@ import {
   TOKEN_PROGRAM_ID,
 } from "@mrgnlabs/mrgn-common";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
-import {
-  KaminoConfigCompact,
-  OracleSetupRawWithKamino,
-} from "./kamino-types";
+import { KaminoConfigCompact, OracleSetupRawWithKamino } from "./kamino-types";
 import { commonSetup } from "../../lib/common-setup";
 import { makeAddKaminoBankIx } from "./ixes-common";
 import { deriveBankWithSeed } from "../common/pdas";
+import { TOKEN_2022_PROGRAM_ID } from "@solana/spl-token";
 
 /**
  * If true, send the tx. If false, output the unsigned b58 tx to console.
@@ -45,26 +43,26 @@ type Config = {
 const config: Config = {
   PROGRAM_ID: "5UDghkpgW1HfYSrmEj2iAApHShqU44H6PKTAar9LL9bY",
   GROUP_KEY: new PublicKey("ERBiJdWtnVBBd4gFm7YVHT3a776x5NbGbJBR5BDvsxtj"),
-  ORACLE: new PublicKey("HyBsZY1UiGttbQ3ppBmnFVss9rmDAEvEbtYxdfjNAqBZ"),
+  ORACLE: new PublicKey("9zXQxpYH3kYhtoybmZfUNNCRVuud7fY9jswTg1hLyT8k"),
   ORACLE_TYPE: { kaminoPythPush: {} },
   ADMIN: new PublicKey("725Z4QQUVhRiXcCdf4cQTrxXYmQXyW9zgVkW5PDVSJz4"),
   FEE_PAYER: new PublicKey("725Z4QQUVhRiXcCdf4cQTrxXYmQXyW9zgVkW5PDVSJz4"),
-  BANK_MINT: new PublicKey("HzwqbKZw8HxMN6bF2yFZNrht3c2iXXzpKcFu7uBEDKtr"),
-  KAMINO_RESERVE: new PublicKey("EGPE45iPkme8G8C1xFDNZoZeHdP3aRYtaAfAQuuwrcGZ"),
+  BANK_MINT: new PublicKey("2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo"),
+  KAMINO_RESERVE: new PublicKey("2gc9Dm1eB6UgVYFBUN9bWks6Kes9PbWSaPaa9DqyvEiN"),
   KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"),
   SEED: 0,
-  TOKEN_PROGRAM: TOKEN_PROGRAM_ID,
+  TOKEN_PROGRAM: TOKEN_2022_PROGRAM_ID,
 
   MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 };
 
 const bankConfig: KaminoConfigCompact = {
-  assetWeightInit: bigNumberToWrappedI80F48(0.6),
-  assetWeightMaint: bigNumberToWrappedI80F48(0.7),
-  depositLimit: new BN(10 * 10 ** 8),
+  assetWeightInit: bigNumberToWrappedI80F48(0.75),
+  assetWeightMaint: bigNumberToWrappedI80F48(0.85),
+  depositLimit: new BN(8 * 10 ** 8),
   operationalState: { operational: {} },
   riskTier: { collateral: {} },
-  totalAssetValueInitLimit: new BN(2000000),
+  totalAssetValueInitLimit: new BN(20000000),
   oracleMaxAge: 70,
   oracleMaxConfidence: 0,
   oracle: config.ORACLE,

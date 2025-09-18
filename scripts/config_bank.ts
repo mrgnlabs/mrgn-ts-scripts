@@ -15,7 +15,7 @@ import { u32MAX } from "../lib/constants";
 /**
  * If true, send the txs. If false, output the unsigned b58 v0 txs to console.
  */
-const sendTx = true;
+const sendTx = false;
 
 export type BankConfigOptRaw = {
   assetWeightInit: WrappedI80F48 | null;
@@ -74,10 +74,10 @@ const config: Config = {
   // One tx per entry in this array:
   BANKS: [
     {
-      bank: new PublicKey("Fe5QkKPVAh629UPP5aJ8sDZu8HTfe6M26jDQkKyXVhoA"),
+      bank: new PublicKey("BeNBJrAh1tZg5sqgt8D6AWKJLD5KkBrfZvtcgd7EuiAR"),
       config: {
-        assetWeightInit: null,
-        assetWeightMaint: null,
+        assetWeightInit: bigNumberToWrappedI80F48(0),
+        assetWeightMaint: bigNumberToWrappedI80F48(0),
         liabilityWeightInit: null,
         liabilityWeightMaint: null,
         depositLimit: null,
@@ -95,7 +95,7 @@ const config: Config = {
           optimalUtilizationRate: null,
           plateauInterestRate: null,
         },
-        operationalState: { operational: {} },
+        operationalState: { reduceOnly: {} },
         oracleMaxAge: null,
         oracleMaxConfidence: null,
         permissionlessBadDebtSettlement: null,
