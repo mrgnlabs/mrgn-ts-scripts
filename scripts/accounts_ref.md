@@ -71,15 +71,16 @@
 - pyUSD (kamino) - JCUFFWfKJPJ5FeqwtMkfnfC7b2Dq6x9WJE4gEmYYm1ec
 - pyUSD (mrgn) - 2xSD6DiLxEweueLmgJyYKJmLXJXqguqEn4VPERHdsVRY
 - jitosol (kamino) - 7bE3ezkNigDvtymqChMF7CnxCZZKpvoAP8EnN7jgtvAY
+- jitosol (mrgn) - AH3mAxhpvYXrfL4rWspN716eiUukPqWjMqVx3TiFGhHu
+- sol (kamino) - DbBEA9j25DqfUHi4W48hXcuS8JVxGUASjcaLo8pYfsaC
+- sol (mrgn) - J7tLRtFsqYACaoANgDVaArihQwCt5umhkoULbqr3M23X
 
 ## ORACLES
 
 - PY USD (Pyth push) - 9zXQxpYH3kYhtoybmZfUNNCRVuud7fY9jswTg1hLyT8k
 - USDC (Pyth push) - Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX
 - USDT (Pyth push) - HT2PLQBcG5EiCcNSaMHAjSgd9F98ecpATbk4Sk5oYuM
-- SOL (Pyth Push) - H6ARHf6YXhGYeQfUzQNGk6rDNnLBQKrenN712K4AQJEG
-- Staked Settings Staging Pyth Oracle - H6ARHf6YXhGYeQfUzQNGk6rDNnLBQKrenN712K4AQJEG
-- Staked Settings Staging Pyth Oracle Feed (Jup's Sol feed)- 7UVimffxr9ow1uXYxsr4LHAcV58mLzhmwaeKvJ1pjLiE
+- Sol- 7UVimffxr9ow1uXYxsr4LHAcV58mLzhmwaeKvJ1pjLiE
 - WIF (swb) - 6B23K3tkb51vLZA14jcEQVCA1pfHptzEHFA93V5dYwbT
 - DUST (swb) - EmCZsrNqQEqsfafK4j4uRFjGvpUeMS5B2uDR9uc3wBMY
 - UXD (swb) - CoEDGeYda7Mi6c1BAsHE2LL6zEVcitX43wPABSLgQfpB
