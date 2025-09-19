@@ -57,13 +57,13 @@ const config: Config = {
 
   ADMIN: new PublicKey("725Z4QQUVhRiXcCdf4cQTrxXYmQXyW9zgVkW5PDVSJz4"),
   FEE_PAYER: new PublicKey("725Z4QQUVhRiXcCdf4cQTrxXYmQXyW9zgVkW5PDVSJz4"),
-  BANK_MINT: new PublicKey("2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo"),
-  KAMINO_RESERVE: new PublicKey("2gc9Dm1eB6UgVYFBUN9bWks6Kes9PbWSaPaa9DqyvEiN"),
+  BANK_MINT: new PublicKey("So11111111111111111111111111111111111111112"),
+  KAMINO_RESERVE: new PublicKey("d4A2prbA2whesmvHaL88BH6Ewn5N4bTSU2Ze8P6Bc4Q"),
   KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"),
   RESERVE_ORACLE: new PublicKey("3NJYftD5sjVfxSnUdZ1wVML8f3aC6mp1CXCL6L7TnU8C"),
-  FARM_STATE: new PublicKey("DEe2NZ5dAXGxC7M8Gs9Esd9wZRPdQzG8jNamXqhL5yku"),
+  FARM_STATE: new PublicKey("955xWFhSDcDiUgUr4sBRtCpTLiMd4H5uZLAmgtP3R3sX"),
   SEED: 0,
-  TOKEN_PROGRAM: TOKEN_2022_PROGRAM_ID,
+  TOKEN_PROGRAM: TOKEN_PROGRAM_ID,
 
   MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 };
@@ -121,6 +121,7 @@ async function main() {
         reserveLiquidityMint: config.BANK_MINT,
         reserve: config.KAMINO_RESERVE,
         scopePrices: config.RESERVE_ORACLE,
+        // TODO support edge cases where no farm state is active
         reserveFarmState: config.FARM_STATE,
         obligationFarmUserState: userState,
         liquidityTokenProgram: config.TOKEN_PROGRAM,

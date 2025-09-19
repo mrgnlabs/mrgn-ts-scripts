@@ -65,11 +65,12 @@
 ## KAMINO INTEGRATION BANKS
 
 - EURC (kamino) - 4TAjQVpmwKX3Zp2pRHa14W5eoPHyXk7jYbhzfZtBiHym
-- USDC (mrgn) - DQ8AKQxPbB9iAyTqtt6UiRH8BANKTztHph9yBnPU72p9
+- USDC (also Kamino) - DQ8AKQxPbB9iAyTqtt6UiRH8BANKTztHph9yBnPU72p9
 - USDC (kamino) - 4iApZwbuTCkxgeg67sQsvSAPxWdWkkT5XVgv3R29s6JU
 - zenBTC (mrgn) - GgVBHPgS7zyYXESHQnfrU3LFTGqv7LUjysSweEGSiBoz
 - pyUSD (kamino) - JCUFFWfKJPJ5FeqwtMkfnfC7b2Dq6x9WJE4gEmYYm1ec
 - pyUSD (mrgn) - 2xSD6DiLxEweueLmgJyYKJmLXJXqguqEn4VPERHdsVRY
+- jitosol (kamino) - 7bE3ezkNigDvtymqChMF7CnxCZZKpvoAP8EnN7jgtvAY
 
 ## ORACLES
 

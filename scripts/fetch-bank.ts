@@ -7,7 +7,6 @@ import {
 import type { WrappedI80F48 } from "@mrgnlabs/mrgn-common";
 import BigNumber from "bignumber.js";
 import { commonSetup } from "../lib/common-setup";
-import { Marginfi } from "../idl/marginfi";
 import { Program } from "@coral-xyz/anchor";
 import { getTokenBalance } from "../lib/utils";
 
@@ -22,7 +21,7 @@ type Config = {
 const config: Config = {
   PROGRAM_ID: "5UDghkpgW1HfYSrmEj2iAApHShqU44H6PKTAar9LL9bY",
   BANKS: [
-    new PublicKey("DQ8AKQxPbB9iAyTqtt6UiRH8BANKTztHph9yBnPU72p9"),
+    new PublicKey("4iApZwbuTCkxgeg67sQsvSAPxWdWkkT5XVgv3R29s6JU"),
     // new PublicKey("HmpMfL8942u22htC4EMiWgLX931g3sacXFR6KjuLgKLV"),
     // new PublicKey("CCKtUs6Cgwo4aaQUmBPmyoApH2gUDErxNZCAntD6LYGh"),
     // new PublicKey("DeyH7QxWvnbbaVB4zFrf4hoq7Q8z1ZT14co42BGwGtfM"),
@@ -30,7 +29,16 @@ const config: Config = {
   ],
 };
 
-async function printBankInfo(program: Program<Marginfi>, bankKey: PublicKey) {
+async function printBankInfo(bankKey: PublicKey) {
+  const user = commonSetup(
+    true,
+    config.PROGRAM_ID,
+    "/.config/solana/id.json",
+    undefined,
+    "kamino"
+  );
+
+  const program = user.program;
   const bank = await program.account.bank.fetch(bankKey);
   const mintInfo = await program.provider.connection.getAccountInfo(bank.mint);
   const isT22 = mintInfo.owner.toString() === TOKEN_2022_PROGRAM_ID.toString();
@@ -61,6 +69,15 @@ async function printBankInfo(program: Program<Marginfi>, bankKey: PublicKey) {
   const liquidityBal = await liquidityBalPromise;
   const insuranceBal = await insuranceBalPromise;
   const feeBal = await feePromise;
+
+  try {
+    if (bank.kaminoObligation.toString() != PublicKey.default.toString()) {
+      console.log("kamino reserve: " + bank.kaminoReserve);
+      console.log("kamino obligation: " + bank.kaminoObligation);
+    }
+  } catch (err) {
+    // do nothing
+  }
 
   // Metrics
   console.log("Metrics:");
@@ -241,18 +258,9 @@ async function printBankInfo(program: Program<Marginfi>, bankKey: PublicKey) {
 }
 
 async function main() {
-  const user = commonSetup(
-    true,
-    config.PROGRAM_ID,
-    "/.config/solana/id.json",
-    undefined,
-    "current"
-  );
-  const program = user.program;
-
   console.log("====================================");
   for (const bankKey of config.BANKS) {
-    await printBankInfo(program, bankKey);
+    await printBankInfo(bankKey);
   }
 }
 
@@ -285,7 +293,8 @@ const formatI80F48 = (x: WrappedI80F48): string =>
  * @param program
  * @param bankKey
  */
-async function printCopyConfigSnippet(program: Program<Marginfi>, bankKey: PublicKey) {
+async function printCopyConfigSnippet(program: any, bankKey: PublicKey) {
+  // TODO kamino support
   const bank = await program.account.bank.fetch(bankKey);
   const mintInfo = await program.provider.connection.getAccountInfo(bank.mint)!;
   const isT22 = mintInfo.owner.toString() === TOKEN_2022_PROGRAM_ID.toString();
