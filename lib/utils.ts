@@ -34,6 +34,7 @@ import { Marginfi } from "../idl/marginfi";
 import { AnchorProvider, Program, Provider } from "@coral-xyz/anchor";
 import { loadSponsoredOracle } from "./pyth-oracle-helpers";
 import * as sb from "@switchboard-xyz/on-demand";
+import { CrossbarClient } from "@switchboard-xyz/common";
 
 dotenv.config();
 
@@ -393,7 +394,11 @@ export async function getOraclesAndCrankSwb(
         (pubkey) => new sb.PullFeed(swbProgram, pubkey)
       );
 
-      const gateway = await pullFeedInstances[0].fetchGatewayUrl();
+      const gateway = await (process.env.CROSSBAR_API_URL
+        ? pullFeedInstances[0].fetchGatewayUrl(
+            new CrossbarClient(process.env.CROSSBAR_API_URL)
+          )
+        : pullFeedInstances[0].fetchGatewayUrl());
 
       const [pullIx, luts] = await sb.PullFeed.fetchUpdateManyIx(swbProgram, {
         feeds: pullFeedInstances,
