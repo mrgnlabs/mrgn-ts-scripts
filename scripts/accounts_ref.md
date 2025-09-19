@@ -67,6 +67,7 @@
 - EURC (kamino) - 4TAjQVpmwKX3Zp2pRHa14W5eoPHyXk7jYbhzfZtBiHym
 - USDC (also Kamino) - DQ8AKQxPbB9iAyTqtt6UiRH8BANKTztHph9yBnPU72p9
 - USDC (kamino) - 4iApZwbuTCkxgeg67sQsvSAPxWdWkkT5XVgv3R29s6JU
+- USDC (mrgn) - 2niLzLpnYRh7Xf7YLzhX7rxfUn41T3FzPTEgPtAkyRiJ
 - zenBTC (mrgn) - GgVBHPgS7zyYXESHQnfrU3LFTGqv7LUjysSweEGSiBoz
 - pyUSD (kamino) - JCUFFWfKJPJ5FeqwtMkfnfC7b2Dq6x9WJE4gEmYYm1ec
 - pyUSD (mrgn) - 2xSD6DiLxEweueLmgJyYKJmLXJXqguqEn4VPERHdsVRY
