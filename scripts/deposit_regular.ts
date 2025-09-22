@@ -26,7 +26,7 @@ type Config = {
   /** In native decimals */
   AMOUNT: BN;
 
-  MULTISIG: PublicKey;
+  MULTISIG?: PublicKey;
 };
 
 const config: Config = {

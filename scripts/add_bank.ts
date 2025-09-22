@@ -5,16 +5,13 @@ import {
   sendAndConfirmTransaction,
 } from "@solana/web3.js";
 import { BN } from "@coral-xyz/anchor";
-import { I80F48_ONE, I80F48_ZERO } from "./utils";
 import {
   bigNumberToWrappedI80F48,
-  TOKEN_2022_PROGRAM_ID,
   TOKEN_PROGRAM_ID,
   WrappedI80F48,
 } from "@mrgnlabs/mrgn-common";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 import { commonSetup } from "../lib/common-setup";
-import { u32MAX } from "../lib/constants";
 
 /**
  * If true, send the tx. If false, output the unsigned b58 tx to console.
