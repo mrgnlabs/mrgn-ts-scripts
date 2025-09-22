@@ -19,12 +19,12 @@ type Config = {
 };
 
 const config: Config = {
-  PROGRAM_ID: "5UDghkpgW1HfYSrmEj2iAApHShqU44H6PKTAar9LL9bY",
+  PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
   BANKS: [
-    new PublicKey("4iApZwbuTCkxgeg67sQsvSAPxWdWkkT5XVgv3R29s6JU"),
-    // new PublicKey("HmpMfL8942u22htC4EMiWgLX931g3sacXFR6KjuLgKLV"),
-    // new PublicKey("CCKtUs6Cgwo4aaQUmBPmyoApH2gUDErxNZCAntD6LYGh"),
-    // new PublicKey("DeyH7QxWvnbbaVB4zFrf4hoq7Q8z1ZT14co42BGwGtfM"),
+    new PublicKey("3RVamPQE3nDViuUU7wdZJgnru7Q93cRzdysXA8kjxMiq"),
+    new PublicKey("HDYFgNRTFL2tVwGyAHaTr4SW7Y7riXjew48qKLHgi8es"),
+    new PublicKey("Ac4KV5K5isDqtABtg6h5DiwzZMe3Sp9bc3pBiCUvUpaQ"),
+    new PublicKey("Gj72XAUuNxNeDnW4tUh3H1U2Jbzshz27vtH8KvB972gi"),
     // new PublicKey("CCKtUs6Cgwo4aaQUmBPmyoApH2gUDErxNZCAntD6LYGh"),
   ],
 };
@@ -35,7 +35,7 @@ async function printBankInfo(bankKey: PublicKey) {
     config.PROGRAM_ID,
     "/.config/solana/id.json",
     undefined,
-    "kamino"
+    "current"
   );
 
   const program = user.program;
@@ -71,8 +71,11 @@ async function printBankInfo(bankKey: PublicKey) {
   const feeBal = await feePromise;
 
   try {
+    // @ts-ignore
     if (bank.kaminoObligation.toString() != PublicKey.default.toString()) {
+      // @ts-ignore
       console.log("kamino reserve: " + bank.kaminoReserve);
+      // @ts-ignore
       console.log("kamino obligation: " + bank.kaminoObligation);
     }
   } catch (err) {
