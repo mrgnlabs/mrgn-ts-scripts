@@ -46,39 +46,38 @@ type Config = {
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
   GROUP_KEY: new PublicKey("4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8"),
-  ORACLE: new PublicKey("4cSM2e6rvbGQUFiJbqytoVMi5GgghSMr8LwVrT9VPSPo"),
-  ORACLE_TYPE: ORACLE_TYPE_PYTH,
+  ORACLE: new PublicKey("Fj9o7sui5XCwCPYErLCcyf1hsdqExRg84f3YaydJxFiH"),
+  ORACLE_TYPE: ORACLE_TYPE_SWB,
   ADMIN: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
   FEE_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
-  BANK_MINT: new PublicKey("9hX59xHHnaZXLU6quvm5uGY2iDiT3jczaReHy6A6TYKw"),
+  BANK_MINT: new PublicKey("picobAEvs6w7QEknPce34wAE4gknZA9v5tTonnmHYdX"),
   SEED: 0,
   TOKEN_PROGRAM: TOKEN_PROGRAM_ID,
-
   MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 };
 
 const rate: InterestRateConfigRaw = {
-  optimalUtilizationRate: bigNumberToWrappedI80F48(0.5),
-  plateauInterestRate: bigNumberToWrappedI80F48(0.01),
-  maxInterestRate: bigNumberToWrappedI80F48(0.5),
+  optimalUtilizationRate: bigNumberToWrappedI80F48(0.8),
+  plateauInterestRate: bigNumberToWrappedI80F48(0.1),
+  maxInterestRate: bigNumberToWrappedI80F48(0.5655),
   insuranceFeeFixedApr: bigNumberToWrappedI80F48(0),
   insuranceIrFee: bigNumberToWrappedI80F48(0),
   protocolFixedFeeApr: bigNumberToWrappedI80F48(0.0001),
-  protocolIrFee: bigNumberToWrappedI80F48(0.01),
+  protocolIrFee: bigNumberToWrappedI80F48(0.135),
   protocolOriginationFee: bigNumberToWrappedI80F48(0),
 };
 
 const bankConfig: BankConfigRaw_v1_4 = {
-  assetWeightInit: bigNumberToWrappedI80F48(0.6),
-  assetWeightMaint: bigNumberToWrappedI80F48(0.7),
-  liabilityWeightInit: bigNumberToWrappedI80F48(1.15),
-  liabilityWeightMaint: bigNumberToWrappedI80F48(1.05),
-  depositLimit: new BN(10 * 10 ** 8),
+  assetWeightInit: bigNumberToWrappedI80F48(0.65),
+  assetWeightMaint: bigNumberToWrappedI80F48(0.8),
+  liabilityWeightInit: bigNumberToWrappedI80F48(1.3),
+  liabilityWeightMaint: bigNumberToWrappedI80F48(1.2),
+  depositLimit: new BN(20000 * 10 ** 9),
   interestRateConfig: rate,
   operationalState: { operational: {} },
-  borrowLimit: new BN(5 * 10 ** 8),
+  borrowLimit: new BN(5000 * 10 ** 9),
   riskTier: { collateral: {} },
-  totalAssetValueInitLimit: new BN(2_000_000),
+  totalAssetValueInitLimit: new BN(10_000_000),
   oracleMaxAge: 70,
   assetTag: 0,
   oracleMaxConfidence: 0,
@@ -91,7 +90,7 @@ async function main() {
     config.PROGRAM_ID,
     "/keys/staging-deploy.json",
     config.MULTISIG_PAYER,
-    "current"
+    "1.4"
   );
   const program = user.program;
   const connection = user.connection;
@@ -134,20 +133,25 @@ async function main() {
         },
         new BN(config.SEED)
       )
-      .accountsPartial({
+      .accounts({
         marginfiGroup: config.GROUP_KEY,
-        admin: config.ADMIN,
-        feePayer: config.FEE_PAYER,
         bankMint: config.BANK_MINT,
+        feePayer: config.FEE_PAYER,
         tokenProgram: config.TOKEN_PROGRAM,
       })
+      .accountsPartial({
+        admin: config.ADMIN,
+      })
       .instruction(),
+
     await program.methods
       .lendingPoolConfigureBankOracle(config.ORACLE_TYPE, config.ORACLE)
+      .accounts({
+        bank: bankKey,
+      })
       .accountsPartial({
         group: config.GROUP_KEY,
         admin: config.ADMIN,
-        bank: bankKey,
       })
       .remainingAccounts([oracleMeta])
       .instruction()
