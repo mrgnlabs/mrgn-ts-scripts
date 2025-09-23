@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { BankInfoPage } from "./pages/BankInfoPage";
 import { OracleStatusPage } from "./pages/OracleStatusPage";
+import { BankEventMonitorPage } from "./pages/BankEventMonitorPage";
 import { loadBanks, FetchedBank } from "./services/api";
 
 // Shared program ID for all pages
 export const PROGRAM_ID = "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA";
 
-export type Page = "bank" | "oracle";
+export type Page = "bank" | "oracle" | "events";
 
 export default function App() {
   const [page, setPage] = useState<Page>("bank");
@@ -52,19 +53,32 @@ export default function App() {
             >
               Oracle Status
             </button>
+            <button
+              onClick={() => setPage("events")}
+              className={`py-2 px-3 font-medium rounded-t ${
+                page === "events"
+                  ? "bg-blue-600 text-white"
+                  : "text-gray-700 hover:bg-gray-200"
+              }`}
+            >
+              Event Monitor
+            </button>
           </div>
         </div>
       </nav>
 
       {/* Page Content */}
       <main className="max-w-6xl mx-auto p-4">
-        {page === "bank" && <BankInfoPage banks={banks}/>}
+        {page === "bank" && <BankInfoPage banks={banks} />}
         {page === "oracle" && (
           <OracleStatusPage
             programId={PROGRAM_ID}
             banks={banks}
             error={error}
           />
+        )}
+        {page === "events" && (
+          <BankEventMonitorPage banks={banks} programId={PROGRAM_ID} error={error} />
         )}
       </main>
     </div>
