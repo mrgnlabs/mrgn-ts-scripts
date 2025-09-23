@@ -1,9 +1,12 @@
-// Optionally set, then permissionlessly withdraw to, an emissions account.
+// Withdraw fees (optionally set destination) for multiple banks in one v0 tx using a LUT.
 import {
   AccountMeta,
+  AddressLookupTableAccount,
   PublicKey,
-  sendAndConfirmTransaction,
   Transaction,
+  TransactionInstruction,
+  TransactionMessage,
+  VersionedTransaction,
 } from "@solana/web3.js";
 import { BN } from "@coral-xyz/anchor";
 import {
@@ -17,30 +20,50 @@ import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 import { commonSetup } from "../lib/common-setup";
 
 /**
- * If true, send the tx. If false, output the unsigned b58 tx to console.
+ * If true, send the tx; if false, output an unsigned base58 v0 message to console (for multisig).
  */
-const sendTx = true;
+const sendTx = false;
 /**
- * If true, set emissions destination. If false, skip that step and just withdraw.
+ * If true, set emissions destination before withdrawing for each bank.
  */
-const setDestination = false;
+const setDestination = true;
 
 export type Config = {
   PROGRAM_ID: string;
-  BANK: PublicKey;
+  BANKS: PublicKey[]; // <-- multiple banks
   DESTINATION_WALLET: PublicKey;
 
   MULTISIG_PAYER: PublicKey;
+
+  LUT: PublicKey;
 };
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  BANK: new PublicKey("2s37akK2eyBbp8DZgCm7RtsaEz8eJP3Nxd4urLHQv7yB"),
+  BANKS: [
+    // new PublicKey("44digRwKFeyiqDaxJRE6iag4cbXECKjG54v5ozxdu5mu"),
+    // new PublicKey("4kNXetv8hSv9PzvzPZzEs1CTH6ARRRi2b8h6jk1ad1nP"),
+    // new PublicKey("5HSLxQN34V9jLihfBDwNLguDKWEPDBL7QBG5JKcAQ7ne"),
+
+    // new PublicKey("61Qx9kgWo9RVtPHf8Rku6gbaUtcnzgkpAuifQBUcMRVK"),
+    // new PublicKey("6Fk3bzhqmUqupk6sN5CbfYMdafvyzDdqDNHW5CsJzq8K"),
+    // new PublicKey("7aoit6hVmaqWn2VjhmDo5qev6QXjsJJf4q5RTd7yczZj"),
+
+    // new PublicKey("9ojzV5xFHtx2h2GhKRSgCwJK3BLswczdiiLW3hsyRE5c"),
+    // new PublicKey("BeNBJrAh1tZg5sqgt8D6AWKJLD5KkBrfZvtcgd7EuiAR"),
+    // new PublicKey("DeyH7QxWvnbbaVB4zFrf4hoq7Q8z1ZT14co42BGwGtfM"),
+
+    new PublicKey("EYp4j7oHV2SfEGSE3GJ4MjsCL33CzmqLTdvTCdacQ9uG"),
+    new PublicKey("FDsf8sj6SoV313qrA91yms3u5b3P4hBxEPvanVs8LtJV"),
+    new PublicKey("GZK3yC3Kfn1ykFhLryzeKqemRNZ3wpZgWhbh5b5ygGML"),
+  ],
   DESTINATION_WALLET: new PublicKey(
     "J3oBkTkDXU3TcAggJEa3YeBZE5om5yNAdTtLVNXFD47"
   ),
 
   MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
+
+  LUT: new PublicKey("CQ8omkUwDtsszuJLo9grtXCeEyDU4QqBLRv9AjRDaUZ3"),
 };
 
 async function main() {
@@ -48,101 +71,138 @@ async function main() {
     sendTx,
     config.PROGRAM_ID,
     "/keys/staging-deploy.json",
-    config.MULTISIG_PAYER
+    config.MULTISIG_PAYER,
+    "current"
   );
   const program = user.program;
   const connection = user.connection;
 
-  let bankAcc = await program.account.bank.fetch(config.BANK);
-  const mint = bankAcc.mint;
-  const feesUncollected = wrappedI80F48toBigNumber(
-    bankAcc.collectedGroupFeesOutstanding
-  ).toNumber();
-  let mintAccInfo = await connection.getAccountInfo(mint);
-  const tokenProgram = mintAccInfo.owner;
-  let isT22 = tokenProgram.toString() == TOKEN_2022_PROGRAM_ID.toString();
-  console.log("mint: " + mint + " is 22: " + isT22);
-  const [feeVault] = deriveFeeVault(program.programId, config.BANK);
-  let feesVaultAcc = await getAccount(
-    connection,
-    feeVault,
-    undefined,
-    tokenProgram
-  );
-  const feesAvailable = Number(feesVaultAcc.amount);
-  console.log(
-    "fees uncollected (in token): " + feesUncollected.toLocaleString()
-  );
-  console.log("fees available (in token): " + feesAvailable.toLocaleString());
-  console.log("decimals: " + bankAcc.mintDecimals);
-  let dstAta = getAssociatedTokenAddressSync(
-    mint,
-    config.DESTINATION_WALLET,
-    true,
-    tokenProgram
-  );
-  console.log("fee destination: " + dstAta);
+  const payerPubkey = sendTx ? user.wallet.publicKey : config.MULTISIG_PAYER;
 
-  let createAtaIx = createAssociatedTokenAccountIdempotentInstruction(
-    config.MULTISIG_PAYER,
-    dstAta,
-    config.DESTINATION_WALLET,
-    mint,
-    tokenProgram
-  );
+  const { value: lut } = await connection.getAddressLookupTable(config.LUT);
 
-  let remaining: AccountMeta[] = [];
-  if (isT22) {
-    const meta: AccountMeta = {
-      pubkey: mint,
-      isSigner: false,
-      isWritable: false,
-    };
-    remaining.push(meta);
-  }
+  const ixes: TransactionInstruction[] = [];
 
-  const transaction = new Transaction();
-  if (setDestination) {
-    transaction.add(
-      createAtaIx,
-      await program.methods
+  for (const bankPk of config.BANKS) {
+    const bankAcc = await program.account.bank.fetch(bankPk);
+    const mint: PublicKey = bankAcc.mint;
+    const mintAccInfo = await connection.getAccountInfo(mint);
+
+    const tokenProgram = mintAccInfo.owner;
+    const isT22 = tokenProgram.toString() === TOKEN_2022_PROGRAM_ID.toString();
+
+    const feesUncollected = wrappedI80F48toBigNumber(
+      bankAcc.collectedGroupFeesOutstanding
+    ).toNumber();
+
+    const [feeVault] = deriveFeeVault(program.programId, bankPk);
+    const feesVaultAcc = await getAccount(
+      connection,
+      feeVault,
+      undefined,
+      tokenProgram
+    );
+    const feesAvailable = feesVaultAcc.amount;
+
+    console.log(
+      `[${bankPk.toBase58()}] mint=${mint.toBase58()} t22=${isT22} dec=${
+        bankAcc.mintDecimals
+      } ` +
+        `feesUncollected=${feesUncollected.toLocaleString()} feesAvailable=${feesAvailable.toLocaleString()}`
+    );
+
+    // Destination ATA for this mint
+    const dstAta = getAssociatedTokenAddressSync(
+      mint,
+      config.DESTINATION_WALLET,
+      true,
+      tokenProgram
+    );
+    console.log(
+      `[${bankPk.toBase58()}] fee destination ATA: ${dstAta.toBase58()}`
+    );
+
+    // Create the ATA if needed (idempotent).
+    ixes.push(
+      createAssociatedTokenAccountIdempotentInstruction(
+        payerPubkey,
+        dstAta,
+        config.DESTINATION_WALLET,
+        mint,
+        tokenProgram
+      )
+    );
+
+    // Token-2022 mints require passing the mint as a remaining account.
+    const remaining: AccountMeta[] = isT22
+      ? [{ pubkey: mint, isSigner: false, isWritable: false }]
+      : [];
+
+    // Set the destination account for this bank
+    if (setDestination) {
+      const setIx = await program.methods
         .lendingPoolUpdateFeesDestinationAccount()
         .accounts({
-          bank: config.BANK,
+          bank: bankPk,
           destinationAccount: dstAta,
         })
-        .instruction()
-    );
+        .instruction();
+      ixes.push(setIx);
+    }
+
+    // Withdraw fees if there is anything to withdraw
+    if (feesAvailable > 1) {
+      const withdrawIx = await program.methods
+        .lendingPoolWithdrawFeesPermissionless(new BN(feesAvailable).subn(1))
+        .accounts({
+          bank: bankPk,
+          tokenProgram: tokenProgram,
+        })
+        // The destination ATA may not exist yet; specify explicitly
+        .accountsPartial({
+          feesDestinationAccount: dstAta,
+        })
+        .remainingAccounts(remaining)
+        .instruction();
+      ixes.push(withdrawIx);
+    } else {
+      console.log(
+        `[${bankPk.toBase58()}] Skipping withdraw; available <= 1 (=${feesAvailable}).`
+      );
+    }
   }
 
-  transaction.add(
-    await program.methods
-      .lendingPoolWithdrawFeesPermissionless(new BN(feesAvailable - 1))
-      .accounts({
-        bank: config.BANK,
-        tokenProgram: tokenProgram,
-      })
-      // The dst ata may not exist yet, so we need to specify it
-      .accountsPartial({
-        feesDestinationAccount: dstAta,
-      })
-      .remainingAccounts(remaining)
-      .instruction()
-  );
+  if (ixes.length === 0) {
+    console.log(
+      "No instructions to send (nothing to set or withdraw). Exiting."
+    );
+    return;
+  }
 
   if (sendTx) {
-    try {
-      const signature = await sendAndConfirmTransaction(
-        connection,
-        transaction,
-        [user.wallet.payer]
-      );
-      console.log("Transaction signature:", signature);
-    } catch (error) {
-      console.error("Transaction failed:", error);
-    }
+    const { blockhash, lastValidBlockHeight } =
+      await connection.getLatestBlockhash();
+    const v0Message = new TransactionMessage({
+      payerKey: user.wallet.publicKey,
+      recentBlockhash: blockhash,
+      instructions: [...ixes],
+    }).compileToV0Message([lut]);
+    const v0Tx = new VersionedTransaction(v0Message);
+
+    v0Tx.sign([user.wallet.payer]);
+    const signature = await connection.sendTransaction(v0Tx, {
+      maxRetries: 2,
+    });
+    await connection.confirmTransaction(
+      { signature, blockhash, lastValidBlockHeight },
+      "confirmed"
+    );
+
+    console.log("tx signature:", signature);
   } else {
-    transaction.feePayer = config.MULTISIG_PAYER;
+    // No versioned tx for squads (yet)
+    let transaction = new Transaction().add(...ixes);
+    transaction.feePayer = config.MULTISIG_PAYER; // Set the fee payer to Squads wallet
     const { blockhash } = await connection.getLatestBlockhash();
     transaction.recentBlockhash = blockhash;
     const serializedTransaction = transaction.serialize({

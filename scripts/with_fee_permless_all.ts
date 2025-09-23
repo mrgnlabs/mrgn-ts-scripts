@@ -10,7 +10,12 @@
  * It groups instructions into one Transaction per 10 banks.
  */
 
-import { AccountMeta, PublicKey, sendAndConfirmTransaction, Transaction } from "@solana/web3.js";
+import {
+  AccountMeta,
+  PublicKey,
+  sendAndConfirmTransaction,
+  Transaction,
+} from "@solana/web3.js";
 import { BN } from "@coral-xyz/anchor";
 import {
   createAssociatedTokenAccountIdempotentInstruction,
@@ -26,19 +31,25 @@ import { commonSetup } from "../lib/common-setup";
 /**
  * If true, actually send each transaction; if false, log the unsigned base58-encoded tx.
  */
-const sendTx = false;
+const sendTx = true;
 
 /**
  * If true, include the `lendingPoolUpdateFeesDestinationAccount` instruction;
  * if false, skip setting the destination and only withdraw.
  */
-const setDestination = true;
+const setDestination = false;
+
+/**
+ * If true, skip any bank that doesn't have an emissions destination set
+ */
+const skipUnset = true;
 
 /**
  * The maximum number of banks to batch into a single Transaction.
  */
 const CHUNK_SIZE = 10;
-const JSON_URL = "https://storage.googleapis.com/mrgn-public/mrgn-bank-metadata-cache.json";
+const JSON_URL =
+  "https://storage.googleapis.com/mrgn-public/mrgn-bank-metadata-cache.json";
 
 export type Config = {
   PROGRAM_ID: string;
@@ -49,13 +60,20 @@ export type Config = {
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  DESTINATION_WALLET: new PublicKey("J3oBkTkDXU3TcAggJEa3YeBZE5om5yNAdTtLVNXFD47"),
+  DESTINATION_WALLET: new PublicKey(
+    "J3oBkTkDXU3TcAggJEa3YeBZE5om5yNAdTtLVNXFD47"
+  ),
 
   MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 };
 
 async function main() {
-  const user = commonSetup(sendTx, config.PROGRAM_ID, "/keys/staging-deploy.json", config.MULTISIG_PAYER);
+  const user = commonSetup(
+    sendTx,
+    config.PROGRAM_ID,
+    "/keys/staging-deploy.json",
+    config.MULTISIG_PAYER
+  );
   const program = user.program;
   const connection = user.connection;
 
@@ -76,6 +94,12 @@ async function main() {
     if (bankAcc.config.assetTag === ASSET_TAG_STAKED) {
       continue;
     }
+    if (
+      skipUnset &&
+      bankAcc.feesDestinationAccount.toString() == PublicKey.default.toString()
+    ) {
+      continue;
+    }
 
     const mintPubkey = new PublicKey(pools[i].tokenAddress);
     includedBanks.push({ bankPubkey, mintPubkey });
@@ -84,27 +108,44 @@ async function main() {
   console.log(`Banks to process: ${includedBanks.length}`);
 
   // Break txes into chunks of CHUNK_SIZE
-  for (let chunkStart = 0; chunkStart < includedBanks.length; chunkStart += CHUNK_SIZE) {
+  for (
+    let chunkStart = 0;
+    chunkStart < includedBanks.length;
+    chunkStart += CHUNK_SIZE
+  ) {
     const chunk = includedBanks.slice(chunkStart, chunkStart + CHUNK_SIZE);
     const tx = new Transaction();
 
     for (const { bankPubkey, mintPubkey } of chunk) {
       const bankAcc = await program.account.bank.fetch(bankPubkey);
-      const collectedFees = wrappedI80F48toBigNumber(bankAcc.collectedGroupFeesOutstanding).toNumber();
+      const collectedFees = wrappedI80F48toBigNumber(
+        bankAcc.collectedGroupFeesOutstanding
+      ).toNumber();
 
       const [feeVault] = deriveFeeVault(program.programId, bankPubkey);
       // Determine token program: check if mint uses Token-2022
       const mintAccInfo = await connection.getAccountInfo(mintPubkey);
       const tokenProgram = mintAccInfo.owner;
-      const isT22 = tokenProgram.toString() === TOKEN_2022_PROGRAM_ID.toString();
+      const isT22 =
+        tokenProgram.toString() === TOKEN_2022_PROGRAM_ID.toString();
 
-      let feesVaultAcc = await getAccount(connection, feeVault, undefined, tokenProgram);
+      let feesVaultAcc = await getAccount(
+        connection,
+        feeVault,
+        undefined,
+        tokenProgram
+      );
       const feesAvailable = Number(feesVaultAcc.amount);
       console.log(
         `    · Bank ${bankPubkey.toString()}: collectedFees=${collectedFees}, feesAvailable=${feesAvailable}, isT22=${isT22}`
       );
 
-      const dstAta = getAssociatedTokenAddressSync(mintPubkey, config.DESTINATION_WALLET, true, tokenProgram);
+      const dstAta = getAssociatedTokenAddressSync(
+        mintPubkey,
+        config.DESTINATION_WALLET,
+        true,
+        tokenProgram
+      );
       const createAtaIx = createAssociatedTokenAccountIdempotentInstruction(
         config.MULTISIG_PAYER,
         dstAta,
@@ -134,7 +175,9 @@ async function main() {
       }
 
       const withdrawIx = await program.methods
-        .lendingPoolWithdrawFeesPermissionless(new BN(Math.max(feesAvailable - 1, 0)))
+        .lendingPoolWithdrawFeesPermissionless(
+          new BN(Math.max(feesAvailable - 1, 0))
+        )
         .accounts({
           bank: bankPubkey,
           tokenProgram: tokenProgram,
@@ -150,7 +193,9 @@ async function main() {
     // TODO WIP: we need to create a LUT and use a versioned tx for this
     if (sendTx) {
       try {
-        const signature = await sendAndConfirmTransaction(connection, tx, [user.wallet.payer]);
+        const signature = await sendAndConfirmTransaction(connection, tx, [
+          user.wallet.payer,
+        ]);
         console.log("Transaction signature:", signature);
       } catch (error) {
         console.error("Transaction failed:", error);
@@ -181,7 +226,10 @@ type PoolEntry = {
 };
 
 const deriveFeeVault = (programId: PublicKey, bank: PublicKey) => {
-  return PublicKey.findProgramAddressSync([Buffer.from("fee_vault", "utf-8"), bank.toBuffer()], programId);
+  return PublicKey.findProgramAddressSync(
+    [Buffer.from("fee_vault", "utf-8"), bank.toBuffer()],
+    programId
+  );
 };
 
 main().catch((err) => {
