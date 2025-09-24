@@ -639,36 +639,43 @@ export function BankEventMonitorPage({
   }, [status]);
 
   return (
-    <div className="space-y-6">
-      <section className="space-y-3">
-        <h1 className="text-2xl font-semibold">Geyser Event Monitor</h1>
-        <p className="text-sm text-gray-600">
-          Paste your Geyser API key and press Start to subscribe to marginfi
-          lending account events. The monitor listens for deposit, borrow,
-          withdraw, and repay events emitted by the program and aggregates them
-          by bank.
-        </p>
-        {error && (
-          <p className="text-sm text-red-600">
-            Bank data failed to load: {error}
+    <div className="space-y-10 rounded-3xl border border-cyan-500/20 bg-slate-950/95 p-6 text-slate-100 shadow-[0_0_60px_rgba(8,47,73,0.45)] md:p-10">
+      <section className="space-y-6">
+        <div className="space-y-4">
+          <h1 className="text-3xl font-semibold tracking-wide text-cyan-200">
+            Geyser Event Monitor
+          </h1>
+          <p className="max-w-3xl text-sm leading-relaxed text-slate-400">
+            Paste your Geyser API key and press Start to subscribe to marginfi
+            lending account events. The monitor listens for deposit, borrow,
+            withdraw, and repay events emitted by the program and aggregates
+            them by bank in real-time.
           </p>
-        )}
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
-          <label className="flex-1 text-sm">
-            <span className="mb-1 block font-medium">Geyser API Key</span>
+          {error && (
+            <p className="rounded-2xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+              Bank data failed to load: {error}
+            </p>
+          )}
+        </div>
+
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-end">
+          <label className="flex-1 text-sm text-slate-300">
+            <span className="mb-2 block font-semibold uppercase tracking-widest text-cyan-200">
+              Geyser API Key
+            </span>
             <input
               type="text"
               value={apiKey}
               onChange={(event) => setApiKey(event.target.value)}
-              className="w-full px-3 py-2 border rounded"
+              className="w-full rounded-2xl border border-cyan-500/30 bg-slate-900/60 px-4 py-3 font-mono text-cyan-100 shadow-inner outline-none transition focus:border-pink-500/60 focus:ring-2 focus:ring-pink-500/30"
               placeholder="Paste your API key"
               disabled={status === "connecting" || status === "connected"}
             />
           </label>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-3">
             <button
               onClick={startMonitoring}
-              className="px-4 py-2 bg-green-600 text-white rounded disabled:opacity-60"
+              className="rounded-full bg-gradient-to-r from-cyan-500/80 via-pink-500/70 to-orange-400/80 px-6 py-2 text-sm font-semibold uppercase tracking-wide text-slate-950 shadow-lg transition hover:from-cyan-400 hover:via-pink-400 hover:to-orange-300 disabled:cursor-not-allowed disabled:opacity-40"
               disabled={
                 status === "connecting" ||
                 status === "connected" ||
@@ -679,38 +686,77 @@ export function BankEventMonitorPage({
             </button>
             <button
               onClick={stopMonitoring}
-              className="px-4 py-2 bg-gray-200 text-gray-700 rounded disabled:opacity-60"
+              className="rounded-full border border-slate-700/70 bg-slate-900/60 px-6 py-2 text-sm font-semibold uppercase tracking-wide text-slate-200 shadow-inner transition hover:border-pink-400/60 hover:text-pink-200 disabled:cursor-not-allowed disabled:opacity-40"
               disabled={status === "idle"}
             >
               Stop
             </button>
           </div>
         </div>
-        <div className="text-sm">
-          <span
-            className={
-              status === "connected"
-                ? "text-green-600"
-                : status === "error"
-                  ? "text-red-600"
-                  : "text-gray-600"
-            }
-          >
-            Status: {statusLabel}
+
+        <div className="flex flex-wrap items-center gap-4 text-sm">
+          <span className="rounded-full border border-slate-800/70 bg-slate-900/60 px-4 py-2 font-semibold uppercase tracking-widest text-slate-300">
+            Status:
+            <span
+              className={`ml-2 rounded-full px-3 py-1 text-xs font-semibold ${
+                status === "connected"
+                  ? "bg-cyan-500/20 text-cyan-200"
+                  : status === "error"
+                    ? "bg-red-500/20 text-red-200"
+                    : status === "connecting"
+                      ? "bg-orange-500/20 text-orange-200"
+                      : "bg-slate-700/60 text-slate-300"
+              }`}
+            >
+              {statusLabel}
+            </span>
           </span>
+          {statusError && (
+            <span className="text-sm text-red-200">{statusError}</span>
+          )}
         </div>
-        {statusError && (
-          <div className="text-sm text-red-600">{statusError}</div>
-        )}
-        <div className="text-sm text-gray-600">
-          Observed events — Deposits: {aggregateCounts.deposit}, Borrows:{" "}
-          {aggregateCounts.borrow}, Withdrawals: {aggregateCounts.withdraw} (
-          {aggregateCounts.withdrawFlagged} withdraw-all), Repays:{" "}
-          {aggregateCounts.repay} ({aggregateCounts.repayFlagged} repay-all)
+
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="rounded-2xl border border-cyan-500/30 bg-slate-900/60 p-4 shadow-inner">
+            <p className="text-xs uppercase tracking-wide text-slate-400">Deposits</p>
+            <p className="mt-2 font-mono text-2xl text-cyan-300">
+              {aggregateCounts.deposit.toLocaleString()}
+            </p>
+            <p className="text-[0.7rem] text-slate-500">events observed</p>
+          </div>
+          <div className="rounded-2xl border border-orange-500/30 bg-slate-900/60 p-4 shadow-inner">
+            <p className="text-xs uppercase tracking-wide text-slate-400">Borrows</p>
+            <p className="mt-2 font-mono text-2xl text-orange-300">
+              {aggregateCounts.borrow.toLocaleString()}
+            </p>
+            <p className="text-[0.7rem] text-slate-500">events observed</p>
+          </div>
+          <div className="rounded-2xl border border-pink-500/30 bg-slate-900/60 p-4 shadow-inner">
+            <p className="text-xs uppercase tracking-wide text-slate-400">Withdrawals</p>
+            <p className="mt-2 font-mono text-2xl text-pink-300">
+              {aggregateCounts.withdraw.toLocaleString()}
+            </p>
+            <p className="text-[0.7rem] text-slate-500">
+              {aggregateCounts.withdrawFlagged.toLocaleString()} withdraw-all
+            </p>
+          </div>
+          <div className="rounded-2xl border border-blue-500/30 bg-slate-900/60 p-4 shadow-inner">
+            <p className="text-xs uppercase tracking-wide text-slate-400">Repays</p>
+            <p className="mt-2 font-mono text-2xl text-blue-300">
+              {aggregateCounts.repay.toLocaleString()}
+            </p>
+            <p className="text-[0.7rem] text-slate-500">
+              {aggregateCounts.repayFlagged.toLocaleString()} repay-all
+            </p>
+          </div>
         </div>
+
         {lastEventDisplay && (
-          <div className="text-sm text-gray-600">
-            Last event: {lastEventDisplay}
+          <div className="rounded-3xl border border-cyan-500/30 bg-gradient-to-r from-cyan-500/20 via-slate-900/60 to-pink-500/20 px-5 py-4 text-sm text-slate-200 shadow-lg">
+            <span className="font-semibold uppercase tracking-widest text-cyan-200">
+              Last event
+            </span>
+            <div className="mt-2 text-slate-100">{lastEventDisplay}</div>
           </div>
         )}
       </section>
