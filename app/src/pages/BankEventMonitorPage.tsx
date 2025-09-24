@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Connection, Logs, PublicKey } from "@solana/web3.js";
+import { Connection, Logs, PublicKey, type Context } from "@solana/web3.js";
 import { BorshCoder, EventParser, type Idl } from "@coral-xyz/anchor";
 import marginfiIdl from "../../idl/marginfi.json";
 import type { FetchedBank } from "../services/api";
@@ -14,7 +14,8 @@ import { formatTokenAmount } from "../lib/format";
 const DEFAULT_HTTP_TEMPLATE = "https://mrgn.rpcpool.com/<API_KEY>";
 const DEFAULT_WS_TEMPLATE = "wss://mrgn.rpcpool.com/<API_KEY>";
 
-const escapeRegExp = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const escapeRegExp = (value: string) =>
+  value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 const applyApiKey = (template: string, apiKey: string) => {
   const trimmed = template.trim();
@@ -22,12 +23,7 @@ const applyApiKey = (template: string, apiKey: string) => {
     return apiKey;
   }
 
-  const placeholders = [
-    "<API_KEY>",
-    "{API_KEY}",
-    "${API_KEY}",
-    "%API_KEY%",
-  ];
+  const placeholders = ["<API_KEY>", "{API_KEY}", "${API_KEY}", "%API_KEY%"];
 
   for (const placeholder of placeholders) {
     if (trimmed.includes(placeholder)) {
@@ -82,16 +78,22 @@ type EventConfig = {
   trackFlagged?: boolean;
 };
 
+const normalizeEventName = (value: string) =>
+  value
+    .trim()
+    .replace(/Event$/iu, "")
+    .replace(/[_\s]/gu, "")
+    .toLowerCase();
+
 const EVENT_MAP: Record<string, EventConfig> = {
-  lendingAccountDepositEvent: { kind: "deposit" },
-  lendingAccountDeposit: { kind: "deposit" },
-  lendingAccountBorrowEvent: { kind: "borrow" },
-  lendingAccountBorrow: { kind: "borrow" },
-  lendingAccountWithdrawEvent: { kind: "withdraw", trackFlagged: true },
-  lendingAccountWithdraw: { kind: "withdraw", trackFlagged: true },
-  lendingAccountRepayEvent: { kind: "repay", trackFlagged: true },
-  lendingAccountRepay: { kind: "repay", trackFlagged: true },
+  lendingaccountdeposit: { kind: "deposit" },
+  lendingaccountborrow: { kind: "borrow" },
+  lendingaccountwithdraw: { kind: "withdraw", trackFlagged: true },
+  lendingaccountrepay: { kind: "repay", trackFlagged: true },
 };
+
+const getEventConfig = (eventName: string | undefined | null) =>
+  eventName ? EVENT_MAP[normalizeEventName(eventName)] : undefined;
 
 const toBase58 = (value: unknown): string | null => {
   if (!value) {
@@ -107,7 +109,10 @@ const toBase58 = (value: unknown): string | null => {
       return new PublicKey(value).toBase58();
     }
 
-    if (typeof value === "object" && typeof (value as any).toBase58 === "function") {
+    if (
+      typeof value === "object" &&
+      typeof (value as any).toBase58 === "function"
+    ) {
       return (value as any).toBase58();
     }
 
@@ -116,7 +121,9 @@ const toBase58 = (value: unknown): string | null => {
     }
 
     if (typeof value === "object" && value !== null && "toString" in value) {
-      return new PublicKey((value as { toString(): string }).toString()).toBase58();
+      return new PublicKey(
+        (value as { toString(): string }).toString(),
+      ).toBase58();
     }
   } catch (error) {
     console.warn("Failed to convert value to PublicKey", error);
@@ -155,20 +162,71 @@ const amountToBigInt = (value: unknown): bigint => {
   return 0n;
 };
 
+const toTimestampMs = (value: unknown): number | null => {
+  if (value instanceof Date) {
+    return value.getTime();
+  }
+
+  if (typeof value === "number" && Number.isFinite(value)) {
+    return value > 1_000_000_000_000 ? value : value * 1000;
+  }
+
+  if (typeof value === "string") {
+    const trimmed = value.trim();
+    if (!trimmed) {
+      return null;
+    }
+
+    const numeric = Number(trimmed);
+    if (!Number.isNaN(numeric)) {
+      return numeric > 1_000_000_000_000 ? numeric : numeric * 1000;
+    }
+
+    const parsed = Date.parse(trimmed);
+    if (!Number.isNaN(parsed)) {
+      return parsed;
+    }
+  }
+
+  return null;
+};
+
+const readHeaderTimestamp = (header: unknown): number | null => {
+  if (!header || typeof header !== "object") {
+    return null;
+  }
+
+  const record = header as Record<string, unknown>;
+  return (
+    toTimestampMs(record.timestamp) ??
+    toTimestampMs((record as Record<string, unknown>).ts)
+  );
+};
+
+const extractEventTimestamp = (
+  entry: Logs,
+  context: Context | undefined,
+  data: Record<string, unknown>,
+) =>
+  readHeaderTimestamp(data.header) ??
+  toTimestampMs((entry as unknown as { timestamp?: unknown }).timestamp) ??
+  toTimestampMs((context as unknown as { timestamp?: unknown })?.timestamp) ??
+  Date.now();
+
 const updateTotals = (
   current: EventTotals,
   amount: bigint,
   flagged: boolean,
-  trackFlagged: boolean
+  trackFlagged: boolean,
 ): EventTotals => ({
   count: current.count + 1,
   total: trackFlagged && flagged ? current.total : current.total + amount,
-  flaggedCount: trackFlagged && flagged
-    ? current.flaggedCount + 1
-    : current.flaggedCount,
-  flaggedTotal: trackFlagged && flagged
-    ? current.flaggedTotal + amount
-    : current.flaggedTotal,
+  flaggedCount:
+    trackFlagged && flagged ? current.flaggedCount + 1 : current.flaggedCount,
+  flaggedTotal:
+    trackFlagged && flagged
+      ? current.flaggedTotal + amount
+      : current.flaggedTotal,
 });
 
 const buildInitialStats = (banks: FetchedBank[]) => {
@@ -206,17 +264,115 @@ export function BankEventMonitorPage({
   const [status, setStatus] = useState<MonitorStatus>("idle");
   const [statusError, setStatusError] = useState<string | null>(null);
   const [stats, setStats] = useState<Record<string, BankEventStats>>(() =>
-    buildInitialStats(banks)
+    buildInitialStats(banks),
   );
   const [lastEvent, setLastEvent] = useState<LastEventSnapshot | null>(null);
 
   const connectionRef = useRef<Connection | null>(null);
   const subscriptionIdRef = useRef<number | null>(null);
+  const shouldMaintainConnectionRef = useRef(false);
+  const websocketCleanupRef = useRef<(() => void) | null>(null);
+  const reconnectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
 
   const coder = useMemo(() => new BorshCoder(marginfiIdlTyped), []);
   const parser = useMemo(
     () => new EventParser(new PublicKey(programId), coder),
-    [coder, programId]
+    [coder, programId],
+  );
+
+  const clearReconnectTimeout = useCallback(() => {
+    if (reconnectTimeoutRef.current) {
+      clearTimeout(reconnectTimeoutRef.current);
+      reconnectTimeoutRef.current = null;
+    }
+  }, []);
+
+  const triggerReconnect = useCallback(() => {
+    if (!shouldMaintainConnectionRef.current) {
+      return;
+    }
+
+    const activeConnection = connectionRef.current as unknown as {
+      _rpcWebSocket?: { connect?: () => Promise<void> | void };
+    } | null;
+
+    try {
+      activeConnection?._rpcWebSocket?.connect?.();
+    } catch (error) {
+      console.error("Failed to trigger websocket reconnect", error);
+    }
+  }, []);
+
+  const attachWebSocketKeepAlive = useCallback(
+    (connection: Connection) => {
+      const socket = (
+        connection as unknown as {
+          _rpcWebSocket?: {
+            on?: (event: string, handler: (...args: any[]) => void) => void;
+            off?: (event: string, handler: (...args: any[]) => void) => void;
+          } & { connect?: () => Promise<void> | void };
+        }
+      )._rpcWebSocket;
+
+      if (!socket?.on || !socket?.off) {
+        return;
+      }
+
+      websocketCleanupRef.current?.();
+
+      const scheduleReconnect = () => {
+        if (!shouldMaintainConnectionRef.current) {
+          return;
+        }
+
+        if (reconnectTimeoutRef.current) {
+          return;
+        }
+
+        reconnectTimeoutRef.current = setTimeout(() => {
+          reconnectTimeoutRef.current = null;
+          triggerReconnect();
+        }, 1000);
+      };
+
+      const handleClose = (code: number) => {
+        if (!shouldMaintainConnectionRef.current) {
+          return;
+        }
+        console.warn(
+          `Geyser websocket closed (code ${code}). Attempting to reconnect…`,
+        );
+        scheduleReconnect();
+      };
+
+      const handleError = (error: unknown) => {
+        if (!shouldMaintainConnectionRef.current) {
+          return;
+        }
+        console.error("Geyser websocket error", error);
+      };
+
+      const handleOpen = () => {
+        if (!shouldMaintainConnectionRef.current) {
+          return;
+        }
+        clearReconnectTimeout();
+        console.log("Geyser websocket connection established.");
+      };
+
+      socket.on("close", handleClose);
+      socket.on("error", handleError);
+      socket.on("open", handleOpen);
+
+      websocketCleanupRef.current = () => {
+        socket.off?.("close", handleClose);
+        socket.off?.("error", handleError);
+        socket.off?.("open", handleOpen);
+      };
+    },
+    [clearReconnectTimeout, triggerReconnect],
   );
 
   const bankByPubkey = useMemo(() => {
@@ -239,10 +395,14 @@ export function BankEventMonitorPage({
   }, [banks]);
 
   const cleanupConnection = useCallback(async () => {
+    shouldMaintainConnectionRef.current = false;
+    websocketCleanupRef.current?.();
+    websocketCleanupRef.current = null;
+    clearReconnectTimeout();
     if (subscriptionIdRef.current !== null && connectionRef.current) {
       try {
         await connectionRef.current.removeOnLogsListener(
-          subscriptionIdRef.current
+          subscriptionIdRef.current,
         );
       } catch (cleanupError) {
         console.warn("Failed to remove logs listener", cleanupError);
@@ -259,7 +419,7 @@ export function BankEventMonitorPage({
       }
     }
     connectionRef.current = null;
-  }, []);
+  }, [clearReconnectTimeout]);
 
   useEffect(() => {
     return () => {
@@ -268,36 +428,58 @@ export function BankEventMonitorPage({
   }, [cleanupConnection]);
 
   const handleLogs = useCallback(
-    (entry: Logs) => {
+    (entry: Logs, context?: Context) => {
       if (!entry.logs?.length) {
         return;
       }
 
       for (const parsed of parser.parseLogs(entry.logs)) {
-        console.log("parsed event name: " + parsed.name);
-        console.log("parsed bank maybe: " + (parsed.data as any)?.bank);
-        
-        const config =
-          EVENT_MAP[parsed.name] ??
-          EVENT_MAP[parsed.name.replace(/Event$/u, "")];
+        const config = getEventConfig(parsed.name);
         if (!config) {
-          console.log("not a listed event");
+          console.debug("Skipping untracked event", parsed.name);
           continue;
         }
 
-        const bankKey = toBase58((parsed.data as any)?.bank);
+        const parsedData = (parsed.data ?? {}) as Record<string, unknown>;
+        const bankKey = toBase58(parsedData.bank);
         if (!bankKey || !bankByPubkey.has(bankKey)) {
-          console.log("didnt find bank");
+          console.debug("Skipping event for unknown bank", {
+            event: parsed.name,
+            bank: parsedData.bank,
+          });
           continue;
         }
 
-        const amount = amountToBigInt((parsed.data as any)?.amount);
-        console.log("amount " + amount);
+        const amount = amountToBigInt(parsedData.amount);
         const flagged = Boolean(
           config.trackFlagged &&
-            ((parsed.data as any)?.closeBalance ||
-              (parsed.data as any)?.withdrawAll ||
-              (parsed.data as any)?.repayAll)
+            [
+              parsedData.closeBalance,
+              parsedData.close_balance,
+              parsedData.withdrawAll,
+              parsedData.withdraw_all,
+              parsedData.repayAll,
+              parsedData.repay_all,
+            ].some(
+              (value) =>
+                value === true ||
+                value === "true" ||
+                value === 1 ||
+                value === "1",
+            ),
+        );
+
+        const slot =
+          typeof (entry as unknown as { slot?: unknown }).slot === "number"
+            ? (entry as unknown as { slot: number }).slot
+            : (context?.slot ?? 0);
+
+        const timestamp = extractEventTimestamp(entry, context, parsedData);
+
+        console.log(
+          `[${new Date(timestamp).toISOString()}] ${config.kind.toUpperCase()} event for bank ${bankKey} (${amount.toString()} units)${
+            flagged ? " (flagged)" : ""
+          }`,
         );
 
         setStats((current) => {
@@ -308,7 +490,7 @@ export function BankEventMonitorPage({
               existing[config.kind],
               amount,
               flagged,
-              Boolean(config.trackFlagged)
+              Boolean(config.trackFlagged),
             ),
           };
           return {
@@ -318,17 +500,17 @@ export function BankEventMonitorPage({
         });
 
         setLastEvent({
-          slot: entry.slot,
+          slot,
           kind: config.kind,
           bankKey,
           tokenName: bankByPubkey.get(bankKey)?.tokenName,
           amount,
           flagged,
-          timestamp: Date.now(),
+          timestamp,
         });
       }
     },
-    [bankByPubkey, parser]
+    [bankByPubkey, parser],
   );
 
   const startMonitoring = useCallback(async () => {
@@ -363,11 +545,13 @@ export function BankEventMonitorPage({
         wsEndpoint,
       });
       connectionRef.current = connection;
+      shouldMaintainConnectionRef.current = true;
+      attachWebSocketKeepAlive(connection);
 
       const subscriptionId = await connection.onLogs(
         new PublicKey(programId),
-        handleLogs,
-        "confirmed"
+        (logEntry, ctx) => handleLogs(logEntry, ctx),
+        "confirmed",
       );
 
       subscriptionIdRef.current = subscriptionId;
@@ -377,14 +561,13 @@ export function BankEventMonitorPage({
       await cleanupConnection();
       setStatus("error");
       setStatusError(
-        startError instanceof Error
-          ? startError.message
-          : String(startError)
+        startError instanceof Error ? startError.message : String(startError),
       );
     }
   }, [
     apiKey,
     banks,
+    attachWebSocketKeepAlive,
     cleanupConnection,
     handleLogs,
     programId,
@@ -418,7 +601,7 @@ export function BankEventMonitorPage({
         withdrawFlagged: 0,
         repay: 0,
         repayFlagged: 0,
-      }
+      },
     );
   }, [stats]);
 
@@ -487,7 +670,9 @@ export function BankEventMonitorPage({
               onClick={startMonitoring}
               className="px-4 py-2 bg-green-600 text-white rounded disabled:opacity-60"
               disabled={
-                status === "connecting" || status === "connected" || !banks.length
+                status === "connecting" ||
+                status === "connected" ||
+                !banks.length
               }
             >
               Start Monitoring
@@ -518,9 +703,9 @@ export function BankEventMonitorPage({
           <div className="text-sm text-red-600">{statusError}</div>
         )}
         <div className="text-sm text-gray-600">
-          Observed events — Deposits: {aggregateCounts.deposit}, Borrows: {" "}
+          Observed events — Deposits: {aggregateCounts.deposit}, Borrows:{" "}
           {aggregateCounts.borrow}, Withdrawals: {aggregateCounts.withdraw} (
-          {aggregateCounts.withdrawFlagged} withdraw-all), Repays: {" "}
+          {aggregateCounts.withdrawFlagged} withdraw-all), Repays:{" "}
           {aggregateCounts.repay} ({aggregateCounts.repayFlagged} repay-all)
         </div>
         {lastEventDisplay && (
