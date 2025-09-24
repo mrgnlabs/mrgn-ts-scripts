@@ -51,7 +51,7 @@ export function OracleStatusPage({
   // Setup connection once
   const connection = useMemo(
     () =>
-      commonSetupBrowser(new ReadOnlyWallet(PublicKey.default), programId)
+      commonSetupBrowser(new ReadOnlyWallet(PublicKey.default), programId, "1.4")
         .connection,
     [programId]
   );

@@ -274,19 +274,25 @@ export function BankEventMonitorPage({
       }
 
       for (const parsed of parser.parseLogs(entry.logs)) {
+        console.log("parsed event name: " + parsed.name);
+        console.log("parsed bank maybe: " + (parsed.data as any)?.bank);
+        
         const config =
           EVENT_MAP[parsed.name] ??
           EVENT_MAP[parsed.name.replace(/Event$/u, "")];
         if (!config) {
+          console.log("not a listed event");
           continue;
         }
 
         const bankKey = toBase58((parsed.data as any)?.bank);
         if (!bankKey || !bankByPubkey.has(bankKey)) {
+          console.log("didnt find bank");
           continue;
         }
 
         const amount = amountToBigInt((parsed.data as any)?.amount);
+        console.log("amount " + amount);
         const flagged = Boolean(
           config.trackFlagged &&
             ((parsed.data as any)?.closeBalance ||
