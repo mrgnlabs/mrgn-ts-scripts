@@ -5,101 +5,14 @@
  * IDL can be found at `target/idl/marginfi.json`.
  */
 export type Marginfi = {
-  "address": "",
+  "address": "5UDghkpgW1HfYSrmEj2iAApHShqU44H6PKTAar9LL9bY",
   "metadata": {
     "name": "marginfi",
-    "version": "0.1.5",
+    "version": "0.1.4",
     "spec": "0.1.0",
     "description": "Created with Anchor"
   },
   "instructions": [
-    {
-      "name": "adminSuperWithdraw",
-      "docs": [
-        "(Arena admin) used to withdraw funds from arena liquidity pools to sunset them. Only",
-        "hard-coded arena banks can call this function."
-      ],
-      "discriminator": [
-        252,
-        21,
-        98,
-        115,
-        66,
-        189,
-        134,
-        13
-      ],
-      "accounts": [
-        {
-          "name": "group",
-          "relations": [
-            "bank"
-          ]
-        },
-        {
-          "name": "admin",
-          "signer": true,
-          "relations": [
-            "group"
-          ]
-        },
-        {
-          "name": "bank",
-          "writable": true
-        },
-        {
-          "name": "destinationTokenAccount",
-          "writable": true
-        },
-        {
-          "name": "bankLiquidityVaultAuthority",
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  108,
-                  105,
-                  113,
-                  117,
-                  105,
-                  100,
-                  105,
-                  116,
-                  121,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116,
-                  95,
-                  97,
-                  117,
-                  116,
-                  104
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "bank"
-              }
-            ]
-          }
-        },
-        {
-          "name": "liquidityVault",
-          "writable": true,
-          "relations": [
-            "bank"
-          ]
-        },
-        {
-          "name": "tokenProgram"
-        }
-      ],
-      "args": []
-    },
     {
       "name": "configGroupFee",
       "docs": [
@@ -223,10 +136,6 @@ export type Marginfi = {
           "type": "u32"
         },
         {
-          "name": "liquidationFlatSolFee",
-          "type": "u32"
-        },
-        {
           "name": "programFeeFixed",
           "type": {
             "defined": {
@@ -236,14 +145,6 @@ export type Marginfi = {
         },
         {
           "name": "programFeeRate",
-          "type": {
-            "defined": {
-              "name": "wrappedI80f48"
-            }
-          }
-        },
-        {
-          "name": "liquidationMaxFee",
           "type": {
             "defined": {
               "name": "wrappedI80f48"
@@ -295,78 +196,6 @@ export type Marginfi = {
       ]
     },
     {
-      "name": "endLiquidation",
-      "discriminator": [
-        110,
-        11,
-        244,
-        54,
-        229,
-        181,
-        22,
-        184
-      ],
-      "accounts": [
-        {
-          "name": "marginfiAccount",
-          "docs": [
-            "Account under liquidation"
-          ],
-          "writable": true
-        },
-        {
-          "name": "liquidationRecord",
-          "docs": [
-            "The associated liquidation record PDA for the given `marginfi_account`"
-          ],
-          "writable": true,
-          "relations": [
-            "marginfiAccount"
-          ]
-        },
-        {
-          "name": "liquidationReceiver",
-          "writable": true,
-          "signer": true,
-          "relations": [
-            "liquidationRecord"
-          ]
-        },
-        {
-          "name": "feeState",
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  102,
-                  101,
-                  101,
-                  115,
-                  116,
-                  97,
-                  116,
-                  101
-                ]
-              }
-            ]
-          }
-        },
-        {
-          "name": "globalFeeWallet",
-          "writable": true,
-          "relations": [
-            "feeState"
-          ]
-        },
-        {
-          "name": "systemProgram",
-          "address": "11111111111111111111111111111111"
-        }
-      ],
-      "args": []
-    },
-    {
       "name": "initGlobalFeeState",
       "docs": [
         "(Runs once per program) Configures the fee state account, where the global admin sets fees",
@@ -413,6 +242,10 @@ export type Marginfi = {
           }
         },
         {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        },
+        {
           "name": "systemProgram",
           "address": "11111111111111111111111111111111"
         }
@@ -431,10 +264,6 @@ export type Marginfi = {
           "type": "u32"
         },
         {
-          "name": "liquidationFlatSolFee",
-          "type": "u32"
-        },
-        {
           "name": "programFeeFixed",
           "type": {
             "defined": {
@@ -444,14 +273,6 @@ export type Marginfi = {
         },
         {
           "name": "programFeeRate",
-          "type": {
-            "defined": {
-              "name": "wrappedI80f48"
-            }
-          }
-        },
-        {
-          "name": "liquidationMaxFee",
           "type": {
             "defined": {
               "name": "wrappedI80f48"
@@ -530,6 +351,10 @@ export type Marginfi = {
           }
         },
         {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        },
+        {
           "name": "systemProgram",
           "address": "11111111111111111111111111111111"
         }
@@ -541,6 +366,842 @@ export type Marginfi = {
             "defined": {
               "name": "stakedSettingsConfig"
             }
+          }
+        }
+      ]
+    },
+    {
+      "name": "kaminoDeposit",
+      "docs": [
+        "(user) Deposit into a Kamino pool through a marginfi account",
+        "* amount - in the liquidity token (e.g. if there is a Kamino USDC bank, pass the amount of",
+        "USDC desired), in native decimals."
+      ],
+      "discriminator": [
+        237,
+        8,
+        188,
+        187,
+        115,
+        99,
+        49,
+        85
+      ],
+      "accounts": [
+        {
+          "name": "group",
+          "relations": [
+            "marginfiAccount",
+            "bank"
+          ]
+        },
+        {
+          "name": "marginfiAccount",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "signer": true,
+          "relations": [
+            "marginfiAccount"
+          ]
+        },
+        {
+          "name": "bank",
+          "writable": true
+        },
+        {
+          "name": "signerTokenAccount",
+          "docs": [
+            "Owned by authority, the source account for the token deposit."
+          ],
+          "writable": true
+        },
+        {
+          "name": "liquidityVaultAuthority",
+          "docs": [
+            "The bank's liquidity vault authority, which owns the Kamino obligation. Note: Kamino needs",
+            "this to be mut because `deposit` might return the rent here"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  108,
+                  105,
+                  113,
+                  117,
+                  105,
+                  100,
+                  105,
+                  116,
+                  121,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          }
+        },
+        {
+          "name": "liquidityVault",
+          "docs": [
+            "Used as an intermediary to deposit token into Kamino"
+          ],
+          "writable": true,
+          "relations": [
+            "bank"
+          ]
+        },
+        {
+          "name": "kaminoObligation",
+          "writable": true,
+          "relations": [
+            "bank"
+          ]
+        },
+        {
+          "name": "lendingMarket"
+        },
+        {
+          "name": "lendingMarketAuthority"
+        },
+        {
+          "name": "kaminoReserve",
+          "docs": [
+            "The Kamino reserve that holds liquidity"
+          ],
+          "writable": true,
+          "relations": [
+            "bank"
+          ]
+        },
+        {
+          "name": "mint",
+          "docs": [
+            "Bank's liquidity token mint (e.g., USDC). Kamino calls this the `reserve_liquidity_mint`"
+          ],
+          "relations": [
+            "bank"
+          ]
+        },
+        {
+          "name": "reserveLiquiditySupply",
+          "writable": true
+        },
+        {
+          "name": "reserveCollateralMint",
+          "docs": [
+            "The reserve's mint for tokenized representations of Kamino deposits."
+          ],
+          "writable": true
+        },
+        {
+          "name": "reserveDestinationDepositCollateral",
+          "docs": [
+            "The reserve's destination for tokenized representations of deposits. Note: the",
+            "`reserve_collateral_mint` will mint tokens directly to this account."
+          ],
+          "writable": true
+        },
+        {
+          "name": "obligationFarmUserState",
+          "docs": [
+            "Required if the Kamino reserve has an active farm."
+          ],
+          "writable": true,
+          "optional": true
+        },
+        {
+          "name": "reserveFarmState",
+          "docs": [
+            "Required if the Kamino reserve has an active farm."
+          ],
+          "writable": true,
+          "optional": true
+        },
+        {
+          "name": "kaminoProgram",
+          "address": "KLend2g3cP87fffoy8q1mQqGKjrxjC8boSyAYavgmjD"
+        },
+        {
+          "name": "farmsProgram",
+          "docs": [
+            "Farms program for Kamino staking functionality"
+          ],
+          "address": "FarmsPZpWu9i7Kky8tPN37rs2TpmMrAZrC7S7vJa91Hr"
+        },
+        {
+          "name": "collateralTokenProgram",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "liquidityTokenProgram"
+        },
+        {
+          "name": "instructionSysvarAccount",
+          "address": "Sysvar1nstructions1111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "kaminoHarvestReward",
+      "docs": [
+        "(fee admin only) Harvest the specified reward index from the Kamino Farm attached to this bank.",
+        "",
+        "* `reward_index` — index of the reward token in the Kamino Farm's reward list"
+      ],
+      "discriminator": [
+        163,
+        202,
+        248,
+        141,
+        106,
+        20,
+        116,
+        5
+      ],
+      "accounts": [
+        {
+          "name": "bank"
+        },
+        {
+          "name": "feeState",
+          "docs": [
+            "Global fee state that contains the global_fee_admin"
+          ]
+        },
+        {
+          "name": "destinationTokenAccount",
+          "docs": [
+            "Destination token account must be owned by the global fee admin"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "feeState"
+              },
+              {
+                "kind": "account",
+                "path": "tokenProgram"
+              },
+              {
+                "kind": "account",
+                "path": "rewardMint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "liquidityVaultAuthority",
+          "docs": [
+            "The bank's liquidity vault authority, which owns the Kamino obligation."
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  108,
+                  105,
+                  113,
+                  117,
+                  105,
+                  100,
+                  105,
+                  116,
+                  121,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          }
+        },
+        {
+          "name": "userState",
+          "writable": true
+        },
+        {
+          "name": "farmState",
+          "writable": true
+        },
+        {
+          "name": "globalConfig"
+        },
+        {
+          "name": "rewardMint"
+        },
+        {
+          "name": "userRewardAta",
+          "docs": [
+            "An initialized ATA of type reward mint owned by liquidity vault"
+          ],
+          "writable": true
+        },
+        {
+          "name": "rewardsVault",
+          "writable": true
+        },
+        {
+          "name": "rewardsTreasuryVault",
+          "writable": true
+        },
+        {
+          "name": "farmVaultsAuthority"
+        },
+        {
+          "name": "scopePrices",
+          "optional": true
+        },
+        {
+          "name": "farmsProgram",
+          "address": "FarmsPZpWu9i7Kky8tPN37rs2TpmMrAZrC7S7vJa91Hr"
+        },
+        {
+          "name": "tokenProgram"
+        }
+      ],
+      "args": [
+        {
+          "name": "rewardIndex",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "kaminoInitObligation",
+      "docs": [
+        "(permissionless) Initialize a Kamino obligation for a marginfi bank",
+        "* amount - In token, in native decimals. Must be >10 (i.e. 10 lamports, not 10 tokens). Lost",
+        "forever. Generally, try to make this the equivalent of around $1, in case Kamino ever",
+        "rounds small balances down to zero."
+      ],
+      "discriminator": [
+        253,
+        177,
+        160,
+        225,
+        70,
+        156,
+        217,
+        109
+      ],
+      "accounts": [
+        {
+          "name": "feePayer",
+          "docs": [
+            "Pays to init the obligation and pays a nominal amount to ensure the obligation has a",
+            "non-zero balance."
+          ],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "bank"
+        },
+        {
+          "name": "signerTokenAccount",
+          "docs": [
+            "The fee payer must provide a nominal amount of bank tokens so the obligation is not empty.",
+            "This amount is irrecoverable and and will prevent the obligation from ever being closed,",
+            "even if the bank is otherwise empty (Kamino normally closes empty obligations automatically)"
+          ],
+          "writable": true
+        },
+        {
+          "name": "liquidityVaultAuthority",
+          "docs": [
+            "The liquidity vault authority (PDA that will own the Kamino obligation). Note: Kamino needs",
+            "this to be mut because `deposit` might return the rent here"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  108,
+                  105,
+                  113,
+                  117,
+                  105,
+                  100,
+                  105,
+                  116,
+                  121,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          }
+        },
+        {
+          "name": "liquidityVault",
+          "docs": [
+            "Used as an intermediary to deposit a nominal amount of token into the obligation."
+          ],
+          "writable": true,
+          "relations": [
+            "bank"
+          ]
+        },
+        {
+          "name": "kaminoObligation",
+          "docs": [
+            "The obligation account to be created. Note that the key was already derived when",
+            "initializing the bank, and this must match the obligation recorded at that time."
+          ],
+          "writable": true,
+          "relations": [
+            "bank"
+          ]
+        },
+        {
+          "name": "userMetadata",
+          "writable": true
+        },
+        {
+          "name": "lendingMarket"
+        },
+        {
+          "name": "lendingMarketAuthority"
+        },
+        {
+          "name": "kaminoReserve",
+          "writable": true,
+          "relations": [
+            "bank"
+          ]
+        },
+        {
+          "name": "mint",
+          "docs": [
+            "Bank's liquidity token mint (e.g., USDC). Kamino calls this the `reserve_liquidity_mint`"
+          ],
+          "writable": true,
+          "relations": [
+            "bank"
+          ]
+        },
+        {
+          "name": "reserveLiquiditySupply",
+          "writable": true
+        },
+        {
+          "name": "reserveCollateralMint",
+          "docs": [
+            "The reserve's mint for tokenized representations of Kamino deposits."
+          ],
+          "writable": true
+        },
+        {
+          "name": "reserveDestinationDepositCollateral",
+          "docs": [
+            "The reserve's destination for tokenized representations of deposits. Note: the",
+            "`reserve_collateral_mint` will mint tokens directly to this account."
+          ],
+          "writable": true
+        },
+        {
+          "name": "pythOracle",
+          "optional": true
+        },
+        {
+          "name": "switchboardPriceOracle",
+          "optional": true
+        },
+        {
+          "name": "switchboardTwapOracle",
+          "optional": true
+        },
+        {
+          "name": "scopePrices",
+          "optional": true
+        },
+        {
+          "name": "obligationFarmUserState",
+          "docs": [
+            "Required if the Kamino reserve has an active farm."
+          ],
+          "writable": true,
+          "optional": true
+        },
+        {
+          "name": "reserveFarmState",
+          "docs": [
+            "Required if the Kamino reserve has an active farm."
+          ],
+          "writable": true,
+          "optional": true
+        },
+        {
+          "name": "kaminoProgram",
+          "address": "KLend2g3cP87fffoy8q1mQqGKjrxjC8boSyAYavgmjD"
+        },
+        {
+          "name": "farmsProgram",
+          "docs": [
+            "Farms program for Kamino staking functionality"
+          ],
+          "address": "FarmsPZpWu9i7Kky8tPN37rs2TpmMrAZrC7S7vJa91Hr"
+        },
+        {
+          "name": "collateralTokenProgram",
+          "docs": [
+            "Note: the collateral token always uses Token classic, never Token22."
+          ],
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "liquidityTokenProgram",
+          "docs": [
+            "Note: Kamino does not have full Token22 support, certain Token22 features are disallowed.",
+            "Expect this to update over time. Check with the Kamino source."
+          ]
+        },
+        {
+          "name": "instructionSysvarAccount",
+          "address": "Sysvar1nstructions1111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "kaminoWithdraw",
+      "docs": [
+        "(user) Withdraw from a Kamino pool through a marginfi account",
+        "* amount - in the liquidity token (e.g. if there is a Kamino USDC bank, pass the amount of",
+        "USDC desired), in native decimals.",
+        "* withdraw_all - if true, withdraw the entire mrgn balance (Note: due to rounding down, a",
+        "deposit and withdraw back to back may result in several lamports less)"
+      ],
+      "discriminator": [
+        199,
+        101,
+        41,
+        45,
+        213,
+        98,
+        224,
+        200
+      ],
+      "accounts": [
+        {
+          "name": "group",
+          "relations": [
+            "marginfiAccount",
+            "bank"
+          ]
+        },
+        {
+          "name": "marginfiAccount",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "signer": true,
+          "relations": [
+            "marginfiAccount"
+          ]
+        },
+        {
+          "name": "bank",
+          "writable": true
+        },
+        {
+          "name": "destinationTokenAccount",
+          "docs": [
+            "Token account that will get tokens back",
+            "WARN: Completely unchecked!"
+          ],
+          "writable": true
+        },
+        {
+          "name": "liquidityVaultAuthority",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  108,
+                  105,
+                  113,
+                  117,
+                  105,
+                  100,
+                  105,
+                  116,
+                  121,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          }
+        },
+        {
+          "name": "liquidityVault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  108,
+                  105,
+                  113,
+                  117,
+                  105,
+                  100,
+                  105,
+                  116,
+                  121,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          },
+          "relations": [
+            "bank"
+          ]
+        },
+        {
+          "name": "kaminoObligation",
+          "writable": true,
+          "relations": [
+            "bank"
+          ]
+        },
+        {
+          "name": "lendingMarket",
+          "docs": [
+            "The Kamino lending market"
+          ]
+        },
+        {
+          "name": "lendingMarketAuthority",
+          "docs": [
+            "The Kamino lending market authority"
+          ]
+        },
+        {
+          "name": "kaminoReserve",
+          "docs": [
+            "The Kamino reserve that holds liquidity"
+          ],
+          "writable": true,
+          "relations": [
+            "bank"
+          ]
+        },
+        {
+          "name": "reserveLiquidityMint",
+          "docs": [
+            "The liquidity token mint (e.g., USDC)",
+            "Needs serde to get the mint decimals for transfer checked"
+          ],
+          "writable": true
+        },
+        {
+          "name": "reserveLiquiditySupply",
+          "docs": [
+            "The reserve's liquidity supply account"
+          ],
+          "writable": true
+        },
+        {
+          "name": "reserveCollateralMint",
+          "docs": [
+            "The reserve's collateral mint"
+          ],
+          "writable": true
+        },
+        {
+          "name": "reserveSourceCollateral",
+          "docs": [
+            "The reserve's source for collateral tokens"
+          ],
+          "writable": true
+        },
+        {
+          "name": "obligationFarmUserState",
+          "docs": [
+            "Optional farms accounts for Kamino staking functionality"
+          ],
+          "writable": true,
+          "optional": true
+        },
+        {
+          "name": "reserveFarmState",
+          "writable": true,
+          "optional": true
+        },
+        {
+          "name": "kaminoProgram",
+          "address": "KLend2g3cP87fffoy8q1mQqGKjrxjC8boSyAYavgmjD"
+        },
+        {
+          "name": "farmsProgram",
+          "docs": [
+            "Farms program for Kamino staking functionality"
+          ],
+          "address": "FarmsPZpWu9i7Kky8tPN37rs2TpmMrAZrC7S7vJa91Hr"
+        },
+        {
+          "name": "collateralTokenProgram",
+          "docs": [
+            "The token program for the collateral token"
+          ],
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "liquidityTokenProgram",
+          "docs": [
+            "The token program for the liquidity token"
+          ]
+        },
+        {
+          "name": "instructionSysvarAccount",
+          "docs": [
+            "Used by kamino validate CPI calls"
+          ],
+          "address": "Sysvar1nstructions1111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        },
+        {
+          "name": "withdrawAll",
+          "type": {
+            "option": "bool"
           }
         }
       ]
@@ -980,13 +1641,10 @@ export type Marginfi = {
         },
         {
           "name": "authority",
-          "docs": [
-            "Must be marginfi_account's authority, unless in liquidation receivership",
-            "",
-            "Note: during liquidation, there are no signer checks whatsoever: any key can repay as",
-            "long as the invariants checked at the end of liquidation are met."
-          ],
-          "signer": true
+          "signer": true,
+          "relations": [
+            "marginfiAccount"
+          ]
         },
         {
           "name": "bank",
@@ -1132,13 +1790,10 @@ export type Marginfi = {
         },
         {
           "name": "authority",
-          "docs": [
-            "Must be marginfi_account's authority, unless in liquidation receivership",
-            "",
-            "Note: during liquidation, there are no signer checks whatsoever: any key can repay as",
-            "long as the invariants checked at the end of liquidation are met."
-          ],
-          "signer": true
+          "signer": true,
+          "relations": [
+            "marginfiAccount"
+          ]
         },
         {
           "name": "bank",
@@ -1769,6 +2424,10 @@ export type Marginfi = {
           }
         },
         {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        },
+        {
           "name": "tokenProgram"
         },
         {
@@ -1784,6 +2443,312 @@ export type Marginfi = {
               "name": "bankConfigCompact"
             }
           }
+        }
+      ]
+    },
+    {
+      "name": "lendingPoolAddBankKamino",
+      "docs": [
+        "(group admin only) Add a Kamino bank to the group. Pass the oracle and reserve in remaining",
+        "accounts 0 and 1 respectively."
+      ],
+      "discriminator": [
+        118,
+        53,
+        16,
+        243,
+        255,
+        245,
+        149,
+        241
+      ],
+      "accounts": [
+        {
+          "name": "group",
+          "writable": true
+        },
+        {
+          "name": "admin",
+          "signer": true,
+          "relations": [
+            "group"
+          ]
+        },
+        {
+          "name": "feePayer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "bankMint",
+          "docs": [
+            "Must match the mint used by `kamino_reserve`, Kamino calls this the `reserve_liquidity_mint`",
+            "aka `liquidity.mint_pubkey`"
+          ]
+        },
+        {
+          "name": "bank",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "group"
+              },
+              {
+                "kind": "account",
+                "path": "bankMint"
+              },
+              {
+                "kind": "arg",
+                "path": "bankSeed"
+              }
+            ]
+          }
+        },
+        {
+          "name": "kaminoReserve"
+        },
+        {
+          "name": "kaminoObligation",
+          "docs": [
+            "Note: not yet initialized in this instruction, run `init_obligation` after."
+          ]
+        },
+        {
+          "name": "liquidityVaultAuthority",
+          "docs": [
+            "Will be authority of the bank's `kamino_obligation`. Note: When depositing/withdrawing",
+            "Kamino assets, the source/destination must also be owned by the obligation authority. This",
+            "account owns the `liquidity_vault`, and thus acts as intermediary for deposits/withdraws"
+          ],
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  108,
+                  105,
+                  113,
+                  117,
+                  105,
+                  100,
+                  105,
+                  116,
+                  121,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          }
+        },
+        {
+          "name": "liquidityVault",
+          "docs": [
+            "For Kamino banks, the `liquidity_vault` never holds assets, but is instead used as an",
+            "intermediary when depositing/withdrawing, e.g., withdrawn funds move from Kamino -> here ->",
+            "the user's token account."
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  108,
+                  105,
+                  113,
+                  117,
+                  105,
+                  100,
+                  105,
+                  116,
+                  121,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          }
+        },
+        {
+          "name": "insuranceVaultAuthority",
+          "docs": [
+            "Note: Currently does nothing."
+          ],
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  110,
+                  115,
+                  117,
+                  114,
+                  97,
+                  110,
+                  99,
+                  101,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          }
+        },
+        {
+          "name": "insuranceVault",
+          "docs": [
+            "Note: Currently does nothing."
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  110,
+                  115,
+                  117,
+                  114,
+                  97,
+                  110,
+                  99,
+                  101,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          }
+        },
+        {
+          "name": "feeVaultAuthority",
+          "docs": [
+            "Note: Currently does nothing."
+          ],
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  101,
+                  101,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          }
+        },
+        {
+          "name": "feeVault",
+          "docs": [
+            "Note: Currently does nothing."
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  101,
+                  101,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          }
+        },
+        {
+          "name": "tokenProgram"
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "bankConfig",
+          "type": {
+            "defined": {
+              "name": "kaminoConfigCompact"
+            }
+          }
+        },
+        {
+          "name": "bankSeed",
+          "type": "u64"
         }
       ]
     },
@@ -2047,6 +3012,10 @@ export type Marginfi = {
               }
             ]
           }
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
         },
         {
           "name": "tokenProgram"
@@ -2344,6 +3313,10 @@ export type Marginfi = {
           }
         },
         {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        },
+        {
           "name": "tokenProgram"
         },
         {
@@ -2360,276 +3333,6 @@ export type Marginfi = {
             }
           }
         },
-        {
-          "name": "bankSeed",
-          "type": "u64"
-        }
-      ]
-    },
-    {
-      "name": "lendingPoolCloneBank",
-      "docs": [
-        "Staging or localnet only, panics on mainnet"
-      ],
-      "discriminator": [
-        214,
-        93,
-        17,
-        236,
-        177,
-        228,
-        78,
-        17
-      ],
-      "accounts": [
-        {
-          "name": "marginfiGroup",
-          "writable": true
-        },
-        {
-          "name": "admin",
-          "writable": true,
-          "signer": true,
-          "relations": [
-            "marginfiGroup"
-          ]
-        },
-        {
-          "name": "feePayer",
-          "writable": true,
-          "signer": true
-        },
-        {
-          "name": "bankMint"
-        },
-        {
-          "name": "sourceBank",
-          "docs": [
-            "Source bank to clone from mainnet program",
-            ""
-          ]
-        },
-        {
-          "name": "bank",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "path": "marginfiGroup"
-              },
-              {
-                "kind": "account",
-                "path": "bankMint"
-              },
-              {
-                "kind": "arg",
-                "path": "bankSeed"
-              }
-            ]
-          }
-        },
-        {
-          "name": "liquidityVaultAuthority",
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  108,
-                  105,
-                  113,
-                  117,
-                  105,
-                  100,
-                  105,
-                  116,
-                  121,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116,
-                  95,
-                  97,
-                  117,
-                  116,
-                  104
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "bank"
-              }
-            ]
-          }
-        },
-        {
-          "name": "liquidityVault",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  108,
-                  105,
-                  113,
-                  117,
-                  105,
-                  100,
-                  105,
-                  116,
-                  121,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "bank"
-              }
-            ]
-          }
-        },
-        {
-          "name": "insuranceVaultAuthority",
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  105,
-                  110,
-                  115,
-                  117,
-                  114,
-                  97,
-                  110,
-                  99,
-                  101,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116,
-                  95,
-                  97,
-                  117,
-                  116,
-                  104
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "bank"
-              }
-            ]
-          }
-        },
-        {
-          "name": "insuranceVault",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  105,
-                  110,
-                  115,
-                  117,
-                  114,
-                  97,
-                  110,
-                  99,
-                  101,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "bank"
-              }
-            ]
-          }
-        },
-        {
-          "name": "feeVaultAuthority",
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  102,
-                  101,
-                  101,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116,
-                  95,
-                  97,
-                  117,
-                  116,
-                  104
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "bank"
-              }
-            ]
-          }
-        },
-        {
-          "name": "feeVault",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  102,
-                  101,
-                  101,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "bank"
-              }
-            ]
-          }
-        },
-        {
-          "name": "tokenProgram"
-        },
-        {
-          "name": "systemProgram",
-          "address": "11111111111111111111111111111111"
-        }
-      ],
-      "args": [
         {
           "name": "bankSeed",
           "type": "u64"
@@ -3898,68 +4601,9 @@ export type Marginfi = {
       "args": []
     },
     {
-      "name": "marginfiAccountInitLiqRecord",
-      "discriminator": [
-        236,
-        213,
-        238,
-        126,
-        147,
-        251,
-        164,
-        8
-      ],
-      "accounts": [
-        {
-          "name": "marginfiAccount",
-          "writable": true
-        },
-        {
-          "name": "feePayer",
-          "writable": true,
-          "signer": true
-        },
-        {
-          "name": "liquidationRecord",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  108,
-                  105,
-                  113,
-                  95,
-                  114,
-                  101,
-                  99,
-                  111,
-                  114,
-                  100
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "marginfiAccount"
-              }
-            ]
-          }
-        },
-        {
-          "name": "systemProgram",
-          "address": "11111111111111111111111111111111"
-        }
-      ],
-      "args": []
-    },
-    {
       "name": "marginfiAccountInitialize",
       "docs": [
-        "Initialize a marginfi account for a given group. The account is a fresh keypair, and must",
-        "sign. If you are a CPI caller, consider using `marginfi_account_initialize_pda` instead, or",
-        "create the account manually and use `transfer_to_new_account` to gift it to the owner you",
-        "wish."
+        "Initialize a marginfi account for a given group"
       ],
       "discriminator": [
         43,
@@ -3995,113 +4639,6 @@ export type Marginfi = {
         }
       ],
       "args": []
-    },
-    {
-      "name": "marginfiAccountInitializePda",
-      "docs": [
-        "The same as `marginfi_account_initialize`, except the created marginfi account uses a PDA",
-        "(Program Derived Address)",
-        "",
-        "seeds:",
-        "- marginfi_group",
-        "- authority: The account authority (owner)",
-        "- account_index: A u16 value to allow multiple accounts per authority",
-        "- third_party_id: Optional u16 for third-party tagging. Seeds < PDA_FREE_THRESHOLD can be",
-        "used freely. For a dedicated seed used by just your program (via CPI), contact us."
-      ],
-      "discriminator": [
-        87,
-        177,
-        91,
-        80,
-        218,
-        119,
-        245,
-        31
-      ],
-      "accounts": [
-        {
-          "name": "marginfiGroup"
-        },
-        {
-          "name": "marginfiAccount",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  109,
-                  97,
-                  114,
-                  103,
-                  105,
-                  110,
-                  102,
-                  105,
-                  95,
-                  97,
-                  99,
-                  99,
-                  111,
-                  117,
-                  110,
-                  116
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "marginfiGroup"
-              },
-              {
-                "kind": "account",
-                "path": "authority"
-              },
-              {
-                "kind": "arg",
-                "path": "accountIndex"
-              },
-              {
-                "kind": "arg",
-                "path": "third_party_id.unwrap_or(0)"
-              }
-            ]
-          }
-        },
-        {
-          "name": "authority",
-          "signer": true
-        },
-        {
-          "name": "feePayer",
-          "writable": true,
-          "signer": true
-        },
-        {
-          "name": "instructionsSysvar",
-          "docs": [
-            "Instructions sysvar for CPI validation",
-            ""
-          ],
-          "address": "Sysvar1nstructions1111111111111111111111111"
-        },
-        {
-          "name": "systemProgram",
-          "address": "11111111111111111111111111111111"
-        }
-      ],
-      "args": [
-        {
-          "name": "accountIndex",
-          "type": "u16"
-        },
-        {
-          "name": "thirdPartyId",
-          "type": {
-            "option": "u16"
-          }
-        }
-      ]
     },
     {
       "name": "marginfiAccountUpdateEmissionsDestinationAccount",
@@ -4245,139 +4782,34 @@ export type Marginfi = {
       ]
     },
     {
-      "name": "panicPause",
+      "name": "migratePythPushOracle",
       "discriminator": [
-        76,
-        164,
-        123,
-        25,
-        4,
-        43,
-        79,
-        165
-      ],
-      "accounts": [
-        {
-          "name": "globalFeeAdmin",
-          "docs": [
-            "Admin of the global FeeState (can trigger panic pause)"
-          ],
-          "signer": true,
-          "relations": [
-            "feeState"
-          ]
-        },
-        {
-          "name": "feeState",
-          "docs": [
-            "Global fee state account containing the panic state"
-          ],
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  102,
-                  101,
-                  101,
-                  115,
-                  116,
-                  97,
-                  116,
-                  101
-                ]
-              }
-            ]
-          }
-        }
-      ],
-      "args": []
-    },
-    {
-      "name": "panicUnpause",
-      "discriminator": [
-        236,
-        107,
-        194,
-        242,
-        99,
-        51,
-        121,
-        128
-      ],
-      "accounts": [
-        {
-          "name": "globalFeeAdmin",
-          "docs": [
-            "Admin of the global FeeState (can manually unpause)"
-          ],
-          "writable": true,
-          "signer": true,
-          "relations": [
-            "feeState"
-          ]
-        },
-        {
-          "name": "feeState",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  102,
-                  101,
-                  101,
-                  115,
-                  116,
-                  97,
-                  116,
-                  101
-                ]
-              }
-            ]
-          }
-        }
-      ],
-      "args": []
-    },
-    {
-      "name": "panicUnpausePermissionless",
-      "docs": [
-        "(permissionless) Unpause the protocol when pause time has expired"
-      ],
-      "discriminator": [
-        245,
         139,
-        50,
-        159,
-        213,
-        62,
-        91,
-        248
+        58,
+        192,
+        167,
+        217,
+        110,
+        247,
+        152
       ],
       "accounts": [
         {
-          "name": "feeState",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  102,
-                  101,
-                  101,
-                  115,
-                  116,
-                  97,
-                  116,
-                  101
-                ]
-              }
-            ]
-          }
+          "name": "group",
+          "relations": [
+            "bank"
+          ]
+        },
+        {
+          "name": "bank",
+          "writable": true
+        },
+        {
+          "name": "oracle",
+          "docs": [
+            "Must use the Pyth Sponsored shard ID (0) or mrgn's (3301)",
+            ""
+          ]
         }
       ],
       "args": []
@@ -4421,7 +4853,7 @@ export type Marginfi = {
         {
           "name": "marginfiGroup",
           "docs": [
-            "Any group, this ix is permisionless and can propagate the fee to any group"
+            "Any group, this ix is permisionless and can propogate the fee to any group"
           ],
           "writable": true
         }
@@ -4453,51 +4885,6 @@ export type Marginfi = {
         {
           "name": "bank",
           "writable": true
-        }
-      ],
-      "args": []
-    },
-    {
-      "name": "startLiquidation",
-      "discriminator": [
-        244,
-        93,
-        90,
-        214,
-        192,
-        166,
-        191,
-        21
-      ],
-      "accounts": [
-        {
-          "name": "marginfiAccount",
-          "docs": [
-            "Account under liquidation"
-          ],
-          "writable": true
-        },
-        {
-          "name": "liquidationRecord",
-          "docs": [
-            "The associated liquidation record PDA for the given `marginfi_account`"
-          ],
-          "writable": true,
-          "relations": [
-            "marginfiAccount"
-          ]
-        },
-        {
-          "name": "liquidationReceiver",
-          "docs": [
-            "This account will have the authority to withdraw/repay as if they are the user authority",
-            "until the end of the tx.",
-            ""
-          ]
-        },
-        {
-          "name": "instructionSysvar",
-          "address": "Sysvar1nstructions1111111111111111111111111"
         }
       ],
       "args": []
@@ -4551,124 +4938,6 @@ export type Marginfi = {
         }
       ],
       "args": []
-    },
-    {
-      "name": "transferToNewAccountPda",
-      "docs": [
-        "Same as `transfer_to_new_account` except the resulting account is a PDA",
-        "",
-        "seeds:",
-        "- marginfi_group",
-        "- authority: The account authority (owner)",
-        "- account_index: A u32 value to allow multiple accounts per authority",
-        "- third_party_id: Optional u32 for third-party tagging. Seeds < PDA_FREE_THRESHOLD can be",
-        "used freely. For a dedicated seed used by just your program (via CPI), contact us."
-      ],
-      "discriminator": [
-        172,
-        210,
-        224,
-        220,
-        146,
-        212,
-        253,
-        49
-      ],
-      "accounts": [
-        {
-          "name": "group",
-          "relations": [
-            "oldMarginfiAccount"
-          ]
-        },
-        {
-          "name": "oldMarginfiAccount",
-          "writable": true
-        },
-        {
-          "name": "newMarginfiAccount",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  109,
-                  97,
-                  114,
-                  103,
-                  105,
-                  110,
-                  102,
-                  105,
-                  95,
-                  97,
-                  99,
-                  99,
-                  111,
-                  117,
-                  110,
-                  116
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "group"
-              },
-              {
-                "kind": "account",
-                "path": "newAuthority"
-              },
-              {
-                "kind": "arg",
-                "path": "accountIndex"
-              },
-              {
-                "kind": "arg",
-                "path": "third_party_id.unwrap_or(0)"
-              }
-            ]
-          }
-        },
-        {
-          "name": "authority",
-          "writable": true,
-          "signer": true,
-          "relations": [
-            "oldMarginfiAccount"
-          ]
-        },
-        {
-          "name": "newAuthority"
-        },
-        {
-          "name": "globalFeeWallet",
-          "writable": true
-        },
-        {
-          "name": "instructionsSysvar",
-          "docs": [
-            "Instructions sysvar for CPI validation"
-          ],
-          "address": "Sysvar1nstructions1111111111111111111111111"
-        },
-        {
-          "name": "systemProgram",
-          "address": "11111111111111111111111111111111"
-        }
-      ],
-      "args": [
-        {
-          "name": "accountIndex",
-          "type": "u16"
-        },
-        {
-          "name": "thirdPartyId",
-          "type": {
-            "option": "u16"
-          }
-        }
-      ]
     }
   ],
   "accounts": [
@@ -4699,19 +4968,6 @@ export type Marginfi = {
       ]
     },
     {
-      "name": "liquidationRecord",
-      "discriminator": [
-        95,
-        116,
-        23,
-        132,
-        89,
-        210,
-        245,
-        162
-      ]
-    },
-    {
       "name": "marginfiAccount",
       "discriminator": [
         67,
@@ -4735,6 +4991,32 @@ export type Marginfi = {
         206,
         182,
         67
+      ]
+    },
+    {
+      "name": "minimalObligation",
+      "discriminator": [
+        168,
+        206,
+        141,
+        106,
+        88,
+        76,
+        172,
+        167
+      ]
+    },
+    {
+      "name": "minimalReserve",
+      "discriminator": [
+        43,
+        242,
+        204,
+        202,
+        26,
+        247,
+        59,
+        127
       ]
     },
     {
@@ -4932,19 +5214,6 @@ export type Marginfi = {
         94,
         10,
         57
-      ]
-    },
-    {
-      "name": "liquidationReceiverEvent",
-      "discriminator": [
-        40,
-        131,
-        224,
-        220,
-        151,
-        83,
-        24,
-        230
       ]
     },
     {
@@ -5278,8 +5547,8 @@ export type Marginfi = {
     },
     {
       "code": 6055,
-      "name": "oracleMaxConfidenceExceeded",
-      "msg": "Oracle max confidence exceeded: try again later"
+      "name": "pythPushMismatchedFeedId",
+      "msg": "Pyth Push oracle: mismatched feed id"
     },
     {
       "code": 6056,
@@ -5288,13 +5557,13 @@ export type Marginfi = {
     },
     {
       "code": 6057,
-      "name": "zeroAssetPrice",
-      "msg": "Zero asset price"
+      "name": "pythPushFeedIdMustBe32Bytes",
+      "msg": "Pyth Push oracle: feed id must be 32 Bytes"
     },
     {
       "code": 6058,
-      "name": "zeroLiabilityPrice",
-      "msg": "Zero liability price"
+      "name": "pythPushFeedIdNonHexCharacter",
+      "msg": "Pyth Push oracle: feed id contains non-hex characters"
     },
     {
       "code": 6059,
@@ -5393,73 +5662,83 @@ export type Marginfi = {
     },
     {
       "code": 6078,
+      "name": "zeroAssetPrice",
+      "msg": "Zero asset price"
+    },
+    {
+      "code": 6079,
+      "name": "zeroLiabilityPrice",
+      "msg": "Zero liability price"
+    },
+    {
+      "code": 6080,
+      "name": "oracleMaxConfidenceExceeded",
+      "msg": "Oracle max confidence exceeded: try again later"
+    },
+    {
+      "code": 6081,
       "name": "bankCannotClose",
       "msg": "Banks cannot close when they have open positions or emissions outstanding"
     },
     {
-      "code": 6079,
-      "name": "accountAlreadyMigrated",
-      "msg": "Account already migrated"
+      "code": 6200,
+      "name": "wrongAssetTagForStandardInstructions",
+      "msg": "Wrong asset tag for standard instructions, expected DEFAULT, SOL, or STAKED asset tag"
     },
     {
-      "code": 6080,
-      "name": "protocolPaused",
-      "msg": "Protocol is paused"
+      "code": 6201,
+      "name": "wrongAssetTagForKaminoInstructions",
+      "msg": "Wrong asset tag for Kamino instructions, expected KAMINO asset tag"
     },
     {
-      "code": 6081,
-      "name": "placeholder81",
-      "msg": "Reserved for future use"
+      "code": 6202,
+      "name": "cantAddPool",
+      "msg": "Cannot create a kamino bank with this instruction, use add_bank_kamino"
     },
     {
-      "code": 6082,
-      "name": "pauseLimitExceeded",
-      "msg": "Pause limit exceeded"
+      "code": 6203,
+      "name": "kaminoReserveMintAddressMismatch",
+      "msg": "Kamino reserve mint address doesn't match the bank mint address"
     },
     {
-      "code": 6083,
-      "name": "protocolNotPaused",
-      "msg": "Protocol is not paused"
+      "code": 6204,
+      "name": "kaminoDepositFailed",
+      "msg": "Deposit failed: obligation deposit amount increase did not match the expected increase, left - actual, right - expected"
     },
     {
-      "code": 6084,
-      "name": "bankKilledByBankruptcy",
-      "msg": "Bank killed by bankruptcy: bank shutdown and value of all holdings is zero"
+      "code": 6205,
+      "name": "kaminoWithdrawFailed",
+      "msg": "Withdraw failed: token vault increase did not match the expected increase, left - actual, right - expected"
     },
     {
-      "code": 6085,
-      "name": "unexpectedLiquidationState",
-      "msg": "Liquidation state issue. Check start before end, end last, and both unique"
+      "code": 6206,
+      "name": "reserveStale",
+      "msg": "Kamino Reserve data is stale - run refresh_reserve on kamino program first"
     },
     {
-      "code": 6086,
-      "name": "startNotFirst",
-      "msg": "Liquidation start must be first instruction (other than compute program ixes)"
+      "code": 6207,
+      "name": "invalidObligationDepositCount",
+      "msg": "Kamino obligation must have exactly one active deposit, at index 0"
     },
     {
-      "code": 6087,
-      "name": "startRepeats",
-      "msg": "Only one liquidation event allowed per tx"
+      "code": 6208,
+      "name": "obligationDepositReserveMismatch",
+      "msg": "Kamino obligation deposit doesn't match the expected reserve"
     },
     {
-      "code": 6088,
-      "name": "endNotLast",
-      "msg": "The end instruction must be the last ix in the tx"
+      "code": 6209,
+      "name": "obligationInitDepositInsufficient",
+      "msg": "Failed to meet minimum deposit amount requirement for init obligation"
     },
     {
-      "code": 6089,
-      "name": "forbiddenIx",
-      "msg": "Tried to call an instruction that is forbidden during liquidation"
+      "code": 6210,
+      "name": "kaminoReserveValidationFailed",
+      "msg": "Kamino reserve validation failed"
     },
     {
-      "code": 6090,
-      "name": "liquidationPremiumTooHigh",
-      "msg": "Seized too much of the asset relative to liability repaid"
-    },
-    {
-      "code": 6091,
-      "name": "notAllowedInCpi",
-      "msg": "Start and end liquidation and flashloan must be top-level instructions"
+      "code": 6211,
+      "name": "kaminoInvalidOracleSetup",
+      "msg": "Invalid oracle setup: only KaminoPythPush and KaminoSwitchboardPull are supported"
     }
   ],
   "types": [
@@ -5594,6 +5873,12 @@ export type Marginfi = {
           },
           {
             "name": "assetShareValue",
+            "docs": [
+              "Monotonically increases as interest rate accumulates. For typical banks, a user's asset",
+              "value in token = (number of shares the user has * asset_share_value).",
+              "* A float (arbitrary decimals)",
+              "* Initially 1"
+            ],
             "type": {
               "defined": {
                 "name": "wrappedI80f48"
@@ -5602,6 +5887,12 @@ export type Marginfi = {
           },
           {
             "name": "liabilityShareValue",
+            "docs": [
+              "Monotonically increases as interest rate accumulates. For typical banks, a user's liabilty",
+              "value in token = (number of shares the user has * liability_share_value)",
+              "* A float (arbitrary decimals)",
+              "* Initially 1"
+            ],
             "type": {
               "defined": {
                 "name": "wrappedI80f48"
@@ -5686,6 +5977,10 @@ export type Marginfi = {
           },
           {
             "name": "totalLiabilityShares",
+            "docs": [
+              "Sum of all liability shares held by all borrowers in this bank.",
+              "* Uses `mint_decimals`"
+            ],
             "type": {
               "defined": {
                 "name": "wrappedI80f48"
@@ -5694,6 +5989,13 @@ export type Marginfi = {
           },
           {
             "name": "totalAssetShares",
+            "docs": [
+              "Sum of all asset shares held by all depositors in this bank.",
+              "* Uses `mint_decimals`",
+              "* For Kamino banks, this is the quantity of collateral tokens (NOT liquidity tokens) in the",
+              "bank, and also uses `mint_decimals`, though the mint itself will always show (6) decimals",
+              "exactly (i.e Kamino ignores this and treats it as if it was using `mint_decimals`)"
+            ],
             "type": {
               "defined": {
                 "name": "wrappedI80f48"
@@ -5720,7 +6022,9 @@ export type Marginfi = {
               "- EMISSIONS_FLAG_BORROW_ACTIVE: 1",
               "- EMISSIONS_FLAG_LENDING_ACTIVE: 2",
               "- PERMISSIONLESS_BAD_DEBT_SETTLEMENT: 4",
-              "- FREEZE_SETTINGS: 8",
+              "- FREEZE_SETTINGS: 8 - banks with this flag enabled can only update deposit/borrow caps",
+              "- CLOSE_ENABLED_FLAG - banks with this flag were created after 0.1.4 and can be closed.",
+              "Banks without this flag can never be closed.",
               ""
             ],
             "type": "u64"
@@ -5771,9 +6075,9 @@ export type Marginfi = {
           {
             "name": "feesDestinationAccount",
             "docs": [
-              "Set with `update_fees_destination_account`. Fees can be withdrawn to the canonical ATA of",
-              "this wallet without the admin's input (withdraw_fees_permissionless). If pubkey default, the",
-              "bank doesn't support this feature, and the fees must be collected manually (withdraw_fees)."
+              "Set with `update_fees_destination_account`. This should be an ATA for the bank's mint. If",
+              "pubkey default, the bank doesn't support this feature, and the fees must be collected",
+              "manually (withdraw_fees)."
             ],
             "type": "pubkey"
           },
@@ -5817,6 +6121,20 @@ export type Marginfi = {
             }
           },
           {
+            "name": "kaminoReserve",
+            "docs": [
+              "Kamino banks only, otherwise Pubkey default"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "kaminoObligation",
+            "docs": [
+              "Kamino banks only, otherwise Pubkey default"
+            ],
+            "type": "pubkey"
+          },
+          {
             "name": "padding1",
             "type": {
               "array": [
@@ -5826,7 +6144,7 @@ export type Marginfi = {
                     2
                   ]
                 },
-                19
+                15
               ]
             }
           }
@@ -5906,6 +6224,9 @@ export type Marginfi = {
     },
     {
       "name": "bankConfig",
+      "docs": [
+        "TODO: Convert weights to (u64, u64) to avoid precision loss (maybe?)"
+      ],
       "repr": {
         "kind": "c"
       },
@@ -5914,9 +6235,6 @@ export type Marginfi = {
         "fields": [
           {
             "name": "assetWeightInit",
-            "docs": [
-              "TODO: Convert weights to (u64, u64) to avoid precision loss (maybe?)"
-            ],
             "type": {
               "defined": {
                 "name": "wrappedI80f48"
@@ -6375,9 +6693,6 @@ export type Marginfi = {
           },
           {
             "name": "reduceOnly"
-          },
-          {
-            "name": "killedByBankruptcy"
           }
         ]
       }
@@ -6538,8 +6853,9 @@ export type Marginfi = {
           {
             "name": "flags",
             "docs": [
-              "EMODE_ON (1) - If set, at least one entry is configured",
-              "2, 4, 8, etc, Reserved for future use"
+              "* EMODE_ON (1) - If set, at least one entry is configured. Never update this flag manually,",
+              "it should always be equivalent to `EmodeConfig.has_entries`",
+              "* 2, 4, 8, etc, Reserved for future use"
             ],
             "type": "u64"
           },
@@ -6584,7 +6900,7 @@ export type Marginfi = {
             "name": "globalFeeWallet",
             "docs": [
               "The base wallet for all protocol fees. All SOL fees go to this wallet. All non-SOL fees go",
-              "to the cannonical ATA of this wallet for that asset."
+              "to the canonical ATA of this wallet for that asset."
             ],
             "type": "pubkey"
           },
@@ -6609,28 +6925,23 @@ export type Marginfi = {
             "type": {
               "array": [
                 "u8",
-                3
+                4
               ]
             }
           },
           {
-            "name": "liquidationMaxFee",
-            "docs": [
-              "Liquidators can claim at this premium, when liquidating an asset in receivership",
-              "liquidation, e.g. (1 + this) * amount repaid <= asset seized",
-              "* A percentage"
-            ],
+            "name": "padding1",
             "type": {
-              "defined": {
-                "name": "wrappedI80f48"
-              }
+              "array": [
+                "u8",
+                15
+              ]
             }
           },
           {
             "name": "programFeeFixed",
             "docs": [
-              "Fee collected by the program owner from all groups",
-              "* A percentage"
+              "Fee collected by the program owner from all groups"
             ],
             "type": {
               "defined": {
@@ -6641,8 +6952,7 @@ export type Marginfi = {
           {
             "name": "programFeeRate",
             "docs": [
-              "Fee collected by the program owner from all groups",
-              "* A percentage"
+              "Fee collected by the program owner from all groups"
             ],
             "type": {
               "defined": {
@@ -6651,35 +6961,11 @@ export type Marginfi = {
             }
           },
           {
-            "name": "panicState",
-            "docs": [
-              "When the global admin pauses the protocol in the event of an emergency, information about",
-              "the pause duration will be stored here and propagated to groups."
-            ],
-            "type": {
-              "defined": {
-                "name": "panicState"
-              }
-            }
-          },
-          {
-            "name": "placeholder1",
-            "type": "u64"
-          },
-          {
-            "name": "liquidationFlatSolFee",
-            "docs": [
-              "Flat fee assessed for insurance/program use when a liquidation is executed",
-              "* In SOL, in native decimals."
-            ],
-            "type": "u32"
-          },
-          {
             "name": "reserved0",
             "type": {
               "array": [
                 "u8",
-                20
+                32
               ]
             }
           },
@@ -6688,7 +6974,7 @@ export type Marginfi = {
             "type": {
               "array": [
                 "u8",
-                32
+                64
               ]
             }
           }
@@ -7258,6 +7544,100 @@ export type Marginfi = {
       }
     },
     {
+      "name": "kaminoConfigCompact",
+      "docs": [
+        "Used to configure Kamino banks. A simplified version of `BankConfigCompact` which omits most",
+        "values related to interest since Kamino banks cannot earn interest or be borrowed against."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "oracle",
+            "type": "pubkey"
+          },
+          {
+            "name": "assetWeightInit",
+            "type": {
+              "defined": {
+                "name": "wrappedI80f48"
+              }
+            }
+          },
+          {
+            "name": "assetWeightMaint",
+            "type": {
+              "defined": {
+                "name": "wrappedI80f48"
+              }
+            }
+          },
+          {
+            "name": "depositLimit",
+            "type": "u64"
+          },
+          {
+            "name": "oracleSetup",
+            "docs": [
+              "Either `KaminoPythPush` or `KaminoSwitchboardPull`"
+            ],
+            "type": {
+              "defined": {
+                "name": "oracleSetup"
+              }
+            }
+          },
+          {
+            "name": "operationalState",
+            "docs": [
+              "Bank operational state - allows starting banks in paused state"
+            ],
+            "type": {
+              "defined": {
+                "name": "bankOperationalState"
+              }
+            }
+          },
+          {
+            "name": "riskTier",
+            "docs": [
+              "Risk tier - determines if assets can be borrowed in isolation"
+            ],
+            "type": {
+              "defined": {
+                "name": "riskTier"
+              }
+            }
+          },
+          {
+            "name": "configFlags",
+            "docs": [
+              "Config flags for future-proofing"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "totalAssetValueInitLimit",
+            "type": "u64"
+          },
+          {
+            "name": "oracleMaxAge",
+            "docs": [
+              "Currently unused: Kamino's oracle age applies to kamino banks."
+            ],
+            "type": "u16"
+          },
+          {
+            "name": "oracleMaxConfidence",
+            "docs": [
+              "Oracle confidence threshold (0 = use default 10%)"
+            ],
+            "type": "u32"
+          }
+        ]
+      }
+    },
+    {
       "name": "lendingAccount",
       "repr": {
         "kind": "c"
@@ -7727,269 +8107,6 @@ export type Marginfi = {
       }
     },
     {
-      "name": "liquidationCache",
-      "serialization": "bytemuck",
-      "repr": {
-        "kind": "c"
-      },
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "assetValueMaint",
-            "docs": [
-              "Internal risk engine asset value snapshot taken when liquidation begins, using maintenance",
-              "weight with all confidence adjustments.",
-              "* Uses SPOT price",
-              "* In dollars"
-            ],
-            "type": {
-              "defined": {
-                "name": "wrappedI80f48"
-              }
-            }
-          },
-          {
-            "name": "liabilityValueMaint",
-            "docs": [
-              "Internal risk engine liability value snapshot taken when liquidation begins, using",
-              "maintenance weight with all confidence adjustments.",
-              "* Uses SPOT price",
-              "* In dollars"
-            ],
-            "type": {
-              "defined": {
-                "name": "wrappedI80f48"
-              }
-            }
-          },
-          {
-            "name": "assetValueEquity",
-            "docs": [
-              "Actual cash value of assets pre-liquidation (inclusive of price adjustment for oracle",
-              "confidence, but without any weights)",
-              "* Liquidator is allowed to seize up to `liability_value_equity` - this amount",
-              "* Uses EMA price",
-              "* In dollars"
-            ],
-            "type": {
-              "defined": {
-                "name": "wrappedI80f48"
-              }
-            }
-          },
-          {
-            "name": "liabilityValueEquity",
-            "docs": [
-              "Actual cash value of liabilities pre-liquidation (inclusive of price adjustment for oracle",
-              "confidence, but without any weights)",
-              "* Liquidator is allowed to seize up to this amount - `asset_value_equity`",
-              "* Uses EMA price",
-              "* In dollars"
-            ],
-            "type": {
-              "defined": {
-                "name": "wrappedI80f48"
-              }
-            }
-          },
-          {
-            "name": "placeholder",
-            "type": "u64"
-          },
-          {
-            "name": "reserved0",
-            "type": {
-              "array": [
-                "u8",
-                32
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "liquidationEntry",
-      "docs": [
-        "Used to record key details of the last few liquidation events on the account"
-      ],
-      "serialization": "bytemuck",
-      "repr": {
-        "kind": "c"
-      },
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "assetAmountSeized",
-            "docs": [
-              "Dollar amount seized",
-              "* An f64 stored as bytes"
-            ],
-            "type": {
-              "array": [
-                "u8",
-                8
-              ]
-            }
-          },
-          {
-            "name": "liabAmountRepaid",
-            "docs": [
-              "Dollar amount repaid",
-              "* An f64 stored as bytes"
-            ],
-            "type": {
-              "array": [
-                "u8",
-                8
-              ]
-            }
-          },
-          {
-            "name": "placeholder0",
-            "type": "u64"
-          },
-          {
-            "name": "timestamp",
-            "type": "i64"
-          },
-          {
-            "name": "reserved0",
-            "type": {
-              "array": [
-                "u8",
-                16
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "liquidationReceiverEvent",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "marginfiAccount",
-            "type": "pubkey"
-          },
-          {
-            "name": "liquidationReceiver",
-            "type": "pubkey"
-          },
-          {
-            "name": "liquidateeAssetsSeized",
-            "type": "f64"
-          },
-          {
-            "name": "liquidateeLiabilityRepaid",
-            "type": "f64"
-          },
-          {
-            "name": "lampsFeePaid",
-            "type": "u32"
-          }
-        ]
-      }
-    },
-    {
-      "name": "liquidationRecord",
-      "serialization": "bytemuck",
-      "repr": {
-        "kind": "c"
-      },
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "key",
-            "docs": [
-              "This account's own key. A PDA derived from `marginfi_account`"
-            ],
-            "type": "pubkey"
-          },
-          {
-            "name": "marginfiAccount",
-            "docs": [
-              "Account this record tracks"
-            ],
-            "type": "pubkey"
-          },
-          {
-            "name": "recordPayer",
-            "docs": [
-              "The key that paid to create this account. At some point, we may allow this wallet to reclaim",
-              "the rent paid to open a record."
-            ],
-            "type": "pubkey"
-          },
-          {
-            "name": "liquidationReceiver",
-            "docs": [
-              "The liquidator taking receivership of the `marginfi_account` to complete a liquidation. Pays",
-              "the liquidation fee.",
-              "* Always pubkey default unless actively within a liquidation event."
-            ],
-            "type": "pubkey"
-          },
-          {
-            "name": "entries",
-            "docs": [
-              "Basic historical data for the last few liquidation events on this account"
-            ],
-            "type": {
-              "array": [
-                {
-                  "defined": {
-                    "name": "liquidationEntry"
-                  }
-                },
-                4
-              ]
-            }
-          },
-          {
-            "name": "cache",
-            "type": {
-              "defined": {
-                "name": "liquidationCache"
-              }
-            }
-          },
-          {
-            "name": "reserved0",
-            "type": {
-              "array": [
-                "u8",
-                64
-              ]
-            }
-          },
-          {
-            "name": "reserved2",
-            "type": {
-              "array": [
-                "u8",
-                16
-              ]
-            }
-          },
-          {
-            "name": "reserved3",
-            "type": {
-              "array": [
-                "u8",
-                8
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
       "name": "marginfiAccount",
       "serialization": "bytemuck",
       "repr": {
@@ -8026,11 +8143,8 @@ export type Marginfi = {
               "- 2: `ACCOUNT_IN_FLASHLOAN` - Only set when an account is within a flash loan, e.g. when",
               "start_flashloan is called, then unset when the flashloan ends.",
               "- 4: `ACCOUNT_FLAG_DEPRECATED` - Deprecated, available for future use",
-              "- 8: `ACCOUNT_TRANSFER_AUTHORITY_DEPRECATED` - the admin has flagged with account to be",
-              "moved, original owner can now call `set_account_transfer_authority`",
-              "- 16: `ACCOUNT_IN_RECEIVERSHIP` - the account is eligible to be liquidated and has entered",
-              "receivership, a liquidator is able to control borrows and withdraws until the end of the",
-              "tx. This flag will only appear within a tx."
+              "- 8: `ACCOUNT_TRANSFER_AUTHORITY_ALLOWED` - the admin has flagged with account to be moved,",
+              "original owner can now call `set_account_transfer_authority`"
             ],
             "type": "u64"
           },
@@ -8038,9 +8152,16 @@ export type Marginfi = {
             "name": "emissionsDestinationAccount",
             "docs": [
               "Set with `update_emissions_destination_account`. Emissions rewards can be withdrawn to the",
-              "cannonical ATA of this wallet without the user's input (withdraw_emissions_permissionless).",
+              "canonical ATA of this wallet without the user's input (withdraw_emissions_permissionless).",
               "If pubkey default, the user has not opted into this feature, and must claim emissions",
               "manually (withdraw_emissions)."
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "migratedFrom",
+            "docs": [
+              "If this account was migrated from another one, store the original account key"
             ],
             "type": "pubkey"
           },
@@ -8053,77 +8174,11 @@ export type Marginfi = {
             }
           },
           {
-            "name": "migratedFrom",
-            "docs": [
-              "If this account was migrated from another one, store the original account key"
-            ],
-            "type": "pubkey"
-          },
-          {
-            "name": "migratedTo",
-            "docs": [
-              "If this account has been migrated to another one, store the destination account key"
-            ],
-            "type": "pubkey"
-          },
-          {
-            "name": "lastUpdate",
-            "type": "u64"
-          },
-          {
-            "name": "accountIndex",
-            "docs": [
-              "If a PDA-based account, the account index, a seed used to derive the PDA that can be chosen",
-              "arbitrarily (0.1.5 or later). Otherwise, does nothing."
-            ],
-            "type": "u16"
-          },
-          {
-            "name": "thirdPartyIndex",
-            "docs": [
-              "If a PDA-based account (0.1.5 or later), a \"vendor specific\" id. Values < PDA_FREE_THRESHOLD",
-              "can be used by anyone with no restrictions. Values >= PDA_FREE_THRESHOLD can only be used by",
-              "a particular program via CPI. These values require being added to a list, contact us for",
-              "more details. For legacy non-pda accounts, does nothing.",
-              "",
-              "Note: use a unique seed to tag accounts related to some particular program or campaign so",
-              "you can easily fetch them all later."
-            ],
-            "type": "u16"
-          },
-          {
-            "name": "bump",
-            "docs": [
-              "This account's bump, if a PDA-based account (0.1.5 or later). Otherwise, does nothing."
-            ],
-            "type": "u8"
-          },
-          {
-            "name": "pad0",
-            "type": {
-              "array": [
-                "u8",
-                3
-              ]
-            }
-          },
-          {
-            "name": "liquidationRecord",
-            "docs": [
-              "Stores information related to liquidations made against this account. A pda of this",
-              "account's key, and \"liq_record\"",
-              "* Typically pubkey default if this account has never been liquidated or close to liquidation",
-              "* Opening this account is permissionless. Typically the liquidator pays, but e.g. we may",
-              "also charge the user if they are opening a risky position on the front end."
-            ],
-            "type": "pubkey"
-          },
-          {
             "name": "padding0",
             "type": {
               "array": [
                 "u64",
-                7
+                17
               ]
             }
           }
@@ -8196,7 +8251,7 @@ export type Marginfi = {
               "Bitmask for group settings flags.",
               "* 0: `PROGRAM_FEES_ENABLED` If set, program-level fees are enabled.",
               "* 1: `ARENA_GROUP` If set, this is an arena group, which can only have two banks",
-              "* Bits 2-63: Reserved for future use."
+              "* Bits 1-63: Reserved for future use."
             ],
             "type": "u64"
           },
@@ -8235,6 +8290,10 @@ export type Marginfi = {
           },
           {
             "name": "delegateCurveAdmin",
+            "docs": [
+              "Can modify the fields in `config.interest_rate_config` but nothing else, for every bank under",
+              "this group"
+            ],
             "type": "pubkey"
           },
           {
@@ -8254,18 +8313,6 @@ export type Marginfi = {
             "type": "pubkey"
           },
           {
-            "name": "panicStateCache",
-            "docs": [
-              "When program keeper temporarily puts the program into panic mode, information about the",
-              "duration of the lockup will be available here."
-            ],
-            "type": {
-              "defined": {
-                "name": "panicStateCache"
-              }
-            }
-          },
-          {
             "name": "padding0",
             "type": {
               "array": [
@@ -8275,7 +8322,7 @@ export type Marginfi = {
                     2
                   ]
                 },
-                17
+                18
               ]
             }
           },
@@ -8292,6 +8339,10 @@ export type Marginfi = {
                 32
               ]
             }
+          },
+          {
+            "name": "padding4",
+            "type": "u64"
           }
         ]
       }
@@ -8337,6 +8388,587 @@ export type Marginfi = {
       }
     },
     {
+      "name": "minimalObligation",
+      "docs": [
+        "A minimal copy of Kamino's Obligation for zero-copy deserialization"
+      ],
+      "serialization": "bytemuck",
+      "repr": {
+        "kind": "c"
+      },
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "tag",
+            "type": "u64"
+          },
+          {
+            "name": "lastUpdateSlot",
+            "docs": [
+              "Kamino obligations are only good for one slot, e.g. `refresh_obligation` must have run within the",
+              "same slot as any ix that needs a non-stale obligation e.g. withdraw."
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "lastUpdateStale",
+            "docs": [
+              "True if the obligation is stale, which will cause various ixes like withdraw to fail. Typically",
+              "set to true in any tx that modifies obligation balance, and set to false at the end of a",
+              "successful `refresh_obligation`",
+              "* 0 = false, 1 = true"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "lastUpdatePriceStatus",
+            "docs": [
+              "Each bit represents a passed check in price status.",
+              "* 63 = all checks passed",
+              "",
+              "Otherwise:",
+              "* PRICE_LOADED =        0b_0000_0001; // 1",
+              "* PRICE_AGE_CHECKED =   0b_0000_0010; // 2",
+              "* TWAP_CHECKED =        0b_0000_0100; // 4",
+              "* TWAP_AGE_CHECKED =    0b_0000_1000; // 8",
+              "* HEURISTIC_CHECKED =   0b_0001_0000; // 16",
+              "* PRICE_USAGE_ALLOWED = 0b_0010_0000; // 32"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "lastUpdatePlaceholder",
+            "type": {
+              "array": [
+                "u8",
+                6
+              ]
+            }
+          },
+          {
+            "name": "lendingMarket",
+            "type": "pubkey"
+          },
+          {
+            "name": "owner",
+            "docs": [
+              "For mrgn banks, the bank's Liquidity Vault Authority (a pda which can be derived if the bank",
+              "key is known)"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "deposits",
+            "type": {
+              "array": [
+                {
+                  "defined": {
+                    "name": "minimalObligationCollateral"
+                  }
+                },
+                8
+              ]
+            }
+          },
+          {
+            "name": "lowestReserveDepositLiquidationLtv",
+            "type": "u64"
+          },
+          {
+            "name": "depositedValueSf",
+            "type": {
+              "array": [
+                "u8",
+                16
+              ]
+            }
+          },
+          {
+            "name": "paddingPart1",
+            "type": {
+              "array": [
+                "u8",
+                512
+              ]
+            }
+          },
+          {
+            "name": "paddingPart2",
+            "type": {
+              "array": [
+                "u8",
+                512
+              ]
+            }
+          },
+          {
+            "name": "paddingPart3",
+            "type": {
+              "array": [
+                "u8",
+                512
+              ]
+            }
+          },
+          {
+            "name": "paddingPart4",
+            "type": {
+              "array": [
+                "u8",
+                512
+              ]
+            }
+          },
+          {
+            "name": "paddingPart5a",
+            "type": {
+              "array": [
+                "u8",
+                64
+              ]
+            }
+          },
+          {
+            "name": "paddingPart5c",
+            "type": {
+              "array": [
+                "u8",
+                24
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "minimalObligationCollateral",
+      "serialization": "bytemuck",
+      "repr": {
+        "kind": "c"
+      },
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "depositReserve",
+            "type": "pubkey"
+          },
+          {
+            "name": "depositedAmount",
+            "docs": [
+              "In collateral token (NOT liquidity token), use `collateral_to_liquidity` to convert back to",
+              "liquidity token!",
+              "* Always 6 decimals"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "marketValueSf",
+            "docs": [
+              "* In dollars, based on last oracle price update",
+              "* Actually an I68F60, stored as a u128 (i.e. BN) in Kamino.",
+              "* A float (arbitrary decimals)"
+            ],
+            "type": {
+              "array": [
+                "u8",
+                16
+              ]
+            }
+          },
+          {
+            "name": "borrowedAmountAgainstThisCollateralInElevationGroup",
+            "type": "u64"
+          },
+          {
+            "name": "padding",
+            "type": {
+              "array": [
+                "u64",
+                9
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "minimalReserve",
+      "serialization": "bytemuck",
+      "repr": {
+        "kind": "c"
+      },
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "version",
+            "type": "u64"
+          },
+          {
+            "name": "slot",
+            "docs": [
+              "Kamino reserves are only good for one slot, e.g. `refresh_reserve` must have run within the",
+              "same slot as any ix that needs a non-stale reserve e.g. withdraw."
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "stale",
+            "docs": [
+              "True if the reserve is stale, which will cause various ixes like withdraw to fail. Typically",
+              "set to true in any tx that modifies reserve balance, and set to false at the end of a",
+              "successful `refresh_reserve`",
+              "* 0 = false, 1 = true"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "priceStatus",
+            "docs": [
+              "Each bit represents a passed check in price status.",
+              "* 63 = all checks passed",
+              "",
+              "Otherwise:",
+              "* PRICE_LOADED =        0b_0000_0001; // 1",
+              "* PRICE_AGE_CHECKED =   0b_0000_0010; // 2",
+              "* TWAP_CHECKED =        0b_0000_0100; // 4",
+              "* TWAP_AGE_CHECKED =    0b_0000_1000; // 8",
+              "* HEURISTIC_CHECKED =   0b_0001_0000; // 16",
+              "* PRICE_USAGE_ALLOWED = 0b_0010_0000; // 32"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "placeholder",
+            "type": {
+              "array": [
+                "u8",
+                6
+              ]
+            }
+          },
+          {
+            "name": "lendingMarket",
+            "type": "pubkey"
+          },
+          {
+            "name": "farmCollateral",
+            "type": "pubkey"
+          },
+          {
+            "name": "farmDebt",
+            "type": "pubkey"
+          },
+          {
+            "name": "mintPubkey",
+            "type": "pubkey"
+          },
+          {
+            "name": "supplyVault",
+            "docs": [
+              "* A PDA"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "feeVault",
+            "docs": [
+              "* A PDA"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "availableAmount",
+            "docs": [
+              "In simple terms: (amount in supply vault - outstanding borrows)",
+              "* In token, with `mint_decimals`"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "borrowedAmountSf",
+            "docs": [
+              "* In token, with `mint_decimals`",
+              "* Actually an I68F60, stored as a u128 (i.e. BN) in Kamino."
+            ],
+            "type": {
+              "array": [
+                "u8",
+                16
+              ]
+            }
+          },
+          {
+            "name": "marketPriceSf",
+            "docs": [
+              "* Actually an I68F60, stored as a u128 (i.e. BN) in Kamino."
+            ],
+            "type": {
+              "array": [
+                "u8",
+                16
+              ]
+            }
+          },
+          {
+            "name": "marketPriceLastUpdatedTs",
+            "type": "u64"
+          },
+          {
+            "name": "mintDecimals",
+            "type": "u64"
+          },
+          {
+            "name": "depositLimitCrossedTimestamp",
+            "type": "u64"
+          },
+          {
+            "name": "borrowLimitCrossedTimestamp",
+            "type": "u64"
+          },
+          {
+            "name": "cumulativeBorrowRateBsf",
+            "type": {
+              "array": [
+                "u8",
+                48
+              ]
+            }
+          },
+          {
+            "name": "accumulatedProtocolFeesSf",
+            "docs": [
+              "* In token, with `mint_decimals`",
+              "* Actually an I68F60, stored as a u128 (i.e. BN) in Kamino."
+            ],
+            "type": {
+              "array": [
+                "u8",
+                16
+              ]
+            }
+          },
+          {
+            "name": "accumulatedReferrerFeesSf",
+            "docs": [
+              "* In token, with `mint_decimals`",
+              "* Actually an I68F60, stored as a u128 (i.e. BN) in Kamino."
+            ],
+            "type": {
+              "array": [
+                "u8",
+                16
+              ]
+            }
+          },
+          {
+            "name": "pendingReferrerFeesSf",
+            "docs": [
+              "* In token, with `mint_decimals`",
+              "* Actually an I68F60, stored as a u128 (i.e. BN) in Kamino."
+            ],
+            "type": {
+              "array": [
+                "u8",
+                16
+              ]
+            }
+          },
+          {
+            "name": "absoluteReferralRateSf",
+            "docs": [
+              "* In token, with `mint_decimals`",
+              "* Actually an I68F60, stored as a u128 (i.e. BN) in Kamino."
+            ],
+            "type": {
+              "array": [
+                "u8",
+                16
+              ]
+            }
+          },
+          {
+            "name": "tokenProgram",
+            "docs": [
+              "Token or Token22. If token22, note that Kamino does not support all Token22 extensions."
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "padding2Part1",
+            "type": {
+              "array": [
+                "u8",
+                256
+              ]
+            }
+          },
+          {
+            "name": "padding2Part2",
+            "type": {
+              "array": [
+                "u8",
+                128
+              ]
+            }
+          },
+          {
+            "name": "padding2Part3",
+            "type": {
+              "array": [
+                "u8",
+                24
+              ]
+            }
+          },
+          {
+            "name": "padding3",
+            "type": {
+              "array": [
+                "u8",
+                512
+              ]
+            }
+          },
+          {
+            "name": "paddingPart1",
+            "type": {
+              "array": [
+                "u8",
+                512
+              ]
+            }
+          },
+          {
+            "name": "paddingPart2",
+            "type": {
+              "array": [
+                "u8",
+                512
+              ]
+            }
+          },
+          {
+            "name": "paddingPart3",
+            "type": {
+              "array": [
+                "u8",
+                128
+              ]
+            }
+          },
+          {
+            "name": "paddingPart4",
+            "type": {
+              "array": [
+                "u8",
+                48
+              ]
+            }
+          },
+          {
+            "name": "collateralMintPubkey",
+            "docs": [
+              "Mints collateral tokens",
+              "* A PDA",
+              "* technically 6 decimals, but uses `mint_decimals` regardless for all purposes",
+              "* authority = lending_market_authority"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "mintTotalSupply",
+            "docs": [
+              "Total number of collateral tokens",
+              "* uses `mint_decimals`, even though it's technically 6 decimals under the hood"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "collateralSupplyVault",
+            "docs": [
+              "* A PDA"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "padding1ReserveCollateral",
+            "type": {
+              "array": [
+                "u8",
+                512
+              ]
+            }
+          },
+          {
+            "name": "padding2ReserveCollateral",
+            "type": {
+              "array": [
+                "u8",
+                512
+              ]
+            }
+          },
+          {
+            "name": "padding4Part1",
+            "type": {
+              "array": [
+                "u8",
+                4096
+              ]
+            }
+          },
+          {
+            "name": "padding4Part2",
+            "type": {
+              "array": [
+                "u8",
+                512
+              ]
+            }
+          },
+          {
+            "name": "padding4Part3",
+            "type": {
+              "array": [
+                "u8",
+                256
+              ]
+            }
+          },
+          {
+            "name": "padding4Part4",
+            "type": {
+              "array": [
+                "u8",
+                64
+              ]
+            }
+          },
+          {
+            "name": "padding4Part5",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "padding4Part6",
+            "type": {
+              "array": [
+                "u8",
+                8
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
       "name": "oracleSetup",
       "repr": {
         "kind": "rust"
@@ -8361,121 +8993,12 @@ export type Marginfi = {
           },
           {
             "name": "stakedWithPythPush"
-          }
-        ]
-      }
-    },
-    {
-      "name": "panicState",
-      "docs": [
-        "Panic state for emergency protocol pausing"
-      ],
-      "repr": {
-        "kind": "c"
-      },
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "pauseFlags",
-            "docs": [
-              "Whether the protocol is currently paused (1 = paused, 0 = not paused)"
-            ],
-            "type": "u8"
           },
           {
-            "name": "dailyPauseCount",
-            "docs": [
-              "Number of times paused today (resets every 24 hours)"
-            ],
-            "type": "u8"
+            "name": "kaminoPythPush"
           },
           {
-            "name": "consecutivePauseCount",
-            "docs": [
-              "Number of consecutive pauses (resets when unpause happens)"
-            ],
-            "type": "u8"
-          },
-          {
-            "name": "reserved",
-            "type": {
-              "array": [
-                "u8",
-                5
-              ]
-            }
-          },
-          {
-            "name": "pauseStartTimestamp",
-            "docs": [
-              "Timestamp when the current pause started (0 if not paused)",
-              "* When a pause is extended before expiring, this could be in the future."
-            ],
-            "type": "i64"
-          },
-          {
-            "name": "lastDailyResetTimestamp",
-            "docs": [
-              "Timestamp of the last daily reset (for tracking daily pause count)"
-            ],
-            "type": "i64"
-          },
-          {
-            "name": "reservedSpace",
-            "docs": [
-              "Reserved for future use (making total struct 32 bytes)"
-            ],
-            "type": {
-              "array": [
-                "u8",
-                8
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "panicStateCache",
-      "docs": [
-        "Cached panic state information for fast checking during user operations"
-      ],
-      "repr": {
-        "kind": "c"
-      },
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "pauseFlags",
-            "docs": [
-              "Whether the protocol is currently paused (1 = paused, 0 = not paused)"
-            ],
-            "type": "u8"
-          },
-          {
-            "name": "reserved",
-            "type": {
-              "array": [
-                "u8",
-                7
-              ]
-            }
-          },
-          {
-            "name": "pauseStartTimestamp",
-            "docs": [
-              "Timestamp when the current pause started (0 if not paused)"
-            ],
-            "type": "i64"
-          },
-          {
-            "name": "lastCacheUpdate",
-            "docs": [
-              "Timestamp when this cache was last updated"
-            ],
-            "type": "i64"
+            "name": "kaminoSwitchboardPull"
           }
         ]
       }

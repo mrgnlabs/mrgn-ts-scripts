@@ -6,20 +6,32 @@ import {
   VersionedTransaction,
 } from "@solana/web3.js";
 import { Program, AnchorProvider, Wallet, type Idl } from "@coral-xyz/anchor";
+
+import { KaminoLending } from "../../idl/kamino_lending";
+import KaminoLendingIdl from "../../idl/kamino_lending.json";
+
 import { Marginfi as MarginfiCurrent } from "../../idl/marginfi";
-import { Marginfi as MarginfiV1_3 } from "../../idl/marginfi1.3";
 import marginfiIdlCurrent from "../../idl/marginfi.json";
+
+import { Marginfi as Marginfi_Kamino } from "../../idl/marginfi_kamino";
+import marginfiIdl_Kamino from "../../idl/marginfi_kamino.json";
+
+import { Marginfi as MarginfiV1_4 } from "../../idl/marginfi1.4";
+import marginfiIdlV1_4 from "../../idl/marginfi1.4.json";
+
+import { Marginfi as MarginfiV1_3 } from "../../idl/marginfi1.3";
 import marginfiIdlV1_3 from "../../idl/marginfi1.3.json";
 
 // Only env vars prefixed with VITE_ are exposed to the client
 const DEFAULT_API_URL = "https://api.mainnet-beta.solana.com";
 
-const idlMap: Record<"current" | "1.3", Idl> = {
+const idlMap: Record<"current" | "1.3" | "1.4", Idl> = {
   current: marginfiIdlCurrent as Idl,
+  "1.4": marginfiIdlV1_4 as Idl,
   "1.3": marginfiIdlV1_3 as Idl,
 };
 
-type Version = "current" | "1.3";
+type Version = "current" | "1.3" | "1.4";
 
 /**
  * Browser-friendly setup for Anchor + Solana.
@@ -48,6 +60,13 @@ export function commonSetupBrowser(
   if (version === "1.3") {
     return {
       program: new Program<MarginfiV1_3>(idl as any, provider),
+      wallet,
+      provider,
+      connection,
+    };
+  } else if (version === "1.4") {
+    return {
+      program: new Program<MarginfiV1_4>(idl as any, provider),
       wallet,
       provider,
       connection,
