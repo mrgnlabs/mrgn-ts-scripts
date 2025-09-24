@@ -32,3 +32,26 @@ export const formatTokenAmount = (
       groupSize: 3,
     });
 };
+
+export const formatTokenAmountFixed = (
+  raw: bigint,
+  decimals: number,
+  fractionDigits = 4,
+): string => {
+  if (fractionDigits < 0) {
+    throw new Error("fractionDigits must be non-negative");
+  }
+
+  if (raw === 0n) {
+    return `0.${"0".repeat(fractionDigits)}`;
+  }
+
+  const divisor = decimals > 0 ? new BigNumber(10).pow(decimals) : new BigNumber(1);
+  const normalized = new BigNumber(raw.toString()).dividedBy(divisor);
+
+  return normalized.toFormat(fractionDigits, BigNumber.ROUND_DOWN, {
+    groupSeparator: ",",
+    decimalSeparator: ".",
+    groupSize: 3,
+  });
+};
