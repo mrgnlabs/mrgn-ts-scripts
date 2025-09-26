@@ -7,11 +7,10 @@ import {
 import type { WrappedI80F48 } from "@mrgnlabs/mrgn-common";
 import BigNumber from "bignumber.js";
 import { commonSetup } from "../lib/common-setup";
-import { Program } from "@coral-xyz/anchor";
 import { getTokenBalance } from "../lib/utils";
 
 // If true, prints this bank's settings in a format to be copy-pasted into add_bank
-const printForCopy = true;
+const printForCopy = false;
 
 type Config = {
   PROGRAM_ID: string;

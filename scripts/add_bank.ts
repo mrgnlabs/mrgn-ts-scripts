@@ -46,11 +46,11 @@ type Config = {
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
   GROUP_KEY: new PublicKey("4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8"),
-  ORACLE: new PublicKey("Fj9o7sui5XCwCPYErLCcyf1hsdqExRg84f3YaydJxFiH"),
+  ORACLE: new PublicKey("j8RP5LnubZh6VD6eJk1zguGpKkpYrCWvTEmtBosUadR"),
   ORACLE_TYPE: ORACLE_TYPE_SWB,
   ADMIN: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
   FEE_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
-  BANK_MINT: new PublicKey("picobAEvs6w7QEknPce34wAE4gknZA9v5tTonnmHYdX"),
+  BANK_MINT: new PublicKey("EPCz5LK372vmvCkZH3HgSuGNKACJJwwxsofW6fypCPZL"),
   SEED: 0,
   TOKEN_PROGRAM: TOKEN_PROGRAM_ID,
   MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
@@ -88,7 +88,7 @@ async function main() {
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
-    "/keys/staging-deploy.json",
+    "/keys/staging-admin.json",
     config.MULTISIG_PAYER,
     "1.4"
   );
