@@ -1,101 +1,103 @@
 import {
+  AccountMeta,
+  ComputeBudgetProgram,
   PublicKey,
-  SystemProgram,
   Transaction,
   sendAndConfirmTransaction,
 } from "@solana/web3.js";
 import { BN } from "@coral-xyz/anchor";
-import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
 import {
-  createAssociatedTokenAccountIdempotentInstruction,
-  createSyncNativeInstruction,
   getAssociatedTokenAddressSync,
 } from "@mrgnlabs/mrgn-common";
 import { commonSetup } from "../lib/common-setup";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
+import { TOKEN_2022_PROGRAM_ID } from "@solana/spl-token";
 
 const sendTx = true;
 
 type Config = {
   PROGRAM_ID: string;
-  GROUP: PublicKey;
   ACCOUNT: PublicKey;
-  ACCOUNT_AUTHORITY: PublicKey;
   BANK: PublicKey;
   MINT: PublicKey;
   /** In native decimals */
   AMOUNT: BN;
+  REPAY_ALL: boolean;
+  ADD_COMPUTE_UNITS: boolean;
 
+  // Optional, omit if not using MS.
   MULTISIG?: PublicKey;
 };
 
 const config: Config = {
   PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-  GROUP: new PublicKey("FCPfpHA69EbS8f9KKSreTRkXbzFpunsKuYf5qNmnJjpo"),
-  ACCOUNT: new PublicKey("9oeseTmNecAoyLbA5j4UsRdUe53ajn9W1goRpEocYHbv"),
-  ACCOUNT_AUTHORITY: new PublicKey(
-    "H4QMTHMVbJ3KrB5bz573cBBZKoYSZ2B4mSST1JKzPUrH"
-  ),
-  BANK: new PublicKey("Ds4ZD4M1rLjo4anQnkhCRU9tkmjzx9AsmMkPdPCo4U1t"),
+  ACCOUNT: new PublicKey("8HwNc1W9YUydGWLFiyahwrUAWz5yuW7gSiPHaU6sSFSr"),
+  BANK: new PublicKey("64NtNrDgwY4U8ktazsPMNSBNdwjeFgxauqxi9f6u9ym8"),
   MINT: new PublicKey("DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263"),
-  AMOUNT: new BN(0.001 * 10 ** 5),
-
-  // Not required if sending without multisig.
-  MULTISIG: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
+  AMOUNT: new BN(10 * 10 ** 6),
+  REPAY_ALL: true,
+  ADD_COMPUTE_UNITS: false,
 };
 
 async function main() {
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
-    "/keys/phantom-wallet.json",
+    "/keys/staging-deploy.json",
     config.MULTISIG,
     "current"
   );
   const program = user.program;
   const connection = user.connection;
 
+  let mintAccInfo = await connection.getAccountInfo(config.MINT);
+  const tokenProgram = mintAccInfo.owner;
+  let isT22 = tokenProgram.toString() == TOKEN_2022_PROGRAM_ID.toString();
+
+  let meta: AccountMeta[] = [];
+
+  if (isT22) {
+    const m: AccountMeta = {
+      pubkey: config.MINT,
+      isSigner: false,
+      isWritable: false,
+    };
+    // must be pushed first in the array
+    meta.unshift(m);
+  }
+
   const ata = getAssociatedTokenAddressSync(
     config.MINT,
     user.wallet.publicKey,
-    true
+    true,
+    tokenProgram
   );
-
   const transaction = new Transaction();
-  transaction.add(
-    createAssociatedTokenAccountIdempotentInstruction(
-      user.wallet.publicKey,
-      ata,
-      user.wallet.publicKey,
-      config.MINT
-    )
-  );
-  if (config.MINT.toString() == "So11111111111111111111111111111111111111112") {
+
+  if (config.ADD_COMPUTE_UNITS) {
     transaction.add(
-      SystemProgram.transfer({
-        fromPubkey: user.wallet.publicKey,
-        toPubkey: ata,
-        lamports: config.AMOUNT.toNumber(),
-      })
+      ComputeBudgetProgram.setComputeUnitPrice({ microLamports: 100_000 })
     );
-    transaction.add(createSyncNativeInstruction(ata));
+    transaction.add(
+      ComputeBudgetProgram.setComputeUnitLimit({ units: 1_400_000 })
+    );
   }
+
   transaction.add(
     await program.methods
-      .lendingAccountDeposit(config.AMOUNT, false)
+      .lendingAccountRepay(config.AMOUNT, config.REPAY_ALL)
       .accounts({
         marginfiAccount: config.ACCOUNT,
         bank: config.BANK,
         signerTokenAccount: ata,
-        // bankLiquidityVault = deriveLiquidityVault(id, bank)
-        tokenProgram: TOKEN_PROGRAM_ID,
+        tokenProgram: tokenProgram,
       })
-      // To handle the case where the account doesn't exist yet.
-      .accountsPartial({
-        group: config.GROUP,
-        authority: config.ACCOUNT_AUTHORITY,
-      })
+      .remainingAccounts(meta)
       .instruction()
+  );
+
+  console.log(
+    "repaying : " + config.AMOUNT.toString() + " to " + config.BANK
   );
 
   if (sendTx) {
@@ -120,8 +122,6 @@ async function main() {
     const base58Transaction = bs58.encode(serializedTransaction);
     console.log("Base58-encoded transaction:", base58Transaction);
   }
-
-  console.log("deposit: " + config.AMOUNT.toString() + " to " + config.BANK);
 }
 
 main().catch((err) => {

@@ -10,7 +10,6 @@ import { BN } from "@coral-xyz/anchor";
 import {
   createAssociatedTokenAccountIdempotentInstruction,
   getAssociatedTokenAddressSync,
-  TOKEN_PROGRAM_ID,
 } from "@mrgnlabs/mrgn-common";
 import { commonSetup } from "../lib/common-setup";
 import {

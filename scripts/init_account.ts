@@ -14,7 +14,7 @@ type Config = {
   GROUP: PublicKey;
   AUTHORITY: PublicKey;
 
-  MULTISIG: PublicKey;
+  MULTISIG?: PublicKey;
 };
 
 const config: Config = {

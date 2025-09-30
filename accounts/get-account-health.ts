@@ -1,32 +1,20 @@
 import dotenv from "dotenv";
 import {
-  ComputeBudgetProgram,
   PublicKey,
   TransactionMessage,
-  VersionedMessage,
   VersionedTransaction,
 } from "@solana/web3.js";
 import { wrappedI80F48toBigNumber } from "@mrgnlabs/mrgn-common";
 import { getDefaultYargsOptions, getMarginfiProgram } from "../lib/config";
-import { Environment } from "../lib/types";
-import { formatNumber, getBankMetadata, getBankMetadataFromBirdeye } from "../lib/utils";
 import {
   BankConfig,
   BankRaw,
-  buildFeedIdMap,
-  findOracleKey,
   HealthCacheRaw,
   MarginfiAccount,
   MarginfiAccountRaw,
-  MarginfiAccountType,
 } from "@mrgnlabs/marginfi-client-v2";
 
 dotenv.config();
-
-type BankMetadata = {
-  bankAddress: string;
-  tokenSymbol: string;
-};
 
 async function main() {
   //   const argv = getDefaultYargsOptions()
@@ -38,8 +26,10 @@ async function main() {
   //     })
   //     .parseSync();
 
-  const accountPubkey = new PublicKey("7PNqUqfpdks8zLHCzpynNbiz6TTPKVqqBYAL83dJbX2w");
-  const program = getMarginfiProgram("staging");
+  const groupKey = new PublicKey("4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8");
+  
+  const accountPubkey = new PublicKey("Azp49yTY4gxHbW1aNGq4mzWLmLhgakdo1snuzScTd1GK");
+  const program = getMarginfiProgram("production");
 
   const accountRaw: MarginfiAccountRaw = await program.account.marginfiAccount.fetch(accountPubkey);
   const activePositions = accountRaw.lendingAccount.balances.filter((b) => b.active);
@@ -47,14 +37,9 @@ async function main() {
   const bankKeys = activePositions.map((b) => b.bankPk);
   const banks = (await program.account.bank.fetchMultiple(bankKeys)) as unknown as BankRaw[];
 
-  const bankConfigs = await buildFeedIdMap(
-    banks.map((b) => b.config),
-    program.provider.connection
-  );
-
   const parsedPositions = activePositions.map((b, index) => ({
     bank: b.bankPk,
-    oracleKey: findOracleKey(BankConfig.fromAccountParsed(banks[index].config), bankConfigs),
+    oracleKey: BankConfig.fromAccountParsed(banks[index].config).oracleKeys[0],
     isActive: b.active,
   }));
 
