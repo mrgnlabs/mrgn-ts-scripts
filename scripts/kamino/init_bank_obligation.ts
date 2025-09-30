@@ -57,12 +57,12 @@ const config: Config = {
 
   ADMIN: new PublicKey("725Z4QQUVhRiXcCdf4cQTrxXYmQXyW9zgVkW5PDVSJz4"),
   FEE_PAYER: new PublicKey("725Z4QQUVhRiXcCdf4cQTrxXYmQXyW9zgVkW5PDVSJz4"),
-  BANK_MINT: new PublicKey("So11111111111111111111111111111111111111112"),
-  KAMINO_RESERVE: new PublicKey("6gTJfuPHEg6uRAijRkMqNc9kan4sVZejKMxmvx2grT1p"),
-  KAMINO_MARKET: new PublicKey("H6rHXmXoCQvq8Ue81MqNh7ow5ysPa1dSozwW3PU1dDH6"),
+  BANK_MINT: new PublicKey("mSoLzYCxHdYgdzU16g5QSh3i5K3z3KZK7ytfqcJm7So"),
+  KAMINO_RESERVE: new PublicKey("r7Tyu7QswfZncQwmTQBkG1fDd8N5tJdi4b8S6KiBtBj"),
+  KAMINO_MARKET: new PublicKey("GVDUXFwS8uvBG35RjZv6Y8S1AkV5uASiMJ9qTUKqb5PL"),
   RESERVE_ORACLE: new PublicKey("3NJYftD5sjVfxSnUdZ1wVML8f3aC6mp1CXCL6L7TnU8C"),
-  FARM_STATE: new PublicKey("BgMEUzcjkJxEH1PdPkZyv3NbUynwbkPiNJ7X2x7G1JmH"),
-  SEED: 3,
+  FARM_STATE: new PublicKey("5fDeYtxrQzpg4KaWkTzy4daKeeg6oC4cwVXLpCFeKd9T"),
+  SEED: 0,
   TOKEN_PROGRAM: TOKEN_PROGRAM_ID,
 
   MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),

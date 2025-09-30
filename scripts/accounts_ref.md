@@ -77,6 +77,7 @@
 - sol (mrgn) - J7tLRtFsqYACaoANgDVaArihQwCt5umhkoULbqr3M23X
 - usds (kamino huma pool, two rewards) - B63tbAfJFNL5ZvMYivZQdcCt6WSfUkwhe9J91MKWRUW8
 - sol (kamino, jito pool, swb oracle) - 54BbBaVDni5Eoy5AmDQ7rmXsmeeT4ginaj9PcQaZhanV
+- msol (kamino, msol pool, swb oracle) - HhKsxu1D8WnUBBiU9qpMjyUhWeosUGRKUmBwWnuwGRMK
 
 ## ORACLES
 
