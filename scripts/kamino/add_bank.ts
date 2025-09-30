@@ -43,14 +43,14 @@ type Config = {
 const config: Config = {
   PROGRAM_ID: "5UDghkpgW1HfYSrmEj2iAApHShqU44H6PKTAar9LL9bY",
   GROUP_KEY: new PublicKey("ERBiJdWtnVBBd4gFm7YVHT3a776x5NbGbJBR5BDvsxtj"),
-  ORACLE: new PublicKey("7UVimffxr9ow1uXYxsr4LHAcV58mLzhmwaeKvJ1pjLiE"),
-  ORACLE_TYPE: { kaminoPythPush: {} },
+  ORACLE: new PublicKey("4Hmd6PdjVA9auCoScE12iaBogfwS4ZXQ6VZoBeqanwWW"),
+  ORACLE_TYPE: { kaminoSwitchboardPull: {} },
   ADMIN: new PublicKey("725Z4QQUVhRiXcCdf4cQTrxXYmQXyW9zgVkW5PDVSJz4"),
   FEE_PAYER: new PublicKey("725Z4QQUVhRiXcCdf4cQTrxXYmQXyW9zgVkW5PDVSJz4"),
   BANK_MINT: new PublicKey("So11111111111111111111111111111111111111112"),
-  KAMINO_RESERVE: new PublicKey("d4A2prbA2whesmvHaL88BH6Ewn5N4bTSU2Ze8P6Bc4Q"),
-  KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"),
-  SEED: 0,
+  KAMINO_RESERVE: new PublicKey("6gTJfuPHEg6uRAijRkMqNc9kan4sVZejKMxmvx2grT1p"),
+  KAMINO_MARKET: new PublicKey("H6rHXmXoCQvq8Ue81MqNh7ow5ysPa1dSozwW3PU1dDH6"),
+  SEED: 3,
   TOKEN_PROGRAM: TOKEN_PROGRAM_ID,
 
   MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
@@ -59,7 +59,7 @@ const config: Config = {
 const bankConfig: KaminoConfigCompact = {
   assetWeightInit: bigNumberToWrappedI80F48(0.75),
   assetWeightMaint: bigNumberToWrappedI80F48(0.85),
-  depositLimit: new BN(8 * 10 ** 8),
+  depositLimit: new BN(8 * 10 ** 9),
   operationalState: { operational: {} },
   riskTier: { collateral: {} },
   totalAssetValueInitLimit: new BN(20000000),
