@@ -37,33 +37,33 @@ export type BankLimitsEntry = {
  *  (though using a LUT can help).
  */
 const bankLimits: BankLimitsEntry[] = [
-  // zbtc
+  // bonk
   {
-    bank: new PublicKey("3RVamPQE3nDViuUU7wdZJgnru7Q93cRzdysXA8kjxMiq"),
-    depositLimit: cap(50, 8),
-    borrowLimit: cap(25, 8),
-    initValue: new BN(10_000_000),
+    bank: new PublicKey("DeyH7QxWvnbbaVB4zFrf4hoq7Q8z1ZT14co42BGwGtfM"),
+    depositLimit: cap(900_000_000_000, 5),
+    borrowLimit: cap(4_000_000_000, 5),
+    initValue: new BN(30_000_000),
   },
-  // xbtc
+  // wif
   {
-    bank: new PublicKey("HDYFgNRTFL2tVwGyAHaTr4SW7Y7riXjew48qKLHgi8es"),
-    depositLimit: cap(100, 8),
-    borrowLimit: cap(50, 8),
-    initValue: new BN(20_000_000),
+    bank: new PublicKey("9dpu8KL5ABYiD3WP2Cnajzg1XaotcJvZspv29Y1Y3tn1"),
+    depositLimit: cap(5_000_000, 6),
+    borrowLimit: cap(100_000, 6),
+    initValue: new BN(5_000_000),
   },
-  // cbtc
+  // jto
   {
-    bank: new PublicKey("Ac4KV5K5isDqtABtg6h5DiwzZMe3Sp9bc3pBiCUvUpaQ"),
-    depositLimit: cap(100, 8),
-    borrowLimit: cap(50, 8),
-    initValue: new BN(20_000_000),
+    bank: new PublicKey("EdB7YADw4XUt6wErT8kHGCUok4mnTpWGzPUU9rWDebzb"),
+    depositLimit: cap(2_000_000, 9),
+    borrowLimit: cap(1_000_000, 9),
+    initValue: new BN(6_000_000),
   },
-  // zenbtc
+  // hnt
   {
-    bank: new PublicKey("Gj72XAUuNxNeDnW4tUh3H1U2Jbzshz27vtH8KvB972gi"),
-    depositLimit: cap(50, 8),
-    borrowLimit: cap(25, 8),
-    initValue: new BN(10_000_000),
+    bank: new PublicKey("JBcir4DPRPYVUpks9hkS1jtHMXejfeBo4xJGv3AYYHg6"),
+    depositLimit: cap(500_000, 8),
+    borrowLimit: cap(150_000, 8),
+    initValue: new BN(2_500_000),
   },
 ];
 

@@ -48,17 +48,6 @@ export type BankConfigPair = {
   config: BankConfigOptRaw;
 };
 
-const rate: InterestRateConfigRaw = {
-  optimalUtilizationRate: bigNumberToWrappedI80F48(0.8),
-  plateauInterestRate: bigNumberToWrappedI80F48(0.1),
-  maxInterestRate: bigNumberToWrappedI80F48(0.5655),
-  insuranceFeeFixedApr: bigNumberToWrappedI80F48(0),
-  insuranceIrFee: bigNumberToWrappedI80F48(0),
-  protocolFixedFeeApr: bigNumberToWrappedI80F48(0.0001),
-  protocolIrFee: bigNumberToWrappedI80F48(0.135),
-  protocolOriginationFee: bigNumberToWrappedI80F48(0),
-};
-
 export type Config = {
   PROGRAM_ID: string;
   ADMIN: PublicKey;
@@ -85,19 +74,28 @@ const config: Config = {
   // One tx per entry in this array:
   BANKS: [
     {
-      bank: new PublicKey("ARwrmohp8qMCkxQNiq5di4pTnTWhvXhAc7c18tZ877Kg"),
+      bank: new PublicKey("BeNBJrAh1tZg5sqgt8D6AWKJLD5KkBrfZvtcgd7EuiAR"),
       config: {
-        assetWeightInit: bigNumberToWrappedI80F48(0.65),
-        assetWeightMaint: bigNumberToWrappedI80F48(0.8),
-        liabilityWeightInit: bigNumberToWrappedI80F48(1.3),
-        liabilityWeightMaint: bigNumberToWrappedI80F48(1.2),
-        depositLimit: new BN(20000 * 10 ** 9),
-        interestRateConfig: rate,
-        operationalState: { operational: {} },
-        borrowLimit: new BN(5000 * 10 ** 9),
-        riskTier: { collateral: {} },
-        totalAssetValueInitLimit: new BN(10000000),
-        oracleMaxAge: 70,
+        assetWeightInit: null,
+        assetWeightMaint: null,
+        liabilityWeightInit: null,
+        liabilityWeightMaint: null,
+        depositLimit: null,
+        interestRateConfig: {
+          protocolOriginationFee: null,
+          protocolIrFee: null,
+          protocolFixedFeeApr: null,
+          insuranceIrFee: null,
+          insuranceFeeFixedApr: null,
+          maxInterestRate: null,
+          optimalUtilizationRate: null,
+          plateauInterestRate: null,
+        },
+        operationalState: { reduceOnly: {} },
+        borrowLimit: null,
+        riskTier: null,
+        totalAssetValueInitLimit: null,
+        oracleMaxAge: null,
         assetTag: null,
         oracleMaxConfidence: null,
         permissionlessBadDebtSettlement: null,
