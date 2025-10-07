@@ -5,19 +5,19 @@ const sendTx = true;
 
 type Config = {
   PROGRAM_ID: string;
-  ACCOUNT: PublicKey;
+  BANK: PublicKey;
 };
 
 const config: Config = {
   PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-  ACCOUNT: new PublicKey("EtVhwiGacGjvZ48XvmYJebfxfWFxqhxHvSx9arsfFDCW"),
+  BANK: new PublicKey("8Ats6Ej699ELxYR4DFTteLiNEXsGRtUNgTauD9LoFPRc"),
 };
 
 async function main() {
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
-    "/.config/stage/id.json",
+    "/keys/staging-deploy.json",
     undefined,
     "current"
   );
@@ -26,9 +26,9 @@ async function main() {
 
   const transaction = new Transaction().add(
     await program.methods
-      .marginfiAccountClose()
+      .lendingPoolCloseBank()
       .accounts({
-        marginfiAccount: config.ACCOUNT,
+        bank: config.BANK,
       })
       .instruction()
   );

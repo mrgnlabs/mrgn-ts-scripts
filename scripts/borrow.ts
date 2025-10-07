@@ -37,7 +37,7 @@ type Config = {
   ADD_COMPUTE_UNITS: boolean;
 
   // Optional, omit if not using MS.
-  MULTISIG: PublicKey;
+  MULTISIG?: PublicKey;
 };
 
 const config: Config = {

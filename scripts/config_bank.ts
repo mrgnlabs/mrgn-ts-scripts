@@ -10,7 +10,6 @@ import { bigNumberToWrappedI80F48, WrappedI80F48 } from "@mrgnlabs/mrgn-common";
 import { InterestRateConfigRaw } from "@mrgnlabs/marginfi-client-v2";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 import { commonSetup } from "../lib/common-setup";
-import { u32MAX } from "../lib/constants";
 
 /**
  * If true, send the txs. If false, output the unsigned b58 v0 txs to console.
