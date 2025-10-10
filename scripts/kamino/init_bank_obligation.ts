@@ -24,11 +24,12 @@ import {
   deriveBankWithSeed,
   deriveLiquidityVaultAuthority,
 } from "../common/pdas";
+import { loadEnvFile } from "../utils";
 
 /**
  * If true, send the tx. If false, output the unsigned b58 tx to console.
  */
-const sendTx = true;
+const sendTx = false;
 
 type Config = {
   PROGRAM_ID: string;
@@ -51,28 +52,41 @@ type Config = {
   MULTISIG_PAYER?: PublicKey; // May be omitted if not using squads
 };
 
-const config: Config = {
-  PROGRAM_ID: "5UDghkpgW1HfYSrmEj2iAApHShqU44H6PKTAar9LL9bY",
-  GROUP_KEY: new PublicKey("ERBiJdWtnVBBd4gFm7YVHT3a776x5NbGbJBR5BDvsxtj"),
+// ========================================
+// PYUSD - Kamino Bank Obligation Configuration
+// ========================================
 
+const config: Config = {
+  PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
+  GROUP_KEY: new PublicKey("ERBiJdWtnVBBd4gFm7YVHT3a776x5NbGbJBR5BDvsxtj"),
   ADMIN: new PublicKey("725Z4QQUVhRiXcCdf4cQTrxXYmQXyW9zgVkW5PDVSJz4"),
   FEE_PAYER: new PublicKey("725Z4QQUVhRiXcCdf4cQTrxXYmQXyW9zgVkW5PDVSJz4"),
-  BANK_MINT: new PublicKey("mSoLzYCxHdYgdzU16g5QSh3i5K3z3KZK7ytfqcJm7So"),
-  KAMINO_RESERVE: new PublicKey("r7Tyu7QswfZncQwmTQBkG1fDd8N5tJdi4b8S6KiBtBj"),
-  KAMINO_MARKET: new PublicKey("GVDUXFwS8uvBG35RjZv6Y8S1AkV5uASiMJ9qTUKqb5PL"),
+  BANK_MINT: new PublicKey("2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo"),
+  KAMINO_RESERVE: new PublicKey("2gc9Dm1eB6UgVYFBUN9bWks6Kes9PbWSaPaa9DqyvEiN"),
+  KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"),
   RESERVE_ORACLE: new PublicKey("3NJYftD5sjVfxSnUdZ1wVML8f3aC6mp1CXCL6L7TnU8C"),
-  FARM_STATE: new PublicKey("5fDeYtxrQzpg4KaWkTzy4daKeeg6oC4cwVXLpCFeKd9T"),
-  SEED: 0,
+  FARM_STATE: new PublicKey("DEe2NZ5dAXGxC7M8Gs9Esd9wZRPdQzG8jNamXqhL5yku"), // Active farm
+  SEED: 300,
   TOKEN_PROGRAM: TOKEN_PROGRAM_ID,
-
   MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 };
 
 async function main() {
+  // Load env vars from .env.api first, before reading KEYPAIR_PATH
+  loadEnvFile(".env.api");
+
+  console.log("init obligation for bank in group: " + config.GROUP_KEY);
+
+  // Use KEYPAIR_PATH env var, or fall back to default path
+  // NOTE: When sendTx=false, this keypair is ONLY used for transaction construction.
+  // The actual signer will be the Squads multisig (MULTISIG_PAYER).
+  const keypairPath = process.env.KEYPAIR_PATH || "/keys/zerotrade_admin.json";
+  console.log("using keypair path: " + keypairPath);
+
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
-    "/keys/zerotrade_admin.json",
+    keypairPath,
     config.MULTISIG_PAYER,
     "kamino"
   );

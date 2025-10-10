@@ -14,12 +14,13 @@ import { KaminoConfigCompact, OracleSetupRawWithKamino } from "./kamino-types";
 import { commonSetup } from "../../lib/common-setup";
 import { makeAddKaminoBankIx } from "./ixes-common";
 import { deriveBankWithSeed } from "../common/pdas";
-import { TOKEN_2022_PROGRAM_ID } from "@solana/spl-token";
+import { TOKEN_2022_PROGRAM_ID, getMint } from "@solana/spl-token";
+import { loadEnvFile } from "../utils";
 
 /**
  * If true, send the tx. If false, output the unsigned b58 tx to console.
  */
-const sendTx = true;
+const sendTx = false;
 
 type Config = {
   PROGRAM_ID: string;
@@ -36,51 +37,94 @@ type Config = {
   KAMINO_RESERVE: PublicKey;
   KAMINO_MARKET: PublicKey;
   SEED: number;
-  TOKEN_PROGRAM: PublicKey;
   MULTISIG_PAYER?: PublicKey; // May be omitted if not using squads
 };
+
+// ========================================
+// PYUSD - Kamino Bank Configuration
+// ========================================
 
 const config: Config = {
   PROGRAM_ID: "5UDghkpgW1HfYSrmEj2iAApHShqU44H6PKTAar9LL9bY",
   GROUP_KEY: new PublicKey("ERBiJdWtnVBBd4gFm7YVHT3a776x5NbGbJBR5BDvsxtj"),
-  ORACLE: new PublicKey("HBkp4ppTRv9HjAKLz7Wjo1zRUd1m1o7Nn3uaapCRfT21"),
-  ORACLE_TYPE: { kaminoSwitchboardPull: {} },
+  ORACLE: new PublicKey("9zXQxpYH3kYhtoybmZfUNNCRVuud7fY9jswTg1hLyT8k"),
+  ORACLE_TYPE: { kaminoPythPush: {} },
   ADMIN: new PublicKey("725Z4QQUVhRiXcCdf4cQTrxXYmQXyW9zgVkW5PDVSJz4"),
   FEE_PAYER: new PublicKey("725Z4QQUVhRiXcCdf4cQTrxXYmQXyW9zgVkW5PDVSJz4"),
-  BANK_MINT: new PublicKey("mSoLzYCxHdYgdzU16g5QSh3i5K3z3KZK7ytfqcJm7So"),
-  KAMINO_RESERVE: new PublicKey("r7Tyu7QswfZncQwmTQBkG1fDd8N5tJdi4b8S6KiBtBj"),
-  KAMINO_MARKET: new PublicKey("GVDUXFwS8uvBG35RjZv6Y8S1AkV5uASiMJ9qTUKqb5PL"),
-  SEED: 0,
-  TOKEN_PROGRAM: TOKEN_PROGRAM_ID,
-
+  BANK_MINT: new PublicKey("2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo"),
+  KAMINO_RESERVE: new PublicKey("2gc9Dm1eB6UgVYFBUN9bWks6Kes9PbWSaPaa9DqyvEiN"),
+  KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"),
+  SEED: 300,
   MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 };
 
-const bankConfig: KaminoConfigCompact = {
-  assetWeightInit: bigNumberToWrappedI80F48(0.75),
-  assetWeightMaint: bigNumberToWrappedI80F48(0.85),
-  depositLimit: new BN(8 * 10 ** 9),
-  operationalState: { operational: {} },
-  riskTier: { collateral: {} },
-  totalAssetValueInitLimit: new BN(20000000),
-  oracleMaxAge: 70,
-  oracleMaxConfidence: 0,
-  oracle: config.ORACLE,
-  oracleSetup: config.ORACLE_TYPE,
-  configFlags: 0,
-};
-
 async function main() {
+  // Load env vars from .env.api first, before reading KEYPAIR_PATH
+  loadEnvFile(".env.api");
+
   console.log("adding bank to group: " + config.GROUP_KEY);
+
+  // Use KEYPAIR_PATH env var, or fall back to default path
+  // NOTE: When sendTx=false, this keypair is ONLY used for transaction construction.
+  // The actual signer will be the Squads multisig (MULTISIG_PAYER).
+  const keypairPath = process.env.KEYPAIR_PATH || "/keys/zerotrade_admin.json";
+  console.log("using keypair path: " + keypairPath);
+
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
-    "/keys/zerotrade_admin.json",
+    keypairPath,
     config.MULTISIG_PAYER,
     "kamino"
   );
   const program = user.program;
   const connection = user.connection;
+
+  // Fetch mint to determine token program and decimals
+  console.log("fetching mint account: " + config.BANK_MINT);
+
+  let mintInfo;
+  let tokenProgram;
+
+  try {
+    // Try Token-2022 first
+    mintInfo = await getMint(
+      connection,
+      config.BANK_MINT,
+      "confirmed",
+      TOKEN_2022_PROGRAM_ID
+    );
+    tokenProgram = TOKEN_2022_PROGRAM_ID;
+    console.log("detected Token-2022 mint");
+  } catch {
+    // Fall back to regular Token Program
+    mintInfo = await getMint(
+      connection,
+      config.BANK_MINT,
+      "confirmed",
+      TOKEN_PROGRAM_ID
+    );
+    tokenProgram = TOKEN_PROGRAM_ID;
+    console.log("detected Token Program mint");
+  }
+
+  console.log("token program: " + tokenProgram);
+  console.log("mint decimals: " + mintInfo.decimals);
+
+  // Build bank config using fetched decimals
+  const bankConfig: KaminoConfigCompact = {
+    assetWeightInit: bigNumberToWrappedI80F48(0.9),
+    assetWeightMaint: bigNumberToWrappedI80F48(0.95),
+    depositLimit: new BN(10_000_000 * 10 ** mintInfo.decimals),
+    operationalState: { operational: {} },
+    riskTier: { collateral: {} },
+    totalAssetValueInitLimit: new BN(10_000_000),
+    oracleMaxAge: 300,
+    oracleMaxConfidence: 0,
+    oracle: config.ORACLE,
+    oracleSetup: config.ORACLE_TYPE,
+    configFlags: 1,
+  };
 
   const [bankKey] = deriveBankWithSeed(
     program.programId,
@@ -99,7 +143,7 @@ async function main() {
         kaminoReserve: config.KAMINO_RESERVE,
         kaminoMarket: config.KAMINO_MARKET,
         oracle: config.ORACLE,
-        tokenProgram: config.TOKEN_PROGRAM,
+        tokenProgram: tokenProgram,
         admin: config.ADMIN,
       },
       {
