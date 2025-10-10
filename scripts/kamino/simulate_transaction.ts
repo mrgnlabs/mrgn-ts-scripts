@@ -39,14 +39,10 @@ async function main() {
     // Simulate with signature verification disabled
     let simulation;
     if (tx instanceof Transaction) {
-      simulation = await connection.simulateTransaction(tx, undefined, {
-        sigVerify: false,
-        commitment: "confirmed",
-      });
+      simulation = await connection.simulateTransaction(tx);
     } else {
       simulation = await connection.simulateTransaction(tx, {
         sigVerify: false,
-        commitment: "confirmed",
       });
     }
 
