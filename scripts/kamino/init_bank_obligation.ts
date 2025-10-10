@@ -50,20 +50,20 @@ type Config = {
 };
 
 // ========================================
-// PYUSD - Kamino Bank Obligation Configuration
+// USDG - Kamino Bank Obligation Configuration
 // ========================================
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA", // Mainnet program
   GROUP_KEY: new PublicKey("4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8"), // Mainnet group
   ADMIN: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"), // Mainnet multisig
-  BANK_MINT: new PublicKey("2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo"),
-  KAMINO_RESERVE: new PublicKey("2gc9Dm1eB6UgVYFBUN9bWks6Kes9PbWSaPaa9DqyvEiN"),
+  BANK_MINT: new PublicKey("2u1tszSeqZ3qBWF3uNGPFc8TzMk2tdiwknnRMWGWjGWH"), // USDG
+  KAMINO_RESERVE: new PublicKey("ESCkPWKHmgNE7Msf77n9yzqJd5kQVWWGy3o5Mgxhvavp"),
   KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"),
-  RESERVE_ORACLE: new PublicKey("3NJYftD5sjVfxSnUdZ1wVML8f3aC6mp1CXCL6L7TnU8C"),
-  FARM_STATE: new PublicKey("DEe2NZ5dAXGxC7M8Gs9Esd9wZRPdQzG8jNamXqhL5yku"), // Active farm
+  RESERVE_ORACLE: new PublicKey("3NJYftD5sjVfxSnUdZ1wVML8f3aC6mp1CXCL6L7TnU8C"), // Scope oracle for USDG
+  FARM_STATE: new PublicKey("3W4tNzMoRXCBhirSSoHf5413Cx9P8kqXk4QpZtkjiLCG"), // Farm collateral for USDG
   SEED: 300,
-  TOKEN_PROGRAM: TOKEN_2022_PROGRAM_ID, // PYUSD uses Token-2022
+  TOKEN_PROGRAM: TOKEN_2022_PROGRAM_ID, // USDG uses Token-2022
 };
 
 async function main() {
@@ -111,11 +111,16 @@ async function main() {
     config.TOKEN_PROGRAM
   );
 
-  const [userState] = deriveUserState(
-    FARMS_PROGRAM_ID,
-    config.FARM_STATE,
-    baseObligation
-  );
+  // Derive obligation farm user state if farm exists
+  const hasFarm = !config.FARM_STATE.equals(PublicKey.default);
+  const [obligationFarmUserState] = hasFarm
+    ? deriveUserState(FARMS_PROGRAM_ID, config.FARM_STATE, baseObligation)
+    : [null, 0];
+
+  console.log("has farm:", hasFarm);
+  if (hasFarm) {
+    console.log("obligation farm user state:", obligationFarmUserState?.toBase58());
+  }
 
   let initObligationTx = new Transaction().add(
     ComputeBudgetProgram.setComputeUnitLimit({ units: 1_400_000 }),
@@ -129,9 +134,9 @@ async function main() {
         reserveLiquidityMint: config.BANK_MINT,
         reserve: config.KAMINO_RESERVE,
         scopePrices: config.RESERVE_ORACLE,
-        // TODO support edge cases where no farm state is active
-        reserveFarmState: config.FARM_STATE,
-        obligationFarmUserState: userState,
+        // Pass farm state if configured, otherwise null
+        reserveFarmState: hasFarm ? config.FARM_STATE : null,
+        obligationFarmUserState: obligationFarmUserState,
         liquidityTokenProgram: config.TOKEN_PROGRAM,
       },
       new BN(100)
