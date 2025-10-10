@@ -41,19 +41,19 @@ type Config = {
 };
 
 // ========================================
-// PYUSD - Kamino Bank Configuration
+// USDT - Kamino Bank Configuration
 // ========================================
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA", // Mainnet program
   GROUP_KEY: new PublicKey("4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8"), // Mainnet group
-  ORACLE: new PublicKey("9zXQxpYH3kYhtoybmZfUNNCRVuud7fY9jswTg1hLyT8k"),
+  ORACLE: new PublicKey("HT2PLQBcG5EiCcNSaMHAjSgd9F98ecpATbk4Sk5oYuM"), // Pyth USDT/USD
   ORACLE_TYPE: { kaminoPythPush: {} },
   ADMIN: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"), // Mainnet multisig
   FEE_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"), // Mainnet multisig
-  BANK_MINT: new PublicKey("2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo"),
-  KAMINO_RESERVE: new PublicKey("2gc9Dm1eB6UgVYFBUN9bWks6Kes9PbWSaPaa9DqyvEiN"),
-  KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"),
+  BANK_MINT: new PublicKey("Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB"), // USDT
+  KAMINO_RESERVE: new PublicKey("H3t6qZ1JkguCNTi9uzVKqQ7dvt2cum4XiXWom6Gn5e5S"), // Kamino USDT Reserve
+  KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"), // Main Market
   SEED: 300,
   MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 };
@@ -113,12 +113,12 @@ async function main() {
 
   // Build bank config using fetched decimals
   const bankConfig: KaminoConfigCompact = {
-    assetWeightInit: bigNumberToWrappedI80F48(0.9),
-    assetWeightMaint: bigNumberToWrappedI80F48(0.95),
-    depositLimit: new BN(10_000_000 * 10 ** mintInfo.decimals),
+    assetWeightInit: bigNumberToWrappedI80F48(1.0), // 100% for USDT
+    assetWeightMaint: bigNumberToWrappedI80F48(1.0), // 100% for USDT
+    depositLimit: new BN(50_000_000 * 10 ** mintInfo.decimals), // 50M USDT
     operationalState: { operational: {} },
     riskTier: { collateral: {} },
-    totalAssetValueInitLimit: new BN(10_000_000),
+    totalAssetValueInitLimit: new BN(50_000_000), // $50M
     oracleMaxAge: 300,
     oracleMaxConfidence: 0,
     oracle: config.ORACLE,
