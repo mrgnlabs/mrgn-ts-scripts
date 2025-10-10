@@ -61,8 +61,8 @@ const config: Config = {
   BANK_MINT: new PublicKey("Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB"), // USDT
   KAMINO_RESERVE: new PublicKey("H3t6qZ1JkguCNTi9uzVKqQ7dvt2cum4XiXWom6Gn5e5S"),
   KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"),
-  RESERVE_ORACLE: new PublicKey("3NJYftD5sjVfxSnUdZ1wVML8f3aC6mp1CXCL6L7TnU8C"),
-  FARM_STATE: PublicKey.default, // NOTE: USDT has no active farm
+  RESERVE_ORACLE: new PublicKey("3NJYftD5sjVfxSnUdZ1wVML8f3aC6mp1CXCL6L7TnU8C"), // Scope oracle for USDT
+  FARM_STATE: new PublicKey("5pCqu9RFdL6QoN7KK4gKnAU6CjQFJot8nU7wpFK8Zwou"), // Farm collateral for USDT
   SEED: 300,
   TOKEN_PROGRAM: TOKEN_PROGRAM_ID, // USDT uses standard Token Program
 };
@@ -112,11 +112,16 @@ async function main() {
     config.TOKEN_PROGRAM
   );
 
-  const [userState] = deriveUserState(
-    FARMS_PROGRAM_ID,
-    config.FARM_STATE,
-    baseObligation
-  );
+  // Derive obligation farm user state if farm exists
+  const hasFarm = !config.FARM_STATE.equals(PublicKey.default);
+  const [obligationFarmUserState] = hasFarm
+    ? deriveUserState(FARMS_PROGRAM_ID, config.FARM_STATE, baseObligation)
+    : [null, 0];
+
+  console.log("has farm:", hasFarm);
+  if (hasFarm) {
+    console.log("obligation farm user state:", obligationFarmUserState?.toBase58());
+  }
 
   let initObligationTx = new Transaction().add(
     ComputeBudgetProgram.setComputeUnitLimit({ units: 1_400_000 }),
@@ -130,9 +135,9 @@ async function main() {
         reserveLiquidityMint: config.BANK_MINT,
         reserve: config.KAMINO_RESERVE,
         scopePrices: config.RESERVE_ORACLE,
-        // TODO support edge cases where no farm state is active
-        reserveFarmState: config.FARM_STATE,
-        obligationFarmUserState: userState,
+        // Pass farm state if configured, otherwise null
+        reserveFarmState: hasFarm ? config.FARM_STATE : null,
+        obligationFarmUserState: obligationFarmUserState,
         liquidityTokenProgram: config.TOKEN_PROGRAM,
       },
       new BN(100)
