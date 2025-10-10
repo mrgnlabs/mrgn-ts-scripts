@@ -7,6 +7,7 @@ import {
   PublicKey,
   Transaction,
   sendAndConfirmTransaction,
+  SystemProgram,
 } from "@solana/web3.js";
 import { BN } from "@coral-xyz/anchor";
 import {
@@ -17,7 +18,10 @@ import { commonSetup } from "../../lib/common-setup";
 import { makeInitObligationIx } from "./ixes-common";
 import {
   getAssociatedTokenAddressSync,
+  createAssociatedTokenAccountInstruction,
+  createSyncNativeInstruction,
   TOKEN_2022_PROGRAM_ID,
+  TOKEN_PROGRAM_ID,
 } from "@solana/spl-token";
 import { deriveBaseObligation, deriveUserState } from "./pdas";
 import {
@@ -50,20 +54,20 @@ type Config = {
 };
 
 // ========================================
-// PYUSD - Kamino Bank Obligation Configuration
+// SOL - Kamino Bank Obligation Configuration
 // ========================================
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA", // Mainnet program
   GROUP_KEY: new PublicKey("4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8"), // Mainnet group
   ADMIN: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"), // Mainnet multisig
-  BANK_MINT: new PublicKey("2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo"),
-  KAMINO_RESERVE: new PublicKey("2gc9Dm1eB6UgVYFBUN9bWks6Kes9PbWSaPaa9DqyvEiN"),
+  BANK_MINT: new PublicKey("So11111111111111111111111111111111111111112"), // SOL
+  KAMINO_RESERVE: new PublicKey("d4A2prbA2whesmvHaL88BH6Ewn5N4bTSU2Ze8P6Bc4Q"),
   KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"),
-  RESERVE_ORACLE: new PublicKey("3NJYftD5sjVfxSnUdZ1wVML8f3aC6mp1CXCL6L7TnU8C"),
-  FARM_STATE: new PublicKey("DEe2NZ5dAXGxC7M8Gs9Esd9wZRPdQzG8jNamXqhL5yku"), // Active farm
+  RESERVE_ORACLE: new PublicKey("3NJYftD5sjVfxSnUdZ1wVML8f3aC6mp1CXCL6L7TnU8C"), // Scope oracle for SOL
+  FARM_STATE: new PublicKey("955xWFhSDcDiUgUr4sBRtCpTLiMd4H5uZLAmgtP3R3sX"), // Farm collateral for SOL
   SEED: 300,
-  TOKEN_PROGRAM: TOKEN_2022_PROGRAM_ID, // PYUSD uses Token-2022
+  TOKEN_PROGRAM: TOKEN_PROGRAM_ID, // SOL uses standard Token Program
 };
 
 async function main() {
@@ -111,13 +115,57 @@ async function main() {
     config.TOKEN_PROGRAM
   );
 
-  const [userState] = deriveUserState(
-    FARMS_PROGRAM_ID,
-    config.FARM_STATE,
-    baseObligation
-  );
+  // Check if ATA exists, if not we'll create it
+  const ataInfo = await connection.getAccountInfo(ata);
+  const needsAtaCreation = ataInfo === null;
 
-  let initObligationTx = new Transaction().add(
+  if (needsAtaCreation) {
+    console.log("ATA does not exist, will create it:", ata.toBase58());
+  } else {
+    console.log("ATA exists:", ata.toBase58());
+  }
+
+  // Derive obligation farm user state if farm exists
+  const hasFarm = !config.FARM_STATE.equals(PublicKey.default);
+  const [obligationFarmUserState] = hasFarm
+    ? deriveUserState(FARMS_PROGRAM_ID, config.FARM_STATE, baseObligation)
+    : [null, 0];
+
+  console.log("has farm:", hasFarm);
+  if (hasFarm) {
+    console.log("obligation farm user state:", obligationFarmUserState?.toBase58());
+  }
+
+  let initObligationTx = new Transaction();
+
+  // Add ATA creation if needed
+  if (needsAtaCreation) {
+    initObligationTx.add(
+      createAssociatedTokenAccountInstruction(
+        user.wallet.publicKey, // payer
+        ata, // ata
+        user.wallet.publicKey, // owner
+        config.BANK_MINT, // mint
+        config.TOKEN_PROGRAM // token program
+      )
+    );
+
+    // Transfer 100 lamports to the ATA
+    initObligationTx.add(
+      SystemProgram.transfer({
+        fromPubkey: user.wallet.publicKey,
+        toPubkey: ata,
+        lamports: 100,
+      })
+    );
+
+    // Sync native to wrap the SOL
+    initObligationTx.add(
+      createSyncNativeInstruction(ata, config.TOKEN_PROGRAM)
+    );
+  }
+
+  initObligationTx.add(
     ComputeBudgetProgram.setComputeUnitLimit({ units: 1_400_000 }),
     await makeInitObligationIx(
       program,
@@ -129,9 +177,9 @@ async function main() {
         reserveLiquidityMint: config.BANK_MINT,
         reserve: config.KAMINO_RESERVE,
         scopePrices: config.RESERVE_ORACLE,
-        // TODO support edge cases where no farm state is active
-        reserveFarmState: config.FARM_STATE,
-        obligationFarmUserState: userState,
+        // Pass farm state if configured, otherwise null
+        reserveFarmState: hasFarm ? config.FARM_STATE : null,
+        obligationFarmUserState: obligationFarmUserState,
         liquidityTokenProgram: config.TOKEN_PROGRAM,
       },
       new BN(100)
