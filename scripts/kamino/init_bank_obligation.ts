@@ -29,7 +29,7 @@ import { loadEnvFile } from "../utils";
 /**
  * If true, send the tx. If false, just output transaction details for review.
  */
-const sendTx = false;
+const sendTx = true;
 
 type Config = {
   PROGRAM_ID: string;
@@ -60,8 +60,8 @@ const config: Config = {
   BANK_MINT: new PublicKey("CASHx9KJUStyftLFWGvEVf59SGeG9sh5FfcnZMVPCASH"), // CASH
   KAMINO_RESERVE: new PublicKey("ApQkX32ULJUzszZDe986aobLDLMNDoGQK8tRm6oD6SsA"),
   KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"),
-  RESERVE_ORACLE: new PublicKey("HxQbxDh4SGYi94LrgS6VuSdoBnRZamBvHgdiVTG8yomf"), // Switchboard CASH/USD
-  FARM_STATE: PublicKey.default, // NOTE: Check if CASH has active farm - using default for now
+  RESERVE_ORACLE: new PublicKey("3NJYftD5sjVfxSnUdZ1wVML8f3aC6mp1CXCL6L7TnU8C"), // Scope oracle for CASH
+  FARM_STATE: new PublicKey("8pkQoRJz4yKVpYLjqFNdNfN1mvkDQz4UHRtJenzS9yys"), // Farm collateral for CASH
   SEED: 300,
   TOKEN_PROGRAM: TOKEN_2022_PROGRAM_ID, // CASH uses Token-2022
 };
@@ -111,11 +111,16 @@ async function main() {
     config.TOKEN_PROGRAM
   );
 
-  const [userState] = deriveUserState(
-    FARMS_PROGRAM_ID,
-    config.FARM_STATE,
-    baseObligation
-  );
+  // Derive obligation farm user state if farm exists
+  const hasFarm = !config.FARM_STATE.equals(PublicKey.default);
+  const [obligationFarmUserState] = hasFarm
+    ? deriveUserState(FARMS_PROGRAM_ID, config.FARM_STATE, baseObligation)
+    : [null, 0];
+
+  console.log("has farm:", hasFarm);
+  if (hasFarm) {
+    console.log("obligation farm user state:", obligationFarmUserState?.toBase58());
+  }
 
   let initObligationTx = new Transaction().add(
     ComputeBudgetProgram.setComputeUnitLimit({ units: 1_400_000 }),
@@ -129,9 +134,9 @@ async function main() {
         reserveLiquidityMint: config.BANK_MINT,
         reserve: config.KAMINO_RESERVE,
         scopePrices: config.RESERVE_ORACLE,
-        // TODO support edge cases where no farm state is active
-        reserveFarmState: config.FARM_STATE,
-        obligationFarmUserState: userState,
+        // Pass farm state if configured, otherwise null
+        reserveFarmState: hasFarm ? config.FARM_STATE : null,
+        obligationFarmUserState: obligationFarmUserState,
         liquidityTokenProgram: config.TOKEN_PROGRAM,
       },
       new BN(100)
