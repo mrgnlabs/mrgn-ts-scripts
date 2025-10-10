@@ -18,6 +18,7 @@ import { makeInitObligationIx } from "./ixes-common";
 import {
   getAssociatedTokenAddressSync,
   TOKEN_2022_PROGRAM_ID,
+  TOKEN_PROGRAM_ID,
 } from "@solana/spl-token";
 import { deriveBaseObligation, deriveUserState } from "./pdas";
 import {
@@ -29,7 +30,7 @@ import { loadEnvFile } from "../utils";
 /**
  * If true, send the tx. If false, just output transaction details for review.
  */
-const sendTx = true;
+const sendTx = false;
 
 type Config = {
   PROGRAM_ID: string;
@@ -50,20 +51,20 @@ type Config = {
 };
 
 // ========================================
-// PYUSD - Kamino Bank Obligation Configuration
+// SOL - Kamino Bank Obligation Configuration
 // ========================================
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA", // Mainnet program
   GROUP_KEY: new PublicKey("4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8"), // Mainnet group
   ADMIN: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"), // Mainnet multisig
-  BANK_MINT: new PublicKey("2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo"),
-  KAMINO_RESERVE: new PublicKey("2gc9Dm1eB6UgVYFBUN9bWks6Kes9PbWSaPaa9DqyvEiN"),
+  BANK_MINT: new PublicKey("So11111111111111111111111111111111111111112"), // SOL
+  KAMINO_RESERVE: new PublicKey("d4A2prbA2whesmvHaL88BH6Ewn5N4bTSU2Ze8P6Bc4Q"),
   KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"),
-  RESERVE_ORACLE: new PublicKey("3NJYftD5sjVfxSnUdZ1wVML8f3aC6mp1CXCL6L7TnU8C"),
-  FARM_STATE: new PublicKey("DEe2NZ5dAXGxC7M8Gs9Esd9wZRPdQzG8jNamXqhL5yku"), // Active farm
+  RESERVE_ORACLE: new PublicKey("4Hmd6PdjVA9auCoScE12iaBogfwS4ZXQ6VZoBeqanwWW"), // Switchboard SOL/USD
+  FARM_STATE: PublicKey.default, // NOTE: Check if SOL has active farm - using default for now
   SEED: 300,
-  TOKEN_PROGRAM: TOKEN_2022_PROGRAM_ID, // PYUSD uses Token-2022
+  TOKEN_PROGRAM: TOKEN_PROGRAM_ID, // SOL uses standard Token Program
 };
 
 async function main() {
