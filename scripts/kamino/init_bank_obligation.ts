@@ -30,7 +30,7 @@ import { loadEnvFile } from "../utils";
 /**
  * If true, send the tx. If false, just output transaction details for review.
  */
-const sendTx = false;
+const sendTx = true;
 
 type Config = {
   PROGRAM_ID: string;
@@ -61,8 +61,8 @@ const config: Config = {
   BANK_MINT: new PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"), // USDC
   KAMINO_RESERVE: new PublicKey("D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59"),
   KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"),
-  RESERVE_ORACLE: new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
-  FARM_STATE: PublicKey.default, // NOTE: USDC has no active farm - this may need special handling
+  RESERVE_ORACLE: new PublicKey("3NJYftD5sjVfxSnUdZ1wVML8f3aC6mp1CXCL6L7TnU8C"), // Scope oracle for USDC
+  FARM_STATE: new PublicKey("JAvnB9AKtgPsTEoKmn24Bq64UMoYcrtWtq42HHBdsPkh"), // Farm collateral for USDC
   SEED: 300,
   TOKEN_PROGRAM: TOKEN_PROGRAM_ID, // USDC uses standard Token Program
 };
@@ -112,11 +112,16 @@ async function main() {
     config.TOKEN_PROGRAM
   );
 
-  const [userState] = deriveUserState(
-    FARMS_PROGRAM_ID,
-    config.FARM_STATE,
-    baseObligation
-  );
+  // Derive obligation farm user state if farm exists
+  const hasFarm = !config.FARM_STATE.equals(PublicKey.default);
+  const [obligationFarmUserState] = hasFarm
+    ? deriveUserState(FARMS_PROGRAM_ID, config.FARM_STATE, baseObligation)
+    : [null, 0];
+
+  console.log("has farm:", hasFarm);
+  if (hasFarm) {
+    console.log("obligation farm user state:", obligationFarmUserState?.toBase58());
+  }
 
   let initObligationTx = new Transaction().add(
     ComputeBudgetProgram.setComputeUnitLimit({ units: 1_400_000 }),
@@ -130,9 +135,9 @@ async function main() {
         reserveLiquidityMint: config.BANK_MINT,
         reserve: config.KAMINO_RESERVE,
         scopePrices: config.RESERVE_ORACLE,
-        // TODO support edge cases where no farm state is active
-        reserveFarmState: config.FARM_STATE,
-        obligationFarmUserState: userState,
+        // Pass farm state if configured, otherwise null
+        reserveFarmState: hasFarm ? config.FARM_STATE : null,
+        obligationFarmUserState: obligationFarmUserState,
         liquidityTokenProgram: config.TOKEN_PROGRAM,
       },
       new BN(100)
@@ -148,8 +153,26 @@ async function main() {
       );
       console.log("obligation key: " + baseObligation);
       console.log("Transaction signature:", sigObligation);
-    } catch (error) {
-      console.error("Transaction failed:", error);
+    } catch (error: any) {
+      console.error("Transaction failed:", error.message);
+      if (error.logs) {
+        console.log("\n=== TRANSACTION LOGS ===");
+        error.logs.forEach((log: string, i: number) => {
+          console.log(`[${i}] ${log}`);
+        });
+      }
+      // Try to get logs via getLogs if available
+      if (typeof error.getLogs === 'function') {
+        try {
+          const logs = await error.getLogs(connection);
+          console.log("\n=== DETAILED LOGS ===");
+          logs.forEach((log: string, i: number) => {
+            console.log(`[${i}] ${log}`);
+          });
+        } catch (e) {
+          console.error("Could not fetch detailed logs:", e);
+        }
+      }
     }
   } else {
     // When sendTx=false, output transaction for simulation
