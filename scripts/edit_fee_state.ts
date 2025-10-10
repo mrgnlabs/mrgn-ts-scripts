@@ -42,14 +42,14 @@ type Config = {
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  ADMIN: new PublicKey("AZtUUe9GvTFq9kfseu9jxTioSgdSfjgmZfGQBmhVpTj1"),
+  ADMIN: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 
-  MULTISIG: new PublicKey("AZtUUe9GvTFq9kfseu9jxTioSgdSfjgmZfGQBmhVpTj1"),
+  MULTISIG: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 
   NEW_WALLET: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
   NEW_ADMIN: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
   NEW_POOL_FLAT_SOL_FEE: 0,
-  LIQUIDATION_FLAT_SOL_FEE: 0.05 * 10 ** 9,
+  LIQUIDATION_FLAT_SOL_FEE: 0.01 * 10 ** 9,
   FIXED_FEE: 0,
   RATE_FEE: 0.075,
   LIQUIDATION_MAX_PREMIUM: 0.1,
@@ -114,24 +114,6 @@ const deriveGlobalFeeState = (programId: PublicKey) => {
     [Buffer.from("feestate", "utf-8")],
     programId
   );
-};
-
-export const editGlobalFeeState = (program: Program<Marginfi>) => {
-  const ix = program.methods
-    .editGlobalFeeState(
-      config.NEW_ADMIN,
-      config.NEW_WALLET,
-      config.NEW_POOL_FLAT_SOL_FEE,
-      bigNumberToWrappedI80F48(config.FIXED_FEE),
-      bigNumberToWrappedI80F48(config.RATE_FEE)
-    )
-    .accountsPartial({
-      globalFeeAdmin: config.ADMIN,
-      // feeState = deriveGlobalFeeState(id),
-    })
-    .instruction();
-
-  return ix;
 };
 
 main().catch((err) => {
