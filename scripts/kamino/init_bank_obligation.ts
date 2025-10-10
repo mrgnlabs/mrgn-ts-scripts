@@ -1,4 +1,7 @@
 // Call this once after each bank is made.
+// This script is always run LOCALLY with your own wallet (not via Squads multisig).
+// Set KEYPAIR_PATH env var to your wallet location.
+// The fee payer will automatically be your wallet's public key.
 import {
   ComputeBudgetProgram,
   PublicKey,
@@ -6,12 +9,9 @@ import {
   sendAndConfirmTransaction,
 } from "@solana/web3.js";
 import { BN } from "@coral-xyz/anchor";
-import { TOKEN_PROGRAM_ID, WrappedI80F48 } from "@mrgnlabs/mrgn-common";
-import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 import {
   FARMS_PROGRAM_ID,
   KLEND_PROGRAM_ID,
-  OracleSetupRawWithKamino,
 } from "./kamino-types";
 import { commonSetup } from "../../lib/common-setup";
 import { makeInitObligationIx } from "./ixes-common";
@@ -27,9 +27,9 @@ import {
 import { loadEnvFile } from "../utils";
 
 /**
- * If true, send the tx. If false, output the unsigned b58 tx to console.
+ * If true, send the tx. If false, just output transaction details for review.
  */
-const sendTx = false;
+const sendTx = true;
 
 type Config = {
   PROGRAM_ID: string;
@@ -37,8 +37,6 @@ type Config = {
 
   /** Group admin (generally the MS on mainnet) */
   ADMIN: PublicKey;
-  /** Pays flat sol fee to init and rent (generally the MS on mainnet) */
-  FEE_PAYER: PublicKey;
   BANK_MINT: PublicKey;
   KAMINO_RESERVE: PublicKey;
   KAMINO_MARKET: PublicKey;
@@ -49,7 +47,6 @@ type Config = {
   FARM_STATE: PublicKey;
   SEED: number;
   TOKEN_PROGRAM: PublicKey;
-  MULTISIG_PAYER?: PublicKey; // May be omitted if not using squads
 };
 
 // ========================================
@@ -60,7 +57,6 @@ const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA", // Mainnet program
   GROUP_KEY: new PublicKey("4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8"), // Mainnet group
   ADMIN: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"), // Mainnet multisig
-  FEE_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"), // Mainnet multisig
   BANK_MINT: new PublicKey("2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo"),
   KAMINO_RESERVE: new PublicKey("2gc9Dm1eB6UgVYFBUN9bWks6Kes9PbWSaPaa9DqyvEiN"),
   KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"),
@@ -68,7 +64,6 @@ const config: Config = {
   FARM_STATE: new PublicKey("DEe2NZ5dAXGxC7M8Gs9Esd9wZRPdQzG8jNamXqhL5yku"), // Active farm
   SEED: 300,
   TOKEN_PROGRAM: TOKEN_2022_PROGRAM_ID, // PYUSD uses Token-2022
-  MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 };
 
 async function main() {
@@ -77,17 +72,16 @@ async function main() {
 
   console.log("init obligation for bank in group: " + config.GROUP_KEY);
 
-  // Use KEYPAIR_PATH env var, or fall back to default path
-  // NOTE: When sendTx=false, this keypair is ONLY used for transaction construction.
-  // The actual signer will be the Squads multisig (MULTISIG_PAYER).
-  const keypairPath = process.env.KEYPAIR_PATH || "/keys/zerotrade_admin.json";
-  console.log("using keypair path: " + keypairPath);
+  // commonSetup prepends HOME to the path, so pass a path starting with /
+  const keypairPath = "/.config/solana/id.json";
+  console.log("using keypair: $HOME" + keypairPath);
 
+  // Always load real wallet (even when sendTx=false) since we need the public key for ATA
   const user = commonSetup(
-    sendTx,
+    true, // Always pass true to load real wallet
     config.PROGRAM_ID,
     keypairPath,
-    config.MULTISIG_PAYER,
+    undefined,
     "kamino"
   );
   const program = user.program;
@@ -128,7 +122,7 @@ async function main() {
     await makeInitObligationIx(
       program,
       {
-        feePayer: config.FEE_PAYER,
+        feePayer: user.wallet.publicKey, // Use the wallet's public key as fee payer
         bank: bankKey,
         signerTokenAccount: ata,
         lendingMarket: config.KAMINO_MARKET,
@@ -157,16 +151,39 @@ async function main() {
       console.error("Transaction failed:", error);
     }
   } else {
-    initObligationTx.feePayer = config.MULTISIG_PAYER; // Set the fee payer to Squads wallet
+    // When sendTx=false, output transaction for simulation
     const { blockhash } = await connection.getLatestBlockhash();
     initObligationTx.recentBlockhash = blockhash;
-    const serializedTransaction = initObligationTx.serialize({
-      requireAllSignatures: false,
-      verifySignatures: false,
-    });
-    const base58Transaction = bs58.encode(serializedTransaction);
-    console.log("bank key: " + bankKey);
-    console.log("Base58-encoded transaction:", base58Transaction);
+    initObligationTx.feePayer = user.wallet.publicKey;
+
+    // Simulate the transaction
+    try {
+      const simulation = await connection.simulateTransaction(initObligationTx);
+
+      console.log("bank key: " + bankKey);
+      console.log("obligation key: " + baseObligation);
+      console.log("fee payer: " + user.wallet.publicKey.toBase58());
+      console.log("\n=== SIMULATION RESULTS ===");
+
+      if (simulation.value.err) {
+        console.log("❌ Simulation failed!");
+        console.log("Error:", JSON.stringify(simulation.value.err, null, 2));
+      } else {
+        console.log("✅ Simulation successful!");
+        console.log("Compute units:", simulation.value.unitsConsumed);
+      }
+
+      if (simulation.value.logs) {
+        console.log("\n📝 Logs:");
+        simulation.value.logs.forEach((log, i) => {
+          console.log(`  [${i}] ${log}`);
+        });
+      }
+
+      console.log("\nSet sendTx=true to execute this transaction.");
+    } catch (error) {
+      console.error("Simulation error:", error);
+    }
   }
 }
 
