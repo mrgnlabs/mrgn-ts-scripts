@@ -41,19 +41,19 @@ type Config = {
 };
 
 // ========================================
-// PYUSD - Kamino Bank Configuration
+// CASH - Kamino Bank Configuration
 // ========================================
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA", // Mainnet program
   GROUP_KEY: new PublicKey("4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8"), // Mainnet group
-  ORACLE: new PublicKey("9zXQxpYH3kYhtoybmZfUNNCRVuud7fY9jswTg1hLyT8k"),
-  ORACLE_TYPE: { kaminoPythPush: {} },
+  ORACLE: new PublicKey("HxQbxDh4SGYi94LrgS6VuSdoBnRZamBvHgdiVTG8yomf"), // Switchboard CASH/USD
+  ORACLE_TYPE: { kaminoSwitchboardPull: {} }, // Use Switchboard since original bank uses Switchboard
   ADMIN: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"), // Mainnet multisig
   FEE_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"), // Mainnet multisig
-  BANK_MINT: new PublicKey("2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo"),
-  KAMINO_RESERVE: new PublicKey("2gc9Dm1eB6UgVYFBUN9bWks6Kes9PbWSaPaa9DqyvEiN"),
-  KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"),
+  BANK_MINT: new PublicKey("CASHx9KJUStyftLFWGvEVf59SGeG9sh5FfcnZMVPCASH"), // CASH
+  KAMINO_RESERVE: new PublicKey("ApQkX32ULJUzszZDe986aobLDLMNDoGQK8tRm6oD6SsA"), // Kamino CASH Reserve
+  KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"), // Main Market
   SEED: 300,
   MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 };
@@ -113,12 +113,12 @@ async function main() {
 
   // Build bank config using fetched decimals
   const bankConfig: KaminoConfigCompact = {
-    assetWeightInit: bigNumberToWrappedI80F48(0.9),
-    assetWeightMaint: bigNumberToWrappedI80F48(0.95),
-    depositLimit: new BN(10_000_000 * 10 ** mintInfo.decimals),
+    assetWeightInit: bigNumberToWrappedI80F48(0.5), // 50% for CASH
+    assetWeightMaint: bigNumberToWrappedI80F48(0.6), // 60% for CASH
+    depositLimit: new BN(2_500_000 * 10 ** mintInfo.decimals), // 2.5M CASH (50% of 5M)
     operationalState: { operational: {} },
     riskTier: { collateral: {} },
-    totalAssetValueInitLimit: new BN(10_000_000),
+    totalAssetValueInitLimit: new BN(2_500_000), // $2.5M (50% of $5M)
     oracleMaxAge: 300,
     oracleMaxConfidence: 0,
     oracle: config.ORACLE,
