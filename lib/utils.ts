@@ -8,6 +8,7 @@ import {
   PublicKey,
   sendAndConfirmTransaction,
   Transaction,
+  TransactionInstruction,
   TransactionMessage,
   VersionedTransaction,
 } from "@solana/web3.js";
@@ -30,11 +31,13 @@ import {
   MARGINFI_SPONSORED_SHARD_ID,
 } from "./constants";
 import { Environment, MarginfiAccountRaw } from "@mrgnlabs/marginfi-client-v2";
-import { Marginfi } from "../idl/marginfi";
+import { Marginfi } from "../idl/marginfi_kamino";
 import { AnchorProvider, Program, Provider } from "@coral-xyz/anchor";
 import { loadSponsoredOracle } from "./pyth-oracle-helpers";
 import * as sb from "@switchboard-xyz/on-demand";
 import { CrossbarClient } from "@switchboard-xyz/common";
+import { KaminoLending } from "../idl/kamino_lending";
+import { simpleRefreshReserve } from "../scripts/kamino/ixes-common";
 
 dotenv.config();
 
@@ -331,52 +334,77 @@ export async function getBankPrices(
 
 export async function getOraclesAndCrankSwb(
   program: Program<Marginfi>,
+  kaminoProgram: Program<KaminoLending>,
   account: PublicKey,
   connection: Connection,
   payer: Keypair
-): Promise<BankAndOracles[]> {
+): Promise<[BankAndOracles[], TransactionInstruction[]]> {
   let swbPullFeeds: PublicKey[] = [];
+  const ixs: TransactionInstruction[] = [];
 
   let acc = await program.account.marginfiAccount.fetch(account);
   dumpAccBalances(acc);
   let balances = acc.lendingAccount.balances;
   let activeBalances: BankAndOracles[] = [];
   for (let i = 0; i < balances.length; i++) {
-    let bal = balances[i];
+    const bal = balances[i];
     if (bal.active == 1) {
-      let bankAcc = await program.account.bank.fetch(bal.bankPk);
-      if ("switchboardPull" in bankAcc.config.oracleSetup) {
-        const oracle = bankAcc.config.oracleKeys[0];
-        console.log("[" + i + "] swb oracle: " + oracle);
+      const bankAcc = await program.account.bank.fetch(bal.bankPk);
+      const setup = bankAcc.config.oracleSetup;
+      const keys = bankAcc.config.oracleKeys;
+
+      if ("switchboardPull" in setup) {
+        const oracle = keys[0];
+        console.log(`[${i}] swb oracle: ${oracle}`);
         swbPullFeeds.push(oracle);
         activeBalances.push([bal.bankPk, oracle]);
-      } else if ("pythPushOracle" in bankAcc.config.oracleSetup) {
-        const oracle = bankAcc.config.oracleKeys[0];
-        console.log("[" + i + "] pyth oracle: " + oracle);
-        let feed = oracle;
-        console.log(" feed: " + feed);
-        activeBalances.push([bal.bankPk, feed]);
-      } else if (
-        "[" + i + "] stakedWithPythPush" in
-        bankAcc.config.oracleSetup
-      ) {
-        const oracle = bankAcc.config.oracleKeys[0];
-        console.log("pyth oracle: " + oracle);
-        console.log(
-          "lst pool/mint: " +
-            bankAcc.config.oracleKeys[1] +
-            " " +
-            bankAcc.config.oracleKeys[2]
+      } else if ("kaminoSwitchboardPull" in setup) {
+        const oracle = keys[0];
+        console.log(`[${i}] kamino swb oracle: ${oracle}`);
+        console.log(`  extra key: ${keys[1]}`);
+        swbPullFeeds.push(oracle); // still a switchboard feed
+        activeBalances.push([bal.bankPk, oracle, keys[1]]);
+
+        const kaminoReservePk: PublicKey = bankAcc.kaminoReserve;
+        let reserve = await kaminoProgram.account.reserve.fetch(
+          kaminoReservePk
         );
-        activeBalances.push([
-          bal.bankPk,
-          oracle,
-          bankAcc.config.oracleKeys[1],
-          bankAcc.config.oracleKeys[2],
-        ]);
+        const ix = await simpleRefreshReserve(
+          kaminoProgram,
+          kaminoReservePk,
+          reserve.lendingMarket,
+          reserve.config.tokenInfo.scopeConfiguration.priceFeed
+        );
+        ixs.push(ix);
+      } else if ("pythPushOracle" in setup) {
+        const oracle = keys[0];
+        console.log(`[${i}] pyth oracle: ${oracle}`);
+        activeBalances.push([bal.bankPk, oracle]);
+      } else if ("kaminoPythPush" in setup) {
+        const oracle = keys[0];
+        console.log(`[${i}] kamino pyth oracle: ${oracle}`);
+        console.log(`  extra key: ${keys[1]}`);
+        activeBalances.push([bal.bankPk, oracle, keys[1]]);
+
+        const kaminoReservePk: PublicKey = bankAcc.kaminoReserve;
+        let reserve = await kaminoProgram.account.reserve.fetch(
+          kaminoReservePk
+        );
+        const ix = await simpleRefreshReserve(
+          kaminoProgram,
+          kaminoReservePk,
+          reserve.lendingMarket,
+          reserve.config.tokenInfo.scopeConfiguration.priceFeed
+        );
+        ixs.push(ix);
+      } else if ("stakedWithPythPush" in setup) {
+        const oracle = keys[0];
+        console.log(`[${i}] pyth oracle: ${oracle}`);
+        console.log(`  lst pool/mint: ${keys[1]} ${keys[2]}`);
+        activeBalances.push([bal.bankPk, oracle, keys[1], keys[2]]);
       } else {
-        const oracle = bankAcc.config.oracleKeys[0];
-        console.log("[" + i + "] other oracle: " + oracle);
+        const oracle = keys[0];
+        console.log(`[${i}] other oracle: ${oracle}`);
         activeBalances.push([bal.bankPk, oracle]);
       }
     }
@@ -434,7 +462,7 @@ export async function getOraclesAndCrankSwb(
     }
   }
 
-  return activeBalances;
+  return [activeBalances, ixs];
 }
 
 export const getTokenBalance = async (

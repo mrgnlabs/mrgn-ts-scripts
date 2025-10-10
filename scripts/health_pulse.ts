@@ -7,12 +7,10 @@ import {
   TransactionMessage,
   VersionedTransaction,
 } from "@solana/web3.js";
-import {
-  bytesToF64,
-  getOraclesAndCrankSwb,
-} from "../lib/utils";
-import { commonSetup } from "../lib/common-setup";
+import { bytesToF64, getOraclesAndCrankSwb } from "../lib/utils";
+import { commonSetup, registerKaminoProgram } from "../lib/common-setup";
 import { wrappedI80F48toBigNumber } from "@mrgnlabs/mrgn-common";
+import { KLEND_PROGRAM_ID } from "./kamino/kamino-types";
 
 export type Config = {
   PROGRAM_ID: string;
@@ -23,8 +21,8 @@ export type Config = {
 };
 
 const config: Config = {
-  PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  ACCOUNT: new PublicKey("95zwX8Y6LFByC5zTD6dyiZNbrwG7Rgv4TmY6WDup3ju3"),
+  PROGRAM_ID: "5UDghkpgW1HfYSrmEj2iAApHShqU44H6PKTAar9LL9bY",
+  ACCOUNT: new PublicKey("6G2U3DAytwCZGbNHhe2UnconQwzVCWEkKKHRfeQ9wXTy"),
 
   LUT: new PublicKey("CQ8omkUwDtsszuJLo9grtXCeEyDU4QqBLRv9AjRDaUZ3"),
 };
@@ -35,13 +33,15 @@ async function main() {
     config.PROGRAM_ID,
     "/keys/staging-deploy.json",
     undefined,
-    "current"
+    "kamino"
   );
+  registerKaminoProgram(user, KLEND_PROGRAM_ID.toString());
   const program = user.program;
   const connection = user.connection;
 
-  let activeBalances = await getOraclesAndCrankSwb(
+  let [activeBalances, kaminoIxes] = await getOraclesAndCrankSwb(
     program,
+    user.kaminoProgram,
     config.ACCOUNT,
     connection,
     user.wallet.payer
@@ -53,6 +53,7 @@ async function main() {
   const transaction = new Transaction();
   transaction.add(
     ComputeBudgetProgram.setComputeUnitLimit({ units: 2_000_000 }),
+    ...kaminoIxes,
     await program.methods
       .lendingAccountPulseHealth()
       .accounts({
