@@ -49,7 +49,7 @@ const config: Config = {
   NEW_WALLET: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
   NEW_ADMIN: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
   NEW_POOL_FLAT_SOL_FEE: 0,
-  LIQUIDATION_FLAT_SOL_FEE: 0.01 * 10 ** 9,
+  LIQUIDATION_FLAT_SOL_FEE: 0.001 * 10 ** 9,
   FIXED_FEE: 0,
   RATE_FEE: 0.075,
   LIQUIDATION_MAX_PREMIUM: 0.1,
