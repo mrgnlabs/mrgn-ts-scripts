@@ -1,12 +1,23 @@
-import { Connection, PublicKey, Transaction, sendAndConfirmTransaction } from "@solana/web3.js";
-import { Marginfi } from "../../marginfi-client-v2/src/idl/marginfi-types_0.1.2";
-import marginfiIdl from "../../marginfi-client-v2/src/idl/marginfi_0.1.2.json";
-import { bigNumberToWrappedI80F48, WrappedI80F48 } from "@mrgnlabs/mrgn-common";
+import {
+  Connection,
+  PublicKey,
+  Transaction,
+  sendAndConfirmTransaction,
+} from "@solana/web3.js";
+import {
+  bigNumberToWrappedI80F48,
+  WrappedI80F48,
+  wrappedI80F48toBigNumber,
+} from "@mrgnlabs/mrgn-common";
 import { AnchorProvider, BN, Program } from "@coral-xyz/anchor";
 import { loadKeypairFromTxtFile } from "./utils";
-import { assertBNEqual, assertI80F48Approx, assertKeysEqual } from "./softTests";
+import {
+  assertBNEqual,
+  assertI80F48Approx,
+  assertKeysEqual,
+} from "./softTests";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
-import { wrappedI80F48toBigNumber } from "../../mrgn-common/dist";
+import { commonSetup } from "../lib/common-setup";
 
 /**
  * If true, send the tx. If false, output the b58 tx to console.
@@ -22,9 +33,11 @@ type Config = {
 
   NEW_WALLET: PublicKey;
   NEW_ADMIN: PublicKey;
-  FLAT_SOL_FEE: number;
+  NEW_POOL_FLAT_SOL_FEE: number;
+  LIQUIDATION_FLAT_SOL_FEE: number;
   FIXED_FEE: number;
   RATE_FEE: number;
+  LIQUIDATION_MAX_PREMIUM: number;
 };
 
 const config: Config = {
@@ -35,44 +48,53 @@ const config: Config = {
 
   NEW_WALLET: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
   NEW_ADMIN: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
-  FLAT_SOL_FEE: 150000000,
+  NEW_POOL_FLAT_SOL_FEE: 0,
+  LIQUIDATION_FLAT_SOL_FEE: 0.05 * 10 ** 9,
   FIXED_FEE: 0,
   RATE_FEE: 0.075,
+  LIQUIDATION_MAX_PREMIUM: 0.1,
 };
 
 async function main() {
-  marginfiIdl.address = config.PROGRAM_ID;
-  const connection = new Connection("https://api.mainnet-beta.solana.com", "confirmed");
-  const wallet = loadKeypairFromTxtFile(process.env.HOME + "/keys/staging-fee-admin.txt");
-
-  // @ts-ignore
-  const provider = new AnchorProvider(connection, wallet, {
-    preflightCommitment: "confirmed",
-  });
-  const program: Program<Marginfi> = new Program(
-    // @ts-ignore
-    marginfiIdl as Marginfi,
-    provider
+  const user = commonSetup(
+    sendTx,
+    config.PROGRAM_ID,
+    "/keys/phantom-wallet.json",
+    config.MULTISIG,
+    "kamino"
   );
+  const program = user.program;
+  const connection = user.connection;
 
-  const transaction = new Transaction().add(await editGlobalFeeState(program));
+  const transaction = new Transaction().add(
+    await program.methods
+      .editGlobalFeeState(
+        config.NEW_ADMIN,
+        config.NEW_WALLET,
+        config.NEW_POOL_FLAT_SOL_FEE,
+        config.LIQUIDATION_FLAT_SOL_FEE,
+        bigNumberToWrappedI80F48(config.FIXED_FEE),
+        bigNumberToWrappedI80F48(config.RATE_FEE),
+        bigNumberToWrappedI80F48(config.LIQUIDATION_MAX_PREMIUM)
+      )
+      .accounts({})
+      .accountsPartial({
+        globalFeeAdmin: config.ADMIN,
+      })
+      .instruction()
+  );
 
   if (sendTx) {
     try {
-      const signature = await sendAndConfirmTransaction(connection, transaction, [wallet]);
+      const signature = await sendAndConfirmTransaction(
+        connection,
+        transaction,
+        [user.wallet.payer]
+      );
       console.log("Transaction signature:", signature);
     } catch (error) {
       console.error("Transaction failed:", error);
     }
-
-    const [feeStateKey] = deriveGlobalFeeState(program.programId);
-    const gfs = await program.account.feeState.fetch(feeStateKey);
-    console.log("***Fee state***");
-    console.log(" admin:     " + gfs.globalFeeAdmin);
-    console.log(" wallet:    " + gfs.globalFeeWallet);
-    console.log(" flat sol:  " + gfs.bankInitFlatSolFee);
-    console.log(" fixed:     " + wrappedI80F48toBigNumber(gfs.programFeeFixed));
-    console.log(" rate       " + wrappedI80F48toBigNumber(gfs.programFeeRate));
   } else {
     transaction.feePayer = config.MULTISIG; // Set the fee payer to Squads wallet
     const { blockhash } = await connection.getLatestBlockhash();
@@ -88,7 +110,10 @@ async function main() {
 
 // TODO remove after package updates
 const deriveGlobalFeeState = (programId: PublicKey) => {
-  return PublicKey.findProgramAddressSync([Buffer.from("feestate", "utf-8")], programId);
+  return PublicKey.findProgramAddressSync(
+    [Buffer.from("feestate", "utf-8")],
+    programId
+  );
 };
 
 export const editGlobalFeeState = (program: Program<Marginfi>) => {
@@ -96,7 +121,7 @@ export const editGlobalFeeState = (program: Program<Marginfi>) => {
     .editGlobalFeeState(
       config.NEW_ADMIN,
       config.NEW_WALLET,
-      config.FLAT_SOL_FEE,
+      config.NEW_POOL_FLAT_SOL_FEE,
       bigNumberToWrappedI80F48(config.FIXED_FEE),
       bigNumberToWrappedI80F48(config.RATE_FEE)
     )

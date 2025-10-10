@@ -11,7 +11,7 @@ import {
   createAssociatedTokenAccountIdempotentInstruction,
   getAssociatedTokenAddressSync,
 } from "@mrgnlabs/mrgn-common";
-import { commonSetup } from "../lib/common-setup";
+import { commonSetup, registerKaminoProgram } from "../lib/common-setup";
 import {
   BankAndOracles,
   composeRemainingAccounts,
@@ -19,6 +19,7 @@ import {
 } from "../lib/utils";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 import { TOKEN_2022_PROGRAM_ID } from "@solana/spl-token";
+import { KLEND_PROGRAM_ID } from "./kamino/kamino-types";
 
 const sendTx = false;
 
@@ -115,23 +116,27 @@ async function main() {
     config.PROGRAM_ID,
     "/keys/phantom-wallet.json",
     config.MULTISIG,
-    "current"
+    "kamino"
   );
   const program = user.program;
   const connection = user.connection;
+  registerKaminoProgram(user, KLEND_PROGRAM_ID.toString());
 
   let mintAccInfo = await connection.getAccountInfo(config.MINT);
   const tokenProgram = mintAccInfo.owner;
   let isT22 = tokenProgram.toString() == TOKEN_2022_PROGRAM_ID.toString();
 
   let meta: AccountMeta[] = [];
+  let kaminoIxes = [];
   if (sendTx) {
-    let activeBalances = await getOraclesAndCrankSwb(
+    let [activeBalances, ixes] = await getOraclesAndCrankSwb(
       program,
+      user.kaminoProgram,
       config.ACCOUNT,
       connection,
       user.wallet.payer
     );
+    kaminoIxes = ixes;
     meta = activeBalances.flat().map((pubkey) => {
       return { pubkey, isSigner: false, isWritable: false };
     });
@@ -174,6 +179,7 @@ async function main() {
   }
 
   transaction.add(
+    ...kaminoIxes,
     createAssociatedTokenAccountIdempotentInstruction(
       user.wallet.publicKey,
       ata,

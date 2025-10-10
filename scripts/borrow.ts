@@ -12,13 +12,14 @@ import {
   getAssociatedTokenAddressSync,
   TOKEN_PROGRAM_ID,
 } from "@mrgnlabs/mrgn-common";
-import { commonSetup } from "../lib/common-setup";
+import { commonSetup, registerKaminoProgram } from "../lib/common-setup";
 import {
   BankAndOracles,
   composeRemainingAccounts,
   getOraclesAndCrankSwb,
 } from "../lib/utils";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
+import { KLEND_PROGRAM_ID } from "./kamino/kamino-types";
 
 const sendTx = true;
 
@@ -46,7 +47,7 @@ const config: Config = {
   ACCOUNT: new PublicKey("7qEL6Gb8jNWRGRLKU3G6fvWZkWMs5hVkpKKNeWdaJAE4"),
   BANK: new PublicKey("DMoqjmsuoru986HgfjqrKEvPv8YBufvBGADHUonkadC5"),
   MINT: new PublicKey("LSTxxxnJzKDFSLr4dUkPcmCf5VyryEqzPLz5j4bpxFp"),
-  AMOUNT: new BN(.00001 * 10 ** 9),
+  AMOUNT: new BN(0.00001 * 10 ** 9),
   NEW_REMAINING: [
     // new PublicKey("2s37akK2eyBbp8DZgCm7RtsaEz8eJP3Nxd4urLHQv7yB"),
     // new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
@@ -126,13 +127,15 @@ async function main() {
     config.PROGRAM_ID,
     "/keys/phantom-wallet.json",
     config.MULTISIG,
-    "current"
+    "kamino"
   );
   const program = user.program;
   const connection = user.connection;
+  registerKaminoProgram(user, KLEND_PROGRAM_ID.toString());
 
-  let activeBalances = await getOraclesAndCrankSwb(
+  let [activeBalances, kaminoIxes] = await getOraclesAndCrankSwb(
     program,
+    user.kaminoProgram,
     config.ACCOUNT,
     connection,
     user.wallet.payer
@@ -156,6 +159,7 @@ async function main() {
   }
 
   transaction.add(
+    ...kaminoIxes,
     createAssociatedTokenAccountIdempotentInstruction(
       user.wallet.publicKey,
       ata,
