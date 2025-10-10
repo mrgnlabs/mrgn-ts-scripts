@@ -41,19 +41,19 @@ type Config = {
 };
 
 // ========================================
-// PYUSD - Kamino Bank Configuration
+// USDG - Kamino Bank Configuration
 // ========================================
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA", // Mainnet program
   GROUP_KEY: new PublicKey("4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8"), // Mainnet group
-  ORACLE: new PublicKey("9zXQxpYH3kYhtoybmZfUNNCRVuud7fY9jswTg1hLyT8k"),
-  ORACLE_TYPE: { kaminoPythPush: {} },
+  ORACLE: new PublicKey("6JkZmXGgWnzsyTQaqRARzP64iFYnpMNT4siiuUDUaB8s"), // Pyth USDG/USD
+  ORACLE_TYPE: { kaminoPythPush: {} }, // Use Pyth since original bank uses Pyth
   ADMIN: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"), // Mainnet multisig
   FEE_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"), // Mainnet multisig
-  BANK_MINT: new PublicKey("2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo"),
-  KAMINO_RESERVE: new PublicKey("2gc9Dm1eB6UgVYFBUN9bWks6Kes9PbWSaPaa9DqyvEiN"),
-  KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"),
+  BANK_MINT: new PublicKey("2u1tszSeqZ3qBWF3uNGPFc8TzMk2tdiwknnRMWGWjGWH"), // USDG
+  KAMINO_RESERVE: new PublicKey("ESCkPWKHmgNE7Msf77n9yzqJd5kQVWWGy3o5Mgxhvavp"), // Kamino USDG Reserve
+  KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"), // Main Market
   SEED: 300,
   MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 };
@@ -113,12 +113,12 @@ async function main() {
 
   // Build bank config using fetched decimals
   const bankConfig: KaminoConfigCompact = {
-    assetWeightInit: bigNumberToWrappedI80F48(0.9),
-    assetWeightMaint: bigNumberToWrappedI80F48(0.95),
-    depositLimit: new BN(10_000_000 * 10 ** mintInfo.decimals),
+    assetWeightInit: bigNumberToWrappedI80F48(0.85), // 85% for USDG
+    assetWeightMaint: bigNumberToWrappedI80F48(0.91), // 91% for USDG
+    depositLimit: new BN(100_000 * 10 ** mintInfo.decimals), // 100K USDG
     operationalState: { operational: {} },
     riskTier: { collateral: {} },
-    totalAssetValueInitLimit: new BN(10_000_000),
+    totalAssetValueInitLimit: new BN(100_000), // $100K
     oracleMaxAge: 300,
     oracleMaxConfidence: 0,
     oracle: config.ORACLE,
