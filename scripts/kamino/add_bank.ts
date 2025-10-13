@@ -41,20 +41,20 @@ type Config = {
 };
 
 // ========================================
-// USDG - Kamino Bank Configuration
+// PYUSD - Kamino Bank Configuration (JLP Market)
 // ========================================
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA", // Mainnet program
   GROUP_KEY: new PublicKey("4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8"), // Mainnet group
-  ORACLE: new PublicKey("6JkZmXGgWnzsyTQaqRARzP64iFYnpMNT4siiuUDUaB8s"), // Pyth USDG/USD
-  ORACLE_TYPE: { kaminoPythPush: {} }, // Use Pyth since original bank uses Pyth
+  ORACLE: new PublicKey("9zXQxpYH3kYhtoybmZfUNNCRVuud7fY9jswTg1hLyT8k"), // Pyth PYUSD/USD (same as Main Market PYUSD)
+  ORACLE_TYPE: { kaminoPythPush: {} }, // Pyth oracle
   ADMIN: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"), // Mainnet multisig
   FEE_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"), // Mainnet multisig
-  BANK_MINT: new PublicKey("2u1tszSeqZ3qBWF3uNGPFc8TzMk2tdiwknnRMWGWjGWH"), // USDG
-  KAMINO_RESERVE: new PublicKey("ESCkPWKHmgNE7Msf77n9yzqJd5kQVWWGy3o5Mgxhvavp"), // Kamino USDG Reserve
-  KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"), // Main Market
-  SEED: 300,
+  BANK_MINT: new PublicKey("2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo"), // PYUSD
+  KAMINO_RESERVE: new PublicKey("FswUCVjvfAuzHCgPDF95eLKscGsLHyJmD6hzkhq26CLe"), // Kamino PYUSD Reserve (JLP Market)
+  KAMINO_MARKET: new PublicKey("DxXdAyU3kCjnyggvHmY5nAwg5cRbbmdyX3npfDMjjMek"), // JLP Market
+  SEED: 301,
   MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 };
 
@@ -113,12 +113,12 @@ async function main() {
 
   // Build bank config using fetched decimals
   const bankConfig: KaminoConfigCompact = {
-    assetWeightInit: bigNumberToWrappedI80F48(0.85), // 85% for USDG
-    assetWeightMaint: bigNumberToWrappedI80F48(0.91), // 91% for USDG
-    depositLimit: new BN(100_000 * 10 ** mintInfo.decimals), // 100K USDG
+    assetWeightInit: bigNumberToWrappedI80F48(0.90), // 90% for PYUSD (same as Main Market)
+    assetWeightMaint: bigNumberToWrappedI80F48(0.95), // 95% for PYUSD (same as Main Market)
+    depositLimit: new BN(5_000_000 * 10 ** mintInfo.decimals), // 5M PYUSD (50% of Main Market)
     operationalState: { operational: {} },
     riskTier: { collateral: {} },
-    totalAssetValueInitLimit: new BN(100_000), // $100K
+    totalAssetValueInitLimit: new BN(5_000_000), // $5M (50% of Main Market)
     oracleMaxAge: 300,
     oracleMaxConfidence: 0,
     oracle: config.ORACLE,
