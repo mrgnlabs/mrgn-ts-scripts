@@ -17,38 +17,75 @@ const sendTx = false;
 
 export type Config = {
   PROGRAM_ID: string;
-  BANK: PublicKey;
   CURVE_ADMIN: PublicKey;
-
   MULTISIG_PAYER?: PublicKey; // May be omitted if not using squads
 };
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  BANK: new PublicKey("HmpMfL8942u22htC4EMiWgLX931g3sacXFR6KjuLgKLV"),
   CURVE_ADMIN: new PublicKey("BACjgGYJYwVRRpnHJfcjykfkp2Xu118ghx5fYL1wgY7p"),
-
   MULTISIG_PAYER: new PublicKey("BACjgGYJYwVRRpnHJfcjykfkp2Xu118ghx5fYL1wgY7p"),
 };
 
-export const intConfig = () => {
-  let int = {
-    protocolOriginationFee: null,
-    protocolIrFee: null,
-    protocolFixedFeeApr: null,
-    insuranceIrFee: null,
-    insuranceFeeFixedApr: null,
-    maxInterestRate: null,
-    optimalUtilizationRate: null,
-    plateauInterestRate: null,
-  };
-
-  return int;
-};
+// ---- List your (BANK, intConfig) pairs here ----
+const ITEMS: Array<{ bank: PublicKey; int: InterestRateConfigRaw }> = [
+  {
+    bank: new PublicKey("2s37akK2eyBbp8DZgCm7RtsaEz8eJP3Nxd4urLHQv7yB"),
+    int: {
+      protocolOriginationFee: null,
+      protocolIrFee: null,
+      protocolFixedFeeApr: null,
+      insuranceIrFee: null,
+      insuranceFeeFixedApr: null,
+      maxInterestRate: null,
+      optimalUtilizationRate: bigNumberToWrappedI80F48(0.9),
+      plateauInterestRate: bigNumberToWrappedI80F48(0.075),
+    },
+  },
+  {
+    bank: new PublicKey("HmpMfL8942u22htC4EMiWgLX931g3sacXFR6KjuLgKLV"),
+    int: {
+      protocolOriginationFee: null,
+      protocolIrFee: null,
+      protocolFixedFeeApr: null,
+      insuranceIrFee: null,
+      insuranceFeeFixedApr: null,
+      maxInterestRate: null,
+      optimalUtilizationRate: bigNumberToWrappedI80F48(0.9),
+      plateauInterestRate: bigNumberToWrappedI80F48(0.075),
+    },
+  },
+  {
+    bank: new PublicKey("8UEiPmgZHXXEDrqLS3oiTxQxTbeYTtPbeMBxAd2XGbpu"),
+    int: {
+      protocolOriginationFee: null,
+      protocolIrFee: null,
+      protocolFixedFeeApr: null,
+      insuranceIrFee: null,
+      insuranceFeeFixedApr: null,
+      maxInterestRate: null,
+      optimalUtilizationRate: bigNumberToWrappedI80F48(0.9),
+      plateauInterestRate: bigNumberToWrappedI80F48(0.075),
+    },
+  },
+  {
+    bank: new PublicKey("FDsf8sj6SoV313qrA91yms3u5b3P4hBxEPvanVs8LtJV"),
+    int: {
+      protocolOriginationFee: null,
+      protocolIrFee: null,
+      protocolFixedFeeApr: null,
+      insuranceIrFee: null,
+      insuranceFeeFixedApr: null,
+      maxInterestRate: null,
+      optimalUtilizationRate: bigNumberToWrappedI80F48(0.9),
+      plateauInterestRate: bigNumberToWrappedI80F48(0.075),
+    },
+  },
+  // Add more items as needed:
+  // { bank: new PublicKey("..."), int: { ...intConfig(), maxInterestRate: new BN(123) } },
+];
 
 async function main() {
-  let int = intConfig();
-
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
@@ -60,19 +97,21 @@ async function main() {
   const connection = user.connection;
 
   const transaction = new Transaction();
-  transaction.add(
-    await program.methods
+
+  // Create one instruction per (bank, int) pair
+  for (const { bank, int } of ITEMS) {
+    const ix = await program.methods
       .lendingPoolConfigureBankInterestOnly(int)
       .accounts({
-        // group: config.GROUP_KEY,
-        // admin: config.ADMIN,
-        bank: config.BANK,
+        bank,
       })
       .accountsPartial({
         delegateCurveAdmin: config.CURVE_ADMIN,
       })
-      .instruction()
-  );
+      .instruction();
+
+    transaction.add(ix);
+  }
 
   if (sendTx) {
     try {
@@ -86,7 +125,11 @@ async function main() {
       console.error("Transaction failed:", error);
     }
   } else {
-    transaction.feePayer = config.MULTISIG_PAYER; // Set the fee payer to Squads wallet
+    // Prepare unsigned tx for Squads or offline sigs
+    if (!config.MULTISIG_PAYER) {
+      throw new Error("MULTISIG_PAYER must be set when sendTx = false.");
+    }
+    transaction.feePayer = config.MULTISIG_PAYER;
     const { blockhash } = await connection.getLatestBlockhash();
     transaction.recentBlockhash = blockhash;
     const serializedTransaction = transaction.serialize({

@@ -21,8 +21,8 @@ export type Config = {
 };
 
 const config: Config = {
-  PROGRAM_ID: "5UDghkpgW1HfYSrmEj2iAApHShqU44H6PKTAar9LL9bY",
-  ACCOUNT: new PublicKey("6G2U3DAytwCZGbNHhe2UnconQwzVCWEkKKHRfeQ9wXTy"),
+  PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
+  ACCOUNT: new PublicKey("BT6jXNSmxHPjE3TgNfSiG6NnqASpbvATnwFKLrLVt9Kz"),
 
   LUT: new PublicKey("CQ8omkUwDtsszuJLo9grtXCeEyDU4QqBLRv9AjRDaUZ3"),
 };
