@@ -41,19 +41,18 @@ type Config = {
 };
 
 // ========================================
-// SOL - Kamino Bank Configuration
+// CASH - Kamino Bank Configuration
 // ========================================
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA", // Mainnet program
   GROUP_KEY: new PublicKey("4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8"), // Mainnet group
-  ORACLE: new PublicKey("4Hmd6PdjVA9auCoScE12iaBogfwS4ZXQ6VZoBeqanwWW"), // Switchboard SOL/USD (same as existing SOL bank)
+  ORACLE: new PublicKey("HxQbxDh4SGYi94LrgS6VuSdoBnRZamBvHgdiVTG8yomf"), // Switchboard CASH/USD
   ORACLE_TYPE: { kaminoSwitchboardPull: {} }, // Use Switchboard since original bank uses Switchboard
-  // Note: Can use either { kaminoPythPush: {} } for Pyth or { kaminoSwitchboardPull: {} } for Switchboard
   ADMIN: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"), // Mainnet multisig
   FEE_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"), // Mainnet multisig
-  BANK_MINT: new PublicKey("So11111111111111111111111111111111111111112"), // SOL
-  KAMINO_RESERVE: new PublicKey("d4A2prbA2whesmvHaL88BH6Ewn5N4bTSU2Ze8P6Bc4Q"), // Kamino SOL Reserve
+  BANK_MINT: new PublicKey("CASHx9KJUStyftLFWGvEVf59SGeG9sh5FfcnZMVPCASH"), // CASH
+  KAMINO_RESERVE: new PublicKey("ApQkX32ULJUzszZDe986aobLDLMNDoGQK8tRm6oD6SsA"), // Kamino CASH Reserve
   KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"), // Main Market
   SEED: 300,
   MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
@@ -114,12 +113,12 @@ async function main() {
 
   // Build bank config using fetched decimals
   const bankConfig: KaminoConfigCompact = {
-    assetWeightInit: bigNumberToWrappedI80F48(0.8), // 80% for SOL
-    assetWeightMaint: bigNumberToWrappedI80F48(0.9), // 90% for SOL
-    depositLimit: new BN(800_000 * 10 ** mintInfo.decimals), // 800K SOL (40% of 2M)
+    assetWeightInit: bigNumberToWrappedI80F48(0.5), // 50% for CASH
+    assetWeightMaint: bigNumberToWrappedI80F48(0.6), // 60% for CASH
+    depositLimit: new BN(2_500_000 * 10 ** mintInfo.decimals), // 2.5M CASH (50% of 5M)
     operationalState: { operational: {} },
     riskTier: { collateral: {} },
-    totalAssetValueInitLimit: new BN(160_000_000), // $160M (800K SOL * $200)
+    totalAssetValueInitLimit: new BN(2_500_000), // $2.5M (50% of $5M)
     oracleMaxAge: 300,
     oracleMaxConfidence: 0,
     oracle: config.ORACLE,
