@@ -50,20 +50,20 @@ type Config = {
 };
 
 // ========================================
-// CASH - Kamino Bank Obligation Configuration
+// USDG - Kamino Bank Obligation Configuration
 // ========================================
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA", // Mainnet program
   GROUP_KEY: new PublicKey("4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8"), // Mainnet group
   ADMIN: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"), // Mainnet multisig
-  BANK_MINT: new PublicKey("CASHx9KJUStyftLFWGvEVf59SGeG9sh5FfcnZMVPCASH"), // CASH
-  KAMINO_RESERVE: new PublicKey("ApQkX32ULJUzszZDe986aobLDLMNDoGQK8tRm6oD6SsA"),
+  BANK_MINT: new PublicKey("2u1tszSeqZ3qBWF3uNGPFc8TzMk2tdiwknnRMWGWjGWH"), // USDG
+  KAMINO_RESERVE: new PublicKey("ESCkPWKHmgNE7Msf77n9yzqJd5kQVWWGy3o5Mgxhvavp"),
   KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"),
-  RESERVE_ORACLE: new PublicKey("3NJYftD5sjVfxSnUdZ1wVML8f3aC6mp1CXCL6L7TnU8C"), // Scope oracle for CASH
-  FARM_STATE: new PublicKey("8pkQoRJz4yKVpYLjqFNdNfN1mvkDQz4UHRtJenzS9yys"), // Farm collateral for CASH
+  RESERVE_ORACLE: new PublicKey("3NJYftD5sjVfxSnUdZ1wVML8f3aC6mp1CXCL6L7TnU8C"), // Scope oracle for USDG
+  FARM_STATE: new PublicKey("3W4tNzMoRXCBhirSSoHf5413Cx9P8kqXk4QpZtkjiLCG"), // Farm collateral for USDG
   SEED: 300,
-  TOKEN_PROGRAM: TOKEN_2022_PROGRAM_ID, // CASH uses Token-2022
+  TOKEN_PROGRAM: TOKEN_2022_PROGRAM_ID, // USDG uses Token-2022
 };
 
 async function main() {
