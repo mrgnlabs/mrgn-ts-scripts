@@ -40,9 +40,9 @@ const bankLimits: BankLimitsEntry[] = [
   // bonk
   {
     bank: new PublicKey("DeyH7QxWvnbbaVB4zFrf4hoq7Q8z1ZT14co42BGwGtfM"),
-    depositLimit: cap(900_000_000_000, 5),
-    borrowLimit: cap(4_000_000_000, 5),
-    initValue: new BN(30_000_000),
+    depositLimit: cap(820_000_000_000, 5),
+    borrowLimit: cap(3_000_000_000, 5),
+    initValue: new BN(20_000_000),
   },
   // wif
   {
