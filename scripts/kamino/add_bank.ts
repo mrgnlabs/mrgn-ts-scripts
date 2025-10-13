@@ -41,20 +41,20 @@ type Config = {
 };
 
 // ========================================
-// USDG - Kamino Bank Configuration
+// CASH - Kamino Bank Configuration (Maple Market)
 // ========================================
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA", // Mainnet program
   GROUP_KEY: new PublicKey("4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8"), // Mainnet group
-  ORACLE: new PublicKey("6JkZmXGgWnzsyTQaqRARzP64iFYnpMNT4siiuUDUaB8s"), // Pyth USDG/USD
-  ORACLE_TYPE: { kaminoPythPush: {} }, // Use Pyth since original bank uses Pyth
+  ORACLE: new PublicKey("HxQbxDh4SGYi94LrgS6VuSdoBnRZamBvHgdiVTG8yomf"), // Switchboard CASH/USD (same as Main Market CASH)
+  ORACLE_TYPE: { kaminoSwitchboardPull: {} }, // Switchboard oracle
   ADMIN: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"), // Mainnet multisig
   FEE_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"), // Mainnet multisig
-  BANK_MINT: new PublicKey("2u1tszSeqZ3qBWF3uNGPFc8TzMk2tdiwknnRMWGWjGWH"), // USDG
-  KAMINO_RESERVE: new PublicKey("ESCkPWKHmgNE7Msf77n9yzqJd5kQVWWGy3o5Mgxhvavp"), // Kamino USDG Reserve
-  KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"), // Main Market
-  SEED: 300,
+  BANK_MINT: new PublicKey("CASHx9KJUStyftLFWGvEVf59SGeG9sh5FfcnZMVPCASH"), // CASH
+  KAMINO_RESERVE: new PublicKey("FSMWJh3geL7dgeMauFWkjCpU2pvXocGpXcUpVsMQULki"), // Kamino CASH Reserve (Maple Market)
+  KAMINO_MARKET: new PublicKey("6WEGfej9B9wjxRs6t4BYpb9iCXd8CpTpJ8fVSNzHCC5y"), // Maple Market
+  SEED: 301,
   MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 };
 
@@ -113,12 +113,12 @@ async function main() {
 
   // Build bank config using fetched decimals
   const bankConfig: KaminoConfigCompact = {
-    assetWeightInit: bigNumberToWrappedI80F48(0.85), // 85% for USDG
-    assetWeightMaint: bigNumberToWrappedI80F48(0.91), // 91% for USDG
-    depositLimit: new BN(100_000 * 10 ** mintInfo.decimals), // 100K USDG
+    assetWeightInit: bigNumberToWrappedI80F48(0.50), // 50% for CASH (same as Main Market)
+    assetWeightMaint: bigNumberToWrappedI80F48(0.60), // 60% for CASH (same as Main Market)
+    depositLimit: new BN(2_500_000 * 10 ** mintInfo.decimals), // 2.5M CASH (same as Main Market)
     operationalState: { operational: {} },
     riskTier: { collateral: {} },
-    totalAssetValueInitLimit: new BN(100_000), // $100K
+    totalAssetValueInitLimit: new BN(2_500_000), // $2.5M (same as Main Market)
     oracleMaxAge: 300,
     oracleMaxConfidence: 0,
     oracle: config.ORACLE,
