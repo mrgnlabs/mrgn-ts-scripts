@@ -51,20 +51,20 @@ type Config = {
 };
 
 // ========================================
-// USDC - Kamino Bank Obligation Configuration
+// USDT - Kamino Bank Obligation Configuration
 // ========================================
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA", // Mainnet program
   GROUP_KEY: new PublicKey("4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8"), // Mainnet group
   ADMIN: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"), // Mainnet multisig
-  BANK_MINT: new PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"), // USDC
-  KAMINO_RESERVE: new PublicKey("D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59"),
+  BANK_MINT: new PublicKey("Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB"), // USDT
+  KAMINO_RESERVE: new PublicKey("H3t6qZ1JkguCNTi9uzVKqQ7dvt2cum4XiXWom6Gn5e5S"),
   KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"),
-  RESERVE_ORACLE: new PublicKey("3NJYftD5sjVfxSnUdZ1wVML8f3aC6mp1CXCL6L7TnU8C"), // Scope oracle for USDC
-  FARM_STATE: new PublicKey("JAvnB9AKtgPsTEoKmn24Bq64UMoYcrtWtq42HHBdsPkh"), // Farm collateral for USDC
+  RESERVE_ORACLE: new PublicKey("3NJYftD5sjVfxSnUdZ1wVML8f3aC6mp1CXCL6L7TnU8C"), // Scope oracle for USDT
+  FARM_STATE: new PublicKey("5pCqu9RFdL6QoN7KK4gKnAU6CjQFJot8nU7wpFK8Zwou"), // Farm collateral for USDT
   SEED: 300,
-  TOKEN_PROGRAM: TOKEN_PROGRAM_ID, // USDC uses standard Token Program
+  TOKEN_PROGRAM: TOKEN_PROGRAM_ID, // USDT uses standard Token Program
 };
 
 async function main() {
@@ -153,26 +153,8 @@ async function main() {
       );
       console.log("obligation key: " + baseObligation);
       console.log("Transaction signature:", sigObligation);
-    } catch (error: any) {
-      console.error("Transaction failed:", error.message);
-      if (error.logs) {
-        console.log("\n=== TRANSACTION LOGS ===");
-        error.logs.forEach((log: string, i: number) => {
-          console.log(`[${i}] ${log}`);
-        });
-      }
-      // Try to get logs via getLogs if available
-      if (typeof error.getLogs === 'function') {
-        try {
-          const logs = await error.getLogs(connection);
-          console.log("\n=== DETAILED LOGS ===");
-          logs.forEach((log: string, i: number) => {
-            console.log(`[${i}] ${log}`);
-          });
-        } catch (e) {
-          console.error("Could not fetch detailed logs:", e);
-        }
-      }
+    } catch (error) {
+      console.error("Transaction failed:", error);
     }
   } else {
     // When sendTx=false, output transaction for simulation
