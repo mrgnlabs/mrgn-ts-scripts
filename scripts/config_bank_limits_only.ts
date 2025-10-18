@@ -44,6 +44,13 @@ const bankLimits: BankLimitsEntry[] = [
     borrowLimit: cap(2_500_000, 6),
     initValue: new BN(5_000_000),
   },
+  // usdg (kamino)
+  {
+    bank: new PublicKey("6KP94PsCrBk2gPqtqT4WSvZ8Zss7r1auz3azXpv5ptrS"),
+    depositLimit: cap(2_500_000, 6),
+    borrowLimit: cap(0, 6),
+    initValue: new BN(2_500_000),
+  },
 ];
 
 async function main() {
@@ -52,7 +59,7 @@ async function main() {
     config.PROGRAM_ID,
     "/keys/staging-deploy.json",
     config.MULTISIG_PAYER,
-    "current"
+    "kamino"
   );
   const program = user.program;
   const connection = user.connection;
