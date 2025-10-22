@@ -73,61 +73,35 @@ const config: Config = {
   // One tx per entry in this array:
   BANKS: [
     {
-      bank: new PublicKey("5wZz2MV3dFJVq3Wp4tBoqrgrSGZqeLCdLE1L4w6okm9g"),
+      bank: new PublicKey("BeNBJrAh1tZg5sqgt8D6AWKJLD5KkBrfZvtcgd7EuiAR"),
       config: {
-        assetWeightInit: bigNumberToWrappedI80F48(0.65),
-        assetWeightMaint: bigNumberToWrappedI80F48(0.8),
-        liabilityWeightInit: bigNumberToWrappedI80F48(1.3),
-        liabilityWeightMaint: bigNumberToWrappedI80F48(1.2),
-        depositLimit: new BN(5_000 * 10 ** 9),
+        assetWeightInit: bigNumberToWrappedI80F48(0.01),
+        assetWeightMaint: bigNumberToWrappedI80F48(0.01),
+        liabilityWeightInit: null,
+        liabilityWeightMaint: null,
+        depositLimit: null,
+        borrowLimit: null,
+        riskTier: null,
+        assetTag: null,
+        totalAssetValueInitLimit: null,
         interestRateConfig: {
+          protocolOriginationFee: null,
+          protocolIrFee: null,
+          protocolFixedFeeApr: null,
+          insuranceIrFee: null,
+          insuranceFeeFixedApr: null,
+          maxInterestRate: null,
           optimalUtilizationRate: null,
           plateauInterestRate: null,
-          maxInterestRate: bigNumberToWrappedI80F48(0.5655),
-          insuranceFeeFixedApr: null,
-          insuranceIrFee: null,
-          protocolFixedFeeApr: bigNumberToWrappedI80F48(0.00001),
-          protocolIrFee: null,
-          protocolOriginationFee: null,
         },
         operationalState: { operational: {} },
-        borrowLimit: new BN(2_500 * 10 ** 9),
-        riskTier: { collateral: {} },
-        totalAssetValueInitLimit: new BN(15_000_000),
-        oracleMaxAge: 70,
-        assetTag: null,
+        oracleMaxAge: null,
         oracleMaxConfidence: null,
         permissionlessBadDebtSettlement: null,
         freezeSettings: null,
       },
     },
     // Add more { bank, config: bankConfigOptForThatBank() } as needed
-
-    // Example reduce-only config:
-    // assetWeightInit: bigNumberToWrappedI80F48(0),
-    // assetWeightMaint: bigNumberToWrappedI80F48(0),
-    // liabilityWeightInit: null,
-    // liabilityWeightMaint: null,
-    // depositLimit: null,
-    // borrowLimit: null,
-    // riskTier: null,
-    // assetTag: null,
-    // totalAssetValueInitLimit: null,
-    // interestRateConfig: {
-    //   protocolOriginationFee: null,
-    //   protocolIrFee: null,
-    //   protocolFixedFeeApr: null,
-    //   insuranceIrFee: null,
-    //   insuranceFeeFixedApr: null,
-    //   maxInterestRate: null,
-    //   optimalUtilizationRate: null,
-    //   plateauInterestRate: null,
-    // },
-    // operationalState: { reduceOnly: {} },
-    // oracleMaxAge: null,
-    // oracleMaxConfidence: null,
-    // permissionlessBadDebtSettlement: null,
-    // freezeSettings: null,
   ],
 };
 
@@ -169,9 +143,9 @@ async function main() {
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
-    "/keys/staging-deploy.json",
+    "/.config/stage/id.json",
     config.MULTISIG_PAYER,
-    "1.4"
+    "current"
   );
 
   const program = user.program;

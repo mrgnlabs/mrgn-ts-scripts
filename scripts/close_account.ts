@@ -10,14 +10,14 @@ type Config = {
 
 const config: Config = {
   PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-  ACCOUNT: new PublicKey("EtVhwiGacGjvZ48XvmYJebfxfWFxqhxHvSx9arsfFDCW"),
+  ACCOUNT: new PublicKey("N92TukzWFZ7GjM2iLbpPvGhS9rCWknMiDMMFx2AHAGh"),
 };
 
 async function main() {
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
-    "/.config/stage/id.json",
+    "/.config/arena/id.json",
     undefined,
     "current"
   );

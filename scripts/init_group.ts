@@ -21,9 +21,7 @@ type Config = {
 
 const config: Config = {
   PROGRAM_ID: "5UDghkpgW1HfYSrmEj2iAApHShqU44H6PKTAar9LL9bY",
-  ADMIN_KEY: new PublicKey("725Z4QQUVhRiXcCdf4cQTrxXYmQXyW9zgVkW5PDVSJz4"),
-
-  MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
+  ADMIN_KEY: new PublicKey("6DdJqQYD8AizuXiCkbn19LiyWRwUsRMzy2Sgyoyasyj7"),
 };
 
 const deriveGlobalFeeState = (programId: PublicKey) => {
@@ -37,7 +35,9 @@ async function main() {
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
-    "/keys/zerotrade_admin.json"
+    "/.config/stage/id.json",
+    config.MULTISIG_PAYER,
+    "kamino"
   );
   const program = user.program;
   const connection = user.connection;

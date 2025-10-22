@@ -10,14 +10,14 @@ type Config = {
 
 const config: Config = {
   PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-  BANK: new PublicKey("8Ats6Ej699ELxYR4DFTteLiNEXsGRtUNgTauD9LoFPRc"),
+  BANK: new PublicKey("FBhaEQmAj1YZrNh13esWYFEaMtthdB1E2fwPiUTjmahE"),
 };
 
 async function main() {
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
-    "/keys/staging-deploy.json",
+    "/.config/stage/id.json",
     undefined,
     "current"
   );

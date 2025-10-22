@@ -1,0 +1,126 @@
+0. pnpm install & pnpm build (from the root)
+
+1. ts-node ./scripts/init_group.ts
+- Potentially replace program ID.
+
+Get new group Pubkey: HUVAbqPFc5CR8M716gKiMEU7c6vRtikLCwJDoC5Gf6e8
+
+2. ts-node ./scripts/add_bank.ts
+- Potentially replace program ID.
+- Replace group key.
+
+Get new bank Pubkey:
+FBhaEQmAj1YZrNh13esWYFEaMtthdB1E2fwPiUTjmahE (USDC) oracle - Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX
+4KG27yCh1u9eXamzsnffXg8rfFRuyxpBWztkSeJw3WTq (BONK) oracle - DBE3N8uNjhKPRHfANdwGvCZghWXyLPdqdSbEW2XFwBiX
+
+3. ts-node ./scripts/init_account.ts
+- Replace group key.
+
+liquidator (stage) - J55uUt9eZd8ZCxuuwyT1SsXee4dtRtLymS6vEnYnqL2C (auth - 6DdJqQYD8AizuXiCkbn19LiyWRwUsRMzy2Sgyoyasyj7)
+liquidatee (arena) - N92TukzWFZ7GjM2iLbpPvGhS9rCWknMiDMMFx2AHAGh (auth - FbfXs6D1BGUqyz6ya5AfVi3eoyfhin6hfM9d7yt1WK3L)
+
+4. ts-node ./scripts/deposit_regular.ts
+- Potentially replace program ID.
+- Replace account key.
+- Replace bank key.
+
+Run USDC and BONK versions for liquidator and only USDC version for liquidatee.
+
+5. ts-node ./scripts/borrow.ts
+- Potentially replace program ID.
+- Replace account key with the liquidatee.
+- Replace bank keys with the Bonk one.
+- Adjust the amount if necessary (you should aim for ~10 USD worth of Bonk)
+
+6. ts-node ./scripts/config_bank.ts
+- Potentially replace program ID.
+- Replace bank key with the USDC one.
+- Set asset weights to 0.1 to worsen the health of the liquidatee.
+
+Now you liquidatee has a liquidable position and liquidator is able to liquidate it.
+Once Eva successfully does it, proceed with the following steps to clean up things.
+
+7. ts-node ./scripts/repay.ts
+- Potentially replace program ID.
+- Replace bank key with the Bonk one.
+- Replace account key with the liquidatee one.
+- Ensure REPAY_ALL and send_tx are both true.
+
+8. ts-node ./scripts/withdraw.ts
+- Potentially replace program ID.
+- Replace bank key with the USDC one.
+- Replace account key with the liquidatee one.
+- Ensure WITHDRAW_ALL and send_tx are both true.
+
+Then run the same for liquidator USDC and Bonk accs.
+
+9. ts-node ./scripts/close_account.ts
+- Potentially replace program ID.
+- Replace account key.
+
+Run for liquidatee and liquidator accs.
+
+10. ts-node ./scripts/close_bank.ts
+- Potentially replace program ID.
+- Replace bank key.
+
+Run for USDC and Bonk banks.
+
+/// KAMINO /// - 5UDghkpgW1HfYSrmEj2iAApHShqU44H6PKTAar9LL9bY
+
+1. ts-node ./scripts/init_group.ts
+- Potentially replace program ID.
+
+Get new group Pubkey: dgQnjVN26a1y3EJvF8KT3ecLoYykirqQhcdtptGrZff
+
+2. ts-node ./scripts/init_account.ts
+- Potentially replace program ID.
+- Replace group key.
+
+liquidator (stage) - Cw9meVno4B8Tyyg6kvLh8mogdCRj4JT2sSPVM8hbcVhK (auth - 6DdJqQYD8AizuXiCkbn19LiyWRwUsRMzy2Sgyoyasyj7)
+liquidatee (arena) - FRYZ9ErYxVPzp92zNS8E3RY3dJGbv5U1snw6X7yryizK (auth - FbfXs6D1BGUqyz6ya5AfVi3eoyfhin6hfM9d7yt1WK3L)
+
+3. ts-node ./scripts/kamino/add_bank.ts
+- Potentially replace program ID.
+- Replace group key.
+
+Get new bank Pubkey:
+HcbiyRRfyf9Rte9Bn3HXLj3TM6cpBDoHTF4xaa5Sswty (USDC) oracle - Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX
+
+Reserve: D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59
+Market: 7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF
+
+4. ts-node ./scripts/kamino/init_bank_obligation.ts
+- Replace lots of data using the add_bank tx.
+
+Obligation: 5HxomAyh1wDSqHp9Gg5n3aF4vLAKQL3WK3baYMZwK6Yd
+
+5. ts-node ./scripts/kamino/deposit_kamino.ts
+- Replace lots of data using the init_bank_obligation tx.
+
+Run USDC version for both liquidatee and liquidator.
+
+6. ts-node ./scripts/add_bank.ts
+- Potentially replace program ID.
+- Replace group key.
+
+Get new bank Pubkey:
+5HFKjP8UafAM4uPohhm5nGqShaFTH2wtzdLPZ9vZgg8T (BONK) oracle - DBE3N8uNjhKPRHfANdwGvCZghWXyLPdqdSbEW2XFwBiX
+
+7. ts-node ./scripts/deposit_regular.ts
+- Potentially replace program ID.
+- Replace account key.
+- Replace bank key.
+
+Run BONK version for liquidator.
+
+8. ts-node ./scripts/borrow.ts
+- Potentially replace program ID.
+- Replace account key with the liquidatee.
+- Replace bank key with the Bonk one.
+- Adjust the amount if necessary.
+
+9. ts-node ./scripts/config_bank.ts
+- Potentially replace program ID.
+- Replace bank key with the USDC one.
+- Set asset weights to 0.1 to worsen the health of the liquidatee.

@@ -12,12 +12,11 @@ import {
 } from "@mrgnlabs/mrgn-common";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 import { commonSetup } from "../lib/common-setup";
-import { TOKEN_2022_PROGRAM_ID } from "@solana/spl-token";
 
 /**
  * If true, send the tx. If false, output the unsigned b58 tx to console.
  */
-const sendTx = false;
+const sendTx = true;
 
 const ASSET_TAG_DEFAULT = 0;
 
@@ -41,41 +40,48 @@ type Config = {
   MULTISIG_PAYER?: PublicKey; // May be omitted if not using squads
 };
 
+// Feed IDs can be taken from here: https://www.pyth.network/developers/price-feed-ids
+// USDC - 6 decimals
+// const mint = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v";
+// const oracle = "Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX";
+// BONK - 5 decimals
+const mint = "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263";
+const oracle = "DBE3N8uNjhKPRHfANdwGvCZghWXyLPdqdSbEW2XFwBiX";
+
 const config: Config = {
-  PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  GROUP_KEY: new PublicKey("4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8"),
-  ORACLE: new PublicKey("9UivckJDKtDChtXvCqgDxGS2CmA4Z9Zb14CMZ76n1PNp"),
-  ORACLE_TYPE: ORACLE_TYPE_SWB,
-  ADMIN: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
-  FEE_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
-  BANK_MINT: new PublicKey("LnTRntk2kTfWEY6cVB8K9649pgJbt6dJLS1Ns1GZCWg"),
+  PROGRAM_ID: "5UDghkpgW1HfYSrmEj2iAApHShqU44H6PKTAar9LL9bY",
+  GROUP_KEY: new PublicKey("dgQnjVN26a1y3EJvF8KT3ecLoYykirqQhcdtptGrZff"),
+  ORACLE: new PublicKey(oracle),
+  ORACLE_TYPE: ORACLE_TYPE_PYTH,
+  ADMIN: new PublicKey("6DdJqQYD8AizuXiCkbn19LiyWRwUsRMzy2Sgyoyasyj7"),
+  FEE_PAYER: new PublicKey("6DdJqQYD8AizuXiCkbn19LiyWRwUsRMzy2Sgyoyasyj7"),
+  BANK_MINT: new PublicKey(mint),
   SEED: 0,
   TOKEN_PROGRAM: TOKEN_PROGRAM_ID,
-  MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 };
 
 const rate: InterestRateConfigRaw = {
-  optimalUtilizationRate: bigNumberToWrappedI80F48(0.8),
-  plateauInterestRate: bigNumberToWrappedI80F48(0.1),
-  maxInterestRate: bigNumberToWrappedI80F48(0.5655),
+  optimalUtilizationRate: bigNumberToWrappedI80F48(0.5),
+  plateauInterestRate: bigNumberToWrappedI80F48(0.01),
+  maxInterestRate: bigNumberToWrappedI80F48(0.5),
   insuranceFeeFixedApr: bigNumberToWrappedI80F48(0),
   insuranceIrFee: bigNumberToWrappedI80F48(0),
-  protocolFixedFeeApr: bigNumberToWrappedI80F48(0.00001),
-  protocolIrFee: bigNumberToWrappedI80F48(0.135),
+  protocolFixedFeeApr: bigNumberToWrappedI80F48(0.0001),
+  protocolIrFee: bigNumberToWrappedI80F48(0.01),
   protocolOriginationFee: bigNumberToWrappedI80F48(0),
 };
 
 const bankConfig: BankConfigRaw_v1_4 = {
-  assetWeightInit: bigNumberToWrappedI80F48(0.65),
-  assetWeightMaint: bigNumberToWrappedI80F48(0.8),
-  liabilityWeightInit: bigNumberToWrappedI80F48(1.3),
-  liabilityWeightMaint: bigNumberToWrappedI80F48(1.2),
-  depositLimit: new BN(5_000 * 10 ** 9),
+  assetWeightInit: bigNumberToWrappedI80F48(1.0),
+  assetWeightMaint: bigNumberToWrappedI80F48(1.0),
+  liabilityWeightInit: bigNumberToWrappedI80F48(1.0),
+  liabilityWeightMaint: bigNumberToWrappedI80F48(1.0),
+  depositLimit: new BN(10000 * 10 ** 8),
   interestRateConfig: rate,
   operationalState: { operational: {} },
-  borrowLimit: new BN(2_500 * 10 ** 9),
+  borrowLimit: new BN(5000 * 10 ** 8),
   riskTier: { collateral: {} },
-  totalAssetValueInitLimit: new BN(15_000_000),
+  totalAssetValueInitLimit: new BN(2_000_000),
   oracleMaxAge: 70,
   assetTag: 0,
   oracleMaxConfidence: 0,
@@ -86,9 +92,9 @@ async function main() {
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
-    "/keys/staging-admin.json",
+    "/.config/stage/id.json",
     config.MULTISIG_PAYER,
-    "kamino"
+    "current"
   );
   const program = user.program;
   const connection = user.connection;
@@ -131,25 +137,20 @@ async function main() {
         },
         new BN(config.SEED)
       )
-      .accounts({
+      .accountsPartial({
         marginfiGroup: config.GROUP_KEY,
-        bankMint: config.BANK_MINT,
+        admin: config.ADMIN,
         feePayer: config.FEE_PAYER,
+        bankMint: config.BANK_MINT,
         tokenProgram: config.TOKEN_PROGRAM,
       })
-      .accountsPartial({
-        admin: config.ADMIN,
-      })
       .instruction(),
-
     await program.methods
       .lendingPoolConfigureBankOracle(config.ORACLE_TYPE, config.ORACLE)
-      .accounts({
-        bank: bankKey,
-      })
       .accountsPartial({
         group: config.GROUP_KEY,
         admin: config.ADMIN,
+        bank: bankKey,
       })
       .remainingAccounts([oracleMeta])
       .instruction()

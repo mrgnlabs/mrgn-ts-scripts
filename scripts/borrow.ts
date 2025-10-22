@@ -20,6 +20,12 @@ import {
 } from "../lib/utils";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 import { KLEND_PROGRAM_ID } from "./kamino/kamino-types";
+import {
+  simpleRefreshObligation,
+  simpleRefreshReserve,
+} from "./kamino/ixes-common";
+import { deriveLiquidityVaultAuthority } from "./common/pdas";
+import { deriveBaseObligation } from "./kamino/pdas";
 
 const sendTx = true;
 
@@ -39,21 +45,31 @@ type Config = {
 
   // Optional, omit if not using MS.
   MULTISIG?: PublicKey;
+  KAMINO_RESERVE: PublicKey;
+  KAMINO_MARKET: PublicKey;
+  RESERVE_ORACLE: PublicKey;
+  OBLIGATION: PublicKey;
 };
 
 const config: Config = {
-  PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  GROUP: new PublicKey("4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8"),
-  ACCOUNT: new PublicKey("7qEL6Gb8jNWRGRLKU3G6fvWZkWMs5hVkpKKNeWdaJAE4"),
-  BANK: new PublicKey("DMoqjmsuoru986HgfjqrKEvPv8YBufvBGADHUonkadC5"),
-  MINT: new PublicKey("LSTxxxnJzKDFSLr4dUkPcmCf5VyryEqzPLz5j4bpxFp"),
-  AMOUNT: new BN(0.00001 * 10 ** 9),
+  PROGRAM_ID: "5UDghkpgW1HfYSrmEj2iAApHShqU44H6PKTAar9LL9bY",
+  GROUP: new PublicKey("dgQnjVN26a1y3EJvF8KT3ecLoYykirqQhcdtptGrZff"),
+  ACCOUNT: new PublicKey("FRYZ9ErYxVPzp92zNS8E3RY3dJGbv5U1snw6X7yryizK"),
+  BANK: new PublicKey("5HFKjP8UafAM4uPohhm5nGqShaFTH2wtzdLPZ9vZgg8T"),
+  MINT: new PublicKey("DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263"),
+  AMOUNT: new BN(50000 * 10 ** 5),
   NEW_REMAINING: [
-    // new PublicKey("2s37akK2eyBbp8DZgCm7RtsaEz8eJP3Nxd4urLHQv7yB"),
-    // new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
+    new PublicKey("HcbiyRRfyf9Rte9Bn3HXLj3TM6cpBDoHTF4xaa5Sswty"),
+    new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
+    new PublicKey("D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59"),
+    new PublicKey("5HFKjP8UafAM4uPohhm5nGqShaFTH2wtzdLPZ9vZgg8T"),
+    new PublicKey("DBE3N8uNjhKPRHfANdwGvCZghWXyLPdqdSbEW2XFwBiX"),
   ],
   ADD_COMPUTE_UNITS: false,
-  MULTISIG: PublicKey.default,
+  KAMINO_RESERVE: new PublicKey("D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59"),
+  KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"),
+  RESERVE_ORACLE: new PublicKey("3NJYftD5sjVfxSnUdZ1wVML8f3aC6mp1CXCL6L7TnU8C"),
+  OBLIGATION: new PublicKey("5HxomAyh1wDSqHp9Gg5n3aF4vLAKQL3WK3baYMZwK6Yd"),
 };
 
 // const examples = {
@@ -125,26 +141,27 @@ async function main() {
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
-    "/keys/phantom-wallet.json",
+    "/.config/arena/id.json",
     config.MULTISIG,
     "kamino"
   );
+  registerKaminoProgram(user, KLEND_PROGRAM_ID.toString());
   const program = user.program;
   const connection = user.connection;
-  registerKaminoProgram(user, KLEND_PROGRAM_ID.toString());
 
-  let [activeBalances, kaminoIxes] = await getOraclesAndCrankSwb(
-    program,
-    user.kaminoProgram,
-    config.ACCOUNT,
-    connection,
-    user.wallet.payer
+  // let activeBalances = await getOraclesAndCrankSwb(
+  //   program,
+  //   config.ACCOUNT,
+  //   connection,
+  //   user.wallet.payer
+  // );
+  // activeBalances.push(config.NEW_REMAINING);
+
+  const oracleMeta: AccountMeta[] = config.NEW_REMAINING.flat().map(
+    (pubkey) => {
+      return { pubkey, isSigner: false, isWritable: false };
+    }
   );
-  activeBalances.push(config.NEW_REMAINING);
-
-  const oracleMeta: AccountMeta[] = activeBalances.flat().map((pubkey) => {
-    return { pubkey, isSigner: false, isWritable: false };
-  });
 
   const ata = getAssociatedTokenAddressSync(config.MINT, user.wallet.publicKey);
   const transaction = new Transaction();
@@ -159,12 +176,23 @@ async function main() {
   }
 
   transaction.add(
-    ...kaminoIxes,
     createAssociatedTokenAccountIdempotentInstruction(
       user.wallet.publicKey,
       ata,
       user.wallet.publicKey,
       config.MINT
+    ),
+    await simpleRefreshReserve(
+      user.kaminoProgram,
+      config.KAMINO_RESERVE,
+      config.KAMINO_MARKET,
+      config.RESERVE_ORACLE
+    ),
+    await simpleRefreshObligation(
+      user.kaminoProgram,
+      config.KAMINO_MARKET,
+      config.OBLIGATION,
+      [config.KAMINO_RESERVE]
     ),
     await program.methods
       .lendingAccountBorrow(config.AMOUNT)

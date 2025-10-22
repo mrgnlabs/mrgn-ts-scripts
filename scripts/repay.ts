@@ -31,8 +31,8 @@ type Config = {
 
 const config: Config = {
   PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-  ACCOUNT: new PublicKey("8HwNc1W9YUydGWLFiyahwrUAWz5yuW7gSiPHaU6sSFSr"),
-  BANK: new PublicKey("64NtNrDgwY4U8ktazsPMNSBNdwjeFgxauqxi9f6u9ym8"),
+  ACCOUNT: new PublicKey("N92TukzWFZ7GjM2iLbpPvGhS9rCWknMiDMMFx2AHAGh"),
+  BANK: new PublicKey("4KG27yCh1u9eXamzsnffXg8rfFRuyxpBWztkSeJw3WTq"),
   MINT: new PublicKey("DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263"),
   AMOUNT: new BN(10 * 10 ** 6),
   REPAY_ALL: true,
@@ -43,7 +43,7 @@ async function main() {
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
-    "/keys/staging-deploy.json",
+    "/.config/arena/id.json",
     config.MULTISIG,
     "current"
   );

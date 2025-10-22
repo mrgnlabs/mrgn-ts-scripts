@@ -11,7 +11,7 @@ import {
   createAssociatedTokenAccountIdempotentInstruction,
   getAssociatedTokenAddressSync,
 } from "@mrgnlabs/mrgn-common";
-import { commonSetup, registerKaminoProgram } from "../lib/common-setup";
+import { commonSetup } from "../lib/common-setup";
 import {
   BankAndOracles,
   composeRemainingAccounts,
@@ -19,13 +19,11 @@ import {
 } from "../lib/utils";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 import { TOKEN_2022_PROGRAM_ID } from "@solana/spl-token";
-import { KLEND_PROGRAM_ID } from "./kamino/kamino-types";
 
-const sendTx = false;
+const sendTx = true;
 
 type Config = {
   PROGRAM_ID: string;
-  GROUP: PublicKey;
   ACCOUNT: PublicKey;
   BANK: PublicKey;
   MINT: PublicKey;
@@ -66,33 +64,31 @@ type Config = {
   ADD_COMPUTE_UNITS: boolean;
 
   // Optional, omit if not using MS.
-  MULTISIG: PublicKey;
+  MULTISIG?: PublicKey;
 };
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  GROUP: new PublicKey("4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8"),
-  ACCOUNT: new PublicKey("GZxaVQQMp7Vv6rF4jYn3FBJwyNujVYibm6TM4ouRp5gR"),
+  ACCOUNT: new PublicKey("AkRjbYJgrKXmdE9zizGWXcK4oecJfhuLxBuNrKsooAKK"),
   BANK: new PublicKey("2s37akK2eyBbp8DZgCm7RtsaEz8eJP3Nxd4urLHQv7yB"),
   MINT: new PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"),
-  AMOUNT: new BN(664_000 * 10 ** 6),
+  AMOUNT: new BN(1000 * 10 ** 6),
   WITHDRAW_ALL: false,
   REMAINING: [
     [
-      new PublicKey("HmpMfL8942u22htC4EMiWgLX931g3sacXFR6KjuLgKLV"),
-      new PublicKey("HT2PLQBcG5EiCcNSaMHAjSgd9F98ecpATbk4Sk5oYuM"),
+      new PublicKey("BkUyfXjbBBALcfZvw76WAFRvYQ21xxMWWeoPtJrUqG3z"), // weth bank
+      new PublicKey("42amVS4KgzR9rA28tkVYqVXjq9Qa8dcZQMbH5EYFX6XC"), // weth oracle
     ],
     [
-      new PublicKey("FDsf8sj6SoV313qrA91yms3u5b3P4hBxEPvanVs8LtJV"),
-      new PublicKey("DyYBBWEi9xZvgNAeMDCiFnmC1U9gqgVsJDXkL5WETpoX"),
+      new PublicKey("BeNBJrAh1tZg5sqgt8D6AWKJLD5KkBrfZvtcgd7EuiAR"), // uxd bank
+      new PublicKey("DtCJYXtxwFi3Cr4sYtdweqZFuP38acT2KbUPjTkDW18b"), // uxd oracle
     ],
     [
-      new PublicKey("2s37akK2eyBbp8DZgCm7RtsaEz8eJP3Nxd4urLHQv7yB"),
-      new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
-    ],
+      new PublicKey("2s37akK2eyBbp8DZgCm7RtsaEz8eJP3Nxd4urLHQv7yB"), // usdc bank
+      new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"), // usdc oracle
+    ]
   ],
   ADD_COMPUTE_UNITS: false,
-  MULTISIG: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 };
 
 /** Helper: pretty-print PublicKey[][] exactly like Config.REMAINING expects */
@@ -114,35 +110,19 @@ async function main() {
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
-    "/keys/phantom-wallet.json",
+    "/.config/prod/id.json",
     config.MULTISIG,
-    "kamino"
+    "current"
   );
   const program = user.program;
   const connection = user.connection;
-  registerKaminoProgram(user, KLEND_PROGRAM_ID.toString());
 
   let mintAccInfo = await connection.getAccountInfo(config.MINT);
   const tokenProgram = mintAccInfo.owner;
   let isT22 = tokenProgram.toString() == TOKEN_2022_PROGRAM_ID.toString();
 
   let meta: AccountMeta[] = [];
-  let kaminoIxes = [];
   if (sendTx) {
-    let [activeBalances, ixes] = await getOraclesAndCrankSwb(
-      program,
-      user.kaminoProgram,
-      config.ACCOUNT,
-      connection,
-      user.wallet.payer
-    );
-    kaminoIxes = ixes;
-    meta = activeBalances.flat().map((pubkey) => {
-      return { pubkey, isSigner: false, isWritable: false };
-    });
-    // TODO remove the one we are withdrawing from if withdrawing all
-    printRemainingForPaste(activeBalances);
-  } else {
     const remaining = composeRemainingAccounts(config.REMAINING);
     meta = remaining.map((pubkey) => ({
       pubkey,
@@ -179,14 +159,6 @@ async function main() {
   }
 
   transaction.add(
-    ...kaminoIxes,
-    createAssociatedTokenAccountIdempotentInstruction(
-      user.wallet.publicKey,
-      ata,
-      user.wallet.publicKey,
-      config.MINT,
-      tokenProgram
-    ),
     await program.methods
       .lendingAccountWithdraw(config.AMOUNT, config.WITHDRAW_ALL)
       .accounts({
