@@ -30,7 +30,7 @@ Adds a new **2Z** bank to the marginfi lending group.
 ### Oracle Configuration
 | Parameter | Value | Verification |
 |-----------|-------|--------------|
-| **Oracle Address** | `Ho9iLZ15SreUnzRpbMHLTzQfCQugmsNnUQ3rLB5V75Ng` | [Solscan](https://solscan.io/account/Ho9iLZ15SreUnzRpbMHLTzQfCQugmsNnUQ3rLB5V75Ng) |
+| **Oracle Address** | `Ho9iLZ15SreUnzRpbMHLTzQfCQugmsNnUQ3rLB5V75Ng` | [Switchboard](https://ondemand.switchboard.xyz/solana/mainnet/feed/Ho9iLZ15SreUnzRpbMHLTzQfCQugmsNnUQ3rLB5V75Ng) \| [Solscan](https://solscan.io/account/Ho9iLZ15SreUnzRpbMHLTzQfCQugmsNnUQ3rLB5V75Ng) |
 | **Oracle Type** | Switchboard Pull | Type 4 |
 | **Oracle Max Age** | 70 seconds | Standard |
 | **Oracle Max Confidence** | 0 | Default (10%) |
@@ -66,7 +66,7 @@ Adds a new **2Z** bank to the marginfi lending group.
 
 ### On-Chain Verification
 - **2Z Mint**: [Solscan](https://solscan.io/account/J6pQQ3FAcJQeWPPGppWRb4nM8jU3wLyYbRrLh7feMfvd)
-- **Oracle**: [Solscan](https://solscan.io/account/Ho9iLZ15SreUnzRpbMHLTzQfCQugmsNnUQ3rLB5V75Ng)
+- **Oracle**: [Switchboard](https://ondemand.switchboard.xyz/solana/mainnet/feed/Ho9iLZ15SreUnzRpbMHLTzQfCQugmsNnUQ3rLB5V75Ng) | [Solscan](https://solscan.io/account/Ho9iLZ15SreUnzRpbMHLTzQfCQugmsNnUQ3rLB5V75Ng)
 - **Marginfi Bank (after execution)**: [Solscan](https://solscan.io/account/CcVpzLenPRWGB8q3pB9kcNma1bp4SdPjJk9wmW5tMvPp)
 
 ---

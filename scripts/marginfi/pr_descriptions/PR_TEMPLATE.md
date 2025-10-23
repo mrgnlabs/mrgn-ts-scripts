@@ -12,7 +12,7 @@ This PR adds two new Marginfi banks to the lending protocol:
 | **Mint** | `Gekfj7SL2fVpTDxJZmeC46cTYxinjB6gkAnb6EGT6mnn` | `J6pQQ3FAcJQeWPPGppWRb4nM8jU3wLyYbRrLh7feMfvd` |
 | **Bank Address** | `E7LfHgmiWT6TxAcWq18yDBXWxHw4VasjD98aZaoXCp8T` | `CcVpzLenPRWGB8q3pB9kcNma1bp4SdPjJk9wmW5tMvPp` |
 | **Decimals** | 9 | 8 |
-| **Oracle** | `8wRUjxh4uCdvQdqcWUMvBBTJa95vLuKrze7WLus5h6Gk` | `Ho9iLZ15SreUnzRpbMHLTzQfCQugmsNnUQ3rLB5V75Ng` |
+| **Oracle** | [`8wRUj...h6Gk`](https://ondemand.switchboard.xyz/solana/mainnet/feed/8wRUjxh4uCdvQdqcWUMvBBTJa95vLuKrze7WLus5h6Gk) | [`Ho9iL...75Ng`](https://ondemand.switchboard.xyz/solana/mainnet/feed/Ho9iLZ15SreUnzRpbMHLTzQfCQugmsNnUQ3rLB5V75Ng) |
 | **Oracle Type** | Switchboard Pull | Switchboard Pull |
 | **Oracle Max Age** | 70 seconds | 70 seconds |
 | **Seed** | 0 | 0 |

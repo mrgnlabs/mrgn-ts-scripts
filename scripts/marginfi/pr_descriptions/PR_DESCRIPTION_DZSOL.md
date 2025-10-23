@@ -30,7 +30,7 @@ Adds a new **dzSOL** bank to the marginfi lending group.
 ### Oracle Configuration
 | Parameter | Value | Verification |
 |-----------|-------|--------------|
-| **Oracle Address** | `8wRUjxh4uCdvQdqcWUMvBBTJa95vLuKrze7WLus5h6Gk` | [Solscan](https://solscan.io/account/8wRUjxh4uCdvQdqcWUMvBBTJa95vLuKrze7WLus5h6Gk) |
+| **Oracle Address** | `8wRUjxh4uCdvQdqcWUMvBBTJa95vLuKrze7WLus5h6Gk` | [Switchboard](https://ondemand.switchboard.xyz/solana/mainnet/feed/8wRUjxh4uCdvQdqcWUMvBBTJa95vLuKrze7WLus5h6Gk) \| [Solscan](https://solscan.io/account/8wRUjxh4uCdvQdqcWUMvBBTJa95vLuKrze7WLus5h6Gk) |
 | **Oracle Type** | Switchboard Pull | Type 4 |
 | **Oracle Max Age** | 70 seconds | Standard |
 | **Oracle Max Confidence** | 0 | Default (10%) |
@@ -66,7 +66,7 @@ Adds a new **dzSOL** bank to the marginfi lending group.
 
 ### On-Chain Verification
 - **dzSOL Mint**: [Solscan](https://solscan.io/account/Gekfj7SL2fVpTDxJZmeC46cTYxinjB6gkAnb6EGT6mnn)
-- **Oracle**: [Solscan](https://solscan.io/account/8wRUjxh4uCdvQdqcWUMvBBTJa95vLuKrze7WLus5h6Gk)
+- **Oracle**: [Switchboard](https://ondemand.switchboard.xyz/solana/mainnet/feed/8wRUjxh4uCdvQdqcWUMvBBTJa95vLuKrze7WLus5h6Gk) | [Solscan](https://solscan.io/account/8wRUjxh4uCdvQdqcWUMvBBTJa95vLuKrze7WLus5h6Gk)
 - **Marginfi Bank (after execution)**: [Solscan](https://solscan.io/account/E7LfHgmiWT6TxAcWq18yDBXWxHw4VasjD98aZaoXCp8T)
 
 ---
