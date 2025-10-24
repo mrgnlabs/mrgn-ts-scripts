@@ -50,10 +50,10 @@ export const dzsolConfig: MarginfiBankConfig = {
   // Current choice: OPTION 1 (Standard LST) - Change if dzSOL should start more conservatively
 
   // ============ Limits ============
-  // Conservative starting limits
-  depositLimit: 100_000,               // 100K dzSOL deposit cap
-  borrowLimit: 25_000,                 // 25K dzSOL borrow cap (25% of deposits)
-  totalAssetValueInitLimit: 20_000_000, // $20M total value cap (100K * ~$200)
+  // Standard second-tier LST limits
+  depositLimit: 25_000,                // 25K dzSOL deposit cap (~$5M at $200/SOL)
+  borrowLimit: 5_000,                  // 5K dzSOL borrow cap (20% of deposits)
+  totalAssetValueInitLimit: 8_750_000, // $8.75M total value cap (25K × $350 for SOL growth room)
 
   // ============ Interest Rate Config ============
   optimalUtilizationRate: 0.80,    // 80% optimal utilization
