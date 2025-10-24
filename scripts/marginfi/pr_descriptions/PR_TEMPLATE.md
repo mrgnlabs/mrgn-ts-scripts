@@ -16,14 +16,14 @@ This PR adds two new Marginfi banks to the lending protocol:
 | **Oracle Type** | Switchboard Pull | Switchboard Pull |
 | **Oracle Max Age** | 70 seconds | 70 seconds |
 | **Seed** | 0 | 0 |
-| **Asset Weight Init** | 0.65 (65%) | 0.50 (50%) |
-| **Asset Weight Maint** | 0.80 (80%) | 0.65 (65%) |
-| **Liability Weight Init** | 1.30 (130%) | 2.50 (250%) |
-| **Liability Weight Maint** | 1.20 (120%) | 1.50 (150%) |
+| **Asset Weight Init** | 0.65 (65%) | 0.40 (40%) |
+| **Asset Weight Maint** | 0.80 (80%) | 0.50 (50%) |
+| **Liability Weight Init** | 1.30 (130%) | 1.60 (160%) |
+| **Liability Weight Maint** | 1.20 (120%) | 1.42 (142%) |
 | **Deposit Limit** | 25,000 dzSOL | 12,500,000 2Z |
-| **Borrow Limit** | 5,000 dzSOL | 3,750,000 2Z |
+| **Borrow Limit** | 5,000 dzSOL | 1,250,000 2Z |
 | **Total Asset Value Init Limit** | $8,750,000 | $2,500,000 |
-| **Optimal Utilization Rate** | 80% | 80% |
+| **Optimal Utilization Rate** | 80% | 50% |
 | **Plateau Interest Rate** | 10% APR | 10% APR |
 | **Max Interest Rate** | 125% APR | 300% APR |
 | **Protocol Fixed Fee APR** | 1% | 1% |
@@ -56,10 +56,10 @@ Full parameter details and simulation results:
 
 **Base58 Transaction:**
 ```
-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
+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
 ```
 
-**Simulation:** ✅ Successful (113,800 compute units)
+**Simulation:** ✅ Successful (114,290 compute units)
 
 ---
 
@@ -75,7 +75,7 @@ Both transactions have been simulated successfully with signature verification d
 ## 📝 Notes
 
 - **dzSOL** uses standard liquid staking token risk parameters (0.65/0.80 asset weights)
-- **2Z** uses conservative volatile token parameters (0.50/0.65 asset weights, 2.50/1.50 liability weights)
+- **2Z** uses PUMP-aligned parameters (0.40/0.50 asset weights, 1.60/1.42 liability weights, 50% optimal utilization, 10% borrow-to-deposit ratio)
 - Both use Switchboard Pull oracles with 70-second max age
 - Both use standard SPL Token program
 - Transactions must be submitted via Squads multisig for approval

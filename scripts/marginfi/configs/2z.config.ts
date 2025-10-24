@@ -33,20 +33,20 @@ export const twoZConfig: MarginfiBankConfig = {
   oracleMaxConfidence: 0,
 
   // ============ Risk Parameters ============
-  // Conservative weights for volatile ecosystem token
-  assetWeightInit: 0.50,        // 50% collateral value when opening positions
-  assetWeightMaint: 0.65,       // 65% collateral value for existing positions
-  liabilityWeightInit: 2.50,    // 250% borrow value when opening positions (expensive to borrow)
-  liabilityWeightMaint: 1.50,   // 150% borrow value for existing positions
+  // Aligned with PUMP - more conservative collateral, less punishing borrows
+  assetWeightInit: 0.40,        // 40% collateral value when opening positions
+  assetWeightMaint: 0.50,       // 50% collateral value for existing positions
+  liabilityWeightInit: 1.60,    // 160% borrow value when opening positions
+  liabilityWeightMaint: 1.42,   // 142% borrow value for existing positions
 
   // ============ Limits ============
   // Based on $2.5M total value at $0.20/token
   depositLimit: 12_500_000,            // 12.5M 2Z ($2.5M at $0.20/token)
-  borrowLimit: 3_750_000,              // 3.75M 2Z (30% of deposits)
+  borrowLimit: 1_250_000,              // 1.25M 2Z (10% of deposits, aligned with PUMP)
   totalAssetValueInitLimit: 2_500_000, // $2.5M total value cap
 
   // ============ Interest Rate Config ============
-  optimalUtilizationRate: 0.80,    // 80% optimal utilization
+  optimalUtilizationRate: 0.50,    // 50% optimal utilization (aligned with PUMP, lower than standard 80%)
   plateauInterestRate: 0.10,       // 10% APR at plateau
   maxInterestRate: 3.00,           // 300% APR max (high to discourage borrowing)
   insuranceFeeFixedApr: 0,
