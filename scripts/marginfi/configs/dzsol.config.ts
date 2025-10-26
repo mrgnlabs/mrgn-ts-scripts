@@ -27,7 +27,7 @@ export const dzsolConfig: MarginfiBankConfig = {
   seed: 0,
 
   // ============ Oracle Config ============
-  oracle: new PublicKey("8wRUjxh4uCdvQdqcWUMvBBTJa95vLuKrze7WLus5h6Gk"), // Switchboard Pull
+  oracle: new PublicKey("Ho9iLZ15SreUnzRpbMHLTzQfCQugmsNnUQ3rLB5V75Ng"), // Switchboard Pull (dzSOL/USD)
   oracleType: "switchboard",
   oracleMaxAge: 70,
   oracleMaxConfidence: 0,

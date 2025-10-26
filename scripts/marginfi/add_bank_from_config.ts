@@ -17,6 +17,9 @@ import {
   Connection,
   PublicKey,
   Transaction,
+  VersionedTransaction,
+  TransactionMessage,
+  AddressLookupTableAccount,
 } from "@solana/web3.js";
 import { BN } from "@coral-xyz/anchor";
 import {
@@ -33,11 +36,20 @@ import {
   BankConfigRaw,
   InterestRateConfigRaw,
 } from "./configs/marginfi-bank-config.types";
+import { verifySwitchboardMint } from "../../lib/switchboard-verify";
 
 /**
  * If true, send the tx. If false, output the unsigned b58 tx to console.
  */
 const sendTx = false;
+
+/**
+ * Marginfi Address Lookup Table
+ * Contains common accounts to reduce transaction size
+ */
+const MARGINFI_ALT_ADDRESS = new PublicKey(
+  "J2bkica3Gesfw4iudrdstMwmJXLCHCfaPgA9XNtDBTvE"
+);
 
 /**
  * Convert user-friendly config to raw on-chain format
@@ -106,16 +118,19 @@ function getTokenProgram(tokenProgram: "spl-token" | "token-2022"): PublicKey {
  */
 async function simulateTransaction(
   connection: Connection,
-  tx: Transaction
+  tx: Transaction | VersionedTransaction
 ): Promise<void> {
   console.log("\n🔄 Simulating transaction...");
 
   try {
-    const simulation = await connection.simulateTransaction(
-      tx,
-      undefined,
-      false
-    );
+    let simulation;
+    if (tx instanceof VersionedTransaction) {
+      simulation = await connection.simulateTransaction(tx, {
+        sigVerify: false,
+      });
+    } else {
+      simulation = await connection.simulateTransaction(tx, undefined, false);
+    }
 
     // Print results
     if (simulation.value.err) {
@@ -284,6 +299,71 @@ async function main() {
   console.log(`  Protocol IR Fee: ${config.protocolIrFee * 100}%`);
   console.log();
 
+  // Verify Switchboard oracle if applicable
+  if (config.oracleType === "switchboard") {
+    console.log("🔍 Verifying Switchboard Oracle...");
+    try {
+      const verifyResult = await verifySwitchboardMint({
+        connection,
+        oraclePubkey: config.oracle,
+        expectedMint: config.bankMint.toString(),
+      });
+
+      console.log(`  Oracle Feed: ${verifyResult.name || "Unknown"}`);
+      console.log(`  Feed Hash: ${verifyResult.feedHashHex.substring(0, 16)}...`);
+      console.log(`  Queue: ${verifyResult.queue}`);
+
+      if (verifyResult.candidateMintsFromJobs.length > 0) {
+        console.log(`  Mints Found in Jobs: ${verifyResult.candidateMintsFromJobs.length}`);
+        verifyResult.candidateMintsFromJobs.forEach((mint) => {
+          const isExpected = mint === config.bankMint.toString();
+          const marker = isExpected ? "✅" : "  ";
+          console.log(`    ${marker} ${mint}`);
+        });
+      } else {
+        console.log(
+          `  ⚠️  No mints found in job spec (may use indirect price feed)`
+        );
+      }
+
+      if (verifyResult.expectedMintFound) {
+        console.log(`  ✅ Oracle verified for mint: ${config.bankMint.toString()}`);
+      } else if (verifyResult.candidateMintsFromJobs.length === 0) {
+        console.log(
+          `  ⚠️  Warning: Oracle doesn't directly reference mint`
+        );
+        console.log(
+          `     This may be expected for LSTs using base asset price feeds.`
+        );
+        console.log(
+          `     Verify manually that this oracle is appropriate for ${config.assetName}.`
+        );
+      } else {
+        console.error(`  ❌ Oracle mint verification FAILED!`);
+        console.error(`     Expected mint: ${config.bankMint.toString()}`);
+        console.error(
+          `     Found mints: ${verifyResult.candidateMintsFromJobs.join(", ")}`
+        );
+        console.error();
+        console.error(
+          `This oracle appears to be configured for a different token.`
+        );
+        console.error(`Please check your configuration and try again.`);
+        process.exit(1);
+      }
+      console.log();
+    } catch (error) {
+      console.error(`  ❌ Failed to verify oracle:`);
+      console.error(`     ${error.message}`);
+      console.error();
+      console.error(`Oracle verification failed. Please check your configuration.`);
+      process.exit(1);
+    }
+  } else {
+    console.log(`ℹ️  Oracle type is ${config.oracleType}, skipping Switchboard verification`);
+    console.log();
+  }
+
   // Create oracle meta
   const oracleMeta: AccountMeta = {
     pubkey: config.oracle,
@@ -291,67 +371,83 @@ async function main() {
     isWritable: false,
   };
 
-  // Build transaction
-  console.log("🔨 Building transaction...");
-  const tx = new Transaction().add(
-    await program.methods
-      .lendingPoolAddBankWithSeed(
-        {
-          assetWeightInit: bankConfigRaw.assetWeightInit,
-          assetWeightMaint: bankConfigRaw.assetWeightMaint,
-          liabilityWeightInit: bankConfigRaw.liabilityWeightInit,
-          liabilityWeightMaint: bankConfigRaw.liabilityWeightMaint,
-          depositLimit: bankConfigRaw.depositLimit,
-          interestRateConfig: bankConfigRaw.interestRateConfig,
-          operationalState: bankConfigRaw.operationalState,
-          borrowLimit: bankConfigRaw.borrowLimit,
-          riskTier: bankConfigRaw.riskTier,
-          assetTag: bankConfigRaw.assetTag,
-          pad0: [0, 0, 0, 0, 0, 0],
-          totalAssetValueInitLimit: bankConfigRaw.totalAssetValueInitLimit,
-          oracleMaxAge: bankConfigRaw.oracleMaxAge,
-          configFlags: 1, // Just always set to one for migrated. This is a real footgun issue
-          oracleMaxConfidence: bankConfigRaw.oracleMaxConfidence,
-        },
-        new BN(config.seed)
-      )
-      .accounts({
-        marginfiGroup: config.groupKey,
-        bankMint: config.bankMint,
-        feePayer: config.feePayer,
-        tokenProgram: tokenProgram,
-      })
-      .accountsPartial({
-        admin: config.admin,
-      })
-      .instruction(),
+  // Fetch the Address Lookup Table
+  console.log("🔍 Fetching Address Lookup Table...");
+  const lookupTableAccount = (
+    await connection.getAddressLookupTable(MARGINFI_ALT_ADDRESS)
+  ).value;
 
-    await program.methods
-      .lendingPoolConfigureBankOracle(oracleTypeNumber, config.oracle)
-      .accounts({
-        bank: bankKey,
-      })
-      .accountsPartial({
-        group: config.groupKey,
-        admin: config.admin,
-      })
-      .remainingAccounts([oracleMeta])
-      .instruction()
+  if (!lookupTableAccount) {
+    console.error("❌ Failed to fetch Address Lookup Table");
+    process.exit(1);
+  }
+
+  console.log(
+    `  ✅ Loaded ALT with ${lookupTableAccount.state.addresses.length} accounts`
   );
+  console.log();
 
-  // Set fee payer to Squads wallet
-  tx.feePayer = config.multisigPayer || config.admin;
+  // Build instructions
+  console.log("🔨 Building transaction...");
+  const addBankIx = await program.methods
+    .lendingPoolAddBankWithSeed(
+      {
+        assetWeightInit: bankConfigRaw.assetWeightInit,
+        assetWeightMaint: bankConfigRaw.assetWeightMaint,
+        liabilityWeightInit: bankConfigRaw.liabilityWeightInit,
+        liabilityWeightMaint: bankConfigRaw.liabilityWeightMaint,
+        depositLimit: bankConfigRaw.depositLimit,
+        interestRateConfig: bankConfigRaw.interestRateConfig,
+        operationalState: bankConfigRaw.operationalState,
+        borrowLimit: bankConfigRaw.borrowLimit,
+        riskTier: bankConfigRaw.riskTier,
+        assetTag: bankConfigRaw.assetTag,
+        pad0: [0, 0, 0, 0, 0, 0],
+        totalAssetValueInitLimit: bankConfigRaw.totalAssetValueInitLimit,
+        oracleMaxAge: bankConfigRaw.oracleMaxAge,
+        configFlags: 1, // Just always set to one for migrated. This is a real footgun issue
+        oracleMaxConfidence: bankConfigRaw.oracleMaxConfidence,
+      },
+      new BN(config.seed)
+    )
+    .accounts({
+      marginfiGroup: config.groupKey,
+      bankMint: config.bankMint,
+      feePayer: config.feePayer,
+      tokenProgram: tokenProgram,
+    })
+    .accountsPartial({
+      admin: config.admin,
+    })
+    .instruction();
+
+  const configureOracleIx = await program.methods
+    .lendingPoolConfigureBankOracle(oracleTypeNumber, config.oracle)
+    .accounts({
+      bank: bankKey,
+    })
+    .accountsPartial({
+      group: config.groupKey,
+      admin: config.admin,
+    })
+    .remainingAccounts([oracleMeta])
+    .instruction();
+
+  // Create versioned transaction with ALT
   const { blockhash } = await connection.getLatestBlockhash();
-  tx.recentBlockhash = blockhash;
+  const messageV0 = new TransactionMessage({
+    payerKey: config.multisigPayer || config.admin,
+    recentBlockhash: blockhash,
+    instructions: [addBankIx, configureOracleIx],
+  }).compileToV0Message([lookupTableAccount]);
+
+  const tx = new VersionedTransaction(messageV0);
 
   // Simulate the transaction
   await simulateTransaction(connection, tx);
 
   // Serialize and output
-  const serializedTransaction = tx.serialize({
-    requireAllSignatures: false,
-    verifySignatures: false,
-  });
+  const serializedTransaction = tx.serialize();
   const base58Transaction = bs58.encode(serializedTransaction);
 
   console.log("═══════════════════════════════════════════════════════");

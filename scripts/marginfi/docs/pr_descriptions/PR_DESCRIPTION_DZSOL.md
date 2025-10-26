@@ -30,10 +30,13 @@ Adds a new **dzSOL** bank to the marginfi lending group.
 ### Oracle Configuration
 | Parameter | Value | Verification |
 |-----------|-------|--------------|
-| **Oracle Address** | `8wRUjxh4uCdvQdqcWUMvBBTJa95vLuKrze7WLus5h6Gk` | [Solscan](https://solscan.io/account/8wRUjxh4uCdvQdqcWUMvBBTJa95vLuKrze7WLus5h6Gk) |
+| **Oracle Address** | `Ho9iLZ15SreUnzRpbMHLTzQfCQugmsNnUQ3rLB5V75Ng` | [Switchboard](https://ondemand.switchboard.xyz/solana/mainnet/feed/Ho9iLZ15SreUnzRpbMHLTzQfCQugmsNnUQ3rLB5V75Ng) \| [Solscan](https://solscan.io/account/Ho9iLZ15SreUnzRpbMHLTzQfCQugmsNnUQ3rLB5V75Ng) |
+| **Oracle Feed Name** | dzSOL/USD | ✅ Verified via automated oracle verification |
 | **Oracle Type** | Switchboard Pull | Type 4 |
 | **Oracle Max Age** | 70 seconds | Standard |
 | **Oracle Max Confidence** | 0 | Default (10%) |
+| **Feed Hash** | `6db28ad8b6f4a96b...` | Verified on-chain |
+| **Oracle Queue** | `A43DyUGA7s8eXPxqEjJY6EBu1KKbNgfxF8h17VAHn13w` | Switchboard mainnet queue |
 
 ### Risk Parameters
 | Parameter | Value | Notes |
@@ -66,8 +69,14 @@ Adds a new **dzSOL** bank to the marginfi lending group.
 
 ### On-Chain Verification
 - **dzSOL Mint**: [Solscan](https://solscan.io/account/Gekfj7SL2fVpTDxJZmeC46cTYxinjB6gkAnb6EGT6mnn)
-- **Oracle**: [Switchboard](https://ondemand.switchboard.xyz/solana/mainnet/feed/8wRUjxh4uCdvQdqcWUMvBBTJa95vLuKrze7WLus5h6Gk) | [Solscan](https://solscan.io/account/8wRUjxh4uCdvQdqcWUMvBBTJa95vLuKrze7WLus5h6Gk)
+- **Oracle (dzSOL/USD)**: [Switchboard](https://ondemand.switchboard.xyz/solana/mainnet/feed/Ho9iLZ15SreUnzRpbMHLTzQfCQugmsNnUQ3rLB5V75Ng) | [Solscan](https://solscan.io/account/Ho9iLZ15SreUnzRpbMHLTzQfCQugmsNnUQ3rLB5V75Ng)
 - **Marginfi Bank (after execution)**: [Solscan](https://solscan.io/account/E7LfHgmiWT6TxAcWq18yDBXWxHw4VasjD98aZaoXCp8T)
+
+### Oracle Verification
+✅ **Automated verification passed**: Oracle feed contains mint `Gekfj7SL2fVpTDxJZmeC46cTYxinjB6gkAnb6EGT6mnn`
+- Feed name: `dzSOL/USD`
+- Feed hash: `6db28ad8b6f4a96be25f927439483d32b87f0542004d556b3bea9dd63fa7d62b`
+- Verified via: `npx tsx scripts/verify-switchboard-oracle.ts`
 
 ---
 
@@ -77,7 +86,7 @@ Adds a new **dzSOL** bank to the marginfi lending group.
 
 **Base58 Transaction**:
 ```
-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
+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
 ```
 
 ### Simulation Results
@@ -192,6 +201,7 @@ E7LfHgmiWT6TxAcWq18yDBXWxHw4VasjD98aZaoXCp8T
 **Key Parameters Verified**:
 - ✅ Program ID: `MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA` (Mainnet)
 - ✅ Token Program: SPL Token
+- ✅ Oracle: `Ho9iLZ15SreUnzRpbMHLTzQfCQugmsNnUQ3rLB5V75Ng` (dzSOL/USD - Automated verification passed ✅)
 - ✅ Asset Weight Init: 0.65 (65%)
 - ✅ Asset Weight Maint: 0.8 (80%)
 - ✅ Liability Weight Init: 1.3 (130%)

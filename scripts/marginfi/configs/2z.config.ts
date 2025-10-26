@@ -27,7 +27,7 @@ export const twoZConfig: MarginfiBankConfig = {
   seed: 0,
 
   // ============ Oracle Config ============
-  oracle: new PublicKey("Ho9iLZ15SreUnzRpbMHLTzQfCQugmsNnUQ3rLB5V75Ng"), // Switchboard Pull
+  oracle: new PublicKey("8wRUjxh4uCdvQdqcWUMvBBTJa95vLuKrze7WLus5h6Gk"), // Switchboard Pull (2Z/USD)
   oracleType: "switchboard",
   oracleMaxAge: 70,
   oracleMaxConfidence: 0,
@@ -40,10 +40,13 @@ export const twoZConfig: MarginfiBankConfig = {
   liabilityWeightMaint: 1.42,   // 142% borrow value for existing positions
 
   // ============ Limits ============
-  // Based on $2.5M total value at $0.20/token
-  depositLimit: 12_500_000,            // 12.5M 2Z ($2.5M at $0.20/token)
-  borrowLimit: 1_250_000,              // 1.25M 2Z (10% of deposits, aligned with PUMP)
-  totalAssetValueInitLimit: 2_500_000, // $2.5M total value cap
+  // Conservative limits based on market liquidity analysis:
+  // - Current price: ~$0.25/token
+  // - Market depth limited (can't absorb $1M+ without bad slippage)
+  // - Setting $750K deposit cap based on available liquidity
+  depositLimit: 3_000_000,             // 3M 2Z ($750K at $0.25/token)
+  borrowLimit: 300_000,                // 300K 2Z (10% of deposits, aligned with PUMP)
+  totalAssetValueInitLimit: 1_000_000, // $1M total value cap
 
   // ============ Interest Rate Config ============
   optimalUtilizationRate: 0.50,    // 50% optimal utilization (aligned with PUMP, lower than standard 80%)
