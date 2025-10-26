@@ -65,8 +65,8 @@ const BANK_KEYS: Record<EmodeTag, PublicKey[]> = {
     new PublicKey("FvrTUfd3kimMfXvGrvcS1XC8NrtmSSurX8yP6XeUFt2s"), // LanternSOL
     new PublicKey("TBD") // DZSOL
   ],
-  [EmodeTag.JUP]: [
-    new PublicKey("Guu5uBc8k1WK1U2ihGosNaCy57LSgCkpWAabtzQqrQf8"), // jup
+  [EmodeTag.JLP]: [
+    new PublicKey("Amtw3n7GZe5SWmyhMhaFhDTi39zbTkLeWErBsmZXwpDa"), // jlp
   ],
   [EmodeTag.STABLE_T1]: [
     new PublicKey("2s37akK2eyBbp8DZgCm7RtsaEz8eJP3Nxd4urLHQv7yB"), // usdc
@@ -100,8 +100,8 @@ const PAIR_TABLE: PairConfig[] = [
   { lend: EmodeTag.LST_T2, borrow: EmodeTag.LST_T2, appIso: true, init: 0.75, maint: 0.85 },
 
   // NEW EMODE PAIRS
-  { lend: EmodeTag.JUP, borrow: EmodeTag.STABLE_T1, appIso: true, init: 0.8, maint: 0.85 },
-  { lend: EmodeTag.JUP, borrow: EmodeTag.SOL, appIso: true, init: 0.75, maint: 0.85 },
+  { lend: EmodeTag.JLP, borrow: EmodeTag.STABLE_T1, appIso: true, init: 0.8, maint: 0.85 },
+  { lend: EmodeTag.JLP, borrow: EmodeTag.SOL, appIso: true, init: 0.75, maint: 0.85 },
 
   { lend: EmodeTag.BTC_T1, borrow: EmodeTag.STABLE_T1, appIso: true, init: 0.87, maint: 0.92 },
 ];
