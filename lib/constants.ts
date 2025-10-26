@@ -17,6 +17,11 @@ export const enum EmodeTag {
   SOL = 501,
   LST_T1 = 1571,
   LST_T2 = 1572,
+  JUP = 609,
+  STABLE_T1 = 57481,
+  STABLE_T2 = 57482,
+  BTC_T1 = 871,
+  BTC_T2 = 872
 }
 
 export const MAX_EMODE_ENTRIES = 10;

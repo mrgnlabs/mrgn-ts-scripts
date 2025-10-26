@@ -37,52 +37,6 @@ interface PairConfig {
   maint: number;
 }
 
-// const BANK_KEYS: Record<EmodeTag, PublicKey[]> = {
-//   // SOL
-//   [EmodeTag.SOL]: [new PublicKey("3evdJSa25nsUiZzEUzd92UNa13TPRJrje1dRyiQP5Lhp")],
-//   // Liquid staking tokens that are SOL correlated
-//   [EmodeTag.LST]: [
-//     new PublicKey("EJuhmswifV6wumS28Sfr5W8B18CJ29m1ZNKkhbhbYDCA"), // Jup SOL
-//     new PublicKey("7QYMReTbACXKeX3fJWeJfxJs1gKRrCyWXKq63fUtBDNJ"), // hSOL
-//   ],
-//   // Stablecoins (~1:1 correlated to each other)
-//   [EmodeTag.STABLE]: [
-//     new PublicKey("Ek5JSFJFD8QgXM6rPDCzf31XhDp1q3xezaWYSkJWqbqc"), // USDC
-//     new PublicKey("Fe5QkKPVAh629UPP5aJ8sDZu8HTfe6M26jDQkKyXVhoA"), // PyUSD
-//     new PublicKey("FNEoFRVnmBF5KpRtghHJrJPbdbMjry1E33dNzzHY9UGC"), // UXD
-//   ],
-//   // Memecoins
-//   [EmodeTag.MEME]: [
-//     new PublicKey("DDLVJyj5sT3knnVDoTifrtQmroLnRCkBmGZ1QXCUDUUd"), // WIF
-//     new PublicKey("GNw2sfgnFX4vermA94de6tgTyftpQHMvWLqFEceVZ1ad"), // DUST
-//   ],
-//   // Staked collateral
-//   [EmodeTag.STAKE]: [
-//     new PublicKey("3jt43usVm7qL1N5qPvbzYHWQRxamPCRhri4CxwDrf6aL"), // Cool
-//     new PublicKey("4Gg6pW1U8W6ZQ22TbUWYRetx2nxjhUAydfKoCTSHhkkG"), // Phantom
-//   ],
-// };
-
-// const PAIR_TABLE: PairConfig[] = [
-//   // In plain English, when lending X and borrowing Y, offer rate A/B
-//   { lend: EmodeTag.SOL, borrow: EmodeTag.LST, appIso: true, init: 0.9, maint: 0.95 },
-//   { lend: EmodeTag.SOL, borrow: EmodeTag.STABLE, appIso: true, init: 0.85, maint: 0.9 },
-
-//   { lend: EmodeTag.LST, borrow: EmodeTag.SOL, appIso: true, init: 0.8, maint: 0.85 },
-//   { lend: EmodeTag.LST, borrow: EmodeTag.LST, appIso: true, init: 0.75, maint: 0.8 },
-
-//   { lend: EmodeTag.STABLE, borrow: EmodeTag.STABLE, appIso: true, init: 0.95, maint: 0.97 },
-//   { lend: EmodeTag.STABLE, borrow: EmodeTag.SOL, appIso: true, init: 0.95, maint: 0.97 },
-//   { lend: EmodeTag.STABLE, borrow: EmodeTag.MEME, appIso: true, init: 0.15, maint: 0.25 },
-
-//   { lend: EmodeTag.MEME, borrow: EmodeTag.MEME, appIso: true, init: 0.2, maint: 0.25 },
-//   { lend: EmodeTag.MEME, borrow: EmodeTag.STABLE, appIso: true, init: 0.15, maint: 0.25 },
-//   { lend: EmodeTag.MEME, borrow: EmodeTag.SOL, appIso: true, init: 0.15, maint: 0.25 },
-//   { lend: EmodeTag.MEME, borrow: EmodeTag.LST, appIso: true, init: 0.1, maint: 0.2 },
-
-//   { lend: EmodeTag.STAKE, borrow: EmodeTag.SOL, appIso: true, init: 0.98, maint: 1 },
-// ];
-
 // STEP 1: Map each tag to the bank PublicKeys that will use that tag. NOTE: If a bank currently has
 // an emode entry and you want to REMOVE IT, make sure that bank appears here too (with a dummy
 // value for the tag)
@@ -105,6 +59,28 @@ const BANK_KEYS: Record<EmodeTag, PublicKey[]> = {
     new PublicKey("FVVKPocxQqJNjDTjzvT3HFXte5oarfp29vJ9tqjAPUW4"), // bnSol
     new PublicKey("AwLRW3aPMMftXEjgWhTkYwM9CGBHdtKecvahCJZBwAqY"), // inf
     new PublicKey("4gQYBXPg4GuUQ58pyRebJrtUt6TvFdznwMu7RLfNsipH"), // dfdvSOL
+    new PublicKey("ARwrmohp8qMCkxQNiq5di4pTnTWhvXhAc7c18tZ877Kg"), // picoSOL
+    new PublicKey("GR9GNdjWf8kSf3b4REribKKSeVvkzjbAQJ1A8CDnFxLF"), // rkSOL
+    new PublicKey("5wZz2MV3dFJVq3Wp4tBoqrgrSGZqeLCdLE1L4w6okm9g"), // JSOL
+    new PublicKey("FvrTUfd3kimMfXvGrvcS1XC8NrtmSSurX8yP6XeUFt2s"), // LanternSOL
+    new PublicKey("TBD") // DZSOL
+  ],
+  [EmodeTag.JUP]: [
+    new PublicKey("Guu5uBc8k1WK1U2ihGosNaCy57LSgCkpWAabtzQqrQf8"), // jup
+  ],
+  [EmodeTag.STABLE_T1]: [
+    new PublicKey("2s37akK2eyBbp8DZgCm7RtsaEz8eJP3Nxd4urLHQv7yB"), // usdc
+    new PublicKey("HmpMfL8942u22htC4EMiWgLX931g3sacXFR6KjuLgKLV"), // usdt
+  ],
+  [EmodeTag.STABLE_T2]: [
+    // TBD in another update...
+  ],
+  [EmodeTag.BTC_T1]: [
+    new PublicKey("Ac4KV5K5isDqtABtg6h5DiwzZMe3Sp9bc3pBiCUvUpaQ"), // cbBTC
+    new PublicKey("HDYFgNRTFL2tVwGyAHaTr4SW7Y7riXjew48qKLHgi8es"), // xBTC
+  ],
+  [EmodeTag.BTC_T2]: [
+    // TBD in another update...
   ],
 };
 
@@ -115,13 +91,19 @@ const PAIR_TABLE: PairConfig[] = [
   { lend: EmodeTag.SOL, borrow: EmodeTag.LST_T1, appIso: true, init: 0.9, maint: 0.95 },
   { lend: EmodeTag.SOL, borrow: EmodeTag.LST_T2, appIso: true, init: 0.85, maint: 0.95 },
 
-  { lend: EmodeTag.LST_T1, borrow: EmodeTag.SOL, appIso: true, init: 0.992, maint: 0.999 }, // UPDATE
+  { lend: EmodeTag.LST_T1, borrow: EmodeTag.SOL, appIso: true, init: 1.046, maint: 1.051 }, // UPDATE
   { lend: EmodeTag.LST_T1, borrow: EmodeTag.LST_T1, appIso: true, init: 0.88, maint: 0.93 },
   { lend: EmodeTag.LST_T1, borrow: EmodeTag.LST_T2, appIso: true, init: 0.85, maint: 0.9 },
 
-  { lend: EmodeTag.LST_T2, borrow: EmodeTag.SOL, appIso: true, init: 0.955, maint: 0.985 }, // UPDATE
+  { lend: EmodeTag.LST_T2, borrow: EmodeTag.SOL, appIso: true, init: 0.992, maint: 0.999 }, // UPDATE
   { lend: EmodeTag.LST_T2, borrow: EmodeTag.LST_T1, appIso: true, init: 0.8, maint: 0.85 },
   { lend: EmodeTag.LST_T2, borrow: EmodeTag.LST_T2, appIso: true, init: 0.75, maint: 0.85 },
+
+  // NEW EMODE PAIRS
+  { lend: EmodeTag.JUP, borrow: EmodeTag.STABLE_T1, appIso: true, init: 0.8, maint: 0.85 },
+  { lend: EmodeTag.JUP, borrow: EmodeTag.SOL, appIso: true, init: 0.75, maint: 0.85 },
+
+  { lend: EmodeTag.BTC_T1, borrow: EmodeTag.STABLE_T1, appIso: true, init: 0.87, maint: 0.92 },
 ];
 
 async function main() {
@@ -290,7 +272,55 @@ function newEmodeEntry(
   };
 }
 
-// Proposed 07/10/2025
+// ******************* Staging
+
+// const BANK_KEYS: Record<EmodeTag, PublicKey[]> = {
+//   // SOL
+//   [EmodeTag.SOL]: [new PublicKey("3evdJSa25nsUiZzEUzd92UNa13TPRJrje1dRyiQP5Lhp")],
+//   // Liquid staking tokens that are SOL correlated
+//   [EmodeTag.LST]: [
+//     new PublicKey("EJuhmswifV6wumS28Sfr5W8B18CJ29m1ZNKkhbhbYDCA"), // Jup SOL
+//     new PublicKey("7QYMReTbACXKeX3fJWeJfxJs1gKRrCyWXKq63fUtBDNJ"), // hSOL
+//   ],
+//   // Stablecoins (~1:1 correlated to each other)
+//   [EmodeTag.STABLE]: [
+//     new PublicKey("Ek5JSFJFD8QgXM6rPDCzf31XhDp1q3xezaWYSkJWqbqc"), // USDC
+//     new PublicKey("Fe5QkKPVAh629UPP5aJ8sDZu8HTfe6M26jDQkKyXVhoA"), // PyUSD
+//     new PublicKey("FNEoFRVnmBF5KpRtghHJrJPbdbMjry1E33dNzzHY9UGC"), // UXD
+//   ],
+//   // Memecoins
+//   [EmodeTag.MEME]: [
+//     new PublicKey("DDLVJyj5sT3knnVDoTifrtQmroLnRCkBmGZ1QXCUDUUd"), // WIF
+//     new PublicKey("GNw2sfgnFX4vermA94de6tgTyftpQHMvWLqFEceVZ1ad"), // DUST
+//   ],
+//   // Staked collateral
+//   [EmodeTag.STAKE]: [
+//     new PublicKey("3jt43usVm7qL1N5qPvbzYHWQRxamPCRhri4CxwDrf6aL"), // Cool
+//     new PublicKey("4Gg6pW1U8W6ZQ22TbUWYRetx2nxjhUAydfKoCTSHhkkG"), // Phantom
+//   ],
+// };
+
+// const PAIR_TABLE: PairConfig[] = [
+//   // In plain English, when lending X and borrowing Y, offer rate A/B
+//   { lend: EmodeTag.SOL, borrow: EmodeTag.LST, appIso: true, init: 0.9, maint: 0.95 },
+//   { lend: EmodeTag.SOL, borrow: EmodeTag.STABLE, appIso: true, init: 0.85, maint: 0.9 },
+
+//   { lend: EmodeTag.LST, borrow: EmodeTag.SOL, appIso: true, init: 0.8, maint: 0.85 },
+//   { lend: EmodeTag.LST, borrow: EmodeTag.LST, appIso: true, init: 0.75, maint: 0.8 },
+
+//   { lend: EmodeTag.STABLE, borrow: EmodeTag.STABLE, appIso: true, init: 0.95, maint: 0.97 },
+//   { lend: EmodeTag.STABLE, borrow: EmodeTag.SOL, appIso: true, init: 0.95, maint: 0.97 },
+//   { lend: EmodeTag.STABLE, borrow: EmodeTag.MEME, appIso: true, init: 0.15, maint: 0.25 },
+
+//   { lend: EmodeTag.MEME, borrow: EmodeTag.MEME, appIso: true, init: 0.2, maint: 0.25 },
+//   { lend: EmodeTag.MEME, borrow: EmodeTag.STABLE, appIso: true, init: 0.15, maint: 0.25 },
+//   { lend: EmodeTag.MEME, borrow: EmodeTag.SOL, appIso: true, init: 0.15, maint: 0.25 },
+//   { lend: EmodeTag.MEME, borrow: EmodeTag.LST, appIso: true, init: 0.1, maint: 0.2 },
+
+//   { lend: EmodeTag.STAKE, borrow: EmodeTag.SOL, appIso: true, init: 0.98, maint: 1 },
+// ];
+
+// ******************* Proposed 07/10/2025
 
 // const BANK_KEYS: Record<EmodeTag, PublicKey[]> = {
 //   // SOL
