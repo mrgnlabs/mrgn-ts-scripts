@@ -73,27 +73,27 @@ const config: Config = {
   // One tx per entry in this array:
   BANKS: [
     {
-      bank: new PublicKey("5wZz2MV3dFJVq3Wp4tBoqrgrSGZqeLCdLE1L4w6okm9g"),
+      bank: new PublicKey("G1pNtooUWPad3zCJLGAtjD3Zu9K56PrRpmvVB6AED1Tr"),
       config: {
-        assetWeightInit: bigNumberToWrappedI80F48(0.65),
-        assetWeightMaint: bigNumberToWrappedI80F48(0.8),
-        liabilityWeightInit: bigNumberToWrappedI80F48(1.3),
-        liabilityWeightMaint: bigNumberToWrappedI80F48(1.2),
-        depositLimit: new BN(5_000 * 10 ** 9),
+        assetWeightInit: null,
+        assetWeightMaint: null,
+        liabilityWeightInit: null,
+        liabilityWeightMaint: null,
+        depositLimit: null,
         interestRateConfig: {
           optimalUtilizationRate: null,
           plateauInterestRate: null,
-          maxInterestRate: bigNumberToWrappedI80F48(0.5655),
+          maxInterestRate: null,
           insuranceFeeFixedApr: null,
           insuranceIrFee: null,
-          protocolFixedFeeApr: bigNumberToWrappedI80F48(0.00001),
+          protocolFixedFeeApr: null,
           protocolIrFee: null,
           protocolOriginationFee: null,
         },
-        operationalState: { operational: {} },
-        borrowLimit: new BN(2_500 * 10 ** 9),
-        riskTier: { collateral: {} },
-        totalAssetValueInitLimit: new BN(15_000_000),
+        operationalState: null, //{ operational: {} }
+        borrowLimit: null,
+        riskTier: null, // { collateral: {} }
+        totalAssetValueInitLimit: null,
         oracleMaxAge: 70,
         assetTag: null,
         oracleMaxConfidence: null,
