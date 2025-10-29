@@ -24,7 +24,7 @@ const config: Config = {
     // new PublicKey("HmpMfL8942u22htC4EMiWgLX931g3sacXFR6KjuLgKLV"), // usdt
     // new PublicKey("8UEiPmgZHXXEDrqLS3oiTxQxTbeYTtPbeMBxAd2XGbpu"), // py
     // new PublicKey("FDsf8sj6SoV313qrA91yms3u5b3P4hBxEPvanVs8LtJV"), // usds
-    new PublicKey("CCKtUs6Cgwo4aaQUmBPmyoApH2gUDErxNZCAntD6LYGh"),
+    new PublicKey("F4brCRJHx8epWah7p8Ace4ehutphxYZ1ctRq2LS3iiBh"),
   ],
 };
 
@@ -69,16 +69,10 @@ async function printBankInfo(bankKey: PublicKey) {
   const insuranceBal = await insuranceBalPromise;
   const feeBal = await feePromise;
 
-  try {
-    // @ts-ignore
-    if (bank.kaminoObligation.toString() != PublicKey.default.toString()) {
-      // @ts-ignore
-      console.log("kamino reserve: " + bank.kaminoReserve);
-      // @ts-ignore
-      console.log("kamino obligation: " + bank.kaminoObligation);
-    }
-  } catch (err) {
-    // do nothing
+  if (bank.kaminoObligation.toString() != PublicKey.default.toString()) {
+    console.log("*****KAMINO BANK*****");
+  } else {
+    console.log("*****P0 NATIVE BANK******");
   }
 
   // Metrics
@@ -98,6 +92,14 @@ async function printBankInfo(bankKey: PublicKey) {
     },
     { Property: "Oracle Max Age (secs)", Value: bank.config.oracleMaxAge },
   ]);
+
+  if (bank.kaminoObligation.toString() != PublicKey.default.toString()) {
+    console.log("Kamino Info:");
+    console.table([
+      { Property: "Reserve", Value: bank.kaminoReserve.toString() },
+      { Property: "Obligation", Value: bank.kaminoObligation.toString() },
+    ]);
+  }
 
   // Weights
   console.log("Weights:");

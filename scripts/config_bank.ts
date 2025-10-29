@@ -73,10 +73,11 @@ const config: Config = {
   // One tx per entry in this array:
   BANKS: [
     {
-      bank: new PublicKey("G1pNtooUWPad3zCJLGAtjD3Zu9K56PrRpmvVB6AED1Tr"),
+      // Honey
+      bank: new PublicKey("F4brCRJHx8epWah7p8Ace4ehutphxYZ1ctRq2LS3iiBh"),
       config: {
-        assetWeightInit: null,
-        assetWeightMaint: null,
+        assetWeightInit: bigNumberToWrappedI80F48(0.85),
+        assetWeightMaint: bigNumberToWrappedI80F48(0.91),
         liabilityWeightInit: null,
         liabilityWeightMaint: null,
         depositLimit: null,
@@ -94,7 +95,7 @@ const config: Config = {
         borrowLimit: null,
         riskTier: null, // { collateral: {} }
         totalAssetValueInitLimit: null,
-        oracleMaxAge: 70,
+        oracleMaxAge: null,
         assetTag: null,
         oracleMaxConfidence: null,
         permissionlessBadDebtSettlement: null,
