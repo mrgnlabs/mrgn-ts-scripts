@@ -9,7 +9,7 @@ import { commonSetup } from "../lib/common-setup";
 import { EmodeTag, MAX_EMODE_ENTRIES } from "../lib/constants";
 import { I80F48_ZERO } from "./utils";
 import { entriesIn, groupBy } from "lodash";
-import { Marginfi } from "../idl/marginfi";
+import { Marginfi } from "../idl/marginfi_kamino";
 
 /**
  * If true, send the tx. If false, output the unsigned b58 tx to console.
@@ -70,7 +70,6 @@ const BANK_KEYS: Record<EmodeTag, PublicKey[]> = {
     new PublicKey("GR9GNdjWf8kSf3b4REribKKSeVvkzjbAQJ1A8CDnFxLF"), // rkSOL
     new PublicKey("5wZz2MV3dFJVq3Wp4tBoqrgrSGZqeLCdLE1L4w6okm9g"), // JSOL
     new PublicKey("FvrTUfd3kimMfXvGrvcS1XC8NrtmSSurX8yP6XeUFt2s"), // LanternSOL
-    // TODO TODO TODO VALIDATE THIS IS LIVE
     new PublicKey("E7LfHgmiWT6TxAcWq18yDBXWxHw4VasjD98aZaoXCp8T")  // DZSOL
   ],
   // Base asset weight: 0.5, base maint weight: 0.65
@@ -104,7 +103,7 @@ const PAIR_TABLE: PairConfig[] = [
   { lend: EmodeTag.SOL, borrow: EmodeTag.LST_T2, appIso: true, init: 0.85, maint: 0.95 },
   { lend: EmodeTag.SOL, borrow: EmodeTag.SOL, appIso: true, init: 0.95, maint: 0.99 }, // New
 
-  { lend: EmodeTag.LST_T1, borrow: EmodeTag.SOL, appIso: true, init: 1.046, maint: 1.051 }, // UPDATE
+  { lend: EmodeTag.LST_T1, borrow: EmodeTag.SOL, appIso: true, init: 1, maint: 1.051 }, // UPDATE
   { lend: EmodeTag.LST_T1, borrow: EmodeTag.LST_T1, appIso: true, init: 0.88, maint: 0.93 },
   { lend: EmodeTag.LST_T1, borrow: EmodeTag.LST_T2, appIso: true, init: 0.85, maint: 0.9 },
 
@@ -125,7 +124,7 @@ async function main() {
     config.PROGRAM_ID,
     "/keys/emode-admin.json",
     config.MULTISIG,
-    "current"
+    "kamino"
   );
   const program = user.program;
   const connection = user.connection;
