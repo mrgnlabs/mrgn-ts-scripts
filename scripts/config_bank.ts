@@ -73,7 +73,7 @@ const config: Config = {
   // One tx per entry in this array:
   BANKS: [
     {
-      // Honey
+      // CASH
       bank: new PublicKey("F4brCRJHx8epWah7p8Ace4ehutphxYZ1ctRq2LS3iiBh"),
       config: {
         assetWeightInit: bigNumberToWrappedI80F48(0.85),
