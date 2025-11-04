@@ -24,7 +24,7 @@ const config: Config = {
     // new PublicKey("HmpMfL8942u22htC4EMiWgLX931g3sacXFR6KjuLgKLV"), // usdt
     // new PublicKey("8UEiPmgZHXXEDrqLS3oiTxQxTbeYTtPbeMBxAd2XGbpu"), // py
     // new PublicKey("FDsf8sj6SoV313qrA91yms3u5b3P4hBxEPvanVs8LtJV"), // usds
-    new PublicKey("E7LfHgmiWT6TxAcWq18yDBXWxHw4VasjD98aZaoXCp8T"),
+    new PublicKey("61Qx9kgWo9RVtPHf8Rku6gbaUtcnzgkpAuifQBUcMRVK"),
   ],
 };
 
@@ -246,7 +246,7 @@ async function printBankInfo(bankKey: PublicKey) {
       AssetWeightMaint: toStr(e.assetWeightMaint),
     }));
 
-  if (emodeRows.length > 0) {
+  if (bank.emode.emodeTag != 0) {
     console.group("EMODE Settings");
     console.log(`Tag:   ${bank.emode.emodeTag}`);
     console.log(`Flags: ${bank.emode.flags}`);
