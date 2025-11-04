@@ -74,7 +74,7 @@ const config: Config = {
   BANKS: [
     {
       // CASH
-      bank: new PublicKey("F4brCRJHx8epWah7p8Ace4ehutphxYZ1ctRq2LS3iiBh"),
+      bank: new PublicKey("4YPGUhxmAXgoGDRkg68zGnbGrV2xCgaoqQSfcZCjFhon"),
       config: {
         assetWeightInit: bigNumberToWrappedI80F48(0.85),
         assetWeightMaint: bigNumberToWrappedI80F48(0.91),
@@ -102,6 +102,36 @@ const config: Config = {
         freezeSettings: null,
       },
     },
+        {
+      // CASH
+      bank: new PublicKey("HnKy41QrJNFLJmBGtgLWpy8NissUsNLKRMibRwsNhDnF"),
+      config: {
+        assetWeightInit: bigNumberToWrappedI80F48(0.85),
+        assetWeightMaint: bigNumberToWrappedI80F48(0.91),
+        liabilityWeightInit: null,
+        liabilityWeightMaint: null,
+        depositLimit: null,
+        interestRateConfig: {
+          optimalUtilizationRate: null,
+          plateauInterestRate: null,
+          maxInterestRate: null,
+          insuranceFeeFixedApr: null,
+          insuranceIrFee: null,
+          protocolFixedFeeApr: null,
+          protocolIrFee: null,
+          protocolOriginationFee: null,
+        },
+        operationalState: null, //{ operational: {} }
+        borrowLimit: null,
+        riskTier: null, // { collateral: {} }
+        totalAssetValueInitLimit: null,
+        oracleMaxAge: null,
+        assetTag: null,
+        oracleMaxConfidence: null,
+        permissionlessBadDebtSettlement: null,
+        freezeSettings: null,
+      },
+    }, 
     // Add more { bank, config: bankConfigOptForThatBank() } as needed
 
     // Example reduce-only config:
@@ -172,7 +202,7 @@ async function main() {
     config.PROGRAM_ID,
     "/keys/staging-deploy.json",
     config.MULTISIG_PAYER,
-    "1.4"
+    "kamino"
   );
 
   const program = user.program;

@@ -10,7 +10,7 @@ import { commonSetup } from "../lib/common-setup";
 import { getTokenBalance } from "../lib/utils";
 
 // If true, prints this bank's settings in a format to be copy-pasted into add_bank
-const printForCopy = true;
+const printForCopy = false;
 
 type Config = {
   PROGRAM_ID: string;
@@ -24,7 +24,7 @@ const config: Config = {
     // new PublicKey("HmpMfL8942u22htC4EMiWgLX931g3sacXFR6KjuLgKLV"), // usdt
     // new PublicKey("8UEiPmgZHXXEDrqLS3oiTxQxTbeYTtPbeMBxAd2XGbpu"), // py
     // new PublicKey("FDsf8sj6SoV313qrA91yms3u5b3P4hBxEPvanVs8LtJV"), // usds
-    new PublicKey("5wZz2MV3dFJVq3Wp4tBoqrgrSGZqeLCdLE1L4w6okm9g"),
+    new PublicKey("61Qx9kgWo9RVtPHf8Rku6gbaUtcnzgkpAuifQBUcMRVK"),
   ],
 };
 
