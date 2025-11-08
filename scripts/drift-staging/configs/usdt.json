@@ -1,0 +1,18 @@
+{
+  "programId": "STAGING_PROGRAM_ID_HERE",
+  "group": "GROUP_PUBKEY_HERE",
+  "bankMint": "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB",
+  "driftMarketIndex": 2,
+  "oracle": "MARGINFI_ORACLE_PUBKEY_HERE",
+  "driftOracle": "JDKJSkxjasBGL3ce1pkrN6tqDzuVUZPWzzkGuyX8m9yN",
+  "depositLimit": "50000000000000",
+  "totalAssetValueInitLimit": "5000000000000",
+  "seed": "555",
+  "initDepositAmount": "100",
+  "comments": {
+    "asset": "USDT",
+    "driftSpotMarket": "7pPeeTqcqYeED7k4ocdeaSx3MAwT56Y7khyCx1zfS8jM",
+    "tokenProgram": "SPL Token",
+    "decimals": 6
+  }
+}

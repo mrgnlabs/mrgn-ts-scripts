@@ -1,0 +1,19 @@
+{
+  "programId": "STAGING_PROGRAM_ID_HERE",
+  "group": "GROUP_PUBKEY_HERE",
+  "bankMint": "J1toso1uCk3RLmjorhTtrVwY9HJ7X8V9yYac6Y7kGCPn",
+  "driftMarketIndex": 4,
+  "oracle": "MARGINFI_ORACLE_PUBKEY_HERE",
+  "driftOracle": "2cHCtAkMnttMh3bNKSCgSKSP5D4yN3p8bfnMdS3VZsDf",
+  "depositLimit": "5000000000000",
+  "totalAssetValueInitLimit": "5000000000000",
+  "seed": "555",
+  "initDepositAmount": "100",
+  "comments": {
+    "asset": "jitoSOL",
+    "driftSpotMarket": "6Aq7WBtsZVyumcRxpAoKNyWb97gAzp3be2LeQ9yE6SVX",
+    "tokenProgram": "SPL Token",
+    "decimals": 9,
+    "note": "Jito staked SOL - earns MEV rewards, good for testing LST rewards"
+  }
+}

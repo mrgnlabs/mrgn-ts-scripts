@@ -1,0 +1,19 @@
+{
+  "programId": "STAGING_PROGRAM_ID_HERE",
+  "group": "GROUP_PUBKEY_HERE",
+  "bankMint": "2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo",
+  "driftMarketIndex": 17,
+  "oracle": "MARGINFI_ORACLE_PUBKEY_HERE",
+  "driftOracle": "5QZMnsyndmphvZF4BNgoMHwVZaREXeE2rpBoCPMxgCCd",
+  "depositLimit": "50000000000000",
+  "totalAssetValueInitLimit": "5000000000000",
+  "seed": "555",
+  "initDepositAmount": "100",
+  "comments": {
+    "asset": "PYUSD (PayPal USD)",
+    "driftSpotMarket": "GyyHYVCrZGc2AQPuvNbcP1babmU3L42ptmxZthUfD9q",
+    "tokenProgram": "Token-2022",
+    "decimals": 6,
+    "note": "Token-2022 mint - important for testing Token-2022 support"
+  }
+}

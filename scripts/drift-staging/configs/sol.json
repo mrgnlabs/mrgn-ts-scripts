@@ -1,0 +1,18 @@
+{
+  "programId": "STAGING_PROGRAM_ID_HERE",
+  "group": "GROUP_PUBKEY_HERE",
+  "bankMint": "So11111111111111111111111111111111111111112",
+  "driftMarketIndex": 1,
+  "oracle": "MARGINFI_ORACLE_PUBKEY_HERE",
+  "driftOracle": "3m6i4RFWEDw2Ft4tFHPJtYgmpPe21k56M3FHeWYrgGBz",
+  "depositLimit": "10000000000000",
+  "totalAssetValueInitLimit": "10000000000000",
+  "seed": "555",
+  "initDepositAmount": "100",
+  "comments": {
+    "asset": "SOL (Wrapped)",
+    "driftSpotMarket": "3x85u7SWkmmr7YQGYhtjARgxwegTLJgkSLRprfXod6rh",
+    "tokenProgram": "SPL Token",
+    "decimals": 9
+  }
+}
