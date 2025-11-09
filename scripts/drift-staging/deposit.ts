@@ -3,10 +3,8 @@ import { BN } from "@coral-xyz/anchor";
 import { getAssociatedTokenAddressSync, TOKEN_PROGRAM_ID } from "@solana/spl-token";
 import { readFileSync } from "fs";
 import { join } from "path";
-import { driftSetup } from "./lib/setup";
+import { userSetup } from "./lib/user_setup";
 import {
-  deriveBankWithSeed,
-  deriveMarginfiAccount,
   deriveDriftStatePDA,
   deriveSpotMarketVaultPDA,
 } from "./lib/utils";
@@ -40,32 +38,17 @@ async function main() {
   console.log("=== Drift Deposit ===\n");
   console.log("Config:", configFile);
   console.log("Bank mint:", config.bankMint);
-  console.log("Amount:", amountStr);
+  console.log("Amount:", amountStr, "base units");
   console.log();
 
-  // Setup connection and program
-  const { connection, wallet, program } = driftSetup(config.programId);
+  // Setup connection and program with USER_WALLET
+  const { connection, wallet, program } = userSetup(config.programId);
 
   // Parse config values
-  const groupPubkey = new PublicKey(config.group);
   const bankMint = new PublicKey(config.bankMint);
   const driftOracle = new PublicKey(config.driftOracle);
-  const seed = new BN(config.seed);
-
-  // Derive accounts
-  const [bankPubkey] = deriveBankWithSeed(
-    program.programId,
-    groupPubkey,
-    bankMint,
-    seed
-  );
-
-  const [marginfiAccount] = deriveMarginfiAccount(
-    program.programId,
-    groupPubkey,
-    wallet.publicKey,
-    0
-  );
+  const bankPubkey = new PublicKey(config.bankAddress);
+  const marginfiAccount = new PublicKey(config.userMarginfiAccount);
 
   const [driftState] = deriveDriftStatePDA();
   const [driftSpotMarketVault] = deriveSpotMarketVaultPDA(config.driftMarketIndex);

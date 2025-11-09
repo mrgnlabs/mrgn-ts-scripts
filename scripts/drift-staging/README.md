@@ -134,3 +134,17 @@ Bank configuration uses external JSON files for easy reuse and documentation.
 5. **Withdrawal health check** - Must pass remaining accounts for ALL other active banks
 6. **Reward accounts** - Required if 2+ admin deposits active (positions 2-7)
 7. **Oracle type** - Must use Pyth Pull (`oracleSetup: { driftPythPull: {} }`)
+
+### Priority Banks for Testing
+
+The following banks should be set up for comprehensive drift integration testing:
+
+1. **USDS** - Has rewards on drift, tests reward harvesting functionality
+2. **BSOL** - Has rewards on drift, tests reward harvesting functionality
+3. **PYUSD** - Token-2022 program, tests SPL token 2022 compatibility
+
+These banks will exercise:
+- Reward account handling (USDS, BSOL)
+- Token-2022 program compatibility (PYUSD)
+- Different oracle configurations
+- Health check with multiple active drift positions

@@ -1,54 +1,54 @@
-import { PublicKey, Transaction, sendAndConfirmTransaction } from "@solana/web3.js";
-import { driftSetup } from "./lib/setup";
-import { deriveMarginfiAccount } from "./lib/utils";
+import { PublicKey, Transaction, sendAndConfirmTransaction, Keypair, SystemProgram } from "@solana/web3.js";
+import { readFileSync } from "fs";
+import { join } from "path";
+import { userSetup } from "./lib/user_setup";
 
 /**
  * Create Marginfi Account Script
  *
- * Creates a marginfi account for testing drift deposits/withdrawals.
- * One-time setup per wallet.
+ * Creates a marginfi account for the user so they can deposit/borrow.
+ * Uses USER_WALLET from .env
  *
- * Usage: npx ts-node scripts/drift-staging/create_marginfi_account.ts <program-id> <group>
- * Example: npx ts-node scripts/drift-staging/create_marginfi_account.ts PROGRAM_ID GROUP_PUBKEY
+ * Usage: npx ts-node scripts/drift-staging/create_marginfi_account.ts <config-file>
+ * Example: npx ts-node scripts/drift-staging/create_marginfi_account.ts configs/usdc-staging.json
  */
 
 async function main() {
-  const programId = process.argv[2];
-  const groupStr = process.argv[3];
+  // Get config file from args
+  const configFile = process.argv[2];
 
-  if (!programId || !groupStr) {
-    console.error("Usage: npx ts-node scripts/drift-staging/create_marginfi_account.ts <program-id> <group>");
-    console.error("Example: npx ts-node scripts/drift-staging/create_marginfi_account.ts PROGRAM_ID GROUP_PUBKEY");
+  if (!configFile) {
+    console.error("Usage: npx ts-node scripts/drift-staging/create_marginfi_account.ts <config-file>");
+    console.error("Example: npx ts-node scripts/drift-staging/create_marginfi_account.ts configs/usdc-staging.json");
     process.exit(1);
   }
 
+  // Load config
+  const configPath = join(__dirname, configFile);
+  const config = JSON.parse(readFileSync(configPath, "utf-8"));
+
   console.log("=== Create Marginfi Account ===\n");
-
-  // Setup connection and program
-  const { connection, wallet, program } = driftSetup(programId);
-  const group = new PublicKey(groupStr);
-
-  console.log("Program ID:", programId);
-  console.log("Group:", groupStr);
-  console.log("Authority:", wallet.publicKey.toString());
+  console.log("Config:", configFile);
   console.log();
 
-  // Derive marginfi account (seed 0)
-  const [marginfiAccount] = deriveMarginfiAccount(
-    program.programId,
-    group,
-    wallet.publicKey,
-    0
-  );
+  // Setup connection and program with USER_WALLET
+  const { connection, wallet, program } = userSetup(config.programId);
 
-  console.log("Marginfi Account:", marginfiAccount.toString());
+  // Parse config values
+  const groupPubkey = new PublicKey(config.group);
+
+  // Generate new keypair for the marginfi account
+  const marginfiAccountKeypair = Keypair.generate();
+  const marginfiAccount = marginfiAccountKeypair.publicKey;
+
+  console.log("Marginfi account to create:", marginfiAccount.toString());
   console.log();
 
-  // Build instruction
+  // Build instruction to initialize marginfi account (regular keypair version)
   const ix = await program.methods
     .marginfiAccountInitialize()
     .accounts({
-      marginfiGroup: group,
+      marginfiGroup: groupPubkey,
       marginfiAccount: marginfiAccount,
       authority: wallet.publicKey,
       feePayer: wallet.publicKey,
@@ -62,7 +62,7 @@ async function main() {
   const { blockhash } = await connection.getLatestBlockhash();
   transaction.recentBlockhash = blockhash;
 
-  console.log("Simulating marginfiAccountInitialize...");
+  console.log("\nSimulating marginfiAccountInitialize...");
   const simulation = await connection.simulateTransaction(transaction);
 
   console.log("\nProgram Logs:");
@@ -78,17 +78,18 @@ async function main() {
   console.log("Compute units:", simulation.value.unitsConsumed);
   console.log();
 
-  // Execute
+  // Execute - need to sign with both wallet and marginfiAccountKeypair
   console.log("Executing transaction...");
   const signature = await sendAndConfirmTransaction(
     connection,
     transaction,
-    [wallet.payer]
+    [wallet.payer, marginfiAccountKeypair]
   );
 
   console.log("✓ Marginfi account created successfully!");
   console.log("Signature:", signature);
-  console.log("Account:", marginfiAccount.toString());
+  console.log("Account address:", marginfiAccount.toString());
+  console.log("\nSave this address - you'll need it for deposits!");
 }
 
 main().catch((err) => {

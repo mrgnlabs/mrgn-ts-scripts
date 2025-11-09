@@ -3,7 +3,7 @@
   "group": "GROUP_PUBKEY_HERE",
   "bankMint": "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB",
   "driftMarketIndex": 2,
-  "oracle": "MARGINFI_ORACLE_PUBKEY_HERE",
+  "oracle": "HT2PLQBcG5EiCcNSaMHAjSgd9F98ecpATbk4Sk5oYuM",
   "driftOracle": "JDKJSkxjasBGL3ce1pkrN6tqDzuVUZPWzzkGuyX8m9yN",
   "depositLimit": "50000000000000",
   "totalAssetValueInitLimit": "5000000000000",
@@ -13,6 +13,8 @@
     "asset": "USDT",
     "driftSpotMarket": "7pPeeTqcqYeED7k4ocdeaSx3MAwT56Y7khyCx1zfS8jM",
     "tokenProgram": "SPL Token",
-    "decimals": 6
+    "decimals": 6,
+    "marginfiOracleType": "pythPushOracle",
+    "marginfiBankAddress": "HmpMfL8942u22htC4EMiWgLX931g3sacXFR6KjuLgKLV"
   }
 }

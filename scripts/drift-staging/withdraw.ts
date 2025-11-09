@@ -1,19 +1,14 @@
 import { PublicKey, Transaction, sendAndConfirmTransaction, AccountMeta } from "@solana/web3.js";
-import { BN, Program } from "@coral-xyz/anchor";
+import { BN } from "@coral-xyz/anchor";
 import { getAssociatedTokenAddressSync, TOKEN_PROGRAM_ID } from "@solana/spl-token";
 import { readFileSync } from "fs";
 import { join } from "path";
-import { driftSetup } from "./lib/setup";
+import { userSetup } from "./lib/user_setup";
 import {
-  deriveBankWithSeed,
-  deriveMarginfiAccount,
   deriveDriftStatePDA,
   deriveSpotMarketVaultPDA,
   deriveDriftSignerPDA,
-  DRIFT_PROGRAM_ID,
 } from "./lib/utils";
-import { Drift } from "../../../idl/drift";
-import driftIdl from "../../../idl/drift.json";
 
 /**
  * Drift Withdraw Script
@@ -48,40 +43,18 @@ async function main() {
   console.log("=== Drift Withdraw ===\n");
   console.log("Config:", configFile);
   console.log("Bank mint:", config.bankMint);
-  console.log("Amount:", amountStr);
+  console.log("Amount:", amountStr, "base units");
   console.log("Withdraw all:", withdrawAll);
   console.log();
 
-  // Setup connection and program
-  const { connection, wallet, program } = driftSetup(config.programId);
-
-  // Also create drift program to fetch spot market
-  const driftProgram = new Program<Drift>(
-    driftIdl as any,
-    DRIFT_PROGRAM_ID,
-    program.provider
-  );
+  // Setup connection and program with USER_WALLET
+  const { connection, wallet, program } = userSetup(config.programId);
 
   // Parse config values
-  const groupPubkey = new PublicKey(config.group);
   const bankMint = new PublicKey(config.bankMint);
   const driftOracle = new PublicKey(config.driftOracle);
-  const seed = new BN(config.seed);
-
-  // Derive accounts
-  const [bankPubkey] = deriveBankWithSeed(
-    program.programId,
-    groupPubkey,
-    bankMint,
-    seed
-  );
-
-  const [marginfiAccount] = deriveMarginfiAccount(
-    program.programId,
-    groupPubkey,
-    wallet.publicKey,
-    0
-  );
+  const bankPubkey = new PublicKey(config.bankAddress);
+  const marginfiAccount = new PublicKey(config.userMarginfiAccount);
 
   const [driftState] = deriveDriftStatePDA();
   const [driftSigner] = deriveDriftSignerPDA();
@@ -105,13 +78,22 @@ async function main() {
 
   const remainingAccounts: PublicKey[] = [];
   for (const balance of marginfiAccountData.lendingAccount.balances) {
-    if (balance.active && !balance.bankPk.equals(bankPubkey)) {
-      // Add other active banks for health check
+    if (balance.active) {
+      // For drift banks (ASSET_TAG_DRIFT = 3), we need 3 accounts: bank + 2 oracles
+      // For regular banks, we need 2 accounts: bank + oracle
       remainingAccounts.push(balance.bankPk);
+
+      // Fetch bank to get oracle info
+      const bankData = await program.account.bank.fetch(balance.bankPk);
+
+      // Add all oracle keys
+      for (const oracleKey of bankData.config.oracleKeys) {
+        remainingAccounts.push(oracleKey);
+      }
     }
   }
 
-  console.log("Remaining accounts (other active banks):", remainingAccounts.length);
+  console.log("Remaining accounts (banks + oracles):", remainingAccounts.length);
   remainingAccounts.forEach((pk, i) => {
     console.log(`  ${i + 1}. ${pk.toString()}`);
   });
@@ -119,7 +101,7 @@ async function main() {
 
   // Build instruction (authority is auto-resolved from marginfiAccount)
   const ix = await program.methods
-    .driftWithdraw(amount, withdrawAll ? {} : null)
+    .driftWithdraw(amount, withdrawAll ? true : null)
     .accounts({
       marginfiAccount: marginfiAccount,
       bank: bankPubkey,
@@ -130,8 +112,10 @@ async function main() {
       driftOracle: driftOracle,
       driftRewardOracle: null,
       driftRewardSpotMarket: null,
+      driftRewardMint: null,
       driftRewardOracle2: null,
       driftRewardSpotMarket2: null,
+      driftRewardMint2: null,
       tokenProgram: TOKEN_PROGRAM_ID,
     })
     .remainingAccounts(

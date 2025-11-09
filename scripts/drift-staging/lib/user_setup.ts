@@ -1,4 +1,4 @@
-import { Connection, Keypair, PublicKey } from "@solana/web3.js";
+import { Connection, Keypair } from "@solana/web3.js";
 import { AnchorProvider, Program, Wallet } from "@coral-xyz/anchor";
 import { readFileSync } from "fs";
 import { homedir } from "os";
@@ -6,23 +6,23 @@ import { loadEnvFile } from "../../utils";
 import marginfiDriftIdl from "../../../idl/marginfi_drift.json";
 import { Marginfi as MarginfiDrift } from "../../../idl/marginfi_drift";
 
-export interface DriftSetup {
+export interface UserSetup {
   connection: Connection;
   wallet: Wallet;
   program: Program<MarginfiDrift>;
 }
 
 /**
- * Setup connection, wallet, and program for drift-integration scripts
+ * Setup connection, wallet, and program for user (using USER_WALLET from .env)
  */
-export function driftSetup(programId: string): DriftSetup {
+export function userSetup(programId: string): UserSetup {
   // Load environment
   loadEnvFile(".env");
   loadEnvFile(".env.api");
 
-  let walletPath = process.env.MARGINFI_WALLET;
+  let walletPath = process.env.USER_WALLET;
   if (!walletPath) {
-    throw new Error("MARGINFI_WALLET not set in .env file");
+    throw new Error("USER_WALLET not set in .env file");
   }
 
   // Prepend HOME if relative path
@@ -39,6 +39,8 @@ export function driftSetup(programId: string): DriftSetup {
   const keypairData = JSON.parse(readFileSync(walletPath, "utf-8"));
   const keypair = Keypair.fromSecretKey(new Uint8Array(keypairData));
   const wallet = new Wallet(keypair);
+
+  console.log("User wallet:", keypair.publicKey.toString());
 
   // Create connection
   const connection = new Connection(rpcUrl, "confirmed");
