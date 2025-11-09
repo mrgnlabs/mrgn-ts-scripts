@@ -1,6 +1,6 @@
 import { PublicKey, Transaction, sendAndConfirmTransaction } from "@solana/web3.js";
 import { BN } from "@coral-xyz/anchor";
-import { getAssociatedTokenAddressSync, TOKEN_PROGRAM_ID } from "@solana/spl-token";
+import { getAssociatedTokenAddressSync, TOKEN_PROGRAM_ID, TOKEN_2022_PROGRAM_ID, getMint, createAssociatedTokenAccountIdempotentInstruction } from "@solana/spl-token";
 import { readFileSync } from "fs";
 import { join } from "path";
 import { userSetup } from "./lib/user_setup";
@@ -53,9 +53,21 @@ async function main() {
   const [driftState] = deriveDriftStatePDA();
   const [driftSpotMarketVault] = deriveSpotMarketVaultPDA(config.driftMarketIndex);
 
+  // Detect token program
+  let tokenProgram = TOKEN_PROGRAM_ID;
+  try {
+    await getMint(connection, bankMint, "confirmed", TOKEN_2022_PROGRAM_ID);
+    tokenProgram = TOKEN_2022_PROGRAM_ID;
+    console.log("Detected Token-2022 mint");
+  } catch {
+    console.log("Detected SPL Token mint");
+  }
+
   const signerTokenAccount = getAssociatedTokenAddressSync(
     bankMint,
-    wallet.publicKey
+    wallet.publicKey,
+    false,
+    tokenProgram
   );
 
   console.log("Derived Accounts:");
@@ -65,8 +77,22 @@ async function main() {
   console.log("  Signer Token Account:", signerTokenAccount.toString());
   console.log();
 
-  // Build instruction (authority is auto-resolved from marginfiAccount)
-  const ix = await program.methods
+  // Create transaction with ATA creation
+  const transaction = new Transaction();
+
+  // Add create ATA instruction (idempotent - only creates if doesn't exist)
+  transaction.add(
+    createAssociatedTokenAccountIdempotentInstruction(
+      wallet.publicKey,
+      signerTokenAccount,
+      wallet.publicKey,
+      bankMint,
+      tokenProgram
+    )
+  );
+
+  // Build deposit instruction (authority is auto-resolved from marginfiAccount)
+  const depositIx = await program.methods
     .driftDeposit(amount)
     .accounts({
       marginfiAccount: marginfiAccount,
@@ -75,11 +101,11 @@ async function main() {
       driftState: driftState,
       driftSpotMarketVault: driftSpotMarketVault,
       driftOracle: driftOracle,
-      tokenProgram: TOKEN_PROGRAM_ID,
+      tokenProgram: tokenProgram,
     })
     .instruction();
 
-  const transaction = new Transaction().add(ix);
+  transaction.add(depositIx);
 
   // Simulate
   transaction.feePayer = wallet.publicKey;

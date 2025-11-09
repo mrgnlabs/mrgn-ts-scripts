@@ -11,6 +11,7 @@
   "totalAssetValueInitLimit": "5000000000000",
   "seed": "67",
   "initDepositAmount": "100",
+  "userMarginfiAccount": "4PfteTYTBPQyNaEygBiqRjAcuDKevbDz4qCdkXjy9988",
   "comments": {
     "asset": "PYUSD (PayPal USD)",
     "driftSpotMarket": "GyyHYVCrZGc2AQPuvNbcP1babmU3L42ptmxZthUfD9q",

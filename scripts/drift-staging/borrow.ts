@@ -1,36 +1,28 @@
-import { PublicKey, Transaction, sendAndConfirmTransaction, AccountMeta } from "@solana/web3.js";
+import { PublicKey, Transaction, sendAndConfirmTransaction } from "@solana/web3.js";
 import { BN } from "@coral-xyz/anchor";
-import { getAssociatedTokenAddressSync, TOKEN_PROGRAM_ID } from "@solana/spl-token";
+import { getAssociatedTokenAddressSync, TOKEN_PROGRAM_ID, createAssociatedTokenAccountIdempotentInstruction } from "@solana/spl-token";
 import { readFileSync } from "fs";
 import { join } from "path";
 import { userSetup } from "./lib/user_setup";
-import {
-  deriveDriftStatePDA,
-  deriveSpotMarketVaultPDA,
-  deriveDriftSignerPDA,
-} from "./lib/utils";
 
 /**
- * Drift Withdraw Script
+ * Borrow Script
  *
- * Withdraws tokens from a drift-enabled marginfi bank.
- * Requires remaining accounts for ALL other active banks for health check.
+ * Borrows from a regular marginfi bank (not drift-enabled).
+ * Uses USER_WALLET and userMarginfiAccount from config.
  *
- * Usage: npx ts-node scripts/drift-staging/withdraw.ts <config-file> <amount> [withdraw-all]
- * Example: npx ts-node scripts/drift-staging/withdraw.ts configs/usdc.json 500
- * Example: npx ts-node scripts/drift-staging/withdraw.ts configs/usdc.json 0 true
+ * Usage: npx ts-node scripts/drift-staging/borrow.ts <config-file> <amount>
+ * Example: npx ts-node scripts/drift-staging/borrow.ts configs/usdc-staging.json 1000000
  */
 
 async function main() {
   // Get config file and amount from args
   const configFile = process.argv[2];
   const amountStr = process.argv[3];
-  const withdrawAll = process.argv[4] === "true";
 
   if (!configFile || !amountStr) {
-    console.error("Usage: npx ts-node scripts/drift-staging/withdraw.ts <config-file> <amount> [withdraw-all]");
-    console.error("Example: npx ts-node scripts/drift-staging/withdraw.ts configs/usdc.json 500");
-    console.error("Example: npx ts-node scripts/drift-staging/withdraw.ts configs/usdc.json 0 true");
+    console.error("Usage: npx ts-node scripts/drift-staging/borrow.ts <config-file> <amount>");
+    console.error("Example: npx ts-node scripts/drift-staging/borrow.ts configs/usdc-staging.json 1000000");
     process.exit(1);
   }
 
@@ -38,13 +30,16 @@ async function main() {
   const configPath = join(__dirname, configFile);
   const config = JSON.parse(readFileSync(configPath, "utf-8"));
 
+  // Get the regular marginfi bank from config, or use normal USDC bank as default
+  // Normal USDC bank in staging: 2niLzLpnYRh7Xf7YLzhX7rxfUn41T3FzPTEgPtAkyRiJ
+  const marginfiBankAddress = config.normalBankAddress || "2niLzLpnYRh7Xf7YLzhX7rxfUn41T3FzPTEgPtAkyRiJ";
+
   const amount = new BN(amountStr);
 
-  console.log("=== Drift Withdraw ===\n");
+  console.log("=== Borrow ===\n");
   console.log("Config:", configFile);
   console.log("Bank mint:", config.bankMint);
   console.log("Amount:", amountStr, "base units");
-  console.log("Withdraw all:", withdrawAll);
   console.log();
 
   // Setup connection and program with USER_WALLET
@@ -52,45 +47,60 @@ async function main() {
 
   // Parse config values
   const bankMint = new PublicKey(config.bankMint);
-  const driftOracle = new PublicKey(config.driftOracle);
-  const bankPubkey = new PublicKey(config.bankAddress);
+  const regularBankPubkey = new PublicKey(marginfiBankAddress);
   const marginfiAccount = new PublicKey(config.userMarginfiAccount);
 
-  const [driftState] = deriveDriftStatePDA();
-  const [driftSigner] = deriveDriftSignerPDA();
-  const [driftSpotMarketVault] = deriveSpotMarketVaultPDA(config.driftMarketIndex);
+  console.log("Borrowing from regular bank:", regularBankPubkey.toString());
+  console.log("Marginfi account:", marginfiAccount.toString());
+  console.log();
 
+  // Get user's token account (ATA)
   const destinationTokenAccount = getAssociatedTokenAddressSync(
     bankMint,
     wallet.publicKey
   );
 
-  console.log("Derived Accounts:");
-  console.log("  Bank:", bankPubkey.toString());
-  console.log("  Marginfi Account:", marginfiAccount.toString());
-  console.log("  Drift State:", driftState.toString());
-  console.log("  Destination Token Account:", destinationTokenAccount.toString());
+  // Fetch bank data to get liquidityVault
+  const bankData = await program.account.bank.fetch(regularBankPubkey);
+  console.log("Bank liquidity vault:", bankData.liquidityVault.toString());
   console.log();
 
-  // Fetch marginfi account to get all active banks for remaining accounts
-  console.log("Fetching marginfi account to build remaining accounts...");
+  // Fetch marginfi account to get all active banks for health check
   const marginfiAccountData = await program.account.marginfiAccount.fetch(marginfiAccount);
 
   const remainingAccounts: PublicKey[] = [];
+
+  // Track if we've added the borrow bank
+  let hasBorrowBank = false;
+
+  // Add all active banks (for health check)
   for (const balance of marginfiAccountData.lendingAccount.balances) {
     if (balance.active) {
-      // For drift banks (ASSET_TAG_DRIFT = 3), we need 3 accounts: bank + 2 oracles
-      // For regular banks, we need 2 accounts: bank + oracle
+      if (balance.bankPk.equals(regularBankPubkey)) {
+        hasBorrowBank = true;
+      }
+
+      // Add bank + oracles
       remainingAccounts.push(balance.bankPk);
 
       // Fetch bank to get oracle info
-      const bankData = await program.account.bank.fetch(balance.bankPk);
+      const balanceBankData = await program.account.bank.fetch(balance.bankPk);
 
       // Add all oracle keys (skip default/system program)
-      for (const oracleKey of bankData.config.oracleKeys) {
+      for (const oracleKey of balanceBankData.config.oracleKeys) {
         if (!oracleKey.equals(PublicKey.default)) {
           remainingAccounts.push(oracleKey);
         }
+      }
+    }
+  }
+
+  // If we're borrowing from a bank that isn't in active positions, add it
+  if (!hasBorrowBank) {
+    remainingAccounts.push(regularBankPubkey);
+    for (const oracleKey of bankData.config.oracleKeys) {
+      if (!oracleKey.equals(PublicKey.default)) {
+        remainingAccounts.push(oracleKey);
       }
     }
   }
@@ -101,23 +111,27 @@ async function main() {
   });
   console.log();
 
-  // Build instruction (authority is auto-resolved from marginfiAccount)
+  // Build transaction
+  const transaction = new Transaction();
+
+  // Create ATA if it doesn't exist
+  transaction.add(
+    createAssociatedTokenAccountIdempotentInstruction(
+      wallet.publicKey,
+      destinationTokenAccount,
+      wallet.publicKey,
+      bankMint
+    )
+  );
+
+  // Build borrow instruction
   const ix = await program.methods
-    .driftWithdraw(amount, withdrawAll ? true : null)
-    .accounts({
+    .lendingAccountBorrow(amount)
+    .accountsPartial({
       marginfiAccount: marginfiAccount,
-      bank: bankPubkey,
+      bank: regularBankPubkey,
       destinationTokenAccount: destinationTokenAccount,
-      driftState: driftState,
-      driftSpotMarketVault: driftSpotMarketVault,
-      driftSigner: driftSigner,
-      driftOracle: driftOracle,
-      driftRewardOracle: null,
-      driftRewardSpotMarket: null,
-      driftRewardMint: null,
-      driftRewardOracle2: null,
-      driftRewardSpotMarket2: null,
-      driftRewardMint2: null,
+      liquidityVault: bankData.liquidityVault,
       tokenProgram: TOKEN_PROGRAM_ID,
     })
     .remainingAccounts(
@@ -129,14 +143,14 @@ async function main() {
     )
     .instruction();
 
-  const transaction = new Transaction().add(ix);
+  transaction.add(ix);
 
   // Simulate
   transaction.feePayer = wallet.publicKey;
   const { blockhash } = await connection.getLatestBlockhash();
   transaction.recentBlockhash = blockhash;
 
-  console.log("Simulating driftWithdraw...");
+  console.log("Simulating borrow...");
   const simulation = await connection.simulateTransaction(transaction);
 
   console.log("\nProgram Logs:");
@@ -160,8 +174,9 @@ async function main() {
     [wallet.payer]
   );
 
-  console.log("✓ Withdrawal successful!");
+  console.log("✓ Borrow successful!");
   console.log("Signature:", signature);
+  console.log();
 }
 
 main().catch((err) => {
