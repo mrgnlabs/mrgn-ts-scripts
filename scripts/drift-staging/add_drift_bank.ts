@@ -1,6 +1,6 @@
 import { PublicKey, Transaction, sendAndConfirmTransaction, TransactionMessage, VersionedTransaction, AccountMeta } from "@solana/web3.js";
 import { BN } from "@coral-xyz/anchor";
-import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
+import { TOKEN_PROGRAM_ID, TOKEN_2022_PROGRAM_ID, getMint } from "@solana/spl-token";
 import { readFileSync } from "fs";
 import { join } from "path";
 import { driftSetup } from "./lib/setup";
@@ -60,7 +60,11 @@ async function main() {
     seed
   );
 
-  const [driftSpotMarket] = deriveSpotMarketPDA(config.driftMarketIndex);
+  // Use spot market address from config if provided, otherwise derive it
+  const driftSpotMarket = config.driftSpotMarket
+    ? new PublicKey(config.driftSpotMarket)
+    : deriveSpotMarketPDA(config.driftMarketIndex)[0];
+
   const [driftState] = deriveDriftStatePDA();
   const [driftSpotMarketVault] = deriveSpotMarketVaultPDA(config.driftMarketIndex);
 
@@ -70,6 +74,15 @@ async function main() {
   console.log("  Drift State:", driftState.toString());
   console.log();
 
+  // Determine oracle setup type from config comments
+  let oracleSetup;
+  if (config.comments?.marginfiOracleType === "switchboardPull") {
+    oracleSetup = { driftSwitchboardPull: {} };
+  } else {
+    // Default to pythPushOracle
+    oracleSetup = { driftPythPull: {} };
+  }
+
   // Build drift bank config
   const driftConfig: DriftConfigCompact = {
     oracle: oracle,
@@ -77,13 +90,26 @@ async function main() {
     assetWeightMaint: I80F48_ONE, // 100%
     depositLimit: new BN(config.depositLimit),
     totalAssetValueInitLimit: new BN(config.totalAssetValueInitLimit),
-    oracleSetup: { driftPythPull: {} },
+    oracleSetup: oracleSetup,
     oracleMaxAge: 100,
   };
 
   console.log("Bank Configuration:");
   console.log("  Deposit Limit:", config.depositLimit);
   console.log("  Total Asset Value Limit:", config.totalAssetValueInitLimit);
+  console.log();
+
+  // Detect the correct token program by checking the mint's owner
+  console.log("Detecting token program for mint...");
+  let tokenProgram = TOKEN_PROGRAM_ID;
+  try {
+    const mintInfo = await getMint(connection, bankMint, "confirmed", TOKEN_2022_PROGRAM_ID);
+    tokenProgram = TOKEN_2022_PROGRAM_ID;
+    console.log("  Using Token-2022 program");
+  } catch {
+    // If it fails with Token-2022, it's a regular SPL token
+    console.log("  Using SPL Token program");
+  }
   console.log();
 
   // Build lendingPoolAddBankDrift instruction
@@ -101,12 +127,11 @@ async function main() {
   const addBankIx = await program.methods
     .lendingPoolAddBankDrift(driftConfig, seed)
     .accounts({
-      marginfiGroup: groupPubkey,
-      admin: wallet.publicKey,
+      group: groupPubkey,
       feePayer: wallet.publicKey,
       bankMint: bankMint,
       driftSpotMarket: driftSpotMarket,
-      tokenProgram: TOKEN_PROGRAM_ID,
+      tokenProgram: tokenProgram,
     })
     .remainingAccounts([oracleMeta, spotMarketMeta])
     .instruction();
@@ -156,23 +181,46 @@ async function main() {
     wallet.publicKey
   );
 
-  const [driftSigner] = PublicKey.findProgramAddressSync(
-    [Buffer.from("drift_signer")],
-    new PublicKey("dRiftyHA39MWEi3m9aunc5MzRF1JYuBsbn6VPcn33UH")
+  // Derive all required accounts
+  const {
+    deriveLiquidityVaultAuthority,
+    deriveDriftUserPDA,
+    deriveDriftUserStatsPDA,
+    deriveDriftSignerPDA,
+    DRIFT_PROGRAM_ID
+  } = await import("./lib/utils");
+
+  const [liquidityVaultAuthority] = deriveLiquidityVaultAuthority(
+    program.programId,
+    bankPubkey
   );
+
+  const [driftUser] = deriveDriftUserPDA(liquidityVaultAuthority, 0);
+  const [driftUserStats] = deriveDriftUserStatsPDA(liquidityVaultAuthority);
+  const [driftSigner] = deriveDriftSignerPDA();
+
+  console.log("Derived accounts:");
+  console.log("  liquidityVaultAuthority:", liquidityVaultAuthority.toString());
+  console.log("  driftUser:", driftUser.toString());
+  console.log("  driftUserStats:", driftUserStats.toString());
+  console.log();
 
   const initUserIx = await program.methods
     .driftInitUser(initDepositAmount)
-    .accounts({
+    .accountsPartial({
       feePayer: wallet.publicKey,
-      bank: bankPubkey,
       signerTokenAccount: signerTokenAccount,
+      bank: bankPubkey,
+      liquidityVaultAuthority: liquidityVaultAuthority,
+      driftUser: driftUser,
+      driftUserStats: driftUserStats,
       driftState: driftState,
+      driftSpotMarket: driftSpotMarket,
       driftSpotMarketVault: driftSpotMarketVault,
       driftSigner: driftSigner,
       driftOracle: driftOracle,
-      referrer: null,
-      tokenProgram: TOKEN_PROGRAM_ID,
+      tokenProgram: tokenProgram,
+      driftProgram: DRIFT_PROGRAM_ID,
     })
     .instruction();
 
