@@ -19,6 +19,8 @@ Formulas from Drift:
 
 https://github.com/mrgnlabs/marginfi-v2-internal/blob/e25afce3e3d6bfb7afbc3104de59e25aeebb0552/programs/drift-mocks/src/state.rs#L133-L207
 
+The typescript functions here are auto generated, I haven't sanity checked or tested them. It's possible it got them from my own tests but I don't know. Maybe just ignore these or I can delete them if they're too misleading.
+
 ### Shares → Amount
 
 ```typescript
