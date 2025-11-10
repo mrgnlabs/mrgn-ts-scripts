@@ -7,7 +7,7 @@ import {
 import type { WrappedI80F48 } from "@mrgnlabs/mrgn-common";
 import BigNumber from "bignumber.js";
 import { commonSetup } from "../lib/common-setup";
-import { getTokenBalance } from "../lib/utils";
+import { getTokenBalance, u32ToApr } from "../lib/utils";
 
 // If true, prints this bank's settings in a format to be copy-pasted into add_bank
 const printForCopy = false;
@@ -24,7 +24,7 @@ const config: Config = {
     // new PublicKey("HmpMfL8942u22htC4EMiWgLX931g3sacXFR6KjuLgKLV"), // usdt
     // new PublicKey("8UEiPmgZHXXEDrqLS3oiTxQxTbeYTtPbeMBxAd2XGbpu"), // py
     // new PublicKey("FDsf8sj6SoV313qrA91yms3u5b3P4hBxEPvanVs8LtJV"), // usds
-    new PublicKey("61Qx9kgWo9RVtPHf8Rku6gbaUtcnzgkpAuifQBUcMRVK"),
+    new PublicKey("DMoqjmsuoru986HgfjqrKEvPv8YBufvBGADHUonkadC5"),
   ],
 };
 
@@ -228,6 +228,15 @@ async function printBankInfo(bankKey: PublicKey) {
       Field: "Protocol Origination Fee",
       Value: toStr(irc.protocolOriginationFee),
     },
+  ]);
+
+  // Rates Cache
+  const cache = bank.cache;
+  console.log("Rate cache:");
+  console.table([
+    { Field: "Base Rate", Value: u32ToApr(cache.baseRate) },
+    { Field: "Lending Rate", Value: u32ToApr(cache.lendingRate) },
+    { Field: "Borrow Rate", Value: u32ToApr(cache.borrowingRate) },
   ]);
 
   // EMODE Settings

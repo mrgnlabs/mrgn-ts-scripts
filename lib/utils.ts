@@ -39,6 +39,8 @@ import { CrossbarClient } from "@switchboard-xyz/common";
 import { KaminoLending } from "../idl/kamino_lending";
 import { simpleRefreshReserve } from "../scripts/kamino/ixes-common";
 
+export const u32_MAX: number = 4294967295;
+
 dotenv.config();
 
 export function loadKeypairFromFile(filePath: string): Keypair {
@@ -402,6 +404,8 @@ export async function getOraclesAndCrankSwb(
         console.log(`[${i}] pyth oracle: ${oracle}`);
         console.log(`  lst pool/mint: ${keys[1]} ${keys[2]}`);
         activeBalances.push([bal.bankPk, oracle, keys[1], keys[2]]);
+      } else if ("fixed" in setup) {
+        // do nothing
       } else {
         const oracle = keys[0];
         console.log(`[${i}] other oracle: ${oracle}`);
@@ -480,4 +484,27 @@ export const getTokenBalance = async (
   }
   const amount: BigInt = data.amount;
   return Number(amount);
+};
+
+export const aprToU32 = (apr: number): number => {
+  if (apr < 0 || apr > 10) {
+    console.error("apr out of range, exp 0-1000% (0-10), will clamp: " + apr);
+  }
+  const clamped = Math.max(0, Math.min(apr, 10));
+  return Math.round((clamped / 10) * u32_MAX);
+};
+export const utilToU32 = (util: number): number => {
+  if (util < 0 || util > 1) {
+    console.error("util out of range, exp 0-100% (0-1), will clamp: " + util);
+  }
+  const clamped = Math.max(0, Math.min(util, 1));
+  return Math.round(clamped * u32_MAX);
+};
+
+export const u32ToApr = (aprAsU32: number): number => {
+  return (aprAsU32 / u32_MAX) * 10;
+};
+
+export const u32ToUtil = (utilAsU32: number): number => {
+  return utilAsU32 / u32_MAX;
 };

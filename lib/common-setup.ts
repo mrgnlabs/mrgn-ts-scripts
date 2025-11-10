@@ -101,7 +101,7 @@ export function commonSetup(
 
   loadEnvFile(".env.api");
   const apiUrl = process.env.API_URL || DEFAULT_API_URL;
-  console.log("api: " + apiUrl);
+  // console.log("api: " + apiUrl);
 
   const connection = new Connection(apiUrl, "confirmed");
 
