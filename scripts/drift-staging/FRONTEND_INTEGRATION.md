@@ -12,11 +12,12 @@ Drift instructions require remaining accounts in this specific order:
 
 1. **Oracle** (read-only) - From `bank.config.oracleKeys[0]`, skip if USDC (market index 0)
 2. **Drift Spot Market** (read-only) - From `bank.driftSpotMarket`
-3. **Token Mint** (read-only, optional) - Only if using Token-2022
 
 ## Deposit Tokens ↔ Asset Shares
 
 Formulas from Drift:
+
+https://github.com/mrgnlabs/marginfi-v2-internal/blob/e25afce3e3d6bfb7afbc3104de59e25aeebb0552/programs/drift-mocks/src/state.rs#L133-L207
 
 ### Shares → Amount
 
@@ -89,3 +90,44 @@ Pass `null` for unused reward slots.
 - No manual reserve refresh needed (automatic)
 - Asset shares use Drift's accounting model
 - Remaining accounts must include all active positions for health check
+
+## Staging Environment Banks
+
+**Program**: `5UDghkpgW1HfYSrmEj2iAApHShqU44H6PKTAar9LL9bY`
+**Group**: `ERBiJdWtnVBBd4gFm7YVHT3a776x5NbGbJBR5BDvsxtj`
+
+### USDC
+- **Bank**: `73PAdXZSH7s89QBLUHntp12QaHWqdc6GChCYLSVF1RBJ`
+- **Mint**: `EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v`
+- **Market Index**: 0
+- **Drift Spot Market**: `6gMq3mRCKf8aP3ttTyYhuijVZ2LGi14oDsBbkgubfLB3`
+- **Drift Oracle**: `9VCioxmni2gDLv11qufWzT3RDERhQE4iY5Gf7NTfYyAV`
+- **Marginfi Oracle**: `Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX`
+- **Token Program**: SPL Token
+
+### SOL
+- **Bank**: `H2FT24RksVSq6kxhfPZacyqbEaXUtRZNi1QvMGV9RrFX`
+- **Mint**: `So11111111111111111111111111111111111111112`
+- **Market Index**: 1
+- **Drift Spot Market**: `3x85u7SWkmmr7YQGYhtjARgxwegTLJgkSLRprfXod6rh`
+- **Drift Oracle**: `3m6i4RFWEDw2Ft4tFHPJtYgmpPe21k56M3FHeWYrgGBz`
+- **Marginfi Oracle**: `4Hmd6PdjVA9auCoScE12iaBogfwS4ZXQ6VZoBeqanwWW`
+- **Token Program**: SPL Token
+
+### jitoSOL
+- **Bank**: `7TduwJSpq2zhPguaciA3GADsnspwSx6FQjZUhy37Jtgz`
+- **Mint**: `J1toso1uCk3RLmjorhTtrVwY9HJ7X8V9yYac6Y7kGCPn`
+- **Market Index**: 6
+- **Drift Spot Market**: `6Aq7WBtsZVyumcRxpAoKNyWb97gAzp3be2LeQ9yE6SVX`
+- **Drift Oracle**: `2cHCtAkMnttMh3bNKSCgSKSP5D4yN3p8bfnMdS3VZsDf`
+- **Marginfi Oracle**: `5htZ4vPKPjAEg8EJv6JHcaCetMM4XehZo8znQvrp6Ur3`
+- **Token Program**: SPL Token
+
+### PYUSD (Token-2022)
+- **Bank**: `8txe1gXz2yGGsy22NAtimJnCM4ivDQSQAf5kz2VZJsRR`
+- **Mint**: `2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo`
+- **Market Index**: 22
+- **Drift Spot Market**: `GyyHYVCrZGc2AQPuvNbcP1babmU3L42ptmxZthUfD9q`
+- **Drift Oracle**: `5QZMnsyndmphvZF4BNgoMHwVZaREXeE2rpBoCPMxgCCd`
+- **Marginfi Oracle**: `9zXQxpYH3kYhtoybmZfUNNCRVuud7fY9jswTg1hLyT8k`
+- **Token Program**: Token-2022
