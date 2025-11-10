@@ -74,7 +74,8 @@ const SPOT_BALANCE_PRECISION = new BN(10).pow(new BN(9));
 
 ### Reward Fields
 
-For banks with drift rewards (USDS, BSOL):
+For banks with drift rewards (BSOL):
+The way drift works is that they admin deposit tokens to your account and this means we need to include all of this extra information for deposits and withdraws if there's a reward. This roughly means you'll have to detect if there's a reward deposit in a bank's drift account and if there is then add these extra fields as needed. If there's an easier way to track whether a drift market has rewards or needs these extra fields, we can figure that out maybe.
 
 - **driftRewardOracle**: First reward oracle address
 - **driftRewardSpotMarket**: First reward spot market
@@ -97,6 +98,7 @@ Pass `null` for unused reward slots.
 **Group**: `ERBiJdWtnVBBd4gFm7YVHT3a776x5NbGbJBR5BDvsxtj`
 
 ### USDC
+
 - **Bank**: `73PAdXZSH7s89QBLUHntp12QaHWqdc6GChCYLSVF1RBJ`
 - **Mint**: `EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v`
 - **Market Index**: 0
@@ -106,6 +108,7 @@ Pass `null` for unused reward slots.
 - **Token Program**: SPL Token
 
 ### SOL
+
 - **Bank**: `H2FT24RksVSq6kxhfPZacyqbEaXUtRZNi1QvMGV9RrFX`
 - **Mint**: `So11111111111111111111111111111111111111112`
 - **Market Index**: 1
@@ -115,6 +118,7 @@ Pass `null` for unused reward slots.
 - **Token Program**: SPL Token
 
 ### jitoSOL
+
 - **Bank**: `7TduwJSpq2zhPguaciA3GADsnspwSx6FQjZUhy37Jtgz`
 - **Mint**: `J1toso1uCk3RLmjorhTtrVwY9HJ7X8V9yYac6Y7kGCPn`
 - **Market Index**: 6
@@ -124,6 +128,7 @@ Pass `null` for unused reward slots.
 - **Token Program**: SPL Token
 
 ### PYUSD (Token-2022)
+
 - **Bank**: `8txe1gXz2yGGsy22NAtimJnCM4ivDQSQAf5kz2VZJsRR`
 - **Mint**: `2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo`
 - **Market Index**: 22
