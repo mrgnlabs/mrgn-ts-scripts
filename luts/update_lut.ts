@@ -29,8 +29,8 @@ type Config = {
 const config: Config = {
   LUT: new PublicKey("CQ8omkUwDtsszuJLo9grtXCeEyDU4QqBLRv9AjRDaUZ3"),
   KEYS: [
-    new PublicKey("CVjgZ9vHcsrYVy1zqAVKD9f5kokwsYDbGaZ9Axv6uDKx"),
-    new PublicKey("BULKoNSGzxtCqzwTvg5hFJg8fx6dqZRScyXe5LYMfxrn"),
+    new PublicKey("5YMkXAYccHSGnHn9nob9xEvv6Pvka9DZWH7nTbotTu9E"),
+    new PublicKey("FTd3pPzN1c35mFNHV72UzKpZmjpLMmNDDVyWGZfP7GPF"),
   ],
 };
 
