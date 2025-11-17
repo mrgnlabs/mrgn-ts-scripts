@@ -140,6 +140,9 @@ particular organization.
 - CQ8omkUwDtsszuJLo9grtXCeEyDU4QqBLRv9AjRDaUZ3 (owned by Phantom wallet
   H4QMTHMVbJ3KrB5bz573cBBZKoYSZ2B4mSST1JKzPUrH)
 
+- DP9JAbtatfCrSAJQiWZUmWTfgHCnuWsx1QBczi1mnuxW (owned by staging shared
+  HMZshKmPfpwxJiwu6WeEt8FSac8heU3gqLnyF26vQgu2)
+
 ## DESTROYED ACCOUNTS
 
 - Activating Cavey Cool Stake Account for Phantom Wallet that was deposited to the single pool: CBkEBnagcbmZrmbg9yV1d1gWxi6tmuR26616XXwVwus

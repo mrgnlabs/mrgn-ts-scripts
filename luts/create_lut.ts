@@ -28,7 +28,7 @@ async function main() {
   const apiUrl = process.env.API_URL || DEFAULT_API_URL;
   console.log("api: " + apiUrl);
   const connection = new Connection(apiUrl, "confirmed");
-  const wallet = loadKeypairFromFile(process.env.HOME + "/keys/phantom-wallet.json");
+  const wallet = loadKeypairFromFile(process.env.HOME + "/keys/staging-shared.json");
 
   const transaction = new Transaction();
   const currentSlot = (await connection.getSlot()) - 1;

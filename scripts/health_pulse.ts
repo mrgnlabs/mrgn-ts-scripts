@@ -76,7 +76,7 @@ async function main() {
       instructions: transaction.instructions,
     }).compileToV0Message(lut);
 
-    const commitment: Commitment = "finalized";
+    const commitment: Commitment = "confirmed";
     const v0Tx = new VersionedTransaction(v0Message);
     v0Tx.sign([user.wallet.payer]);
 
