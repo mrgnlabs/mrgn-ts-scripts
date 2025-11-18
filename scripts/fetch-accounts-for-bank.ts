@@ -1,7 +1,11 @@
-import { wrappedI80F48toBigNumber } from "@mrgnlabs/mrgn-common";
+import fs from "fs";
+import path from "path";
 import { PublicKey } from "@solana/web3.js";
+import { wrappedI80F48toBigNumber } from "@mrgnlabs/mrgn-common";
 import { commonSetup } from "../lib/common-setup";
-// import whatever provides commonSetup, wrappedI80F48toBigNumber, etc.
+
+const writeToConsole = true;
+const writeToFile = true;
 
 type Config = {
   PROGRAM_ID: string;
@@ -10,14 +14,14 @@ type Config = {
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  BANK: new PublicKey("EdB7YADw4XUt6wErT8kHGCUok4mnTpWGzPUU9rWDebzb"),
+  BANK: new PublicKey("9KbkQsu4EGAeM7ZxvwsZcpxoekZyg5LTk1BF5SAMPXdY"),
 };
 
-// layout constants
+// ---- Layout constants ----
 const DISCRIMINATOR_LEN = 8;
-const LENDING_ACCOUNT_OFFSET = 64; // offset of LendingAccount inside MarginfiAccount struct
+const LENDING_ACCOUNT_OFFSET = 64;
 const BALANCE_SIZE = 104;
-const BALANCE_BANK_PK_OFFSET = 1; // inside Balance
+const BALANCE_BANK_PK_OFFSET = 1;
 const MAX_BALANCES = 16;
 
 function bankPkOffsetForIndex(i: number): number {
@@ -26,7 +30,7 @@ function bankPkOffsetForIndex(i: number): number {
     LENDING_ACCOUNT_OFFSET +
     i * BALANCE_SIZE +
     BALANCE_BANK_PK_OFFSET
-  ); // 73 + i*104
+  );
 }
 
 function formatNumber(num: any) {
@@ -38,15 +42,15 @@ async function main() {
   const user = commonSetup(
     true,
     config.PROGRAM_ID,
-    "/.config/solana/id.json",
+    "/keys/phantom-wallet.json",
     undefined,
     "current"
   );
   const program = user.program;
 
-  // Map to dedupe accounts that may match on multiple balance slots
-  const byPk = new Map<string, (typeof acc)[number]>();
+  const allAcc: any[] = [];
 
+  // Search each balance slot for bank_pk match
   for (let i = 0; i < MAX_BALANCES; i++) {
     const offset = bankPkOffsetForIndex(i);
 
@@ -59,41 +63,73 @@ async function main() {
       },
     ]);
 
-    for (const info of accForSlot) {
-      byPk.set(info.publicKey.toBase58(), info);
-    }
+    allAcc.push(...accForSlot);
   }
 
-  const acc = Array.from(byPk.values());
+  // Prepare JSON output array
+  const jsonOutput: any[] = [];
 
-  acc.forEach((accInfo, index) => {
+  allAcc.forEach((accInfo, index) => {
     const acc = accInfo.account;
-    console.log(`${index}: ${accInfo.publicKey.toString()}`);
-
+    const pk = accInfo.publicKey.toString();
     const balances = acc.lendingAccount.balances;
-    const activeBalances: any[] = [];
+
+    console.log(`${index}: ${pk}`);
+
+    const accountEntry: any = {
+      publicKey: pk,
+      balances: [],
+    };
+
+    let hasThisBank = false;
 
     for (let i = 0; i < balances.length; i++) {
-      if (balances[i].active === 0) continue;
+      const b = balances[i];
+      if (b.active === 0) continue;
 
-      activeBalances.push({
-        "Balance Index": i,
-        "Bank PK": balances[i].bankPk.toString(),
-        Tag: balances[i].bankAssetTag,
-        "Liab Shares": formatNumber(
-          wrappedI80F48toBigNumber(balances[i].liabilityShares)
+      const balInfo = {
+        balanceIndex: i,
+        bankPk: b.bankPk.toString(),
+        tag: b.bankAssetTag,
+        assetShares: formatNumber(wrappedI80F48toBigNumber(b.assetShares)),
+        liabilityShares: formatNumber(
+          wrappedI80F48toBigNumber(b.liabilityShares)
         ),
-        "Asset Shares": formatNumber(
-          wrappedI80F48toBigNumber(balances[i].assetShares)
-        ),
-      });
+      };
+
+      accountEntry.balances.push(balInfo);
+
+      if (b.bankPk.equals(config.BANK)) {
+        hasThisBank = true;
+      }
     }
 
-    if (activeBalances.length > 0) {
-      console.table(activeBalances);
+    if (hasThisBank) {
+      jsonOutput.push(accountEntry);
+
+      if (writeToConsole) {
+        if (accountEntry.balances.length > 0) {
+          console.table(accountEntry.balances);
+        }
+        console.log();
+      }
     }
-    console.log();
   });
+
+  // ----- WRITE OUTPUT TO FILE -----
+
+  if (writeToFile) {
+    const logsDir = path.join(process.cwd(), "logs");
+    if (!fs.existsSync(logsDir)) {
+      fs.mkdirSync(logsDir);
+    }
+
+    const filename = `${config.BANK.toBase58()}_accounts.json`;
+    const filePath = path.join(logsDir, filename);
+
+    fs.writeFileSync(filePath, JSON.stringify(jsonOutput, null, 2));
+    console.log(`\n📁 Results written to: ${filePath}\n`);
+  }
 }
 
 main().catch((err) => {
