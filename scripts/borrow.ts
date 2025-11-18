@@ -52,90 +52,75 @@ type Config = {
 };
 
 const config: Config = {
-  PROGRAM_ID: "5UDghkpgW1HfYSrmEj2iAApHShqU44H6PKTAar9LL9bY",
-  GROUP: new PublicKey("dgQnjVN26a1y3EJvF8KT3ecLoYykirqQhcdtptGrZff"),
-  ACCOUNT: new PublicKey("FRYZ9ErYxVPzp92zNS8E3RY3dJGbv5U1snw6X7yryizK"),
-  BANK: new PublicKey("5HFKjP8UafAM4uPohhm5nGqShaFTH2wtzdLPZ9vZgg8T"),
+  PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
+  GROUP: new PublicKey("8D7qgu5153s3dHCbnHviijJyJ3CcJAj1QRX46yW2eSu1"),
+  ACCOUNT: new PublicKey("AP5izhPtwhdSayABT8MYMsKy492XzWit8hVFZQG5jk6n"),
+  BANK: new PublicKey("89LuR6urx9wMxeJtf3LCdq84LsgM22Sp6fWqPbCuZtUr"),
   MINT: new PublicKey("DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263"),
-  AMOUNT: new BN(50000 * 10 ** 5),
+  AMOUNT: new BN(50000 * 10 ** 5), // 50k BONK
   NEW_REMAINING: [
-    new PublicKey("HcbiyRRfyf9Rte9Bn3HXLj3TM6cpBDoHTF4xaa5Sswty"),
+    new PublicKey("HY7cq1dZ3VqQXeVRdmXPhUhKGjBGGgPtAtxk7SKVGG1T"),
     new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
     new PublicKey("D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59"),
-    new PublicKey("5HFKjP8UafAM4uPohhm5nGqShaFTH2wtzdLPZ9vZgg8T"),
+
+    new PublicKey("Fr2Qj2S4jKpeByEChXrHZxBrCoUoneFnMjJJXHUyS6V6"),
+    new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
+
+    new PublicKey("EZeZK1GDLz3x3X1jR9zW5P8quY8cxMJRiNwPmrLj9zd8"),
+    new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
+    new PublicKey("D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59"),
+
+    new PublicKey("EVdZczE3GvbB7wkTNzkCizvDC7X3VEPyaQUFa6ACv3pw"),
+    new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
+    new PublicKey("D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59"),
+
+    new PublicKey("E7SUxSs1YFRUhSQmzFYyn9K46rpUPrfCFJQyrXKU23tT"),
+    new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
+
+    new PublicKey("E1dNntvZo6pXmkZq43wommAdxe6qF1wcXkjz2M2QEb14"),
+    new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
+    new PublicKey("D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59"),
+
+    new PublicKey("AHTqUF4LyDxCnpHWL89RjsJWGEGXKSYyQPWx3fUAcj1H"),
+    new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
+    new PublicKey("D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59"),
+
+    new PublicKey("8nUGEsT5VJijkpnn6fJXWTyyZjExhwipFuDyotqwyzhz"),
+    new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
+
+    new PublicKey("8Xy8fFpN7GtMrQhPuExDFudFTRP6Zf1i9iRJszFpzBJ2"),
+    new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
+    new PublicKey("D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59"),
+
+    new PublicKey("89LuR6urx9wMxeJtf3LCdq84LsgM22Sp6fWqPbCuZtUr"), // BONK
     new PublicKey("DBE3N8uNjhKPRHfANdwGvCZghWXyLPdqdSbEW2XFwBiX"),
+
+    new PublicKey("74KM1fwNm9WP39UH7QsCs4dvkN6RaZT52U9f4tnkJtom"),
+    new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
+
+    new PublicKey("5LTAowCUEK5rr2ALKtk6cTHhyaPTCbksV5C3pCqLKSVu"),
+    new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
+    new PublicKey("D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59"),
+
+    new PublicKey("5HxHAW3BCYPB2uRMrjKpgA6mSpwHPK1JrntWZU4QZpZ1"),
+    new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
+    new PublicKey("D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59"),
+
+    new PublicKey("52AJuRJJcejMYS9nNDCk1vYmyG1uHSsXoSPkctS3EfhA"),
+    new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
+
+    new PublicKey("4eFzqYFZr2UnWQqSfwZxB4r1W1kSJ9XG6M6H17Eq4x2Z"),
+    new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
+
+    new PublicKey("jLfQHXX6hNnGBECzDraZFZTtFYNXaYzw817eAzGMXUP"),
+    new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
   ],
-  ADD_COMPUTE_UNITS: false,
+  ADD_COMPUTE_UNITS: true,
   KAMINO_RESERVE: new PublicKey("D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59"),
   KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"),
   RESERVE_ORACLE: new PublicKey("3NJYftD5sjVfxSnUdZ1wVML8f3aC6mp1CXCL6L7TnU8C"),
   OBLIGATION: new PublicKey("5HxomAyh1wDSqHp9Gg5n3aF4vLAKQL3WK3baYMZwK6Yd"),
 };
-
-// const examples = {
-//   borrowJupSOLAgainstUSDC: {
-//     PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-//     GROUP: new PublicKey("FCPfpHA69EbS8f9KKSreTRkXbzFpunsKuYf5qNmnJjpo"),
-//     ACCOUNT: new PublicKey("2GMbwepeyW5xzgm3cQLivdPWLydrFevLy2iBbZab3pd6"),
-//     BANK: new PublicKey("EJuhmswifV6wumS28Sfr5W8B18CJ29m1ZNKkhbhbYDCA"),
-//     MINT: new PublicKey("jupSoLaHXQiZZTSfEWMTRRgpnyFm8f6sZdosWBjx93v"),
-//     AMOUNT: new BN(0.0005 * 10 ** 9), // jupsol has 9 decimals
-//     REMAINING: [
-//       [
-//         new PublicKey("Ek5JSFJFD8QgXM6rPDCzf31XhDp1q3xezaWYSkJWqbqc"), // usdc bank
-//         new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
-//       ], // usdc oracle
-//       [
-//         new PublicKey("EJuhmswifV6wumS28Sfr5W8B18CJ29m1ZNKkhbhbYDCA"), // jupsol bank
-//         new PublicKey("HX5WM3qzogAfRCjBUWwnniLByMfFrjm1b5yo4KoWGR27"),
-//       ], // jupsol oracle
-//     ],
-//     ADD_COMPUTE_UNITS: false,
-//   },
-//   borrowSOLAgainstUSDC: {
-//     PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-//     GROUP: new PublicKey("FCPfpHA69EbS8f9KKSreTRkXbzFpunsKuYf5qNmnJjpo"),
-//     ACCOUNT: new PublicKey("2GMbwepeyW5xzgm3cQLivdPWLydrFevLy2iBbZab3pd6"),
-//     BANK: new PublicKey("3evdJSa25nsUiZzEUzd92UNa13TPRJrje1dRyiQP5Lhp"),
-//     MINT: new PublicKey("So11111111111111111111111111111111111111112"),
-//     AMOUNT: new BN(0.0005 * 10 ** 9), // sol has 9 decimals
-//     REMAINING: [
-//       [
-//         new PublicKey("Ek5JSFJFD8QgXM6rPDCzf31XhDp1q3xezaWYSkJWqbqc"), // usdc bank
-//         new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
-//       ], // usdc oracle
-//       // [new PublicKey("EJuhmswifV6wumS28Sfr5W8B18CJ29m1ZNKkhbhbYDCA"), // jupsol bank
-//       // new PublicKey("HX5WM3qzogAfRCjBUWwnniLByMfFrjm1b5yo4KoWGR27")], // jupsol oracle
-//       [
-//         new PublicKey("3evdJSa25nsUiZzEUzd92UNa13TPRJrje1dRyiQP5Lhp"), // sol bank
-//         new PublicKey("7UVimffxr9ow1uXYxsr4LHAcV58mLzhmwaeKvJ1pjLiE"),
-//       ], // sol oracle
-//     ],
-//     ADD_COMPUTE_UNITS: false,
-//   },
-//   borrowSOLAgainstStakedSOL: {
-//     PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-//     GROUP: new PublicKey("FCPfpHA69EbS8f9KKSreTRkXbzFpunsKuYf5qNmnJjpo"),
-//     ACCOUNT: new PublicKey("7SBEjeEjhzRvWsrTq7UiNWBLjcYwE1hdbmMK5wUaeVhU"),
-//     BANK: new PublicKey("3evdJSa25nsUiZzEUzd92UNa13TPRJrje1dRyiQP5Lhp"),
-//     STAKE_POOL: new PublicKey("AvS4oXtxWdrJGCJwDbcZ7DqpSqNQtKjyXnbkDbrSk6Fq"),
-//     MINT: new PublicKey("So11111111111111111111111111111111111111112"),
-//     AMOUNT: new BN(0.00002 * 10 ** 6), // usdc has 6 decimals
-//     REMAINING: [
-//       [
-//         new PublicKey("3jt43usVm7qL1N5qPvbzYHWQRxamPCRhri4CxwDrf6aL"), // staked sol bank
-//         new PublicKey("7UVimffxr9ow1uXYxsr4LHAcV58mLzhmwaeKvJ1pjLiE"), // staked sol oracle
-//         new PublicKey("BADo3D6nMtGnsAaTv3iEes8mMcq92TuFoBWebFe8kzeA"), // lst mint
-//         new PublicKey("3e8RuaQMCPASZSMJAskHX6ZfuTtQ3JvoNPFoEvaVRn78"),
-//       ], // lst pool
-//       [
-//         new PublicKey("3evdJSa25nsUiZzEUzd92UNa13TPRJrje1dRyiQP5Lhp"), // usdc bank
-//         new PublicKey("7UVimffxr9ow1uXYxsr4LHAcV58mLzhmwaeKvJ1pjLiE"),
-//       ], // usdc oracle
-//     ],
-//     ADD_COMPUTE_UNITS: false,
-//   },
-// };
 
 async function main() {
   const user = commonSetup(
@@ -148,14 +133,6 @@ async function main() {
   registerKaminoProgram(user, KLEND_PROGRAM_ID.toString());
   const program = user.program;
   const connection = user.connection;
-
-  // let activeBalances = await getOraclesAndCrankSwb(
-  //   program,
-  //   config.ACCOUNT,
-  //   connection,
-  //   user.wallet.payer
-  // );
-  // activeBalances.push(config.NEW_REMAINING);
 
   const oracleMeta: AccountMeta[] = config.NEW_REMAINING.flat().map(
     (pubkey) => {
@@ -176,24 +153,24 @@ async function main() {
   }
 
   transaction.add(
-    createAssociatedTokenAccountIdempotentInstruction(
-      user.wallet.publicKey,
-      ata,
-      user.wallet.publicKey,
-      config.MINT
-    ),
+    // createAssociatedTokenAccountIdempotentInstruction(
+    //   user.wallet.publicKey,
+    //   ata,
+    //   user.wallet.publicKey,
+    //   config.MINT
+    // ),
     await simpleRefreshReserve(
       user.kaminoProgram,
       config.KAMINO_RESERVE,
       config.KAMINO_MARKET,
       config.RESERVE_ORACLE
     ),
-    await simpleRefreshObligation(
-      user.kaminoProgram,
-      config.KAMINO_MARKET,
-      config.OBLIGATION,
-      [config.KAMINO_RESERVE]
-    ),
+    // await simpleRefreshObligation(
+    //   user.kaminoProgram,
+    //   config.KAMINO_MARKET,
+    //   config.OBLIGATION,
+    //   [config.KAMINO_RESERVE]
+    // ),
     await program.methods
       .lendingAccountBorrow(config.AMOUNT)
       .accounts({

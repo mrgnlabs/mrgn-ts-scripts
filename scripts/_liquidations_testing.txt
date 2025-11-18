@@ -66,26 +66,33 @@ Run for liquidatee and liquidator accs.
 
 Run for USDC and Bonk banks.
 
-/// KAMINO /// - 5UDghkpgW1HfYSrmEj2iAApHShqU44H6PKTAar9LL9bY
+/// KAMINO /// liquidator's main marginfi account - CE7D7oeCXs54w8BQjZGq46wjS3a36SSuMmrsXkQTfvJL
 
 1. ts-node ./scripts/init_group.ts
 - Potentially replace program ID.
 
-Get new group Pubkey: dgQnjVN26a1y3EJvF8KT3ecLoYykirqQhcdtptGrZff
+Get new group Pubkey: 8D7qgu5153s3dHCbnHviijJyJ3CcJAj1QRX46yW2eSu1
 
 2. ts-node ./scripts/init_account.ts
 - Potentially replace program ID.
 - Replace group key.
 
-liquidator (stage) - Cw9meVno4B8Tyyg6kvLh8mogdCRj4JT2sSPVM8hbcVhK (auth - 6DdJqQYD8AizuXiCkbn19LiyWRwUsRMzy2Sgyoyasyj7)
-liquidatee (arena) - FRYZ9ErYxVPzp92zNS8E3RY3dJGbv5U1snw6X7yryizK (auth - FbfXs6D1BGUqyz6ya5AfVi3eoyfhin6hfM9d7yt1WK3L)
+liquidator (stage) - SvABoHi4D71ZsYp4KtUoATz8jz5oaRSvtseWvMDHXJG (auth - 6DdJqQYD8AizuXiCkbn19LiyWRwUsRMzy2Sgyoyasyj7)
+liquidatee (arena) - AP5izhPtwhdSayABT8MYMsKy492XzWit8hVFZQG5jk6n (auth - FbfXs6D1BGUqyz6ya5AfVi3eoyfhin6hfM9d7yt1WK3L)
 
 3. ts-node ./scripts/kamino/add_bank.ts
 - Potentially replace program ID.
 - Replace group key.
 
 Get new bank Pubkey:
-HcbiyRRfyf9Rte9Bn3HXLj3TM6cpBDoHTF4xaa5Sswty (USDC) oracle - Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX
+8Xy8fFpN7GtMrQhPuExDFudFTRP6Zf1i9iRJszFpzBJ2 (USDC) oracle - Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX
+EVdZczE3GvbB7wkTNzkCizvDC7X3VEPyaQUFa6ACv3pw
+HY7cq1dZ3VqQXeVRdmXPhUhKGjBGGgPtAtxk7SKVGG1T
+5HxHAW3BCYPB2uRMrjKpgA6mSpwHPK1JrntWZU4QZpZ1
+E1dNntvZo6pXmkZq43wommAdxe6qF1wcXkjz2M2QEb14
+EZeZK1GDLz3x3X1jR9zW5P8quY8cxMJRiNwPmrLj9zd8
+AHTqUF4LyDxCnpHWL89RjsJWGEGXKSYyQPWx3fUAcj1H
+5LTAowCUEK5rr2ALKtk6cTHhyaPTCbksV5C3pCqLKSVu
 
 Reserve: D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59
 Market: 7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF
@@ -93,7 +100,15 @@ Market: 7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF
 4. ts-node ./scripts/kamino/init_bank_obligation.ts
 - Replace lots of data using the add_bank tx.
 
-Obligation: 5HxomAyh1wDSqHp9Gg5n3aF4vLAKQL3WK3baYMZwK6Yd
+Obligations:
+6Wqtr71GjGwXShq3AGxJ57N63pJa1dTD3Q5v7SmXjGBm
+7f3U68tmkitsAqjeouLgSQ1S2ccsGGt6Y8vZk2Hrbdp8
+ArqQ9qQzMGRqw4ZkYfRGc9PJic56fmypnyxdWDJS9GsU
+91tT9bGrp4sfv1Mb3mVDqLYAXVUtAX1LoRpy7zJtLKNx
+F8i6jQuBZYcedAwJ7WTGd1DdnFr7xxq5mV15JNG3569i
+2oNz75Bde4tqsviBCccw3gveBQCxkkFvMsb9fSLhYqdU
+8fRWaofVSaut1BvRAAJZh6n6qqceEmmqvebPZK3UbaSB
+2j7nWFsNPFBKxTJH8w8TzYud9crL7RnXdEqVwPVDS2GE
 
 5. ts-node ./scripts/kamino/deposit_kamino.ts
 - Replace lots of data using the init_bank_obligation tx.
@@ -105,7 +120,16 @@ Run USDC version for both liquidatee and liquidator.
 - Replace group key.
 
 Get new bank Pubkey:
-5HFKjP8UafAM4uPohhm5nGqShaFTH2wtzdLPZ9vZgg8T (BONK) oracle - DBE3N8uNjhKPRHfANdwGvCZghWXyLPdqdSbEW2XFwBiX
+89LuR6urx9wMxeJtf3LCdq84LsgM22Sp6fWqPbCuZtUr (BONK) oracle - DBE3N8uNjhKPRHfANdwGvCZghWXyLPdqdSbEW2XFwBiX
+
+"Padding" USDC banks:
+52AJuRJJcejMYS9nNDCk1vYmyG1uHSsXoSPkctS3EfhA
+Fr2Qj2S4jKpeByEChXrHZxBrCoUoneFnMjJJXHUyS6V6
+jLfQHXX6hNnGBECzDraZFZTtFYNXaYzw817eAzGMXUP
+4eFzqYFZr2UnWQqSfwZxB4r1W1kSJ9XG6M6H17Eq4x2Z
+E7SUxSs1YFRUhSQmzFYyn9K46rpUPrfCFJQyrXKU23tT
+8nUGEsT5VJijkpnn6fJXWTyyZjExhwipFuDyotqwyzhz
+74KM1fwNm9WP39UH7QsCs4dvkN6RaZT52U9f4tnkJtom
 
 7. ts-node ./scripts/deposit_regular.ts
 - Potentially replace program ID.
@@ -124,3 +148,6 @@ Run BONK version for liquidator.
 - Potentially replace program ID.
 - Replace bank key with the USDC one.
 - Set asset weights to 0.1 to worsen the health of the liquidatee.
+
+
+FIX WITHDRAW_KAMINO!

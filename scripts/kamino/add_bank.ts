@@ -41,8 +41,8 @@ type Config = {
 };
 
 const config: Config = {
-  PROGRAM_ID: "5UDghkpgW1HfYSrmEj2iAApHShqU44H6PKTAar9LL9bY",
-  GROUP_KEY: new PublicKey("dgQnjVN26a1y3EJvF8KT3ecLoYykirqQhcdtptGrZff"),
+  PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
+  GROUP_KEY: new PublicKey("8D7qgu5153s3dHCbnHviijJyJ3CcJAj1QRX46yW2eSu1"),
   ORACLE: new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
   ORACLE_TYPE: { kaminoPythPush: {} },
   ADMIN: new PublicKey("6DdJqQYD8AizuXiCkbn19LiyWRwUsRMzy2Sgyoyasyj7"),
@@ -50,7 +50,7 @@ const config: Config = {
   BANK_MINT: new PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"), // usdc
   KAMINO_RESERVE: new PublicKey("D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59"), // usdc
   KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"), // main
-  SEED: 0,
+  SEED: 7,
   TOKEN_PROGRAM: TOKEN_PROGRAM_ID,
 };
 

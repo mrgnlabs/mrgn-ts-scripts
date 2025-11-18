@@ -11,16 +11,18 @@ import {
   createAssociatedTokenAccountIdempotentInstruction,
   getAssociatedTokenAddressSync,
 } from "@mrgnlabs/mrgn-common";
-import { commonSetup } from "../lib/common-setup";
+import { commonSetup, registerKaminoProgram } from "../lib/common-setup";
 import {
   BankAndOracles,
   composeRemainingAccounts,
   getOraclesAndCrankSwb,
 } from "../lib/utils";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
-import { TOKEN_2022_PROGRAM_ID } from "@solana/spl-token";
-
-const sendTx = true;
+import {
+  createTransferCheckedInstruction,
+  TOKEN_2022_PROGRAM_ID,
+} from "@solana/spl-token";
+import { KLEND_PROGRAM_ID } from "./kamino/kamino-types";
 
 type Config = {
   PROGRAM_ID: string;
@@ -69,48 +71,25 @@ type Config = {
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  ACCOUNT: new PublicKey("AkRjbYJgrKXmdE9zizGWXcK4oecJfhuLxBuNrKsooAKK"),
+  ACCOUNT: new PublicKey("CE7D7oeCXs54w8BQjZGq46wjS3a36SSuMmrsXkQTfvJL"),
   BANK: new PublicKey("2s37akK2eyBbp8DZgCm7RtsaEz8eJP3Nxd4urLHQv7yB"),
   MINT: new PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"),
-  AMOUNT: new BN(1000 * 10 ** 6),
+  AMOUNT: new BN(20 * 10 ** 6),
   WITHDRAW_ALL: false,
   REMAINING: [
     [
-      new PublicKey("BkUyfXjbBBALcfZvw76WAFRvYQ21xxMWWeoPtJrUqG3z"), // weth bank
-      new PublicKey("42amVS4KgzR9rA28tkVYqVXjq9Qa8dcZQMbH5EYFX6XC"), // weth oracle
-    ],
-    [
-      new PublicKey("BeNBJrAh1tZg5sqgt8D6AWKJLD5KkBrfZvtcgd7EuiAR"), // uxd bank
-      new PublicKey("DtCJYXtxwFi3Cr4sYtdweqZFuP38acT2KbUPjTkDW18b"), // uxd oracle
-    ],
-    [
       new PublicKey("2s37akK2eyBbp8DZgCm7RtsaEz8eJP3Nxd4urLHQv7yB"), // usdc bank
       new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"), // usdc oracle
-    ]
+    ],
   ],
   ADD_COMPUTE_UNITS: false,
 };
 
-/** Helper: pretty-print PublicKey[][] exactly like Config.REMAINING expects */
-function printRemainingForPaste(groups: BankAndOracles[]) {
-  const body = groups
-    .map(
-      (g) =>
-        `  [\n` +
-        g.map((pk) => `    new PublicKey("${pk.toBase58()}"),`).join("\n") +
-        `\n  ],`
-    )
-    .join("\n");
-
-  const out = `[\n${body}\n]`;
-  console.log("\n=== Copy/Paste for config.REMAINING ===\n" + out + "\n");
-}
-
 async function main() {
   const user = commonSetup(
-    sendTx,
+    true,
     config.PROGRAM_ID,
-    "/.config/prod/id.json",
+    "/.config/stage/id.json",
     config.MULTISIG,
     "current"
   );
@@ -121,15 +100,12 @@ async function main() {
   const tokenProgram = mintAccInfo.owner;
   let isT22 = tokenProgram.toString() == TOKEN_2022_PROGRAM_ID.toString();
 
-  let meta: AccountMeta[] = [];
-  if (sendTx) {
-    const remaining = composeRemainingAccounts(config.REMAINING);
-    meta = remaining.map((pubkey) => ({
-      pubkey,
-      isSigner: false,
-      isWritable: false,
-    }));
-  }
+  const remaining = composeRemainingAccounts(config.REMAINING);
+  let meta: AccountMeta[] = remaining.map((pubkey) => ({
+    pubkey,
+    isSigner: false,
+    isWritable: false,
+  }));
 
   if (isT22) {
     const m: AccountMeta = {
@@ -141,34 +117,35 @@ async function main() {
     meta.unshift(m);
   }
 
-  const ata = getAssociatedTokenAddressSync(
-    config.MINT,
-    user.wallet.publicKey,
-    true,
-    tokenProgram
-  );
   const transaction = new Transaction();
 
   if (config.ADD_COMPUTE_UNITS) {
     transaction.add(
       ComputeBudgetProgram.setComputeUnitPrice({ microLamports: 100_000 })
     );
-    transaction.add(
-      ComputeBudgetProgram.setComputeUnitLimit({ units: 1_400_000 })
-    );
   }
 
+  const ata = getAssociatedTokenAddressSync(
+    config.MINT,
+    user.wallet.publicKey,
+    true,
+    tokenProgram
+  );
+
   transaction.add(
+    // createAssociatedTokenAccountIdempotentInstruction(
+    //   user.wallet.publicKey,
+    //   ata,
+    //   user.wallet.publicKey,
+    //   config.MINT,
+    //   tokenProgram
+    // ),
     await program.methods
       .lendingAccountWithdraw(config.AMOUNT, config.WITHDRAW_ALL)
       .accounts({
-        // marginfiGroup: config.GROUP,
         marginfiAccount: config.ACCOUNT,
-        // signer: wallet.publicKey,
         bank: config.BANK,
         destinationTokenAccount: ata,
-        // bankLiquidityVaultAuthority = deriveLiquidityVaultAuthority(id, bank);
-        // bankLiquidityVault = deriveLiquidityVault(id, bank)
         tokenProgram: tokenProgram,
       })
       .remainingAccounts(meta)
@@ -176,30 +153,21 @@ async function main() {
   );
 
   console.log(
-    "withdrawing : " + config.AMOUNT.toString() + " from " + config.BANK
+    "(" +
+      user.wallet.publicKey +
+      ") withdrawing " +
+      config.AMOUNT.toString() +
+      " from " +
+      config.BANK
   );
 
-  if (sendTx) {
-    try {
-      const signature = await sendAndConfirmTransaction(
-        connection,
-        transaction,
-        [user.wallet.payer]
-      );
-      console.log("Transaction signature:", signature);
-    } catch (error) {
-      console.error("Transaction failed:", error);
-    }
-  } else {
-    transaction.feePayer = config.MULTISIG; // Set the fee payer to Squads wallet
-    const { blockhash } = await connection.getLatestBlockhash();
-    transaction.recentBlockhash = blockhash;
-    const serializedTransaction = transaction.serialize({
-      requireAllSignatures: false,
-      verifySignatures: false,
-    });
-    const base58Transaction = bs58.encode(serializedTransaction);
-    console.log("Base58-encoded transaction:", base58Transaction);
+  try {
+    const signature = await sendAndConfirmTransaction(connection, transaction, [
+      user.wallet.payer,
+    ]);
+    console.log("Transaction signature:", signature);
+  } catch (error) {
+    console.error("Transaction failed:", error);
   }
 }
 

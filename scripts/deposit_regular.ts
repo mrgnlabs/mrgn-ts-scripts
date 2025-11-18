@@ -31,26 +31,26 @@ type Config = {
 
 
 const examples = {
-  depositUSDCArena: {
-    PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-    ACCOUNT: new PublicKey("N92TukzWFZ7GjM2iLbpPvGhS9rCWknMiDMMFx2AHAGh"),
-    BANK: new PublicKey("FBhaEQmAj1YZrNh13esWYFEaMtthdB1E2fwPiUTjmahE"),
+  depositUSDCKamino: {
+    PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
+    ACCOUNT: new PublicKey("AP5izhPtwhdSayABT8MYMsKy492XzWit8hVFZQG5jk6n"),
+    BANK: new PublicKey("74KM1fwNm9WP39UH7QsCs4dvkN6RaZT52U9f4tnkJtom"),
     MINT: new PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"),
-    AMOUNT: new BN(2 * 10 ** 6), // 2 USDC (** 6 decimals)
+    AMOUNT: new BN(1 * 10 ** 5), // 0.1 USDC (** 6 decimals)
     REMAINING: [
-      new PublicKey("FBhaEQmAj1YZrNh13esWYFEaMtthdB1E2fwPiUTjmahE"), // usdc bank
+      new PublicKey("74KM1fwNm9WP39UH7QsCs4dvkN6RaZT52U9f4tnkJtom"), // usdc bank
       new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"), // usdc oracle
     ],
     MULTISIG: undefined,
   },
   depositBonkKamino: {
-    PROGRAM_ID: "5UDghkpgW1HfYSrmEj2iAApHShqU44H6PKTAar9LL9bY",
-    ACCOUNT: new PublicKey("Cw9meVno4B8Tyyg6kvLh8mogdCRj4JT2sSPVM8hbcVhK"),
-    BANK: new PublicKey("5HFKjP8UafAM4uPohhm5nGqShaFTH2wtzdLPZ9vZgg8T"),
+    PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
+    ACCOUNT: new PublicKey("SvABoHi4D71ZsYp4KtUoATz8jz5oaRSvtseWvMDHXJG"),
+    BANK: new PublicKey("89LuR6urx9wMxeJtf3LCdq84LsgM22Sp6fWqPbCuZtUr"),
     MINT: new PublicKey("DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263"),
-    AMOUNT: new BN(100000 * 10 ** 5), // 100'000 BONK (** 5 decimals)
+    AMOUNT: new BN(50000 * 10 ** 5), // 50'000 BONK (** 5 decimals)
     REMAINING: [
-      new PublicKey("5HFKjP8UafAM4uPohhm5nGqShaFTH2wtzdLPZ9vZgg8T"), // bonk bank
+      new PublicKey("89LuR6urx9wMxeJtf3LCdq84LsgM22Sp6fWqPbCuZtUr"), // bonk bank
       new PublicKey("DBE3N8uNjhKPRHfANdwGvCZghWXyLPdqdSbEW2XFwBiX"), // bonk oracle
     ],
     MULTISIG: undefined,
@@ -69,7 +69,7 @@ const examples = {
   }
 };
 
-const config = examples.depositBonkKamino;
+const config = examples.depositUSDCKamino;
 
 // const config: Config = {
 //   PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
@@ -87,7 +87,7 @@ async function main() {
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
-    "/.config/stage/id.json",
+    "/.config/arena/id.json",
     config.MULTISIG,
     "current"
   );

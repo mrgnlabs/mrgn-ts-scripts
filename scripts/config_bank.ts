@@ -189,7 +189,7 @@ async function main() {
 
     if (sendTx) {
       const v0Message = new TransactionMessage({
-        payerKey: user.wallet.publicKey,
+        payerKey,
         recentBlockhash: blockhash,
         instructions: [ix],
       }).compileToV0Message(luts);

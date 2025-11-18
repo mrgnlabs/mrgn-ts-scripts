@@ -35,10 +35,6 @@ type Config = {
   ACCOUNT: PublicKey;
   AMOUNT: BN;
 
-  /** Group admin (generally the MS on mainnet) */
-  ADMIN: PublicKey;
-  /** Pays flat sol fee to init and rent (generally the MS on mainnet) */
-  FEE_PAYER: PublicKey;
   BANK_MINT: PublicKey;
   KAMINO_RESERVE: PublicKey;
   KAMINO_MARKET: PublicKey;
@@ -52,13 +48,11 @@ type Config = {
 };
 
 const config: Config = {
-  PROGRAM_ID: "5UDghkpgW1HfYSrmEj2iAApHShqU44H6PKTAar9LL9bY",
-  BANK: new PublicKey("HcbiyRRfyf9Rte9Bn3HXLj3TM6cpBDoHTF4xaa5Sswty"),
-  ACCOUNT: new PublicKey("FRYZ9ErYxVPzp92zNS8E3RY3dJGbv5U1snw6X7yryizK"),
-  AMOUNT: new BN(2 * 10 ** 6), // 2 USDC
+  PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
+  BANK: new PublicKey("EVdZczE3GvbB7wkTNzkCizvDC7X3VEPyaQUFa6ACv3pw"),
+  ACCOUNT: new PublicKey("AP5izhPtwhdSayABT8MYMsKy492XzWit8hVFZQG5jk6n"),
+  AMOUNT: new BN(1 * 10 ** 5), // 0.1 USDC
 
-  ADMIN: new PublicKey("6DdJqQYD8AizuXiCkbn19LiyWRwUsRMzy2Sgyoyasyj7"),
-  FEE_PAYER: new PublicKey("6DdJqQYD8AizuXiCkbn19LiyWRwUsRMzy2Sgyoyasyj7"),
   BANK_MINT: new PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"),
   KAMINO_RESERVE: new PublicKey("D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59"),
   KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"),

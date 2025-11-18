@@ -42,21 +42,21 @@ type Config = {
 
 // Feed IDs can be taken from here: https://www.pyth.network/developers/price-feed-ids
 // USDC - 6 decimals
-// const mint = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v";
-// const oracle = "Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX";
+const mint = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v";
+const oracle = "Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX";
 // BONK - 5 decimals
-const mint = "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263";
-const oracle = "DBE3N8uNjhKPRHfANdwGvCZghWXyLPdqdSbEW2XFwBiX";
+// const mint = "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263";
+// const oracle = "DBE3N8uNjhKPRHfANdwGvCZghWXyLPdqdSbEW2XFwBiX";
 
 const config: Config = {
-  PROGRAM_ID: "5UDghkpgW1HfYSrmEj2iAApHShqU44H6PKTAar9LL9bY",
-  GROUP_KEY: new PublicKey("dgQnjVN26a1y3EJvF8KT3ecLoYykirqQhcdtptGrZff"),
+  PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
+  GROUP_KEY: new PublicKey("8D7qgu5153s3dHCbnHviijJyJ3CcJAj1QRX46yW2eSu1"),
   ORACLE: new PublicKey(oracle),
   ORACLE_TYPE: ORACLE_TYPE_PYTH,
   ADMIN: new PublicKey("6DdJqQYD8AizuXiCkbn19LiyWRwUsRMzy2Sgyoyasyj7"),
   FEE_PAYER: new PublicKey("6DdJqQYD8AizuXiCkbn19LiyWRwUsRMzy2Sgyoyasyj7"),
   BANK_MINT: new PublicKey(mint),
-  SEED: 0,
+  SEED: 14,
   TOKEN_PROGRAM: TOKEN_PROGRAM_ID,
 };
 
