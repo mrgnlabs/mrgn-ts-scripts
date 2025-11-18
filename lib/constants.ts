@@ -29,3 +29,6 @@ export const EMODE_APPLIES_TO_ISOLATED = 1;
 
 /** u32 MAX. Often used for specifying a percentage, on chain, e.g. N% * u32MAX is stored */
 export const u32MAX: number = 4_294_967_295;
+
+export const INTEREST_CURVE_LEGACY = 0;
+export const INTEREST_CURVE_SEVEN_POINT = 1;
