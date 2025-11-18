@@ -1,5 +1,11 @@
 import { Connection } from "@solana/web3.js";
-import { Program, AnchorProvider, EventParser, BorshCoder, Wallet } from "@coral-xyz/anchor";
+import {
+  Program,
+  AnchorProvider,
+  EventParser,
+  BorshCoder,
+  Wallet,
+} from "@coral-xyz/anchor";
 
 import { loadKeypairFromFile } from "./utils";
 
@@ -15,20 +21,29 @@ type Config = {
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  TX_SIG: "2RccxeFZzG3MyVZWJ4vua3XhH3cnhtHgrxcJ7tbkvg8WzPcMv2mSHW758iYv93smSttFqL7ZCtuRCK4NULdJqVST",
+  TX_SIG:
+    "2RccxeFZzG3MyVZWJ4vua3XhH3cnhtHgrxcJ7tbkvg8WzPcMv2mSHW758iYv93smSttFqL7ZCtuRCK4NULdJqVST",
   // The Liquidate event is 408 bytes, plus something (probably the Option) adds one byte.
   EVENT_EXPECTED_SIZE: 409,
 };
 
 async function main() {
   marginfiIdl.address = config.PROGRAM_ID;
-  const connection = new Connection("https://api.mainnet-beta.solana.com", "confirmed");
-  const wallet = new Wallet(loadKeypairFromFile(process.env.HOME + "/keys/staging-deploy.json"));
+  const connection = new Connection(
+    "https://api.mainnet-beta.solana.com",
+    "confirmed"
+  );
+  const wallet = new Wallet(
+    loadKeypairFromFile(process.env.HOME + "/keys/staging-deploy.json")
+  );
 
   const provider = new AnchorProvider(connection, wallet, {
     preflightCommitment: "confirmed",
   });
-  const program: Program<Marginfi> = new Program(marginfiIdl as Marginfi, provider);
+  const program: Program<Marginfi> = new Program(
+    marginfiIdl as Marginfi,
+    provider
+  );
 
   const tx = await connection.getTransaction(config.TX_SIG, {
     maxSupportedTransactionVersion: 0,
@@ -61,7 +76,9 @@ async function main() {
           .map((b) => b.toString(16).padStart(2, "0"))
           .join(" ");
         console.log(
-          `[${i.toString().padStart(4, "0")}..${(i + chunk.length - 1).toString().padStart(4, "0")}]  ${hexLine}`
+          `[${i.toString().padStart(4, "0")}..${(i + chunk.length - 1)
+            .toString()
+            .padStart(4, "0")}]  ${hexLine}`
         );
       }
 
@@ -84,7 +101,9 @@ async function main() {
   }
 
   const decoded = Array.from(parser.parseLogs(logs, false));
-  const liquidateEvent = decoded.find((evt) => evt.name === "lendingAccountLiquidateEvent");
+  const liquidateEvent = decoded.find(
+    (evt) => evt.name === "lendingAccountLiquidateEvent"
+  );
   if (!liquidateEvent) {
     throw new Error("No lendingAccountLiquidateEvent found in logs");
   }
@@ -106,15 +125,20 @@ async function main() {
   console.log("Balances object:", balances);
 
   // Asset amount seized
-  const assetSeizedActual = balances.pre.liquidateeAsset - balances.post.liquidateeAsset;
-  const assetSeizedAlt = balances.post.liquidatorAsset - balances.pre.liquidatorAsset;
+  const assetSeizedActual =
+    balances.pre.liquidateeAsset - balances.post.liquidateeAsset;
+  const assetSeizedAlt =
+    balances.post.liquidatorAsset - balances.pre.liquidatorAsset;
 
   // Liability amounts
-  const liabilityRepaidToLiquidatee = balances.pre.liquidateeLiability - balances.post.liquidateeLiability;
-  const liabilityPaidByLiquidator = balances.post.liquidatorLiability - balances.pre.liquidatorLiability;
+  const liabilityRepaidToLiquidatee =
+    balances.pre.liquidateeLiability - balances.post.liquidateeLiability;
+  const liabilityPaidByLiquidator =
+    balances.post.liquidatorLiability - balances.pre.liquidatorLiability;
 
   // Insurance‐fund fee paid
-  const insuranceFundPaid = liabilityPaidByLiquidator - liabilityRepaidToLiquidatee;
+  const insuranceFundPaid =
+    liabilityPaidByLiquidator - liabilityRepaidToLiquidatee;
 
   console.log(`Asset amount seized (actual): ${assetSeizedActual}`);
   console.log(`Asset amount seized (alt calc): ${assetSeizedAlt}`);
@@ -134,19 +158,32 @@ async function main() {
   let liabDecimals = liabBank.mintDecimals;
 
   console.log("In native token....");
-  console.log(`Asset amount seized (actual): ${assetSeizedActual / 10 ** assetDecimals}`);
-  console.log(`Asset amount seized (alt calc): ${assetSeizedAlt / 10 ** assetDecimals}`);
+  console.log(
+    `Asset amount seized (actual): ${assetSeizedActual / 10 ** assetDecimals}`
+  );
+  console.log(
+    `Asset amount seized (alt calc): ${assetSeizedAlt / 10 ** assetDecimals}`
+  );
 
-  console.log(`Liability repaid to liquidatee: ${liabilityRepaidToLiquidatee / 10 ** liabDecimals}`);
-  console.log(`Liability paid by liquidator: ${liabilityPaidByLiquidator / 10 ** liabDecimals}`);
+  console.log(
+    `Liability repaid to liquidatee: ${
+      liabilityRepaidToLiquidatee / 10 ** liabDecimals
+    }`
+  );
+  console.log(
+    `Liability paid by liquidator: ${
+      liabilityPaidByLiquidator / 10 ** liabDecimals
+    }`
+  );
 
-  console.log(`Insurance fund amount paid: ${insuranceFundPaid / 10 ** liabDecimals}`);
+  console.log(
+    `Insurance fund amount paid: ${insuranceFundPaid / 10 ** liabDecimals}`
+  );
 }
 
 main().catch((err) => {
   console.error(err);
 });
-
 
 /*
 example at:

@@ -37,7 +37,7 @@ async function main() {
     config.PROGRAM_ID,
     "/keys/staging-deploy.json",
     undefined,
-    "current"
+    "kamino"
   );
   const program = user.program;
 

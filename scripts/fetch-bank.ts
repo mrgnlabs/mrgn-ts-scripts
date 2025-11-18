@@ -7,10 +7,10 @@ import {
 import type { WrappedI80F48 } from "@mrgnlabs/mrgn-common";
 import BigNumber from "bignumber.js";
 import { commonSetup } from "../lib/common-setup";
-import { getTokenBalance } from "../lib/utils";
+import { getTokenBalance, u32ToApr } from "../lib/utils";
 
 // If true, prints this bank's settings in a format to be copy-pasted into add_bank
-const printForCopy = true;
+const printForCopy = false;
 
 type Config = {
   PROGRAM_ID: string;
@@ -24,7 +24,7 @@ const config: Config = {
     // new PublicKey("HmpMfL8942u22htC4EMiWgLX931g3sacXFR6KjuLgKLV"), // usdt
     // new PublicKey("8UEiPmgZHXXEDrqLS3oiTxQxTbeYTtPbeMBxAd2XGbpu"), // py
     // new PublicKey("FDsf8sj6SoV313qrA91yms3u5b3P4hBxEPvanVs8LtJV"), // usds
-    new PublicKey("5wZz2MV3dFJVq3Wp4tBoqrgrSGZqeLCdLE1L4w6okm9g"),
+    new PublicKey("F4brCRJHx8epWah7p8Ace4ehutphxYZ1ctRq2LS3iiBh"),
   ],
 };
 
@@ -69,16 +69,10 @@ async function printBankInfo(bankKey: PublicKey) {
   const insuranceBal = await insuranceBalPromise;
   const feeBal = await feePromise;
 
-  try {
-    // @ts-ignore
-    if (bank.kaminoObligation.toString() != PublicKey.default.toString()) {
-      // @ts-ignore
-      console.log("kamino reserve: " + bank.kaminoReserve);
-      // @ts-ignore
-      console.log("kamino obligation: " + bank.kaminoObligation);
-    }
-  } catch (err) {
-    // do nothing
+  if (bank.kaminoObligation.toString() != PublicKey.default.toString()) {
+    console.log("*****KAMINO BANK*****");
+  } else {
+    console.log("*****P0 NATIVE BANK******");
   }
 
   // Metrics
@@ -98,6 +92,14 @@ async function printBankInfo(bankKey: PublicKey) {
     },
     { Property: "Oracle Max Age (secs)", Value: bank.config.oracleMaxAge },
   ]);
+
+  if (bank.kaminoObligation.toString() != PublicKey.default.toString()) {
+    console.log("Kamino Info:");
+    console.table([
+      { Property: "Reserve", Value: bank.kaminoReserve.toString() },
+      { Property: "Obligation", Value: bank.kaminoObligation.toString() },
+    ]);
+  }
 
   // Weights
   console.log("Weights:");
@@ -228,6 +230,15 @@ async function printBankInfo(bankKey: PublicKey) {
     },
   ]);
 
+  // Rates Cache
+  const cache = bank.cache;
+  console.log("Rate cache:");
+  console.table([
+    { Field: "Base Rate", Value: u32ToApr(cache.baseRate) },
+    { Field: "Lending Rate", Value: u32ToApr(cache.lendingRate) },
+    { Field: "Borrow Rate", Value: u32ToApr(cache.borrowingRate) },
+  ]);
+
   // EMODE Settings
   const entries = bank.emode.emodeConfig.entries || [];
   const emodeRows = entries
@@ -244,7 +255,7 @@ async function printBankInfo(bankKey: PublicKey) {
       AssetWeightMaint: toStr(e.assetWeightMaint),
     }));
 
-  if (emodeRows.length > 0) {
+  if (bank.emode.emodeTag != 0) {
     console.group("EMODE Settings");
     console.log(`Tag:   ${bank.emode.emodeTag}`);
     console.log(`Flags: ${bank.emode.flags}`);

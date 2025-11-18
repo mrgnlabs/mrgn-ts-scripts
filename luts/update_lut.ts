@@ -13,6 +13,7 @@ import {
   loadKeypairFromFile,
 } from "../scripts/utils";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
+import { TOKEN_2022_PROGRAM_ID, TOKEN_PROGRAM_ID } from "@solana/spl-token";
 
 /**
  * If true, send the tx. If false, output the unsigned b58 tx to console.
@@ -27,10 +28,18 @@ type Config = {
 };
 
 const config: Config = {
-  LUT: new PublicKey("CQ8omkUwDtsszuJLo9grtXCeEyDU4QqBLRv9AjRDaUZ3"),
+  LUT: new PublicKey("DP9JAbtatfCrSAJQiWZUmWTfgHCnuWsx1QBczi1mnuxW"),
   KEYS: [
-    new PublicKey("LnTRntk2kTfWEY6cVB8K9649pgJbt6dJLS1Ns1GZCWg"),
-    new PublicKey("9UivckJDKtDChtXvCqgDxGS2CmA4Z9Zb14CMZ76n1PNp"),
+    new PublicKey("4C9r6qeen5pbAC4ikJaQXBJmWg1LyYJAbUCnt1nkj6ry"),
+    new PublicKey("9Soyj6oY8cZFJHYU8cmDhWgcwDbno3se4moGgMEhuZDg"),
+    new PublicKey("7VqrFFXqxzBLpn6NzfnnpG8Kna7nz9KyXL2YQDL1zdnm"),
+    new PublicKey("GnH7eBWuKTyDG9JW8fmR4Bk4ZV1m1HS4BXdTdZHd5bPv"),
+    new PublicKey("GZCxKMwvXu4p13FC744qADcvfPxAJnBBJHjvaatEF8oT"),
+    new PublicKey("9vdudXJYeMjfku4bFWP5JWfZV1mhjxFdeAhztyqvEQBH"),
+    new PublicKey("AustgHiakLqDhC7NyrSrKEmYVL4MMf29heQMNaxa6fp2"),
+    new PublicKey("Gwbzve6wx2E4iDSjigHcNpP1MvNED8Xh7m5DNmaUgS8H"),
+    new PublicKey("8jcuMewhndxQ5XdUngaddSkJ4C9wE58gK1nsHZb9dDPb"),
+    new PublicKey("BgfHEvVwMJfpXJ23XDAdmnbypeRCTy7SqfVfkp1wa6K8"),
   ],
 };
 
@@ -40,7 +49,7 @@ async function main() {
   console.log("api: " + apiUrl);
   const connection = new Connection(apiUrl, "confirmed");
   const wallet = loadKeypairFromFile(
-    process.env.HOME + "/keys/phantom-wallet.json"
+    process.env.HOME + "/keys/staging-shared.json"
   );
 
   const transaction = new Transaction();

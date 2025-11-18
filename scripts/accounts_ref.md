@@ -15,6 +15,7 @@
 - Program v4 -J3oBkTkDXU3TcAggJEa3YeBZE5om5yNAdTtLVNXFD47
 - Inc Ops - ToM1VY97cMeAiyN3MUFKKLuPdG8CaNiqhoDDGJ3a9cg
 - Settings - BACjgGYJYwVRRpnHJfcjykfkp2Xu118ghx5fYL1wgY7p
+- TriSolaris - DBNRpvecWpcxckFs2uDeuioR8Bcad6v68TDJKPeYBNHG
 
 ## MULTISIG HOLDINGS
 
@@ -140,6 +141,9 @@ particular organization.
 - CQ8omkUwDtsszuJLo9grtXCeEyDU4QqBLRv9AjRDaUZ3 (owned by Phantom wallet
   H4QMTHMVbJ3KrB5bz573cBBZKoYSZ2B4mSST1JKzPUrH)
 
+- DP9JAbtatfCrSAJQiWZUmWTfgHCnuWsx1QBczi1mnuxW (owned by staging shared
+  HMZshKmPfpwxJiwu6WeEt8FSac8heU3gqLnyF26vQgu2)
+
 ## DESTROYED ACCOUNTS
 
 - Activating Cavey Cool Stake Account for Phantom Wallet that was deposited to the single pool: CBkEBnagcbmZrmbg9yV1d1gWxi6tmuR26616XXwVwus
@@ -150,3 +154,8 @@ Wallet: H4QMTHMVbJ3KrB5bz573cBBZKoYSZ2B4mSST1JKzPUrH
 Mrgn Account: E3uJyxW232EQAVZ9P9V6CFkxzjqqVdbh8XvUmxtZdGUt
 Bank(s) Lending: 3jt43usVm7qL1N5qPvbzYHWQRxamPCRhri4CxwDrf6aL (Cavey Cool Staked Sol)
 Banks(s) Borrowed: 3evdJSa25nsUiZzEUzd92UNa13TPRJrje1dRyiQP5Lhp (SOL with asset tag)
+
+
+## Banks currently not being indexed by get-all
+RkSOL - GR9GNdjWf8kSf3b4REribKKSeVvkzjbAQJ1A8CDnFxLF
+LanternSOL - FvrTUfd3kimMfXvGrvcS1XC8NrtmSSurX8yP6XeUFt2s

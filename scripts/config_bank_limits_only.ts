@@ -37,19 +37,11 @@ export type BankLimitsEntry = {
  *  (though using a LUT can help).
  */
 const bankLimits: BankLimitsEntry[] = [
-  // usdg
   {
-    bank: new PublicKey("Dj2CwMF3GM7mMT5hcyGXKuYSQ2kQ5zaVCkA1zX1qaTva"),
-    depositLimit: cap(5_000_000, 6),
-    borrowLimit: cap(2_500_000, 6),
-    initValue: new BN(5_000_000),
-  },
-  // usdg (kamino)
-  {
-    bank: new PublicKey("6KP94PsCrBk2gPqtqT4WSvZ8Zss7r1auz3azXpv5ptrS"),
-    depositLimit: cap(2_500_000, 6),
-    borrowLimit: cap(0, 6),
-    initValue: new BN(2_500_000),
+    bank: new PublicKey("61Qx9kgWo9RVtPHf8Rku6gbaUtcnzgkpAuifQBUcMRVK"),
+    depositLimit: cap(600_000_000, 6),
+    borrowLimit: cap(60_000_000, 6),
+    initValue: new BN(3_500_000),
   },
 ];
 

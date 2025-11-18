@@ -101,6 +101,36 @@ const config: Config = {
         freezeSettings: null,
       },
     },
+        {
+      // CASH
+      bank: new PublicKey("HnKy41QrJNFLJmBGtgLWpy8NissUsNLKRMibRwsNhDnF"),
+      config: {
+        assetWeightInit: bigNumberToWrappedI80F48(0.85),
+        assetWeightMaint: bigNumberToWrappedI80F48(0.91),
+        liabilityWeightInit: null,
+        liabilityWeightMaint: null,
+        depositLimit: null,
+        interestRateConfig: {
+          optimalUtilizationRate: null,
+          plateauInterestRate: null,
+          maxInterestRate: null,
+          insuranceFeeFixedApr: null,
+          insuranceIrFee: null,
+          protocolFixedFeeApr: null,
+          protocolIrFee: null,
+          protocolOriginationFee: null,
+        },
+        operationalState: null, //{ operational: {} }
+        borrowLimit: null,
+        riskTier: null, // { collateral: {} }
+        totalAssetValueInitLimit: null,
+        oracleMaxAge: null,
+        assetTag: null,
+        oracleMaxConfidence: null,
+        permissionlessBadDebtSettlement: null,
+        freezeSettings: null,
+      },
+    }, 
     // Add more { bank, config: bankConfigOptForThatBank() } as needed
   ],
 };

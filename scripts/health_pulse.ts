@@ -22,7 +22,7 @@ export type Config = {
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  ACCOUNT: new PublicKey("BT6jXNSmxHPjE3TgNfSiG6NnqASpbvATnwFKLrLVt9Kz"),
+  ACCOUNT: new PublicKey("GejbL5sSi53QA6tzaBsnPsiNg2Jpm8zs7NN891PomGvu"),
 
   LUT: new PublicKey("CQ8omkUwDtsszuJLo9grtXCeEyDU4QqBLRv9AjRDaUZ3"),
 };
@@ -76,7 +76,7 @@ async function main() {
       instructions: transaction.instructions,
     }).compileToV0Message(lut);
 
-    const commitment: Commitment = "finalized";
+    const commitment: Commitment = "confirmed";
     const v0Tx = new VersionedTransaction(v0Message);
     v0Tx.sign([user.wallet.payer]);
 
