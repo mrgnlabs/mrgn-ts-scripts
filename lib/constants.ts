@@ -32,3 +32,5 @@ export const u32MAX: number = 4_294_967_295;
 
 export const INTEREST_CURVE_LEGACY = 0;
 export const INTEREST_CURVE_SEVEN_POINT = 1;
+
+export const ORACLE_TYPE_FIXED = 8;
