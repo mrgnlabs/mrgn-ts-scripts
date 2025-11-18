@@ -15,6 +15,7 @@
 - Program v4 -J3oBkTkDXU3TcAggJEa3YeBZE5om5yNAdTtLVNXFD47
 - Inc Ops - ToM1VY97cMeAiyN3MUFKKLuPdG8CaNiqhoDDGJ3a9cg
 - Settings - BACjgGYJYwVRRpnHJfcjykfkp2Xu118ghx5fYL1wgY7p
+- TriSolaris - DBNRpvecWpcxckFs2uDeuioR8Bcad6v68TDJKPeYBNHG
 
 ## MULTISIG HOLDINGS
 

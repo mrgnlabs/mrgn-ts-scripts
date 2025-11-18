@@ -40,17 +40,6 @@ const config: Config = {
     new PublicKey("Gwbzve6wx2E4iDSjigHcNpP1MvNED8Xh7m5DNmaUgS8H"),
     new PublicKey("8jcuMewhndxQ5XdUngaddSkJ4C9wE58gK1nsHZb9dDPb"),
     new PublicKey("BgfHEvVwMJfpXJ23XDAdmnbypeRCTy7SqfVfkp1wa6K8"),
-
-        new PublicKey("9NwSk5T15JC2ktayeQgnXfVLVTbvDi3FpEGGghq1aSfd"),
-    new PublicKey("29CH2F1wnbL6GZMXyjkCaMahUKWvaVP4xN117iYsZSgz"),
-    new PublicKey("2keKRVdffHCVuPtKePvoFU1QpYtDpbxK18hoeF3tj5Wr"),
-    new PublicKey("BebgJJZy4J89rwYoPxajBPXbAJXvR9XsW7UaNabQkwMm"),
-    new PublicKey("2YxZEzrRqzgAGyeZ87UJmJMNALpm7jmFGJ2byHmQBg8E"),
-    new PublicKey("6kK5HoQP5ioDCc1FpMmFws2wa92RxHmErxLnfTmEgQpm"),
-    new PublicKey("5JgVnYSnuiSLaV6M6rgQCzV6bgBZyihTDwgTUBDuNBXQ"),
-    new PublicKey("6JoJzUXZiuncwor1wGp6chE7SByLAxqyseDBcriRayha"),
-    new PublicKey("4Dy49NyXrZG4F1i4sBz5Ypzq1qhWTHAjhHD52bAuBLAA"),
-    new PublicKey("4G1KLGwZrTLT4DghhuGqUtv39qapprnuxDXaYJAfACat"),
   ],
 };
 
