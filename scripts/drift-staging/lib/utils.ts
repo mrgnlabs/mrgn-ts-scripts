@@ -1,0 +1,119 @@
+import { PublicKey, AccountMeta } from "@solana/web3.js";
+import { BN } from "@coral-xyz/anchor";
+import { bigNumberToWrappedI80F48, WrappedI80F48 } from "@mrgnlabs/mrgn-common";
+
+// Constants
+export const DRIFT_PROGRAM_ID = new PublicKey("dRiftyHA39MWEi3m9aunc5MzRF1JYuBsbn6VPcn33UH");
+export const I80F48_ONE = bigNumberToWrappedI80F48(1);
+export const DRIFT_SCALED_BALANCE_DECIMALS = 9;
+
+// Drift config interface
+export interface DriftConfigCompact {
+  oracle: PublicKey;
+  assetWeightInit: WrappedI80F48;
+  assetWeightMaint: WrappedI80F48;
+  depositLimit: BN;
+  totalAssetValueInitLimit: BN;
+  oracleSetup: { driftPythPull: {} } | { driftSwitchboardPull: {} };
+  oracleMaxAge: number;
+}
+
+// PDA derivations
+export function deriveBankWithSeed(
+  programId: PublicKey,
+  group: PublicKey,
+  mint: PublicKey,
+  seed: BN
+): [PublicKey, number] {
+  return PublicKey.findProgramAddressSync(
+    [
+      Buffer.from("bank"),
+      group.toBuffer(),
+      mint.toBuffer(),
+      seed.toArrayLike(Buffer, "le", 8),
+    ],
+    programId
+  );
+}
+
+export function deriveMarginfiAccount(
+  programId: PublicKey,
+  group: PublicKey,
+  authority: PublicKey,
+  seed: number
+): [PublicKey, number] {
+  return PublicKey.findProgramAddressSync(
+    [
+      Buffer.from("marginfi_account"),
+      group.toBuffer(),
+      authority.toBuffer(),
+      new BN(seed).toArrayLike(Buffer, "le", 8),
+    ],
+    programId
+  );
+}
+
+export function deriveSpotMarketPDA(marketIndex: number): [PublicKey, number] {
+  return PublicKey.findProgramAddressSync(
+    [
+      Buffer.from("spot_market"),
+      new BN(marketIndex).toArrayLike(Buffer, "le", 2),
+    ],
+    DRIFT_PROGRAM_ID
+  );
+}
+
+export function deriveDriftStatePDA(): [PublicKey, number] {
+  return PublicKey.findProgramAddressSync(
+    [Buffer.from("drift_state")],
+    DRIFT_PROGRAM_ID
+  );
+}
+
+export function deriveSpotMarketVaultPDA(marketIndex: number): [PublicKey, number] {
+  return PublicKey.findProgramAddressSync(
+    [
+      Buffer.from("spot_market_vault"),
+      new BN(marketIndex).toArrayLike(Buffer, "le", 2),
+    ],
+    DRIFT_PROGRAM_ID
+  );
+}
+
+export function deriveDriftSignerPDA(): [PublicKey, number] {
+  return PublicKey.findProgramAddressSync(
+    [Buffer.from("drift_signer")],
+    DRIFT_PROGRAM_ID
+  );
+}
+
+export function deriveDriftUserPDA(
+  authority: PublicKey,
+  subAccountId: number = 0
+): [PublicKey, number] {
+  return PublicKey.findProgramAddressSync(
+    [
+      Buffer.from("user"),
+      authority.toBuffer(),
+      new BN(subAccountId).toArrayLike(Buffer, "le", 2),
+    ],
+    DRIFT_PROGRAM_ID
+  );
+}
+
+export function deriveDriftUserStatsPDA(authority: PublicKey): [PublicKey, number] {
+  return PublicKey.findProgramAddressSync(
+    [Buffer.from("user_stats"), authority.toBuffer()],
+    DRIFT_PROGRAM_ID
+  );
+}
+
+export function deriveLiquidityVaultAuthority(
+  programId: PublicKey,
+  bank: PublicKey
+): [PublicKey, number] {
+  return PublicKey.findProgramAddressSync(
+    [Buffer.from("liquidity_vault_auth"), bank.toBuffer()],
+    programId
+  );
+}
