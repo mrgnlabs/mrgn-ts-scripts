@@ -13,3 +13,4 @@ Group: `ERBiJdWtnVBBd4gFm7YVHT3a776x5NbGbJBR5BDvsxtj`
 | PYUSD | `8txe1gXz2yGGsy22NAtimJnCM4ivDQSQAf5kz2VZJsRR` | 22 | Pyth Push | Token-2022 |
 | USDS | `5kW3rsj6XoB2VsE7RdGkmWMo4wQy5ZgLNcH3CFRHEq7J` | 28 | Pyth Push | SPL Token |
 | bSOL | `7iPsp3XiMFe3yJppCzSj7dLhkhnejm8id2ejBBoW4RgW` | 8 | Switchboard Pull | SPL Token |
+| SOL (Isolated) | `BWAm7qFe3uQ3mEzuJNU8umCjKBMvsMr3AiFKGowiD5B8` | 49 | Switchboard Pull | SPL Token |

@@ -158,3 +158,14 @@ Pass `null` for unused reward slots.
 - **Drift Oracle**: `BmDWPMsytWmYkh9n6o7m79eVshVYf2B5GVaqQ2EWKnGH`
 - **Marginfi Oracle**: `2wJdP1WM5dApaXf5DXVnPzcEqfqnwwEofjvJVvn6FNws`
 - **Token Program**: SPL Token
+
+### SOL (LST Market - Isolated Pool)
+
+- **Bank**: `BWAm7qFe3uQ3mEzuJNU8umCjKBMvsMr3AiFKGowiD5B8`
+- **Mint**: `So11111111111111111111111111111111111111112`
+- **Market Index**: 49
+- **Drift Spot Market**: `APWEwmh4PAvPH6p8KexWtaqBeUmByEvzWMEqzakSLFvF`
+- **Drift Oracle**: `3PiwrLLyiuWaxS7zJL5znGR9iYD3KWubZThdQzsCdg2e`
+- **Marginfi Oracle**: `4Hmd6PdjVA9auCoScE12iaBogfwS4ZXQ6VZoBeqanwWW`
+- **Token Program**: SPL Token
+- **Note**: SOL on Drift's LST Market isolated pool (SOL-2)
