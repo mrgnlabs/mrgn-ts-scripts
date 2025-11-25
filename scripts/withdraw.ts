@@ -69,7 +69,7 @@ type Config = {
   MULTISIG?: PublicKey;
 };
 
-const config: Config = {
+const withdrawLiquidatorUSDC: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
   ACCOUNT: new PublicKey("CE7D7oeCXs54w8BQjZGq46wjS3a36SSuMmrsXkQTfvJL"),
   BANK: new PublicKey("2s37akK2eyBbp8DZgCm7RtsaEz8eJP3Nxd4urLHQv7yB"),
@@ -85,13 +85,28 @@ const config: Config = {
   ADD_COMPUTE_UNITS: false,
 };
 
+const withdrawKaminoLiquidatorUSDC: Config = {
+  PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
+  ACCOUNT: new PublicKey("AP5izhPtwhdSayABT8MYMsKy492XzWit8hVFZQG5jk6n"),
+  BANK: new PublicKey("jLfQHXX6hNnGBECzDraZFZTtFYNXaYzw817eAzGMXUP"),
+  MINT: new PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"),
+  AMOUNT: new BN(20 * 10 ** 6),
+  WITHDRAW_ALL: true,
+  REMAINING: [
+    [
+    ],
+  ],
+  ADD_COMPUTE_UNITS: false,
+};
+
+const config = withdrawKaminoLiquidatorUSDC;
+
 async function main() {
   const user = commonSetup(
     true,
     config.PROGRAM_ID,
-    "/.config/stage/id.json",
-    config.MULTISIG,
-    "current"
+    "/.config/arena/id.json",
+    config.MULTISIG
   );
   const program = user.program;
   const connection = user.connection;

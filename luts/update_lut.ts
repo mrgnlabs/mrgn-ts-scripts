@@ -28,18 +28,18 @@ type Config = {
 };
 
 const config: Config = {
-  LUT: new PublicKey("DP9JAbtatfCrSAJQiWZUmWTfgHCnuWsx1QBczi1mnuxW"),
+  LUT: new PublicKey("FtQ5uKQvFoKQ27SWY15tgBeJQnGKmKGzWqDz7kGUbeiq"),
   KEYS: [
-    new PublicKey("4C9r6qeen5pbAC4ikJaQXBJmWg1LyYJAbUCnt1nkj6ry"),
-    new PublicKey("9Soyj6oY8cZFJHYU8cmDhWgcwDbno3se4moGgMEhuZDg"),
-    new PublicKey("7VqrFFXqxzBLpn6NzfnnpG8Kna7nz9KyXL2YQDL1zdnm"),
-    new PublicKey("GnH7eBWuKTyDG9JW8fmR4Bk4ZV1m1HS4BXdTdZHd5bPv"),
-    new PublicKey("GZCxKMwvXu4p13FC744qADcvfPxAJnBBJHjvaatEF8oT"),
-    new PublicKey("9vdudXJYeMjfku4bFWP5JWfZV1mhjxFdeAhztyqvEQBH"),
-    new PublicKey("AustgHiakLqDhC7NyrSrKEmYVL4MMf29heQMNaxa6fp2"),
-    new PublicKey("Gwbzve6wx2E4iDSjigHcNpP1MvNED8Xh7m5DNmaUgS8H"),
-    new PublicKey("8jcuMewhndxQ5XdUngaddSkJ4C9wE58gK1nsHZb9dDPb"),
-    new PublicKey("BgfHEvVwMJfpXJ23XDAdmnbypeRCTy7SqfVfkp1wa6K8"),
+    new PublicKey("52AJuRJJcejMYS9nNDCk1vYmyG1uHSsXoSPkctS3EfhA"),
+    new PublicKey("4eFzqYFZr2UnWQqSfwZxB4r1W1kSJ9XG6M6H17Eq4x2Z"),
+    new PublicKey("jLfQHXX6hNnGBECzDraZFZTtFYNXaYzw817eAzGMXUP"),
+    // new PublicKey("E1dNntvZo6pXmkZq43wommAdxe6qF1wcXkjz2M2QEb14"),
+    // new PublicKey("AHTqUF4LyDxCnpHWL89RjsJWGEGXKSYyQPWx3fUAcj1H"),
+    // new PublicKey("8nUGEsT5VJijkpnn6fJXWTyyZjExhwipFuDyotqwyzhz"),
+    // new PublicKey("89LuR6urx9wMxeJtf3LCdq84LsgM22Sp6fWqPbCuZtUr"),
+    // new PublicKey("74KM1fwNm9WP39UH7QsCs4dvkN6RaZT52U9f4tnkJtom"),
+    // new PublicKey("5LTAowCUEK5rr2ALKtk6cTHhyaPTCbksV5C3pCqLKSVu"),
+    // new PublicKey("5HxHAW3BCYPB2uRMrjKpgA6mSpwHPK1JrntWZU4QZpZ1"),
   ],
 };
 
@@ -49,7 +49,7 @@ async function main() {
   console.log("api: " + apiUrl);
   const connection = new Connection(apiUrl, "confirmed");
   const wallet = loadKeypairFromFile(
-    process.env.HOME + "/keys/staging-shared.json"
+    process.env.HOME + "/.config/stage/id.json"
   );
 
   const transaction = new Transaction();

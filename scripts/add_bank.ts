@@ -12,6 +12,7 @@ import {
 } from "@mrgnlabs/mrgn-common";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 import { commonSetup } from "../lib/common-setup";
+import { RiskTierRaw } from "@mrgnlabs/marginfi-client-v2";
 
 /**
  * If true, send the tx. If false, output the unsigned b58 tx to console.
@@ -60,18 +61,20 @@ const config: Config = {
   TOKEN_PROGRAM: TOKEN_PROGRAM_ID,
 };
 
-const rate: InterestRateConfigRaw = {
-  optimalUtilizationRate: bigNumberToWrappedI80F48(0.5),
-  plateauInterestRate: bigNumberToWrappedI80F48(0.01),
-  maxInterestRate: bigNumberToWrappedI80F48(0.5),
+const rate: InterestRateConfig1_6 = {
   insuranceFeeFixedApr: bigNumberToWrappedI80F48(0),
   insuranceIrFee: bigNumberToWrappedI80F48(0),
-  protocolFixedFeeApr: bigNumberToWrappedI80F48(0.0001),
-  protocolIrFee: bigNumberToWrappedI80F48(0.01),
+  protocolFixedFeeApr: bigNumberToWrappedI80F48(0.0),
+  protocolIrFee: bigNumberToWrappedI80F48(0.0),
   protocolOriginationFee: bigNumberToWrappedI80F48(0),
+
+  zeroUtilRate: 0.0,
+  hundredUtilRate: 0.0,
+  points: [{ util: 0.0, rate: 0.0 }, { util: 0.0, rate: 0.0 }, { util: 0.0, rate: 0.0 }, { util: 0.0, rate: 0.0 }, { util: 0.0, rate: 0.0 }],
+  curveType: 1
 };
 
-const bankConfig: BankConfigRaw_v1_4 = {
+const bankConfig: BankConfig = {
   assetWeightInit: bigNumberToWrappedI80F48(1.0),
   assetWeightMaint: bigNumberToWrappedI80F48(1.0),
   liabilityWeightInit: bigNumberToWrappedI80F48(1.0),
@@ -85,6 +88,7 @@ const bankConfig: BankConfigRaw_v1_4 = {
   oracleMaxAge: 70,
   assetTag: 0,
   oracleMaxConfidence: 0,
+  configFlags: 0
 };
 
 async function main() {
@@ -93,8 +97,7 @@ async function main() {
     sendTx,
     config.PROGRAM_ID,
     "/.config/stage/id.json",
-    config.MULTISIG_PAYER,
-    "current"
+    config.MULTISIG_PAYER
   );
   const program = user.program;
   const connection = user.connection;
@@ -196,32 +199,13 @@ main().catch((err) => {
   console.error(err);
 });
 
-type BankConfigRaw_v1_4 = {
-  assetWeightInit: WrappedI80F48;
-  assetWeightMaint: WrappedI80F48;
 
-  liabilityWeightInit: WrappedI80F48;
-  liabilityWeightMaint: WrappedI80F48;
-
-  depositLimit: BN;
-  borrowLimit: BN;
-  riskTier: { collateral: {} } | { isolated: {} };
-  assetTag: number;
-  totalAssetValueInitLimit: BN;
-
-  interestRateConfig: InterestRateConfigRaw;
-  operationalState: { paused: {} } | { operational: {} } | { reduceOnly: {} };
-
-  oracleMaxAge: number;
-  oracleMaxConfidence: number;
+export type RatePoint = {
+  util: number;
+  rate: number;
 };
 
-interface InterestRateConfigRaw {
-  // Curve Params
-  optimalUtilizationRate: WrappedI80F48;
-  plateauInterestRate: WrappedI80F48;
-  maxInterestRate: WrappedI80F48;
-
+type InterestRateConfig1_6 = {
   // Fees
   insuranceFeeFixedApr: WrappedI80F48;
   insuranceIrFee: WrappedI80F48;
@@ -229,4 +213,38 @@ interface InterestRateConfigRaw {
   protocolIrFee: WrappedI80F48;
 
   protocolOriginationFee: WrappedI80F48;
-}
+
+  zeroUtilRate: number;
+  hundredUtilRate: number;
+  points: RatePoint[];
+  curveType: number;
+};
+
+type OperationalStateRaw =
+  | { paused: {} }
+  | { operational: {} }
+  | { reduceOnly: {} };
+
+type BankConfig = {
+  assetWeightInit: WrappedI80F48;
+  assetWeightMaint: WrappedI80F48;
+
+  liabilityWeightInit: WrappedI80F48;
+  liabilityWeightMaint: WrappedI80F48;
+
+  depositLimit: BN;
+  interestRateConfig: InterestRateConfig1_6;
+
+  /** Paused = 0, Operational = 1, ReduceOnly = 2 */
+  operationalState: OperationalStateRaw;
+
+  borrowLimit: BN;
+  /** Collateral = 0, Isolated = 1 */
+  riskTier: RiskTierRaw;
+  assetTag: number;
+  configFlags: number;
+  totalAssetValueInitLimit: BN;
+  oracleMaxAge: number;
+  /** A u32, e.g. for 100% pass u32::MAX */
+  oracleMaxConfidence: number;
+};

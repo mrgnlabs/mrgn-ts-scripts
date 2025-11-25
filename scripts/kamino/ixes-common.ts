@@ -5,7 +5,6 @@ import {
   AccountMeta,
   PublicKey,
 } from "@solana/web3.js";
-import { Marginfi } from "../../idl/marginfi_kamino";
 import { KaminoConfigCompact, KLEND_PROGRAM_ID } from "./kamino-types";
 import {
   deriveBankWithSeed,
@@ -21,6 +20,7 @@ import {
   deriveUserMetadata,
 } from "./pdas";
 import { KaminoLending } from "../../idl/kamino_lending";
+import { Marginfi } from "../../idl/marginfi";
 
 export interface AddKaminoBankArgs {
   seed: BN;

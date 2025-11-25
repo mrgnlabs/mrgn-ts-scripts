@@ -20,7 +20,7 @@ type Config = {
 };
 
 const config: Config = {
-  PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
+  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
   ADMIN_KEY: new PublicKey("6DdJqQYD8AizuXiCkbn19LiyWRwUsRMzy2Sgyoyasyj7"),
 };
 
@@ -37,7 +37,7 @@ async function main() {
     config.PROGRAM_ID,
     "/.config/stage/id.json",
     config.MULTISIG_PAYER,
-    "kamino"
+    "current"
   );
   const program = user.program;
   const connection = user.connection;
