@@ -138,3 +138,23 @@ Pass `null` for unused reward slots.
 - **Drift Oracle**: `5QZMnsyndmphvZF4BNgoMHwVZaREXeE2rpBoCPMxgCCd`
 - **Marginfi Oracle**: `9zXQxpYH3kYhtoybmZfUNNCRVuud7fY9jswTg1hLyT8k`
 - **Token Program**: Token-2022
+
+### USDS
+
+- **Bank**: `5kW3rsj6XoB2VsE7RdGkmWMo4wQy5ZgLNcH3CFRHEq7J`
+- **Mint**: `USDSwr9ApdHk5bvJKMjzff41FfuX8bSxdKcR81vTwcA`
+- **Market Index**: 28
+- **Drift Spot Market**: `hX9tXtcFomQ38TvtbpzdsNGwoGRBqkNg4J4hNDcET2t`
+- **Drift Oracle**: `5Km85n3s9Zs5wEoXYWuHbpoDzst4EBkS5f1XuQJGG1DL`
+- **Marginfi Oracle**: `DyYBBWEi9xZvgNAeMDCiFnmC1U9gqgVsJDXkL5WETpoX`
+- **Token Program**: SPL Token
+
+### bSOL
+
+- **Bank**: `7iPsp3XiMFe3yJppCzSj7dLhkhnejm8id2ejBBoW4RgW`
+- **Mint**: `bSo13r4TkiE4KumL71LsHTPpL2euBYLFx6h9HP3piy1`
+- **Market Index**: 8
+- **Drift Spot Market**: `3fy2oMRJGceC3GAt9zGUBWt8MzjV5XxQDWKYLtiHPevX`
+- **Drift Oracle**: `BmDWPMsytWmYkh9n6o7m79eVshVYf2B5GVaqQ2EWKnGH`
+- **Marginfi Oracle**: `2wJdP1WM5dApaXf5DXVnPzcEqfqnwwEofjvJVvn6FNws`
+- **Token Program**: SPL Token
