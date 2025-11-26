@@ -37,7 +37,7 @@ type Config = {
   /** Group admin (generally the MS on mainnet) */
   ADMIN: PublicKey;
   /** Pays flat sol fee to init and rent (generally the MS on mainnet) */
-  FEE_PAYER: PublicKey;
+  FEE_PAYER?: PublicKey; // If omitted, defaults to ADMIN
   BANK_MINT: PublicKey;
   KAMINO_RESERVE: PublicKey;
   KAMINO_MARKET: PublicKey;
@@ -47,7 +47,7 @@ type Config = {
    * every (perhaps every?) Kamino reserve in prod has one. */
   FARM_STATE: PublicKey;
   SEED: number;
-  TOKEN_PROGRAM: PublicKey;
+  TOKEN_PROGRAM?: PublicKey; // If omitted, defaults to TOKEN_PROGRAM_ID
   MULTISIG_PAYER?: PublicKey; // May be omitted if not using squads
 };
 
@@ -56,7 +56,6 @@ const config: Config = {
   GROUP_KEY: new PublicKey("DnzhBmNmXgwoUSsKxs5LkMmArf95DmgeZQA1G4xuDSQB"),
 
   ADMIN: new PublicKey("6DdJqQYD8AizuXiCkbn19LiyWRwUsRMzy2Sgyoyasyj7"),
-  FEE_PAYER: new PublicKey("6DdJqQYD8AizuXiCkbn19LiyWRwUsRMzy2Sgyoyasyj7"),
   BANK_MINT: new PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"),
   KAMINO_RESERVE: new PublicKey("D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59"),
   KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"),
@@ -64,15 +63,20 @@ const config: Config = {
   RESERVE_ORACLE: new PublicKey("3t4JZcueEzTbVP6kLxXrL3VpWx45jDer4eqysweBchNH"), 
   FARM_STATE: new PublicKey("JAvnB9AKtgPsTEoKmn24Bq64UMoYcrtWtq42HHBdsPkh"),
   SEED: 7,
-  TOKEN_PROGRAM: TOKEN_PROGRAM_ID,
 };
 
+
 async function main() {
+  await initKaminoObligation(sendTx, config, "/.config/stage/id.json");
+}
+
+export async function initKaminoObligation(sendTx: boolean, config: Config, walletPath: string, version?: "current"): Promise<PublicKey> {
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
-    "/.config/stage/id.json",
-    config.MULTISIG_PAYER
+    walletPath,
+    config.MULTISIG_PAYER,
+    version
   );
   const program = user.program;
   const connection = user.connection;
@@ -112,7 +116,7 @@ async function main() {
     await makeInitObligationIx(
       program,
       {
-        feePayer: config.FEE_PAYER,
+        feePayer: config.FEE_PAYER ?? config.ADMIN,
         bank: bankKey,
         signerTokenAccount: ata,
         lendingMarket: config.KAMINO_MARKET,
@@ -122,7 +126,7 @@ async function main() {
         // TODO support edge cases where no farm state is active
         reserveFarmState: config.FARM_STATE,
         obligationFarmUserState: userState,
-        liquidityTokenProgram: config.TOKEN_PROGRAM,
+        liquidityTokenProgram: config.TOKEN_PROGRAM ?? TOKEN_PROGRAM_ID,
       },
       new BN(100)
     )

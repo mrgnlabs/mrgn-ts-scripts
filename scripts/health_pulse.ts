@@ -28,12 +28,16 @@ const config: Config = {
 };
 
 async function main() {
+  await pulseHealth(config, "/.config/stage/id.json");
+}
+
+export async function pulseHealth(config: Config, walletPath: string, version?: "current") {
   const user = commonSetup(
     true,
     config.PROGRAM_ID,
-    "/keys/staging-deploy.json",
+    walletPath,
     undefined,
-    "kamino"
+    version
   );
   registerKaminoProgram(user, KLEND_PROGRAM_ID.toString());
   const program = user.program;

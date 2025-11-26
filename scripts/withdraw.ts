@@ -8,21 +8,17 @@ import {
 } from "@solana/web3.js";
 import { BN } from "@coral-xyz/anchor";
 import {
-  createAssociatedTokenAccountIdempotentInstruction,
   getAssociatedTokenAddressSync,
 } from "@mrgnlabs/mrgn-common";
-import { commonSetup, registerKaminoProgram } from "../lib/common-setup";
+import { commonSetup } from "../lib/common-setup";
 import {
-  BankAndOracles,
   composeRemainingAccounts,
-  getOraclesAndCrankSwb,
 } from "../lib/utils";
-import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 import {
-  createTransferCheckedInstruction,
   TOKEN_2022_PROGRAM_ID,
 } from "@solana/spl-token";
-import { KLEND_PROGRAM_ID } from "./kamino/kamino-types";
+
+const sendTx = true;
 
 type Config = {
   PROGRAM_ID: string;
@@ -102,11 +98,16 @@ const withdrawKaminoLiquidatorUSDC: Config = {
 const config = withdrawKaminoLiquidatorUSDC;
 
 async function main() {
+  await withdraw(sendTx, config, "/.config/stage/id.json");
+}
+
+export async function withdraw(sendTx: boolean, config: Config, walletPath: string, version?: "current") {
   const user = commonSetup(
-    true,
+    sendTx,
     config.PROGRAM_ID,
-    "/.config/arena/id.json",
-    config.MULTISIG
+    walletPath,
+    config.MULTISIG,
+    version
   );
   const program = user.program;
   const connection = user.connection;

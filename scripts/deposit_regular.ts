@@ -18,9 +18,9 @@ const sendTx = true;
 
 type Config = {
   PROGRAM_ID: string;
-  GROUP: PublicKey;
+  GROUP?: PublicKey;
   ACCOUNT: PublicKey;
-  ACCOUNT_AUTHORITY: PublicKey;
+  ACCOUNT_AUTHORITY?: PublicKey;
   BANK: PublicKey;
   MINT: PublicKey;
   /** In native decimals */
@@ -29,18 +29,17 @@ type Config = {
   MULTISIG?: PublicKey;
 };
 
-
-const examples = {
+const examples: Record<string, Config> = {
   depositUSDCKamino: {
     PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
     ACCOUNT: new PublicKey("3VbTuhoZrLdHkrvUyxZffKgJ247GweRE62AEgXPx9ghM"),
     BANK: new PublicKey("8LkHC2Gh17H4KmdaPU788NgiehMXZRhtXkLgDgcMVUh8"),
     MINT: new PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"),
     AMOUNT: new BN(1 * 10 ** 5), // 0.1 USDC (** 6 decimals)
-    REMAINING: [
-      new PublicKey("8LkHC2Gh17H4KmdaPU788NgiehMXZRhtXkLgDgcMVUh8"), // usdc bank
-      new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"), // usdc oracle
-    ],
+    // REMAINING: [
+    //   new PublicKey("8LkHC2Gh17H4KmdaPU788NgiehMXZRhtXkLgDgcMVUh8"), // usdc bank
+    //   new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"), // usdc oracle
+    // ],
     MULTISIG: undefined,
   },
   depositBonkKamino: {
@@ -49,10 +48,10 @@ const examples = {
     BANK: new PublicKey("7ApaDMRXcHvh8Q3QcoZ5bM3JD1vtd3BX3zsDJuM8TGy6"),
     MINT: new PublicKey("DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263"),
     AMOUNT: new BN(50000 * 10 ** 5), // 50'000 BONK (** 5 decimals)
-    REMAINING: [
-      new PublicKey("7ApaDMRXcHvh8Q3QcoZ5bM3JD1vtd3BX3zsDJuM8TGy6"), // bonk bank
-      new PublicKey("DBE3N8uNjhKPRHfANdwGvCZghWXyLPdqdSbEW2XFwBiX"), // bonk oracle
-    ],
+    // REMAINING: [
+    //   new PublicKey("7ApaDMRXcHvh8Q3QcoZ5bM3JD1vtd3BX3zsDJuM8TGy6"), // bonk bank
+    //   new PublicKey("DBE3N8uNjhKPRHfANdwGvCZghWXyLPdqdSbEW2XFwBiX"), // bonk oracle
+    // ],
     MULTISIG: undefined,
   },
   depositUXDProd: {
@@ -61,10 +60,10 @@ const examples = {
     BANK: new PublicKey("BeNBJrAh1tZg5sqgt8D6AWKJLD5KkBrfZvtcgd7EuiAR"),
     MINT: new PublicKey("7kbnvuGBxxj8AG9qp8Scn56muWGaRaFqxg1FsRp3PaFT"),
     AMOUNT: new BN(29675 * 10 ** 6), // 29'675 UXD (** 6 decimals)
-    REMAINING: [
-      new PublicKey("BeNBJrAh1tZg5sqgt8D6AWKJLD5KkBrfZvtcgd7EuiAR"), // uxd bank
-      new PublicKey("CoEDGeYda7Mi6c1BAsHE2LL6zEVcitX43wPABSLgQfpB"), // uxd oracle
-    ],
+    // REMAINING: [
+    //   new PublicKey("BeNBJrAh1tZg5sqgt8D6AWKJLD5KkBrfZvtcgd7EuiAR"), // uxd bank
+    //   new PublicKey("CoEDGeYda7Mi6c1BAsHE2LL6zEVcitX43wPABSLgQfpB"), // uxd oracle
+    // ],
     MULTISIG: undefined,
   }
 };
@@ -84,11 +83,16 @@ const config = examples.depositUSDCKamino;
 // };
 
 async function main() {
+  await depositRegular(sendTx, config, "/.config/stage/id.json");
+}
+
+export async function depositRegular(sendTx: boolean, config: Config, walletPath: string, version?: "current") {
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
-    "/.config/stage/id.json",
-    config.MULTISIG
+    walletPath,
+    config.MULTISIG,
+    version
   );
   const program = user.program;
   const connection = user.connection;

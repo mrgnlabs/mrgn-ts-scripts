@@ -51,7 +51,7 @@ type Config = {
   /** Reserve Farm state. Can be read from reserve.farmCollateral. Technically optional, but almost
    * every (perhaps every?) Kamino reserve in prod has one. */
   FARM_STATE: PublicKey;
-  TOKEN_PROGRAM: PublicKey;
+  TOKEN_PROGRAM?: PublicKey; // If omitted, defaults to TOKEN_PROGRAM_ID
   LUT: PublicKey;
   MULTISIG_PAYER?: PublicKey; // May be omitted if not using squads
   NEW_REMAINING: BankAndOracles;
@@ -70,7 +70,6 @@ const prodKaminoTestconfig: Config = {
   KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"),
   RESERVE_ORACLE: new PublicKey("3t4JZcueEzTbVP6kLxXrL3VpWx45jDer4eqysweBchNH"),
   FARM_STATE: new PublicKey("JAvnB9AKtgPsTEoKmn24Bq64UMoYcrtWtq42HHBdsPkh"),
-  TOKEN_PROGRAM: TOKEN_PROGRAM_ID,
 
   LUT: new PublicKey("FtQ5uKQvFoKQ27SWY15tgBeJQnGKmKGzWqDz7kGUbeiq"),
 
@@ -102,11 +101,16 @@ const prodKaminoTestconfig: Config = {
 const config = prodKaminoTestconfig;
 
 async function main() {
+  await withdrawKamino(sendTx, config, "/.config/stage/id.json");
+}
+
+export async function withdrawKamino(sendTx: boolean, config: Config, walletPath: string, version?: "current") {
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
-    "/.config/arena/id.json",
-    config.MULTISIG_PAYER
+    walletPath,
+    config.MULTISIG_PAYER,
+    version
   );
   registerKaminoProgram(user, KLEND_PROGRAM_ID.toString());
   const program = user.program;
@@ -143,7 +147,7 @@ async function main() {
     config.BANK_MINT,
     user.wallet.publicKey,
     true,
-    config.TOKEN_PROGRAM
+    config.TOKEN_PROGRAM ?? TOKEN_PROGRAM_ID
   );
 
   const [userState] = deriveUserState(

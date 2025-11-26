@@ -31,12 +31,12 @@ type Config = {
   /** Group admin (generally the MS on mainnet) */
   ADMIN: PublicKey;
   /** Pays flat sol fee to init and rent (generally the MS on mainnet) */
-  FEE_PAYER: PublicKey;
+  FEE_PAYER?: PublicKey; // If omitted, defaults to ADMIN
   BANK_MINT: PublicKey;
   KAMINO_RESERVE: PublicKey;
   KAMINO_MARKET: PublicKey;
   SEED: number;
-  TOKEN_PROGRAM: PublicKey;
+  TOKEN_PROGRAM?: PublicKey; // If omitted, defaults to TOKEN_PROGRAM_ID
   MULTISIG_PAYER?: PublicKey; // May be omitted if not using squads
 };
 
@@ -46,12 +46,10 @@ const config: Config = {
   ORACLE: new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
   ORACLE_TYPE: { kaminoPythPush: {} },
   ADMIN: new PublicKey("6DdJqQYD8AizuXiCkbn19LiyWRwUsRMzy2Sgyoyasyj7"),
-  FEE_PAYER: new PublicKey("6DdJqQYD8AizuXiCkbn19LiyWRwUsRMzy2Sgyoyasyj7"),
   BANK_MINT: new PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"), // usdc
   KAMINO_RESERVE: new PublicKey("D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59"), // usdc
   KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"), // main
   SEED: 7,
-  TOKEN_PROGRAM: TOKEN_PROGRAM_ID,
 };
 
 const bankConfig: KaminoConfigCompact = {
@@ -69,12 +67,17 @@ const bankConfig: KaminoConfigCompact = {
 };
 
 async function main() {
+  await addKaminoBank(sendTx, config, "/.config/stage/id.json");
+}
+
+export async function addKaminoBank(sendTx: boolean, config: Config, walletPath: string, version?: "current"): Promise<PublicKey> {
   console.log("adding bank to group: " + config.GROUP_KEY);
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
-    "/.config/stage/id.json",
-    config.MULTISIG_PAYER
+    walletPath,
+    config.MULTISIG_PAYER,
+    version
   );
   const program = user.program;
   const connection = user.connection;
@@ -91,12 +94,12 @@ async function main() {
       program,
       {
         group: config.GROUP_KEY,
-        feePayer: config.FEE_PAYER,
+        feePayer: config.FEE_PAYER ?? config.ADMIN,
         bankMint: config.BANK_MINT,
         kaminoReserve: config.KAMINO_RESERVE,
         kaminoMarket: config.KAMINO_MARKET,
         oracle: config.ORACLE,
-        tokenProgram: config.TOKEN_PROGRAM,
+        tokenProgram: config.TOKEN_PROGRAM ?? TOKEN_PROGRAM_ID,
         admin: config.ADMIN,
       },
       {
@@ -128,6 +131,8 @@ async function main() {
     console.log("bank key: " + bankKey);
     console.log("Base58-encoded transaction:", base58Transaction);
   }
+
+  return bankKey;
 }
 
 main().catch((err) => {

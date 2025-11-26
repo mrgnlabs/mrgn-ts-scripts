@@ -15,23 +15,17 @@ import {
 import { commonSetup, registerKaminoProgram } from "../lib/common-setup";
 import {
   BankAndOracles,
-  composeRemainingAccounts,
-  getOraclesAndCrankSwb,
 } from "../lib/utils";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 import { KLEND_PROGRAM_ID } from "./kamino/kamino-types";
 import {
-  simpleRefreshObligation,
   simpleRefreshReserve,
 } from "./kamino/ixes-common";
-import { deriveLiquidityVaultAuthority } from "./common/pdas";
-import { deriveBaseObligation } from "./kamino/pdas";
 
 const sendTx = true;
 
 type Config = {
   PROGRAM_ID: string;
-  GROUP: PublicKey;
   ACCOUNT: PublicKey;
   BANK: PublicKey;
   MINT: PublicKey;
@@ -48,12 +42,11 @@ type Config = {
   KAMINO_RESERVE: PublicKey;
   KAMINO_MARKET: PublicKey;
   RESERVE_ORACLE: PublicKey;
-  OBLIGATION: PublicKey;
+  OBLIGATION?: PublicKey;
 };
 
 const config: Config = {
   PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-  GROUP: new PublicKey("DnzhBmNmXgwoUSsKxs5LkMmArf95DmgeZQA1G4xuDSQB"),
   ACCOUNT: new PublicKey("89ViS63BocuvZx5NE5oS9tBJ4ZbKZe3GkvurxHuSqFhz"),
   BANK: new PublicKey("7ApaDMRXcHvh8Q3QcoZ5bM3JD1vtd3BX3zsDJuM8TGy6"),
   MINT: new PublicKey("DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263"),
@@ -123,11 +116,16 @@ const config: Config = {
 };
 
 async function main() {
+  await borrow(sendTx, config, "/.config/stage/id.json");
+}
+
+export async function borrow(sendTx: boolean, config: Config, walletPath: string, version?: "current") {
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
-    "/.config/arena/id.json",
-    config.MULTISIG
+    walletPath,
+    config.MULTISIG,
+    version
   );
   registerKaminoProgram(user, KLEND_PROGRAM_ID.toString());
   const program = user.program;

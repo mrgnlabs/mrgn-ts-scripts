@@ -112,6 +112,10 @@ export function bankConfigOptDefault(): BankConfigOptRaw {
 }
 
 async function main() {
+  await configBank(sendTx, config, "/.config/stage/id.json");
+}
+
+export async function configBank(sendTx: boolean, config: Config, walletPath: string, version?: "current") {
   if (config.BANKS.length === 0) {
     throw new Error("Config.BANKS is empty - nothing to do.");
   }
@@ -119,8 +123,9 @@ async function main() {
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
-    "/.config/stage/id.json",
-    config.MULTISIG_PAYER
+    walletPath,
+    config.MULTISIG_PAYER,
+    version
   );
 
   const program = user.program;

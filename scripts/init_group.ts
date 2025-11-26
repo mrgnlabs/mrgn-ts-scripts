@@ -32,12 +32,21 @@ const deriveGlobalFeeState = (programId: PublicKey) => {
 };
 
 async function main() {
+  await initGroup(sendTx, config, "/.config/stage/id.json");
+}
+
+export async function initGroup(
+  sendTx: boolean,
+  config: Config,
+  walletPath: string,
+  version?: "current"
+): Promise<PublicKey> {
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
-    "/.config/stage/id.json",
+    walletPath,
     config.MULTISIG_PAYER,
-    "current"
+    version
   );
   const program = user.program;
   const connection = user.connection;
@@ -82,6 +91,7 @@ async function main() {
   }
 
   console.log("Group init: " + marginfiGroup.publicKey);
+  return marginfiGroup.publicKey;
 }
 
 main().catch((err) => {

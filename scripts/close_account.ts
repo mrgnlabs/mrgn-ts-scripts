@@ -14,12 +14,16 @@ const config: Config = {
 };
 
 async function main() {
+  await closeAccount(sendTx, config, "/.config/stage/id.json");
+}
+
+export async function closeAccount(sendTx: boolean, config: Config, walletPath: string, version?: "current") {
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
-    "/.config/stage/id.json",
+    walletPath,
     undefined,
-    "current"
+    version
   );
   const program = user.program;
   const connection = user.connection;

@@ -21,7 +21,7 @@ const sendTx = true;
 
 const ASSET_TAG_DEFAULT = 0;
 
-const ORACLE_TYPE_PYTH = 3;
+export const ORACLE_TYPE_PYTH = 3;
 const ORACLE_TYPE_SWB = 4;
 
 type Config = {
@@ -34,10 +34,10 @@ type Config = {
   /** Group admin (generally the MS on mainnet) */
   ADMIN: PublicKey;
   /** Pays flat sol fee to init and rent (generally the MS on mainnet) */
-  FEE_PAYER: PublicKey;
+  FEE_PAYER?: PublicKey; // If omitted, defaults to ADMIN
   BANK_MINT: PublicKey;
   SEED: number;
-  TOKEN_PROGRAM: PublicKey;
+  TOKEN_PROGRAM?: PublicKey; // If omitted, defaults to TOKEN_PROGRAM_ID
   MULTISIG_PAYER?: PublicKey; // May be omitted if not using squads
 };
 
@@ -55,10 +55,8 @@ const config: Config = {
   ORACLE: new PublicKey(oracle),
   ORACLE_TYPE: ORACLE_TYPE_PYTH,
   ADMIN: new PublicKey("6DdJqQYD8AizuXiCkbn19LiyWRwUsRMzy2Sgyoyasyj7"),
-  FEE_PAYER: new PublicKey("6DdJqQYD8AizuXiCkbn19LiyWRwUsRMzy2Sgyoyasyj7"),
   BANK_MINT: new PublicKey(mint),
   SEED: 14,
-  TOKEN_PROGRAM: TOKEN_PROGRAM_ID,
 };
 
 const rate: InterestRateConfig1_6 = {
@@ -92,12 +90,17 @@ const bankConfig: BankConfig = {
 };
 
 async function main() {
+  await addBank(sendTx, config, "/.config/stage/id.json");
+}
+
+export async function addBank(sendTx: boolean, config: Config, walletPath: string, version?: "current"): Promise<PublicKey> {
   console.log("adding bank to group: " + config.GROUP_KEY);
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
-    "/.config/stage/id.json",
-    config.MULTISIG_PAYER
+    walletPath,
+    config.MULTISIG_PAYER,
+    version
   );
   const program = user.program;
   const connection = user.connection;
@@ -143,9 +146,9 @@ async function main() {
       .accountsPartial({
         marginfiGroup: config.GROUP_KEY,
         admin: config.ADMIN,
-        feePayer: config.FEE_PAYER,
+        feePayer: config.FEE_PAYER ?? config.ADMIN,
         bankMint: config.BANK_MINT,
-        tokenProgram: config.TOKEN_PROGRAM,
+        tokenProgram: config.TOKEN_PROGRAM ?? TOKEN_PROGRAM_ID,
       })
       .instruction(),
     await program.methods
@@ -181,6 +184,8 @@ async function main() {
     console.log("bank key: " + bankKey);
     console.log("Base58-encoded transaction:", base58Transaction);
   }
+
+  return bankKey;
 }
 
 const deriveBankWithSeed = (

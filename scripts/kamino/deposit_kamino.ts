@@ -1,21 +1,18 @@
 // Call this once after each bank is made.
 import {
-  ComputeBudgetProgram,
   PublicKey,
   Transaction,
   sendAndConfirmTransaction,
 } from "@solana/web3.js";
 import { BN } from "@coral-xyz/anchor";
-import { TOKEN_PROGRAM_ID, WrappedI80F48 } from "@mrgnlabs/mrgn-common";
+import { TOKEN_PROGRAM_ID } from "@mrgnlabs/mrgn-common";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 import {
   FARMS_PROGRAM_ID,
   KLEND_PROGRAM_ID,
-  OracleSetupRawWithKamino,
 } from "./kamino-types";
 import { commonSetup, registerKaminoProgram } from "../../lib/common-setup";
 import {
-  makeInitObligationIx,
   makeKaminoDepositIx,
   simpleRefreshObligation,
   simpleRefreshReserve,
@@ -43,7 +40,7 @@ type Config = {
   /** Reserve Farm state. Can be read from reserve.farmCollateral. Technically optional, but almost
    * every (perhaps every?) Kamino reserve in prod has one. */
   FARM_STATE: PublicKey;
-  TOKEN_PROGRAM: PublicKey;
+  TOKEN_PROGRAM?: PublicKey; // If omitted, defaults to TOKEN_PROGRAM_ID
   MULTISIG_PAYER?: PublicKey; // May be omitted if not using squads
 };
 
@@ -58,15 +55,19 @@ const config: Config = {
   KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"),
   RESERVE_ORACLE: new PublicKey("3t4JZcueEzTbVP6kLxXrL3VpWx45jDer4eqysweBchNH"),
   FARM_STATE: new PublicKey("JAvnB9AKtgPsTEoKmn24Bq64UMoYcrtWtq42HHBdsPkh"),
-  TOKEN_PROGRAM: TOKEN_PROGRAM_ID,
 };
 
 async function main() {
+  await depositKamino(sendTx, config, "/.config/stage/id.json");
+}
+
+export async function depositKamino(sendTx: boolean, config: Config, walletPath: string, version?: "current") {
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
-    "/.config/arena/id.json",
-    config.MULTISIG_PAYER
+    walletPath,
+    config.MULTISIG_PAYER,
+    version
   );
   registerKaminoProgram(user, KLEND_PROGRAM_ID.toString());
   const program = user.program;
@@ -86,7 +87,7 @@ async function main() {
     config.BANK_MINT,
     user.wallet.publicKey,
     true,
-    config.TOKEN_PROGRAM
+    config.TOKEN_PROGRAM ?? TOKEN_PROGRAM_ID
   );
 
   const [userState] = deriveUserState(

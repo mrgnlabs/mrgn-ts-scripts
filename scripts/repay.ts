@@ -40,12 +40,16 @@ const config: Config = {
 };
 
 async function main() {
+  await repay(sendTx, config, "/.config/stage/id.json");
+}
+
+export async function repay(sendTx: boolean, config: Config, walletPath: string, version?: "current") {
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
-    "/.config/arena/id.json",
+    walletPath,
     config.MULTISIG,
-    "current"
+    version
   );
   const program = user.program;
   const connection = user.connection;

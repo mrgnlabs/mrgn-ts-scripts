@@ -27,11 +27,16 @@ const config: Config = {
 };
 
 async function main() {
+  await initAccount(sendTx, config, "/.config/stage/id.json");
+}
+
+export async function initAccount(sendTx: boolean, config: Config, walletPath: string, version?: "current"): Promise<PublicKey> {
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
-    "/.config/stage/id.json",
-    config.MULTISIG
+    walletPath,
+    config.MULTISIG,
+    version
   );
   const program = user.program;
   const connection = user.connection;
@@ -76,6 +81,7 @@ async function main() {
   }
 
   console.log("Account init: " + accountKeypair.publicKey);
+  return accountKeypair.publicKey;
 }
 
 main().catch((err) => {
