@@ -13,7 +13,7 @@ import { depositRegular } from "./deposit_regular";
 import { borrow } from "./borrow";
 import { composeRemainingAccounts } from "../lib/utils";
 import { bankConfigOptDefault, configBank } from "./config_bank";
-import { bigNumberToWrappedI80F48 } from "@mrgnlabs/mrgn-common";
+import { bigNumberToWrappedI80F48, sleep } from "@mrgnlabs/mrgn-common";
 import { pulseHealth } from "./health_pulse";
 import { writeFileSync } from "fs";
 
@@ -41,6 +41,10 @@ export type State = {
   paddingBanks: PublicKey[];
 };
 
+// Note: current setup assumes you have at least 1.5 USDC on your liquidatee's balances
+// and at least 50'000 BONK on your liquidator's balances. Plus significant amount of SOL
+// for transactions and for rent (>1 SOL in liquidator's case).
+
 const config: Config = {
   PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
   LIQUIDATOR_WALLET_PATH: "/.config/stage/id.json",
@@ -58,17 +62,20 @@ const config: Config = {
 async function main() {
   const liquidatorWallet = loadKeypairFromFile(process.env.HOME + config.LIQUIDATOR_WALLET_PATH);
   const liquidateeWallet = loadKeypairFromFile(process.env.HOME + config.LIQUIDATEE_WALLET_PATH);
-  console.log("liquidator: " + liquidatorWallet.publicKey);
-  console.log("liquidatee: " + liquidateeWallet.publicKey);
 
-  // 1. INIT GROUP
+  console.log("\n\n\n 1. INIT GROUP");
   const marginfiGroup = await initGroup(true, {PROGRAM_ID: config.PROGRAM_ID, ADMIN_KEY: liquidatorWallet.publicKey}, config.LIQUIDATOR_WALLET_PATH);
+  await sleep(1000);
 
-  // 2. INIT MARGINFI ACCOUNTS
+  console.log("\n\n\n 2. INIT MARGINFI ACCOUNTS");
   const liquidator = await initAccount(true, {PROGRAM_ID: config.PROGRAM_ID, GROUP: marginfiGroup, AUTHORITY: liquidatorWallet.publicKey}, config.LIQUIDATOR_WALLET_PATH);
+  console.log("liquidator: " + liquidator);
+  await sleep(1000);
   const liquidatee = await initAccount(true, {PROGRAM_ID: config.PROGRAM_ID, GROUP: marginfiGroup, AUTHORITY: liquidateeWallet.publicKey}, config.LIQUIDATEE_WALLET_PATH);
+  console.log("liquidatee: " + liquidatee);
+  await sleep(1000);
 
-  // 3. ADD KAMINO (USDC) BANKS
+  console.log("\n\n\n 3. ADD KAMINO (USDC) BANKS");
   let kaminoBankConfig = {
     PROGRAM_ID: config.PROGRAM_ID,
     GROUP_KEY: marginfiGroup,
@@ -84,9 +91,10 @@ async function main() {
   for (let i = 0; i < 8; i++) {
     kaminoBankConfig.SEED = i;
     kaminoBanks.push(await addKaminoBank(true, kaminoBankConfig, config.LIQUIDATOR_WALLET_PATH));
+    await sleep(1000);
   }
 
-  // 4. INIT KAMINO OBLIGATIONS
+  console.log("\n\n\n 4. INIT KAMINO OBLIGATIONS");
   let kaminoObligationConfig = {
     PROGRAM_ID: config.PROGRAM_ID,
     GROUP_KEY: marginfiGroup,
@@ -102,9 +110,10 @@ async function main() {
   for (let i = 0; i < 8; i++) {
     kaminoObligationConfig.SEED = i;
     kaminoObligations.push(await initKaminoObligation(true, kaminoObligationConfig, config.LIQUIDATOR_WALLET_PATH));
+    await sleep(1000);
   }
 
-  // 5. DEPOSIT TO ALL KAMINO BANKS BY LIQUIDATEE
+  console.log("\n\n\n 5. DEPOSIT TO ALL KAMINO BANKS BY LIQUIDATEE");
   let kaminoDepositConfig = {
     PROGRAM_ID: config.PROGRAM_ID,
     BANK: kaminoBanks[0],
@@ -119,9 +128,10 @@ async function main() {
   for (let i = 0; i < 8; i++) {
     kaminoDepositConfig.BANK = kaminoBanks[i];
     await depositKamino(true, kaminoDepositConfig, config.LIQUIDATEE_WALLET_PATH);
+    await sleep(1000);
   }
 
-  // 6. ADD 1 DEBT BANK AND 7 MORE COLLATERAL BANKS (padding up to a maximum of 16 open positions)
+  console.log("\n\n\n 6. ADD 1 DEBT BANK AND 7 MORE COLLATERAL BANKS"); // padding up to a maximum of 16 open positions
   let bankConfig = {
     PROGRAM_ID: config.PROGRAM_ID,
     GROUP_KEY: marginfiGroup,
@@ -132,6 +142,7 @@ async function main() {
     SEED: 0,
   };
   const debtBank = await addBank(true, bankConfig, config.LIQUIDATOR_WALLET_PATH);
+  await sleep(1000);
 
   let paddingBanks = [];
   bankConfig.BANK_MINT = config.COLLATERAL_MINT;
@@ -139,9 +150,10 @@ async function main() {
   for (let i = 8; i < 15; i++) {
     bankConfig.SEED = i;
     paddingBanks.push(await addBank(true, bankConfig, config.LIQUIDATOR_WALLET_PATH));
+    await sleep(1000);
   }
 
-  // 7. DEPOSIT TO DEBT BANK BY LIQUIDATOR AND TO PADDING BANKS - BY LIQUIDATEE
+  console.log("\n\n\n 7. DEPOSIT TO DEBT BANK BY LIQUIDATOR AND TO PADDING BANKS - BY LIQUIDATEE");
   let regularDepositConfig = {
     PROGRAM_ID: config.PROGRAM_ID,
     BANK: debtBank,
@@ -150,6 +162,7 @@ async function main() {
     MINT: config.DEBT_MINT,
   };
   await depositRegular(true, regularDepositConfig, config.LIQUIDATOR_WALLET_PATH);
+  await sleep(1000);
 
   regularDepositConfig.ACCOUNT = liquidatee;
   regularDepositConfig.MINT = config.COLLATERAL_MINT;
@@ -157,9 +170,10 @@ async function main() {
   for (let i = 0; i < 7; i++) {
     regularDepositConfig.BANK = paddingBanks[i];
     await depositRegular(true, regularDepositConfig, config.LIQUIDATEE_WALLET_PATH);
+    await sleep(1000);
   }
 
-  // 8. BORROW FROM DEBT BANK BY LIQUIDATEE
+  console.log("\n\n\n 8. BORROW FROM DEBT BANK BY LIQUIDATEE");
   let remainingAccounts: PublicKey[][] = [];
   for (let i = 0; i < 8; i++) {
     remainingAccounts.push([kaminoBanks[i], config.COLLATERAL_ORACLE, config.KAMINO_RESERVE]);
@@ -184,8 +198,9 @@ async function main() {
   };
 
   await borrow(true, borrowConfig, config.LIQUIDATEE_WALLET_PATH);
+  await sleep(1000);
 
-  // 9. SET ALL COLLATERAL BANKS' ASSET WEIGHT TO 0.1 TO RENDER LIQUIDATEE UNHEALTHY
+  console.log("\n\n\n 9. SET ALL COLLATERAL BANKS' ASSET WEIGHT TO 0.1 TO RENDER LIQUIDATEE UNHEALTHY");
   let updatedBankConfig = bankConfigOptDefault();
   updatedBankConfig.assetWeightInit = bigNumberToWrappedI80F48(0.1);
   updatedBankConfig.assetWeightMaint = bigNumberToWrappedI80F48(0.1);
@@ -213,8 +228,9 @@ async function main() {
   }
   configBankConfig.BANKS = bankEntries;
   await configBank(true, configBankConfig, config.LIQUIDATOR_WALLET_PATH);
+  await sleep(1000);
 
-  // 10. CONFIRM LIQUIDATEE IS LIQUIDATABLE NOW
+  console.log("\n\n\n 10. CONFIRM LIQUIDATEE IS LIQUIDATABLE NOW");
   const pulseHealthConfig = {
     PROGRAM_ID: config.PROGRAM_ID,
     ACCOUNT: liquidatee,

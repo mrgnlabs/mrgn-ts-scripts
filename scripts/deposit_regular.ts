@@ -166,6 +166,8 @@ export async function depositRegular(sendTx: boolean, config: Config, walletPath
   console.log("deposit: " + config.AMOUNT.toString() + " to " + config.BANK);
 }
 
-main().catch((err) => {
-  console.error(err);
-});
+if (require.main === module) {
+  main().catch((err) => {
+    console.error(err);
+  });
+}

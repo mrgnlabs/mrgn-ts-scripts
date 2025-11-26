@@ -136,9 +136,11 @@ export async function pulseHealth(config: Config, walletPath: string, version?: 
   }
 }
 
-main().catch((err) => {
-  console.error(err);
-});
+if (require.main === module) {
+  main().catch((err) => {
+    console.error(err);
+  });
+}
 
 export type HealthPulseArgs = {
   marginfiAccount: PublicKey;

@@ -152,6 +152,8 @@ export async function depositKamino(sendTx: boolean, config: Config, walletPath:
   }
 }
 
-main().catch((err) => {
-  console.error(err);
-});
+if (require.main === module) {
+  main().catch((err) => {
+    console.error(err);
+  });
+}

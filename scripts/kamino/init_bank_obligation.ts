@@ -156,8 +156,12 @@ export async function initKaminoObligation(sendTx: boolean, config: Config, wall
     console.log("bank key: " + bankKey);
     console.log("Base58-encoded transaction:", base58Transaction);
   }
+
+  return baseObligation;
 }
 
-main().catch((err) => {
-  console.error(err);
-});
+if (require.main === module) {
+  main().catch((err) => {
+    console.error(err);
+  });
+}

@@ -59,9 +59,9 @@ type Config = {
 };
 
 const prodKaminoTestconfig: Config = {
-  PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  BANK: new PublicKey("5HxHAW3BCYPB2uRMrjKpgA6mSpwHPK1JrntWZU4QZpZ1"),
-  ACCOUNT: new PublicKey("AP5izhPtwhdSayABT8MYMsKy492XzWit8hVFZQG5jk6n"),
+  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
+  BANK: new PublicKey("w7rEzN9zrQjwZN7LYRtigv4XSd1gnmGYmKz8YSCQC8f"),
+  ACCOUNT: new PublicKey("89ViS63BocuvZx5NE5oS9tBJ4ZbKZe3GkvurxHuSqFhz"),
   AMOUNT: new BN(40 * 10 ** 6), // 40 USDC
   WITHDRAW_ALL: true,
 
@@ -74,25 +74,25 @@ const prodKaminoTestconfig: Config = {
   LUT: new PublicKey("FtQ5uKQvFoKQ27SWY15tgBeJQnGKmKGzWqDz7kGUbeiq"),
 
   NEW_REMAINING: [
-    new PublicKey("Fr2Qj2S4jKpeByEChXrHZxBrCoUoneFnMjJJXHUyS6V6"),
+    new PublicKey("GcifFUfAfE18eyLwottPVqGcGJzKF1tcQrAbxj6xwfwi"),
     new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
 
-    new PublicKey("E7SUxSs1YFRUhSQmzFYyn9K46rpUPrfCFJQyrXKU23tT"),
+    new PublicKey("BJXzzbvcfcjh95oidYJ8PvzQdu4kozYqfPN5Nbm1QmcW"),
     new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
 
-    new PublicKey("8nUGEsT5VJijkpnn6fJXWTyyZjExhwipFuDyotqwyzhz"),
+    new PublicKey("BCAUSwpinknASD9uuiT5Fm13TvzNgVPJk5sRTEwHQqmE"),
     new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
 
-    new PublicKey("74KM1fwNm9WP39UH7QsCs4dvkN6RaZT52U9f4tnkJtom"),
+    new PublicKey("8LkHC2Gh17H4KmdaPU788NgiehMXZRhtXkLgDgcMVUh8"),
     new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
 
-    new PublicKey("52AJuRJJcejMYS9nNDCk1vYmyG1uHSsXoSPkctS3EfhA"),
+    new PublicKey("7VVKtodpVdfNZbYa9BR4HTMmGhrBkji5cHo4L6A5pq4R"),
     new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
 
-    new PublicKey("4eFzqYFZr2UnWQqSfwZxB4r1W1kSJ9XG6M6H17Eq4x2Z"),
+    new PublicKey("75D5Cs7z5S53ZwzXLSQhSF2upyitArZrgWY6WvkgABd7"),
     new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
 
-    new PublicKey("jLfQHXX6hNnGBECzDraZFZTtFYNXaYzw817eAzGMXUP"),
+    new PublicKey("MdyhEhSQKXsobV8dSg4ySVwJ1e9Qdb8RQdPfzFyoxqF"),
     new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
   ],
   ADD_COMPUTE_UNITS: true,
@@ -101,7 +101,7 @@ const prodKaminoTestconfig: Config = {
 const config = prodKaminoTestconfig;
 
 async function main() {
-  await withdrawKamino(sendTx, config, "/.config/stage/id.json");
+  await withdrawKamino(sendTx, config, "/.config/arena/id.json");
 }
 
 export async function withdrawKamino(sendTx: boolean, config: Config, walletPath: string, version?: "current") {

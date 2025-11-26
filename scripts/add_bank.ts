@@ -200,10 +200,11 @@ const deriveBankWithSeed = (
   );
 };
 
-main().catch((err) => {
-  console.error(err);
-});
-
+if (require.main === module) {
+  main().catch((err) => {
+    console.error(err);
+  });
+}
 
 export type RatePoint = {
   util: number;

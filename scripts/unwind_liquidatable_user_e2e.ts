@@ -10,6 +10,7 @@ import { withdraw } from "./withdraw";
 import { closeAccount } from "./close_account";
 import { closeBank } from "./close_bank";
 import { Config, State } from "./create_liquidatable_user_e2e";
+import { sleep } from "@mrgnlabs/mrgn-common";
 
 async function main() {
   const raw_config = readFileSync("liquidation_e2e_config.json", "utf8");
@@ -19,7 +20,7 @@ async function main() {
   const state = JSON.parse(raw_state) as State;
   console.log("loaded state: " + state);
 
-  // 1. REPAY DEBT BY LIQUIDATEE
+  console.log("\n\n\n 1. REPAY DEBT BY LIQUIDATEE");
   const repayConfig = {
     PROGRAM_ID: config.PROGRAM_ID,
     BANK: state.debtBank,
@@ -30,8 +31,9 @@ async function main() {
     ADD_COMPUTE_UNITS: false,
   };
   await repay(true, repayConfig, config.LIQUIDATEE_WALLET_PATH);
+  await sleep(1000);
 
-  // 2. WITHDRAW FROM KAMINO BANKS BY LIQUIDATEE
+  console.log("\n\n\n 2. WITHDRAW FROM KAMINO BANKS BY LIQUIDATEE");
   let remainingAccounts: PublicKey[][] = [];
   for (let i = 0; i < 7; i++) {
     remainingAccounts.push([state.paddingBanks[i], config.COLLATERAL_ORACLE]);
@@ -63,9 +65,10 @@ async function main() {
     withdrawKaminoConfig.BANK = state.kaminoBanks[i];
     withdrawKaminoConfig.NEW_REMAINING = composeRemainingAccounts(fullRemainingAccounts);
     await withdrawKamino(true, withdrawKaminoConfig, config.LIQUIDATEE_WALLET_PATH);
+    await sleep(1000);
   }
 
-  // 3. WITHDRAW FROM NON-KAMINO BANKS BY LIQUIDATEE
+  console.log("\n\n\n 3. WITHDRAW FROM NON-KAMINO BANKS BY LIQUIDATEE");
   let withdrawConfig = {
     PROGRAM_ID: config.PROGRAM_ID,
     ACCOUNT: state.liquidatee,
@@ -88,27 +91,34 @@ async function main() {
     withdrawConfig.BANK = state.paddingBanks[i];
     withdrawConfig.REMAINING = fullRemainingAccounts;
     await withdraw(true, withdrawConfig, config.LIQUIDATEE_WALLET_PATH);
+    await sleep(1000);
   }
 
-  // 3. WITHDRAW FROM DEBT BANK BY LIQUIDATOR
+  console.log("\n\n\n 4. WITHDRAW FROM DEBT BANK BY LIQUIDATOR");
   withdrawConfig.ACCOUNT = state.liquidator;
   withdrawConfig.BANK = state.debtBank;
   withdrawConfig.MINT = config.DEBT_MINT;
   withdrawConfig.REMAINING = [];
   await withdraw(true, withdrawConfig, config.LIQUIDATOR_WALLET_PATH);
+  await sleep(1000);
 
-  // 4. CLOSE LIQUIDATOR AND LIQUIDATEE ACCOUNTS
+  console.log("\n\n\n 5. CLOSE LIQUIDATOR AND LIQUIDATEE ACCOUNTS");
   await closeAccount(true, {PROGRAM_ID: config.PROGRAM_ID, ACCOUNT: state.liquidator}, config.LIQUIDATOR_WALLET_PATH);
+  await sleep(1000);
   await closeAccount(true, {PROGRAM_ID: config.PROGRAM_ID, ACCOUNT: state.liquidatee}, config.LIQUIDATEE_WALLET_PATH);
+  await sleep(1000);
 
-  // 5. CLOSE ALL BANKS
+  console.log("\n\n\n 6. CLOSE ALL BANKS");
   for (let i = 0; i < 8; i++) {
     await closeBank(true, {PROGRAM_ID: config.PROGRAM_ID, BANK: state.kaminoBanks[i]}, config.LIQUIDATOR_WALLET_PATH);
+    await sleep(1000);
   }
   for (let i = 0; i < 7; i++) {
     await closeBank(true, {PROGRAM_ID: config.PROGRAM_ID, BANK: state.paddingBanks[i]}, config.LIQUIDATOR_WALLET_PATH);
+    await sleep(1000);
   }
   await closeBank(true, {PROGRAM_ID: config.PROGRAM_ID, BANK: state.debtBank}, config.LIQUIDATOR_WALLET_PATH);
+  await sleep(1000);
 
   console.log("Cleanup finished.");
 }

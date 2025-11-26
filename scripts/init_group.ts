@@ -94,6 +94,8 @@ export async function initGroup(
   return marginfiGroup.publicKey;
 }
 
-main().catch((err) => {
-  console.error(err);
-});
+if (require.main === module) {
+  main().catch((err) => {
+    console.error(err);
+  });
+}

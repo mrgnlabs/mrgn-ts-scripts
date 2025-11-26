@@ -47,7 +47,7 @@ const config: Config = {
   // One tx per entry in this array:
   BANKS: [
     {
-      bank: new PublicKey("7VVKtodpVdfNZbYa9BR4HTMmGhrBkji5cHo4L6A5pq4R"),
+      bank: new PublicKey("2oEWxmFg8572sHeVaQY2uL81T3ujv29gHdxVeNQbXpPV"),
       config: {
         assetWeightInit: bigNumberToWrappedI80F48(0.1),
         assetWeightMaint: bigNumberToWrappedI80F48(0.1),
@@ -101,7 +101,7 @@ export function bankConfigOptDefault(): BankConfigOptRaw {
       hundredUtilRate: null, // I80, a %
       points: null, // I80, a %
     },
-    operationalState: { paused: {} }, // { reduceOnly: {} } or { operational: {} }
+    operationalState: { operational: {} }, // { reduceOnly: {} } or { paused: {} }
     oracleMaxAge: null, // number, in seconds
     oracleMaxConfidence: null, // number, a % out of 100%, as u32, e.g. 10% = u32MAX * 0.10
     permissionlessBadDebtSettlement: null, // true or false
@@ -205,10 +205,11 @@ const ASSET_TAG_DEFAULT = 0;
 const ASSET_TAG_SOL = 1;
 const ASSET_TAG_STAKED = 2;
 
-main().catch((err) => {
-  console.error(err);
-});
-
+if (require.main === module) {
+  main().catch((err) => {
+    console.error(err);
+  });
+}
 
 type InterestRateConfigOpt1_6 = {
   // Fees

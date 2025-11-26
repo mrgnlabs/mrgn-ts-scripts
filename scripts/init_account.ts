@@ -84,6 +84,8 @@ export async function initAccount(sendTx: boolean, config: Config, walletPath: s
   return accountKeypair.publicKey;
 }
 
-main().catch((err) => {
-  console.error(err);
-});
+if (require.main === module) {
+  main().catch((err) => {
+    console.error(err);
+  });
+}

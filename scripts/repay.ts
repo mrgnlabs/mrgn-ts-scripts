@@ -30,9 +30,9 @@ type Config = {
 };
 
 const config: Config = {
-  PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  ACCOUNT: new PublicKey("AP5izhPtwhdSayABT8MYMsKy492XzWit8hVFZQG5jk6n"),
-  BANK: new PublicKey("89LuR6urx9wMxeJtf3LCdq84LsgM22Sp6fWqPbCuZtUr"),
+  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
+  ACCOUNT: new PublicKey("89ViS63BocuvZx5NE5oS9tBJ4ZbKZe3GkvurxHuSqFhz"),
+  BANK: new PublicKey("7ApaDMRXcHvh8Q3QcoZ5bM3JD1vtd3BX3zsDJuM8TGy6"),
   MINT: new PublicKey("DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263"),
   AMOUNT: new BN(10 * 10 ** 6),
   REPAY_ALL: true,
@@ -40,7 +40,7 @@ const config: Config = {
 };
 
 async function main() {
-  await repay(sendTx, config, "/.config/stage/id.json");
+  await repay(sendTx, config, "/.config/arena/id.json");
 }
 
 export async function repay(sendTx: boolean, config: Config, walletPath: string, version?: "current") {
@@ -128,6 +128,8 @@ export async function repay(sendTx: boolean, config: Config, walletPath: string,
   }
 }
 
-main().catch((err) => {
-  console.error(err);
-});
+if (require.main === module) {
+  main().catch((err) => {
+    console.error(err);
+  });
+}

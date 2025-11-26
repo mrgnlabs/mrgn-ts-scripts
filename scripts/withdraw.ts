@@ -82,15 +82,13 @@ const withdrawLiquidatorUSDC: Config = {
 };
 
 const withdrawKaminoLiquidatorUSDC: Config = {
-  PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  ACCOUNT: new PublicKey("AP5izhPtwhdSayABT8MYMsKy492XzWit8hVFZQG5jk6n"),
-  BANK: new PublicKey("jLfQHXX6hNnGBECzDraZFZTtFYNXaYzw817eAzGMXUP"),
+  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
+  ACCOUNT: new PublicKey("3VbTuhoZrLdHkrvUyxZffKgJ247GweRE62AEgXPx9ghM"),
+  BANK: new PublicKey("8LkHC2Gh17H4KmdaPU788NgiehMXZRhtXkLgDgcMVUh8"),
   MINT: new PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"),
   AMOUNT: new BN(20 * 10 ** 6),
   WITHDRAW_ALL: true,
   REMAINING: [
-    [
-    ],
   ],
   ADD_COMPUTE_UNITS: false,
 };
@@ -187,6 +185,8 @@ export async function withdraw(sendTx: boolean, config: Config, walletPath: stri
   }
 }
 
-main().catch((err) => {
-  console.error(err);
-});
+if (require.main === module) {
+  main().catch((err) => {
+    console.error(err);
+  });
+}

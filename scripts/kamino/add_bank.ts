@@ -135,6 +135,8 @@ export async function addKaminoBank(sendTx: boolean, config: Config, walletPath:
   return bankKey;
 }
 
-main().catch((err) => {
-  console.error(err);
-});
+if (require.main === module) {
+  main().catch((err) => {
+    console.error(err);
+  });
+}
