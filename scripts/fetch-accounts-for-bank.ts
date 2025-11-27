@@ -13,7 +13,7 @@ type Config = {
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  BANK: new PublicKey("9KbkQsu4EGAeM7ZxvwsZcpxoekZyg5LTk1BF5SAMPXdY"),
+  BANK: new PublicKey("DeyH7QxWvnbbaVB4zFrf4hoq7Q8z1ZT14co42BGwGtfM"),
 };
 
 // ---- Layout constants ----
@@ -188,7 +188,7 @@ async function main() {
     `Total Liability Shares for bank:     ${totalLiabilitySharesForBank}`
   );
   console.log(
-    `Total Asset Shares (accounts with NO liabilities anywhere): ${totalAssetsForPureLenders}`
+    `Total Asset Shares NOT AT RISK: ${totalAssetsForPureLenders}`
   );
   console.log("=============================\n");
 

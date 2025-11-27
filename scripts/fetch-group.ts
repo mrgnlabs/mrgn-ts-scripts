@@ -11,8 +11,8 @@ type Config = {
 };
 
 const config: Config = {
-  PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  GROUP: new PublicKey("4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8"),
+  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
+  GROUP: new PublicKey("FCPfpHA69EbS8f9KKSreTRkXbzFpunsKuYf5qNmnJjpo"),
 };
 
 async function main() {
@@ -21,7 +21,7 @@ async function main() {
     config.PROGRAM_ID,
     "/keys/staging-admin.json",
     undefined,
-    "kamino"
+    "1.6"
   );
   const program = user.program;
 

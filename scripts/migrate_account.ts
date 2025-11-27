@@ -7,29 +7,33 @@ import {
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 import { commonSetup } from "../lib/common-setup";
 
-const sendTx = true;
+const sendTx = false;
 
 type Config = {
   PROGRAM_ID: string;
   ACCOUNT: PublicKey;
-  OLD_AUTHORITY: PublicKey;
+  // OLD_AUTHORITY: PublicKey;
   NEW_AUTHORITY: PublicKey;
   /** H4QMTHMVbJ3KrB5bz573cBBZKoYSZ2B4mSST1JKzPUrH on staging, typically the MS on the mainnet  */
   GLOBAL_FEE_WALLET: PublicKey;
+  ACCOUNT_INDEX: number;
+  THIRD_PARTY_SEED: number;
 
   MULTISIG: PublicKey;
 };
 
 const config: Config = {
-  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-  ACCOUNT: new PublicKey("12W8kr21RZX3tLR8CxZvnqo8fgFirKF3gNhAwSmhsuCg"),
-  OLD_AUTHORITY: new PublicKey("H4QMTHMVbJ3KrB5bz573cBBZKoYSZ2B4mSST1JKzPUrH"),
-  NEW_AUTHORITY: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
+  PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
+  ACCOUNT: new PublicKey("GZxaVQQMp7Vv6rF4jYn3FBJwyNujVYibm6TM4ouRp5gR"),
+  // OLD_AUTHORITY: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
+  NEW_AUTHORITY: new PublicKey("DBNRpvecWpcxckFs2uDeuioR8Bcad6v68TDJKPeYBNHG"),
   GLOBAL_FEE_WALLET: new PublicKey(
-    "H4QMTHMVbJ3KrB5bz573cBBZKoYSZ2B4mSST1JKzPUrH"
+    "CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"
   ),
+  ACCOUNT_INDEX: 0,
+  THIRD_PARTY_SEED: 789,
 
-  MULTISIG: PublicKey.default,
+  MULTISIG: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 };
 
 async function main() {
@@ -43,29 +47,40 @@ async function main() {
   const program = user.program;
   const connection = user.connection;
 
-  const newAcc = Keypair.generate();
+  const acc = await program.account.marginfiAccount.fetch(config.ACCOUNT);
+  console.log(
+    "Old account on group: " + acc.group + " migrated from " + acc.migratedFrom
+  );
+
+  const [newAcc] = deriveMarginfiAccountPda(
+    program.programId,
+    acc.group,
+    config.NEW_AUTHORITY,
+    config.ACCOUNT_INDEX,
+    config.THIRD_PARTY_SEED
+  );
 
   let tx = new Transaction().add(
     await program.methods
-      .transferToNewAccount()
+      .transferToNewAccountPda(config.ACCOUNT_INDEX, config.THIRD_PARTY_SEED)
       .accounts({
         oldMarginfiAccount: config.ACCOUNT,
-        newMarginfiAccount: newAcc.publicKey,
+        feePayer: user.wallet.publicKey,
         newAuthority: config.NEW_AUTHORITY,
         globalFeeWallet: config.GLOBAL_FEE_WALLET,
       })
+      // TODO figure out why this doesn't infer
       .accountsPartial({
-        authority: config.OLD_AUTHORITY,
+        newMarginfiAccount: newAcc,
       })
       .instruction()
   );
-  console.log("Moving account: " + config.ACCOUNT + " to " + newAcc.publicKey);
+  console.log("Moving account: " + config.ACCOUNT + " to " + newAcc);
 
   if (sendTx) {
     try {
       const signature = await sendAndConfirmTransaction(connection, tx, [
         user.wallet.payer,
-        newAcc,
       ]);
       console.log("Transaction signature:", signature);
     } catch (error) {
@@ -84,6 +99,31 @@ async function main() {
     console.log("Base58-encoded transaction:", base58Transaction);
   }
 }
+
+const deriveMarginfiAccountPda = (
+  programId: PublicKey,
+  group: PublicKey,
+  authority: PublicKey,
+  accountIndex: number,
+  thirdPartyId?: number
+) => {
+  const accountIndexBuffer = Buffer.allocUnsafe(2);
+  accountIndexBuffer.writeUInt16LE(accountIndex, 0);
+
+  const thirdPartyIdBuffer = Buffer.allocUnsafe(2);
+  thirdPartyIdBuffer.writeUInt16LE(thirdPartyId || 0, 0);
+
+  return PublicKey.findProgramAddressSync(
+    [
+      Buffer.from("marginfi_account", "utf-8"),
+      group.toBuffer(),
+      authority.toBuffer(),
+      accountIndexBuffer,
+      thirdPartyIdBuffer,
+    ],
+    programId
+  );
+};
 
 main().catch((err) => {
   console.error(err);
