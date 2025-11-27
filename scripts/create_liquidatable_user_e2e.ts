@@ -189,7 +189,7 @@ async function main() {
     PROGRAM_ID: config.PROGRAM_ID,
     BANK: debtBank,
     ACCOUNT: liquidatee,
-    AMOUNT: new BN(50000 * 10 ** 5), // 50k BONK
+    AMOUNT: new BN(40000 * 10 ** 5), // 40k BONK
     MINT: config.DEBT_MINT,
     ADD_COMPUTE_UNITS: true,
     KAMINO_RESERVE: config.KAMINO_RESERVE,

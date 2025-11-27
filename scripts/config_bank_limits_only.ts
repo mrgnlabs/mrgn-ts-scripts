@@ -38,10 +38,10 @@ export type BankLimitsEntry = {
  */
 const bankLimits: BankLimitsEntry[] = [
   {
-    bank: new PublicKey("61Qx9kgWo9RVtPHf8Rku6gbaUtcnzgkpAuifQBUcMRVK"),
-    depositLimit: cap(600_000_000, 6),
-    borrowLimit: cap(60_000_000, 6),
-    initValue: new BN(3_500_000),
+    bank: new PublicKey("Gj72XAUuNxNeDnW4tUh3H1U2Jbzshz27vtH8KvB972gi"),
+    depositLimit: cap(20, 8),
+    borrowLimit: cap(5, 8),
+    initValue: new BN(4_000_000),
   },
 ];
 
@@ -51,7 +51,7 @@ async function main() {
     config.PROGRAM_ID,
     "/keys/staging-deploy.json",
     config.MULTISIG_PAYER,
-    "kamino"
+    "current"
   );
   const program = user.program;
   const connection = user.connection;
