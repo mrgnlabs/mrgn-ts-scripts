@@ -31,8 +31,8 @@ type Config = {
 
 const config: Config = {
   PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-  ACCOUNT: new PublicKey("8HwNc1W9YUydGWLFiyahwrUAWz5yuW7gSiPHaU6sSFSr"),
-  BANK: new PublicKey("64NtNrDgwY4U8ktazsPMNSBNdwjeFgxauqxi9f6u9ym8"),
+  ACCOUNT: new PublicKey("89ViS63BocuvZx5NE5oS9tBJ4ZbKZe3GkvurxHuSqFhz"),
+  BANK: new PublicKey("7ApaDMRXcHvh8Q3QcoZ5bM3JD1vtd3BX3zsDJuM8TGy6"),
   MINT: new PublicKey("DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263"),
   AMOUNT: new BN(10 * 10 ** 6),
   REPAY_ALL: true,
@@ -40,12 +40,16 @@ const config: Config = {
 };
 
 async function main() {
+  await repay(sendTx, config, "/.config/arena/id.json");
+}
+
+export async function repay(sendTx: boolean, config: Config, walletPath: string, version?: "current") {
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
-    "/keys/staging-deploy.json",
+    walletPath,
     config.MULTISIG,
-    "current"
+    version
   );
   const program = user.program;
   const connection = user.connection;
@@ -124,6 +128,8 @@ async function main() {
   }
 }
 
-main().catch((err) => {
-  console.error(err);
-});
+if (require.main === module) {
+  main().catch((err) => {
+    console.error(err);
+  });
+}

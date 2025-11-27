@@ -8,24 +8,20 @@ import {
 } from "@solana/web3.js";
 import { BN } from "@coral-xyz/anchor";
 import {
-  createAssociatedTokenAccountIdempotentInstruction,
   getAssociatedTokenAddressSync,
 } from "@mrgnlabs/mrgn-common";
-import { commonSetup, registerKaminoProgram } from "../lib/common-setup";
+import { commonSetup } from "../lib/common-setup";
 import {
-  BankAndOracles,
   composeRemainingAccounts,
-  getOraclesAndCrankSwb,
 } from "../lib/utils";
-import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
-import { TOKEN_2022_PROGRAM_ID } from "@solana/spl-token";
-import { KLEND_PROGRAM_ID } from "./kamino/kamino-types";
+import {
+  TOKEN_2022_PROGRAM_ID,
+} from "@solana/spl-token";
 
-const sendTx = false;
+const sendTx = true;
 
 type Config = {
   PROGRAM_ID: string;
-  GROUP: PublicKey;
   ACCOUNT: PublicKey;
   BANK: PublicKey;
   MINT: PublicKey;
@@ -66,90 +62,64 @@ type Config = {
   ADD_COMPUTE_UNITS: boolean;
 
   // Optional, omit if not using MS.
-  MULTISIG: PublicKey;
+  MULTISIG?: PublicKey;
 };
 
-const config: Config = {
+const withdrawLiquidatorUSDC: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  GROUP: new PublicKey("4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8"),
-  ACCOUNT: new PublicKey("GZxaVQQMp7Vv6rF4jYn3FBJwyNujVYibm6TM4ouRp5gR"),
+  ACCOUNT: new PublicKey("CE7D7oeCXs54w8BQjZGq46wjS3a36SSuMmrsXkQTfvJL"),
   BANK: new PublicKey("2s37akK2eyBbp8DZgCm7RtsaEz8eJP3Nxd4urLHQv7yB"),
   MINT: new PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"),
-  AMOUNT: new BN(664_000 * 10 ** 6),
+  AMOUNT: new BN(20 * 10 ** 6),
   WITHDRAW_ALL: false,
   REMAINING: [
     [
-      new PublicKey("HmpMfL8942u22htC4EMiWgLX931g3sacXFR6KjuLgKLV"),
-      new PublicKey("HT2PLQBcG5EiCcNSaMHAjSgd9F98ecpATbk4Sk5oYuM"),
-    ],
-    [
-      new PublicKey("FDsf8sj6SoV313qrA91yms3u5b3P4hBxEPvanVs8LtJV"),
-      new PublicKey("DyYBBWEi9xZvgNAeMDCiFnmC1U9gqgVsJDXkL5WETpoX"),
-    ],
-    [
-      new PublicKey("2s37akK2eyBbp8DZgCm7RtsaEz8eJP3Nxd4urLHQv7yB"),
-      new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
+      new PublicKey("2s37akK2eyBbp8DZgCm7RtsaEz8eJP3Nxd4urLHQv7yB"), // usdc bank
+      new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"), // usdc oracle
     ],
   ],
   ADD_COMPUTE_UNITS: false,
-  MULTISIG: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 };
 
-/** Helper: pretty-print PublicKey[][] exactly like Config.REMAINING expects */
-function printRemainingForPaste(groups: BankAndOracles[]) {
-  const body = groups
-    .map(
-      (g) =>
-        `  [\n` +
-        g.map((pk) => `    new PublicKey("${pk.toBase58()}"),`).join("\n") +
-        `\n  ],`
-    )
-    .join("\n");
+const withdrawKaminoLiquidatorUSDC: Config = {
+  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
+  ACCOUNT: new PublicKey("3VbTuhoZrLdHkrvUyxZffKgJ247GweRE62AEgXPx9ghM"),
+  BANK: new PublicKey("8LkHC2Gh17H4KmdaPU788NgiehMXZRhtXkLgDgcMVUh8"),
+  MINT: new PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"),
+  AMOUNT: new BN(20 * 10 ** 6),
+  WITHDRAW_ALL: true,
+  REMAINING: [
+  ],
+  ADD_COMPUTE_UNITS: false,
+};
 
-  const out = `[\n${body}\n]`;
-  console.log("\n=== Copy/Paste for config.REMAINING ===\n" + out + "\n");
-}
+const config = withdrawKaminoLiquidatorUSDC;
 
 async function main() {
+  await withdraw(sendTx, config, "/.config/stage/id.json");
+}
+
+export async function withdraw(sendTx: boolean, config: Config, walletPath: string, version?: "current") {
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
-    "/keys/phantom-wallet.json",
+    walletPath,
     config.MULTISIG,
-    "kamino"
+    version
   );
   const program = user.program;
   const connection = user.connection;
-  registerKaminoProgram(user, KLEND_PROGRAM_ID.toString());
 
   let mintAccInfo = await connection.getAccountInfo(config.MINT);
   const tokenProgram = mintAccInfo.owner;
   let isT22 = tokenProgram.toString() == TOKEN_2022_PROGRAM_ID.toString();
 
-  let meta: AccountMeta[] = [];
-  let kaminoIxes = [];
-  if (sendTx) {
-    let [activeBalances, ixes] = await getOraclesAndCrankSwb(
-      program,
-      user.kaminoProgram,
-      config.ACCOUNT,
-      connection,
-      user.wallet.payer
-    );
-    kaminoIxes = ixes;
-    meta = activeBalances.flat().map((pubkey) => {
-      return { pubkey, isSigner: false, isWritable: false };
-    });
-    // TODO remove the one we are withdrawing from if withdrawing all
-    printRemainingForPaste(activeBalances);
-  } else {
-    const remaining = composeRemainingAccounts(config.REMAINING);
-    meta = remaining.map((pubkey) => ({
-      pubkey,
-      isSigner: false,
-      isWritable: false,
-    }));
-  }
+  const remaining = composeRemainingAccounts(config.REMAINING);
+  let meta: AccountMeta[] = remaining.map((pubkey) => ({
+    pubkey,
+    isSigner: false,
+    isWritable: false,
+  }));
 
   if (isT22) {
     const m: AccountMeta = {
@@ -161,42 +131,35 @@ async function main() {
     meta.unshift(m);
   }
 
-  const ata = getAssociatedTokenAddressSync(
-    config.MINT,
-    user.wallet.publicKey,
-    true,
-    tokenProgram
-  );
   const transaction = new Transaction();
 
   if (config.ADD_COMPUTE_UNITS) {
     transaction.add(
       ComputeBudgetProgram.setComputeUnitPrice({ microLamports: 100_000 })
     );
-    transaction.add(
-      ComputeBudgetProgram.setComputeUnitLimit({ units: 1_400_000 })
-    );
   }
 
+  const ata = getAssociatedTokenAddressSync(
+    config.MINT,
+    user.wallet.publicKey,
+    true,
+    tokenProgram
+  );
+
   transaction.add(
-    ...kaminoIxes,
-    createAssociatedTokenAccountIdempotentInstruction(
-      user.wallet.publicKey,
-      ata,
-      user.wallet.publicKey,
-      config.MINT,
-      tokenProgram
-    ),
+    // createAssociatedTokenAccountIdempotentInstruction(
+    //   user.wallet.publicKey,
+    //   ata,
+    //   user.wallet.publicKey,
+    //   config.MINT,
+    //   tokenProgram
+    // ),
     await program.methods
       .lendingAccountWithdraw(config.AMOUNT, config.WITHDRAW_ALL)
       .accounts({
-        // marginfiGroup: config.GROUP,
         marginfiAccount: config.ACCOUNT,
-        // signer: wallet.publicKey,
         bank: config.BANK,
         destinationTokenAccount: ata,
-        // bankLiquidityVaultAuthority = deriveLiquidityVaultAuthority(id, bank);
-        // bankLiquidityVault = deriveLiquidityVault(id, bank)
         tokenProgram: tokenProgram,
       })
       .remainingAccounts(meta)
@@ -204,33 +167,26 @@ async function main() {
   );
 
   console.log(
-    "withdrawing : " + config.AMOUNT.toString() + " from " + config.BANK
+    "(" +
+      user.wallet.publicKey +
+      ") withdrawing " +
+      config.AMOUNT.toString() +
+      " from " +
+      config.BANK
   );
 
-  if (sendTx) {
-    try {
-      const signature = await sendAndConfirmTransaction(
-        connection,
-        transaction,
-        [user.wallet.payer]
-      );
-      console.log("Transaction signature:", signature);
-    } catch (error) {
-      console.error("Transaction failed:", error);
-    }
-  } else {
-    transaction.feePayer = config.MULTISIG; // Set the fee payer to Squads wallet
-    const { blockhash } = await connection.getLatestBlockhash();
-    transaction.recentBlockhash = blockhash;
-    const serializedTransaction = transaction.serialize({
-      requireAllSignatures: false,
-      verifySignatures: false,
-    });
-    const base58Transaction = bs58.encode(serializedTransaction);
-    console.log("Base58-encoded transaction:", base58Transaction);
+  try {
+    const signature = await sendAndConfirmTransaction(connection, transaction, [
+      user.wallet.payer,
+    ]);
+    console.log("Transaction signature:", signature);
+  } catch (error) {
+    console.error("Transaction failed:", error);
   }
 }
 
-main().catch((err) => {
-  console.error(err);
-});
+if (require.main === module) {
+  main().catch((err) => {
+    console.error(err);
+  });
+}

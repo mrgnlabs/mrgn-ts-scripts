@@ -15,17 +15,17 @@ import {
 import { commonSetup, registerKaminoProgram } from "../lib/common-setup";
 import {
   BankAndOracles,
-  composeRemainingAccounts,
-  getOraclesAndCrankSwb,
 } from "../lib/utils";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 import { KLEND_PROGRAM_ID } from "./kamino/kamino-types";
+import {
+  simpleRefreshReserve,
+} from "./kamino/ixes-common";
 
 const sendTx = true;
 
 type Config = {
   PROGRAM_ID: string;
-  GROUP: PublicKey;
   ACCOUNT: PublicKey;
   BANK: PublicKey;
   MINT: PublicKey;
@@ -39,112 +39,103 @@ type Config = {
 
   // Optional, omit if not using MS.
   MULTISIG?: PublicKey;
+  KAMINO_RESERVE: PublicKey;
+  KAMINO_MARKET: PublicKey;
+  RESERVE_ORACLE: PublicKey;
+  OBLIGATION?: PublicKey;
 };
 
 const config: Config = {
-  PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  GROUP: new PublicKey("4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8"),
-  ACCOUNT: new PublicKey("7qEL6Gb8jNWRGRLKU3G6fvWZkWMs5hVkpKKNeWdaJAE4"),
-  BANK: new PublicKey("DMoqjmsuoru986HgfjqrKEvPv8YBufvBGADHUonkadC5"),
-  MINT: new PublicKey("LSTxxxnJzKDFSLr4dUkPcmCf5VyryEqzPLz5j4bpxFp"),
-  AMOUNT: new BN(0.00001 * 10 ** 9),
+  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
+  ACCOUNT: new PublicKey("89ViS63BocuvZx5NE5oS9tBJ4ZbKZe3GkvurxHuSqFhz"),
+  BANK: new PublicKey("7ApaDMRXcHvh8Q3QcoZ5bM3JD1vtd3BX3zsDJuM8TGy6"),
+  MINT: new PublicKey("DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263"),
+  AMOUNT: new BN(50000 * 10 ** 5), // 50k BONK
   NEW_REMAINING: [
-    // new PublicKey("2s37akK2eyBbp8DZgCm7RtsaEz8eJP3Nxd4urLHQv7yB"),
-    // new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
+    new PublicKey("J3KtPXSWiVjYLrTEGNqUt7A2BT3r263miZXYBsrhjyee"),
+    new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
+    new PublicKey("D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59"),
+
+    new PublicKey("HakK3mqEPwsaYiZkcsDbdkY9Y8Eg7bV74jhMbvEdrufX"),
+    new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
+    new PublicKey("D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59"),
+
+    new PublicKey("GcifFUfAfE18eyLwottPVqGcGJzKF1tcQrAbxj6xwfwi"),
+    new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
+
+    new PublicKey("EXdnvWEHhg6LGGsnPW7MDPWrkAGjuU372cP4ANFq6zrx"),
+    new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
+    new PublicKey("D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59"),
+
+    new PublicKey("E4eAE2HF979z4SFcWht5c3tTuvRfGCPJ7qGSf7BDPkNr"),
+    new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
+    new PublicKey("D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59"),
+
+    new PublicKey("BJXzzbvcfcjh95oidYJ8PvzQdu4kozYqfPN5Nbm1QmcW"),
+    new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
+
+    new PublicKey("BCAUSwpinknASD9uuiT5Fm13TvzNgVPJk5sRTEwHQqmE"),
+    new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
+
+    new PublicKey("8qPLKaKb4F5BC6mVncKAryMp78yp5ZRGYnPkQbt9ikKt"),
+    new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
+    new PublicKey("D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59"),
+
+    new PublicKey("8LkHC2Gh17H4KmdaPU788NgiehMXZRhtXkLgDgcMVUh8"),
+    new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
+
+    new PublicKey("7VVKtodpVdfNZbYa9BR4HTMmGhrBkji5cHo4L6A5pq4R"),
+    new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
+
+    new PublicKey("7ApaDMRXcHvh8Q3QcoZ5bM3JD1vtd3BX3zsDJuM8TGy6"), // BONK
+    new PublicKey("DBE3N8uNjhKPRHfANdwGvCZghWXyLPdqdSbEW2XFwBiX"),
+
+    new PublicKey("75D5Cs7z5S53ZwzXLSQhSF2upyitArZrgWY6WvkgABd7"),
+    new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
+
+    new PublicKey("73vML9t9N9gyJxYMqXYMHb7cQso7JuKphwVGUsHoLQSg"),
+    new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
+    new PublicKey("D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59"),
+
+    new PublicKey("52qegQaofPUG8CHb6RmMmDH2PpZ74CuDbhURPhurXV5F"),
+    new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
+    new PublicKey("D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59"),
+
+    new PublicKey("w7rEzN9zrQjwZN7LYRtigv4XSd1gnmGYmKz8YSCQC8f"),
+    new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
+    new PublicKey("D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59"),
+
+    new PublicKey("MdyhEhSQKXsobV8dSg4ySVwJ1e9Qdb8RQdPfzFyoxqF"),
+    new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
   ],
-  ADD_COMPUTE_UNITS: false,
-  MULTISIG: PublicKey.default,
+  ADD_COMPUTE_UNITS: true,
+  KAMINO_RESERVE: new PublicKey("D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59"),
+  KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"),
+  RESERVE_ORACLE: new PublicKey("3t4JZcueEzTbVP6kLxXrL3VpWx45jDer4eqysweBchNH"),
+  OBLIGATION: new PublicKey("5HxomAyh1wDSqHp9Gg5n3aF4vLAKQL3WK3baYMZwK6Yd"),
 };
 
-// const examples = {
-//   borrowJupSOLAgainstUSDC: {
-//     PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-//     GROUP: new PublicKey("FCPfpHA69EbS8f9KKSreTRkXbzFpunsKuYf5qNmnJjpo"),
-//     ACCOUNT: new PublicKey("2GMbwepeyW5xzgm3cQLivdPWLydrFevLy2iBbZab3pd6"),
-//     BANK: new PublicKey("EJuhmswifV6wumS28Sfr5W8B18CJ29m1ZNKkhbhbYDCA"),
-//     MINT: new PublicKey("jupSoLaHXQiZZTSfEWMTRRgpnyFm8f6sZdosWBjx93v"),
-//     AMOUNT: new BN(0.0005 * 10 ** 9), // jupsol has 9 decimals
-//     REMAINING: [
-//       [
-//         new PublicKey("Ek5JSFJFD8QgXM6rPDCzf31XhDp1q3xezaWYSkJWqbqc"), // usdc bank
-//         new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
-//       ], // usdc oracle
-//       [
-//         new PublicKey("EJuhmswifV6wumS28Sfr5W8B18CJ29m1ZNKkhbhbYDCA"), // jupsol bank
-//         new PublicKey("HX5WM3qzogAfRCjBUWwnniLByMfFrjm1b5yo4KoWGR27"),
-//       ], // jupsol oracle
-//     ],
-//     ADD_COMPUTE_UNITS: false,
-//   },
-//   borrowSOLAgainstUSDC: {
-//     PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-//     GROUP: new PublicKey("FCPfpHA69EbS8f9KKSreTRkXbzFpunsKuYf5qNmnJjpo"),
-//     ACCOUNT: new PublicKey("2GMbwepeyW5xzgm3cQLivdPWLydrFevLy2iBbZab3pd6"),
-//     BANK: new PublicKey("3evdJSa25nsUiZzEUzd92UNa13TPRJrje1dRyiQP5Lhp"),
-//     MINT: new PublicKey("So11111111111111111111111111111111111111112"),
-//     AMOUNT: new BN(0.0005 * 10 ** 9), // sol has 9 decimals
-//     REMAINING: [
-//       [
-//         new PublicKey("Ek5JSFJFD8QgXM6rPDCzf31XhDp1q3xezaWYSkJWqbqc"), // usdc bank
-//         new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
-//       ], // usdc oracle
-//       // [new PublicKey("EJuhmswifV6wumS28Sfr5W8B18CJ29m1ZNKkhbhbYDCA"), // jupsol bank
-//       // new PublicKey("HX5WM3qzogAfRCjBUWwnniLByMfFrjm1b5yo4KoWGR27")], // jupsol oracle
-//       [
-//         new PublicKey("3evdJSa25nsUiZzEUzd92UNa13TPRJrje1dRyiQP5Lhp"), // sol bank
-//         new PublicKey("7UVimffxr9ow1uXYxsr4LHAcV58mLzhmwaeKvJ1pjLiE"),
-//       ], // sol oracle
-//     ],
-//     ADD_COMPUTE_UNITS: false,
-//   },
-//   borrowSOLAgainstStakedSOL: {
-//     PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-//     GROUP: new PublicKey("FCPfpHA69EbS8f9KKSreTRkXbzFpunsKuYf5qNmnJjpo"),
-//     ACCOUNT: new PublicKey("7SBEjeEjhzRvWsrTq7UiNWBLjcYwE1hdbmMK5wUaeVhU"),
-//     BANK: new PublicKey("3evdJSa25nsUiZzEUzd92UNa13TPRJrje1dRyiQP5Lhp"),
-//     STAKE_POOL: new PublicKey("AvS4oXtxWdrJGCJwDbcZ7DqpSqNQtKjyXnbkDbrSk6Fq"),
-//     MINT: new PublicKey("So11111111111111111111111111111111111111112"),
-//     AMOUNT: new BN(0.00002 * 10 ** 6), // usdc has 6 decimals
-//     REMAINING: [
-//       [
-//         new PublicKey("3jt43usVm7qL1N5qPvbzYHWQRxamPCRhri4CxwDrf6aL"), // staked sol bank
-//         new PublicKey("7UVimffxr9ow1uXYxsr4LHAcV58mLzhmwaeKvJ1pjLiE"), // staked sol oracle
-//         new PublicKey("BADo3D6nMtGnsAaTv3iEes8mMcq92TuFoBWebFe8kzeA"), // lst mint
-//         new PublicKey("3e8RuaQMCPASZSMJAskHX6ZfuTtQ3JvoNPFoEvaVRn78"),
-//       ], // lst pool
-//       [
-//         new PublicKey("3evdJSa25nsUiZzEUzd92UNa13TPRJrje1dRyiQP5Lhp"), // usdc bank
-//         new PublicKey("7UVimffxr9ow1uXYxsr4LHAcV58mLzhmwaeKvJ1pjLiE"),
-//       ], // usdc oracle
-//     ],
-//     ADD_COMPUTE_UNITS: false,
-//   },
-// };
-
 async function main() {
+  await borrow(sendTx, config, "/.config/stage/id.json");
+}
+
+export async function borrow(sendTx: boolean, config: Config, walletPath: string, version?: "current") {
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
-    "/keys/phantom-wallet.json",
+    walletPath,
     config.MULTISIG,
-    "kamino"
+    version
   );
+  registerKaminoProgram(user, KLEND_PROGRAM_ID.toString());
   const program = user.program;
   const connection = user.connection;
-  registerKaminoProgram(user, KLEND_PROGRAM_ID.toString());
 
-  let [activeBalances, kaminoIxes] = await getOraclesAndCrankSwb(
-    program,
-    user.kaminoProgram,
-    config.ACCOUNT,
-    connection,
-    user.wallet.payer
+  const oracleMeta: AccountMeta[] = config.NEW_REMAINING.flat().map(
+    (pubkey) => {
+      return { pubkey, isSigner: false, isWritable: false };
+    }
   );
-  activeBalances.push(config.NEW_REMAINING);
-
-  const oracleMeta: AccountMeta[] = activeBalances.flat().map((pubkey) => {
-    return { pubkey, isSigner: false, isWritable: false };
-  });
 
   const ata = getAssociatedTokenAddressSync(config.MINT, user.wallet.publicKey);
   const transaction = new Transaction();
@@ -159,13 +150,24 @@ async function main() {
   }
 
   transaction.add(
-    ...kaminoIxes,
-    createAssociatedTokenAccountIdempotentInstruction(
-      user.wallet.publicKey,
-      ata,
-      user.wallet.publicKey,
-      config.MINT
+    // createAssociatedTokenAccountIdempotentInstruction(
+    //   user.wallet.publicKey,
+    //   ata,
+    //   user.wallet.publicKey,
+    //   config.MINT
+    // ),
+    await simpleRefreshReserve(
+      user.kaminoProgram,
+      config.KAMINO_RESERVE,
+      config.KAMINO_MARKET,
+      config.RESERVE_ORACLE
     ),
+    // await simpleRefreshObligation(
+    //   user.kaminoProgram,
+    //   config.KAMINO_MARKET,
+    //   config.OBLIGATION,
+    //   [config.KAMINO_RESERVE]
+    // ),
     await program.methods
       .lendingAccountBorrow(config.AMOUNT)
       .accounts({
@@ -210,6 +212,8 @@ async function main() {
   }
 }
 
-main().catch((err) => {
-  console.error(err);
-});
+if (require.main === module) {
+  main().catch((err) => {
+    console.error(err);
+  });
+}

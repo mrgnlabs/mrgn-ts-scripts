@@ -1,25 +1,35 @@
 // Call this once after each bank is made.
 import {
+  AccountMeta,
+  AddressLookupTableAccount,
+  ComputeBudgetProgram,
   PublicKey,
   Transaction,
+  TransactionInstruction,
+  TransactionMessage,
+  VersionedTransaction,
   sendAndConfirmTransaction,
 } from "@solana/web3.js";
 import { BN } from "@coral-xyz/anchor";
-import { TOKEN_PROGRAM_ID } from "@mrgnlabs/mrgn-common";
+import { TOKEN_PROGRAM_ID, WrappedI80F48 } from "@mrgnlabs/mrgn-common";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 import {
   FARMS_PROGRAM_ID,
   KLEND_PROGRAM_ID,
+  OracleSetupRawWithKamino,
 } from "./kamino-types";
 import { commonSetup, registerKaminoProgram } from "../../lib/common-setup";
 import {
+  makeInitObligationIx,
   makeKaminoDepositIx,
+  makeKaminoWithdrawIx,
   simpleRefreshObligation,
   simpleRefreshReserve,
 } from "./ixes-common";
 import { getAssociatedTokenAddressSync } from "@solana/spl-token";
 import { deriveBaseObligation, deriveUserState } from "./pdas";
 import { deriveLiquidityVaultAuthority } from "../common/pdas";
+import { BankAndOracles } from "../../lib/utils";
 
 /**
  * If true, send the tx. If false, output the unsigned b58 tx to console.
@@ -31,6 +41,7 @@ type Config = {
   BANK: PublicKey;
   ACCOUNT: PublicKey;
   AMOUNT: BN;
+  WITHDRAW_ALL: boolean;
 
   BANK_MINT: PublicKey;
   KAMINO_RESERVE: PublicKey;
@@ -41,27 +52,46 @@ type Config = {
    * every (perhaps every?) Kamino reserve in prod has one. */
   FARM_STATE: PublicKey;
   TOKEN_PROGRAM?: PublicKey; // If omitted, defaults to TOKEN_PROGRAM_ID
+  LUT: PublicKey;
   MULTISIG_PAYER?: PublicKey; // May be omitted if not using squads
+  NEW_REMAINING: BankAndOracles;
+  ADD_COMPUTE_UNITS: boolean;
 };
 
-const config: Config = {
+const prodKaminoTestconfig: Config = {
   PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-  BANK: new PublicKey("8qPLKaKb4F5BC6mVncKAryMp78yp5ZRGYnPkQbt9ikKt"),
-  ACCOUNT: new PublicKey("89ViS63BocuvZx5NE5oS9tBJ4ZbKZe3GkvurxHuSqFhz"),
-  AMOUNT: new BN(1 * 10 ** 5), // 0.1 USDC
+  BANK: new PublicKey("Ay8kyX7q2G9Yp3T6Nt8Z3p8xcMeaC19xLQjmGjTX2niq"),
+  ACCOUNT: new PublicKey("FvRj5WiHZh6mU9TSsgAeJinDeSAkBmPvbJHJCqXAxCsH"),
+  AMOUNT: new BN(40 * 10 ** 6), // 40 USDC
+  WITHDRAW_ALL: true,
 
   BANK_MINT: new PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"),
   KAMINO_RESERVE: new PublicKey("D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59"),
   KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"),
   RESERVE_ORACLE: new PublicKey("3t4JZcueEzTbVP6kLxXrL3VpWx45jDer4eqysweBchNH"),
   FARM_STATE: new PublicKey("JAvnB9AKtgPsTEoKmn24Bq64UMoYcrtWtq42HHBdsPkh"),
+
+  LUT: new PublicKey("FtQ5uKQvFoKQ27SWY15tgBeJQnGKmKGzWqDz7kGUbeiq"),
+
+  NEW_REMAINING: [
+    new PublicKey("CVjHEnJWKELsbFt37znC2nq4KNrwTf7w42fcfySEifNu"),
+    new PublicKey("DBE3N8uNjhKPRHfANdwGvCZghWXyLPdqdSbEW2XFwBiX"),
+  ],
+  ADD_COMPUTE_UNITS: true,
 };
 
+const config = prodKaminoTestconfig;
+
 async function main() {
-  await depositKamino(sendTx, config, "/.config/stage/id.json");
+  await withdrawKamino(sendTx, config, "/.config/stage/id.json");
 }
 
-export async function depositKamino(sendTx: boolean, config: Config, walletPath: string, version?: "current") {
+export async function withdrawKamino(
+  sendTx: boolean,
+  config: Config,
+  walletPath: string,
+  version?: "current"
+) {
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
@@ -72,6 +102,23 @@ export async function depositKamino(sendTx: boolean, config: Config, walletPath:
   registerKaminoProgram(user, KLEND_PROGRAM_ID.toString());
   const program = user.program;
   const connection = user.connection;
+
+  let luts: AddressLookupTableAccount[] = [];
+  const lutLookup = await connection.getAddressLookupTable(config.LUT);
+  if (!lutLookup || !lutLookup.value) {
+    console.warn(
+      `Warning: LUT ${config.LUT.toBase58()} not found on-chain. Proceeding without it.`
+    );
+    luts = [];
+  } else {
+    luts = [lutLookup.value];
+  }
+
+  const oracleMeta: AccountMeta[] = config.NEW_REMAINING.flat().map(
+    (pubkey) => {
+      return { pubkey, isSigner: false, isWritable: false };
+    }
+  );
 
   const [lendingVaultAuthority] = deriveLiquidityVaultAuthority(
     program.programId,
@@ -96,7 +143,17 @@ export async function depositKamino(sendTx: boolean, config: Config, walletPath:
     baseObligation
   );
 
-  let depositTx = new Transaction().add(
+  let instructions: TransactionInstruction[] = [];
+  if (config.ADD_COMPUTE_UNITS) {
+    // instructions.push(
+    //   ComputeBudgetProgram.setComputeUnitPrice({ microLamports: 100_000 })
+    // );
+    instructions.push(
+      ComputeBudgetProgram.setComputeUnitLimit({ units: 1_400_000 })
+    );
+  }
+
+  instructions.push(
     await simpleRefreshReserve(
       user.kaminoProgram,
       config.KAMINO_RESERVE,
@@ -109,44 +166,60 @@ export async function depositKamino(sendTx: boolean, config: Config, walletPath:
       baseObligation,
       [config.KAMINO_RESERVE]
     ),
-    await makeKaminoDepositIx(
+    await makeKaminoWithdrawIx(
       program,
       {
         marginfiAccount: config.ACCOUNT,
         bank: config.BANK,
-        signerTokenAccount: ata,
+        destinationTokenAccount: ata,
         lendingMarket: config.KAMINO_MARKET,
         reserveLiquidityMint: config.BANK_MINT,
         reserveFarmState: config.FARM_STATE,
         obligationFarmUserState: userState,
       },
-      config.AMOUNT
+      config.AMOUNT,
+      config.WITHDRAW_ALL,
+      oracleMeta
     )
   );
+  const { blockhash, lastValidBlockHeight } =
+    await connection.getLatestBlockhash();
 
   if (sendTx) {
     try {
-      const sigObligation = await sendAndConfirmTransaction(
-        connection,
-        depositTx,
-        [user.wallet.payer]
-      );
-      console.log("deposit to: " + config.BANK);
+      console.log("withdraw from: " + config.BANK);
       console.log("by account: " + config.ACCOUNT);
-      console.log("Transaction signature:", sigObligation);
+      const v0Message = new TransactionMessage({
+        payerKey: user.wallet.publicKey,
+        recentBlockhash: blockhash,
+        instructions,
+      }).compileToV0Message(luts);
+      const v0Tx = new VersionedTransaction(v0Message);
+
+      v0Tx.sign([user.wallet.payer]);
+      const signature = await connection.sendTransaction(v0Tx, {
+        maxRetries: 2,
+      });
+      await connection.confirmTransaction(
+        { signature, blockhash, lastValidBlockHeight },
+        "confirmed"
+      );
+
+      console.log("tx signature:", signature);
     } catch (error) {
       console.error("Transaction failed:", error);
     }
   } else {
-    depositTx.feePayer = config.MULTISIG_PAYER; // Set the fee payer to Squads wallet
-    const { blockhash } = await connection.getLatestBlockhash();
-    depositTx.recentBlockhash = blockhash;
-    const serializedTransaction = depositTx.serialize({
-      requireAllSignatures: false,
-      verifySignatures: false,
-    });
+    const v0Message = new TransactionMessage({
+      payerKey: config.MULTISIG_PAYER,
+      recentBlockhash: blockhash,
+      instructions,
+    }).compileToV0Message(luts);
+    const v0Tx = new VersionedTransaction(v0Message);
+
+    const serializedTransaction = v0Tx.serialize();
     const base58Transaction = bs58.encode(serializedTransaction);
-    console.log("deposit to: " + config.BANK);
+    console.log("withdraw from: " + config.BANK);
     console.log("by account: " + config.ACCOUNT);
     console.log("Base58-encoded transaction:", base58Transaction);
   }

@@ -19,6 +19,8 @@ type Config = {
   CURVE_ADMIN: PublicKey;
   LIMIT_ADMIN: PublicKey;
   EMISS_ADMIN: PublicKey;
+  META_ADMIN: PublicKey;
+  RISK_ADMIN: PublicKey;
 
   MULTISIG?: PublicKey;
 };
@@ -31,6 +33,8 @@ const config: Config = {
   CURVE_ADMIN: new PublicKey("BACjgGYJYwVRRpnHJfcjykfkp2Xu118ghx5fYL1wgY7p"),
   LIMIT_ADMIN: new PublicKey("BACjgGYJYwVRRpnHJfcjykfkp2Xu118ghx5fYL1wgY7p"),
   EMISS_ADMIN: new PublicKey("BACjgGYJYwVRRpnHJfcjykfkp2Xu118ghx5fYL1wgY7p"),
+  META_ADMIN: new PublicKey("BACjgGYJYwVRRpnHJfcjykfkp2Xu118ghx5fYL1wgY7p"),
+  RISK_ADMIN: new PublicKey("BACjgGYJYwVRRpnHJfcjykfkp2Xu118ghx5fYL1wgY7p"),
 
   MULTISIG: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 };
@@ -57,6 +61,8 @@ async function main() {
         config.CURVE_ADMIN,
         config.LIMIT_ADMIN,
         config.EMISS_ADMIN,
+        config.META_ADMIN,
+        config.RISK_ADMIN,
         false
       )
       .accounts({
@@ -99,6 +105,8 @@ async function main() {
   }
 }
 
-main().catch((err) => {
-  console.error(err);
-});
+if (require.main === module) {
+  main().catch((err) => {
+    console.error(err);
+  });
+}

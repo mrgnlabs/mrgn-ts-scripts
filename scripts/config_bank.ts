@@ -7,40 +7,14 @@ import {
 } from "@solana/web3.js";
 import { BN } from "@coral-xyz/anchor";
 import { bigNumberToWrappedI80F48, WrappedI80F48 } from "@mrgnlabs/mrgn-common";
-import { InterestRateConfigRaw } from "@mrgnlabs/marginfi-client-v2";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 import { commonSetup } from "../lib/common-setup";
+import { RatePoint } from "./add_bank";
 
 /**
  * If true, send the txs. If false, output the unsigned b58 v0 txs to console.
  */
-const sendTx = false;
-
-export type BankConfigOptRaw = {
-  assetWeightInit: WrappedI80F48 | null;
-  assetWeightMaint: WrappedI80F48 | null;
-
-  liabilityWeightInit: WrappedI80F48 | null;
-  liabilityWeightMaint: WrappedI80F48 | null;
-
-  depositLimit: BN | null;
-  borrowLimit: BN | null;
-  riskTier: { collateral: {} } | { isolated: {} } | null;
-  assetTag: number | null;
-  totalAssetValueInitLimit: BN | null;
-
-  interestRateConfig: InterestRateConfigRaw | null;
-  operationalState:
-    | { paused: {} }
-    | { operational: {} }
-    | { reduceOnly: {} }
-    | null;
-
-  oracleMaxAge: number | null;
-  oracleMaxConfidence: number | null;
-  permissionlessBadDebtSettlement: boolean | null;
-  freezeSettings: boolean | null;
-};
+const sendTx = true;
 
 export type BankConfigPair = {
   bank: PublicKey;
@@ -64,71 +38,45 @@ export type Config = {
 };
 
 const config: Config = {
-  PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  ADMIN: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
-  MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
+  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
+  ADMIN: new PublicKey("6DdJqQYD8AizuXiCkbn19LiyWRwUsRMzy2Sgyoyasyj7"),
+  //MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 
   LUT: new PublicKey("CQ8omkUwDtsszuJLo9grtXCeEyDU4QqBLRv9AjRDaUZ3"),
 
   // One tx per entry in this array:
   BANKS: [
     {
-      // TNSR
-      bank: new PublicKey("9KbkQsu4EGAeM7ZxvwsZcpxoekZyg5LTk1BF5SAMPXdY"),
+      bank: new PublicKey("2oEWxmFg8572sHeVaQY2uL81T3ujv29gHdxVeNQbXpPV"),
       config: {
-        assetWeightInit: null,
-        assetWeightMaint: null,
+        assetWeightInit: bigNumberToWrappedI80F48(0.1),
+        assetWeightMaint: bigNumberToWrappedI80F48(0.1),
         liabilityWeightInit: null,
         liabilityWeightMaint: null,
         depositLimit: null,
-        interestRateConfig: {
-          optimalUtilizationRate: null,
-          plateauInterestRate: null,
-          maxInterestRate: null,
-          insuranceFeeFixedApr: null,
-          insuranceIrFee: null,
-          protocolFixedFeeApr: null,
-          protocolIrFee: null,
-          protocolOriginationFee: null,
-        },
-        operationalState: { reduceOnly: {} }, // { operational: {} }
         borrowLimit: null,
-        riskTier: null, // { collateral: {} }
-        totalAssetValueInitLimit: null,
-        oracleMaxAge: null,
+        riskTier: null,
         assetTag: null,
+        totalAssetValueInitLimit: null,
+        interestRateConfig: {
+          protocolOriginationFee: null,
+          protocolIrFee: null,
+          protocolFixedFeeApr: null,
+          insuranceIrFee: null,
+          insuranceFeeFixedApr: null,
+          zeroUtilRate: null,
+          hundredUtilRate: null,
+          points: null,
+        },
+        operationalState: { operational: {} },
+        oracleMaxAge: null,
         oracleMaxConfidence: null,
         permissionlessBadDebtSettlement: null,
         freezeSettings: null,
+        tokenlessRepaymentsAllowed: null
       },
     },
     // Add more { bank, config: bankConfigOptForThatBank() } as needed
-
-    // Example reduce-only config:
-    // assetWeightInit: bigNumberToWrappedI80F48(0),
-    // assetWeightMaint: bigNumberToWrappedI80F48(0),
-    // liabilityWeightInit: null,
-    // liabilityWeightMaint: null,
-    // depositLimit: null,
-    // borrowLimit: null,
-    // riskTier: null,
-    // assetTag: null,
-    // totalAssetValueInitLimit: null,
-    // interestRateConfig: {
-    //   protocolOriginationFee: null,
-    //   protocolIrFee: null,
-    //   protocolFixedFeeApr: null,
-    //   insuranceIrFee: null,
-    //   insuranceFeeFixedApr: null,
-    //   maxInterestRate: null,
-    //   optimalUtilizationRate: null,
-    //   plateauInterestRate: null,
-    // },
-    // operationalState: { reduceOnly: {} },
-    // oracleMaxAge: null,
-    // oracleMaxConfidence: null,
-    // permissionlessBadDebtSettlement: null,
-    // freezeSettings: null,
   ],
 };
 
@@ -149,20 +97,25 @@ export function bankConfigOptDefault(): BankConfigOptRaw {
       protocolFixedFeeApr: null, // I80, a %
       insuranceIrFee: null, // I80, a %
       insuranceFeeFixedApr: null, // I80, a %
-      maxInterestRate: null, // I80, a %
-      optimalUtilizationRate: null, // I80, a %
-      plateauInterestRate: null, // I80, a %
+      zeroUtilRate: null, // I80, a %
+      hundredUtilRate: null, // I80, a %
+      points: null, // I80, a %
     },
-    operationalState: { paused: {} }, // { reduceOnly: {} } or { operational: {} }
+    operationalState: { operational: {} }, // { reduceOnly: {} } or { paused: {} }
     oracleMaxAge: null, // number, in seconds
     oracleMaxConfidence: null, // number, a % out of 100%, as u32, e.g. 10% = u32MAX * 0.10
     permissionlessBadDebtSettlement: null, // true or false
-    freezeSettings: null, // true or false
+    freezeSettings: null,
+    tokenlessRepaymentsAllowed: null
   };
   return bankConfigOpt;
 }
 
 async function main() {
+  await configBank(sendTx, config, "/.config/stage/id.json");
+}
+
+export async function configBank(sendTx: boolean, config: Config, walletPath: string, version?: "current") {
   if (config.BANKS.length === 0) {
     throw new Error("Config.BANKS is empty - nothing to do.");
   }
@@ -170,9 +123,9 @@ async function main() {
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
-    "/keys/staging-deploy.json",
+    walletPath,
     config.MULTISIG_PAYER,
-    "kamino"
+    version
   );
 
   const program = user.program;
@@ -216,7 +169,7 @@ async function main() {
 
     if (sendTx) {
       const v0Message = new TransactionMessage({
-        payerKey: user.wallet.publicKey,
+        payerKey,
         recentBlockhash: blockhash,
         instructions: [ix],
       }).compileToV0Message(luts);
@@ -252,6 +205,50 @@ const ASSET_TAG_DEFAULT = 0;
 const ASSET_TAG_SOL = 1;
 const ASSET_TAG_STAKED = 2;
 
-main().catch((err) => {
-  console.error(err);
-});
+if (require.main === module) {
+  main().catch((err) => {
+    console.error(err);
+  });
+}
+
+type InterestRateConfigOpt1_6 = {
+  // Fees
+  insuranceFeeFixedApr: WrappedI80F48 | null;
+  insuranceIrFee: WrappedI80F48 | null;
+  protocolFixedFeeApr: WrappedI80F48 | null;
+  protocolIrFee: WrappedI80F48 | null;
+
+  protocolOriginationFee: WrappedI80F48 | null;
+
+  zeroUtilRate: number | null;
+  hundredUtilRate: number | null;
+  points: RatePoint[] | null;
+};
+
+type BankConfigOptRaw = {
+  assetWeightInit: WrappedI80F48 | null;
+  assetWeightMaint: WrappedI80F48 | null;
+
+  liabilityWeightInit: WrappedI80F48 | null;
+  liabilityWeightMaint: WrappedI80F48 | null;
+
+  depositLimit: BN | null;
+  borrowLimit: BN | null;
+  riskTier: { collateral: {} } | { isolated: {} } | null;
+  assetTag: number | null;
+  totalAssetValueInitLimit: BN | null;
+
+  interestRateConfig: InterestRateConfigOpt1_6 | null;
+  operationalState:
+    | { paused: {} }
+    | { operational: {} }
+    | { reduceOnly: {} }
+    | null;
+
+  oracleMaxConfidence: number | null;
+  oracleMaxAge: number | null;
+  permissionlessBadDebtSettlement: boolean | null;
+  freezeSettings: boolean | null;
+  tokenlessRepaymentsAllowed: boolean | null;
+};
+
