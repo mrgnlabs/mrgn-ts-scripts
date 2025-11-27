@@ -44,13 +44,19 @@ const config: Config = {
 };
 
 async function main() {
+  await updateLut(sendTx, config, "/.config/stage/id.json");
+}
+
+export async function updateLut(
+  sendTx: boolean,
+  config: Config,
+  walletPath: string
+) {
   loadEnvFile(".env.api");
   const apiUrl = process.env.API_URL || DEFAULT_API_URL;
   console.log("api: " + apiUrl);
   const connection = new Connection(apiUrl, "confirmed");
-  const wallet = loadKeypairFromFile(
-    process.env.HOME + "/.config/stage/id.json"
-  );
+  const wallet = loadKeypairFromFile(process.env.HOME + walletPath);
 
   const transaction = new Transaction();
 
@@ -114,6 +120,8 @@ async function main() {
   }
 }
 
-main().catch((err) => {
-  console.error(err);
-});
+if (require.main === module) {
+  main().catch((err) => {
+    console.error(err);
+  });
+}

@@ -60,8 +60,8 @@ type Config = {
 
 const prodKaminoTestconfig: Config = {
   PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-  BANK: new PublicKey("w7rEzN9zrQjwZN7LYRtigv4XSd1gnmGYmKz8YSCQC8f"),
-  ACCOUNT: new PublicKey("89ViS63BocuvZx5NE5oS9tBJ4ZbKZe3GkvurxHuSqFhz"),
+  BANK: new PublicKey("Ay8kyX7q2G9Yp3T6Nt8Z3p8xcMeaC19xLQjmGjTX2niq"),
+  ACCOUNT: new PublicKey("FvRj5WiHZh6mU9TSsgAeJinDeSAkBmPvbJHJCqXAxCsH"),
   AMOUNT: new BN(40 * 10 ** 6), // 40 USDC
   WITHDRAW_ALL: true,
 
@@ -74,26 +74,8 @@ const prodKaminoTestconfig: Config = {
   LUT: new PublicKey("FtQ5uKQvFoKQ27SWY15tgBeJQnGKmKGzWqDz7kGUbeiq"),
 
   NEW_REMAINING: [
-    new PublicKey("GcifFUfAfE18eyLwottPVqGcGJzKF1tcQrAbxj6xwfwi"),
-    new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
-
-    new PublicKey("BJXzzbvcfcjh95oidYJ8PvzQdu4kozYqfPN5Nbm1QmcW"),
-    new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
-
-    new PublicKey("BCAUSwpinknASD9uuiT5Fm13TvzNgVPJk5sRTEwHQqmE"),
-    new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
-
-    new PublicKey("8LkHC2Gh17H4KmdaPU788NgiehMXZRhtXkLgDgcMVUh8"),
-    new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
-
-    new PublicKey("7VVKtodpVdfNZbYa9BR4HTMmGhrBkji5cHo4L6A5pq4R"),
-    new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
-
-    new PublicKey("75D5Cs7z5S53ZwzXLSQhSF2upyitArZrgWY6WvkgABd7"),
-    new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
-
-    new PublicKey("MdyhEhSQKXsobV8dSg4ySVwJ1e9Qdb8RQdPfzFyoxqF"),
-    new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
+    new PublicKey("CVjHEnJWKELsbFt37znC2nq4KNrwTf7w42fcfySEifNu"),
+    new PublicKey("DBE3N8uNjhKPRHfANdwGvCZghWXyLPdqdSbEW2XFwBiX"),
   ],
   ADD_COMPUTE_UNITS: true,
 };
@@ -101,10 +83,15 @@ const prodKaminoTestconfig: Config = {
 const config = prodKaminoTestconfig;
 
 async function main() {
-  await withdrawKamino(sendTx, config, "/.config/arena/id.json");
+  await withdrawKamino(sendTx, config, "/.config/stage/id.json");
 }
 
-export async function withdrawKamino(sendTx: boolean, config: Config, walletPath: string, version?: "current") {
+export async function withdrawKamino(
+  sendTx: boolean,
+  config: Config,
+  walletPath: string,
+  version?: "current"
+) {
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
@@ -238,6 +225,8 @@ export async function withdrawKamino(sendTx: boolean, config: Config, walletPath
   }
 }
 
-main().catch((err) => {
-  console.error(err);
-});
+if (require.main === module) {
+  main().catch((err) => {
+    console.error(err);
+  });
+}

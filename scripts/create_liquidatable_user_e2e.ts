@@ -29,6 +29,7 @@ export type Config = {
   KAMINO_MARKET: PublicKey;
   KAMINO_RESERVE_ORACLE: PublicKey;
   KAMINO_FARM_STATE: PublicKey;
+  LUT: PublicKey;
 };
 
 export type State = {
@@ -57,6 +58,7 @@ const config: Config = {
   KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"), // main
   KAMINO_RESERVE_ORACLE: new PublicKey("3t4JZcueEzTbVP6kLxXrL3VpWx45jDer4eqysweBchNH"), 
   KAMINO_FARM_STATE: new PublicKey("JAvnB9AKtgPsTEoKmn24Bq64UMoYcrtWtq42HHBdsPkh"),
+  LUT: new PublicKey("FtQ5uKQvFoKQ27SWY15tgBeJQnGKmKGzWqDz7kGUbeiq"),
 };
 
 async function main() {
@@ -278,6 +280,7 @@ function serializeConfig(config: Config): any {
     KAMINO_MARKET: pkToString(config.KAMINO_MARKET),
     KAMINO_RESERVE_ORACLE: pkToString(config.KAMINO_RESERVE_ORACLE),
     KAMINO_FARM_STATE: pkToString(config.KAMINO_FARM_STATE),
+    LUT: pkToString(config.LUT),
   };
 }
 

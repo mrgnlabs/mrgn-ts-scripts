@@ -44,10 +44,10 @@ const examples: Record<string, Config> = {
   },
   depositBonkKamino: {
     PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-    ACCOUNT: new PublicKey("3VbTuhoZrLdHkrvUyxZffKgJ247GweRE62AEgXPx9ghM"),
-    BANK: new PublicKey("7ApaDMRXcHvh8Q3QcoZ5bM3JD1vtd3BX3zsDJuM8TGy6"),
+    ACCOUNT: new PublicKey("FvRj5WiHZh6mU9TSsgAeJinDeSAkBmPvbJHJCqXAxCsH"),
+    BANK: new PublicKey("CVjHEnJWKELsbFt37znC2nq4KNrwTf7w42fcfySEifNu"),
     MINT: new PublicKey("DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263"),
-    AMOUNT: new BN(50000 * 10 ** 5), // 50'000 BONK (** 5 decimals)
+    AMOUNT: new BN(10000 * 10 ** 5), // 10'000 BONK (** 5 decimals)
     // REMAINING: [
     //   new PublicKey("7ApaDMRXcHvh8Q3QcoZ5bM3JD1vtd3BX3zsDJuM8TGy6"), // bonk bank
     //   new PublicKey("DBE3N8uNjhKPRHfANdwGvCZghWXyLPdqdSbEW2XFwBiX"), // bonk oracle
@@ -68,7 +68,7 @@ const examples: Record<string, Config> = {
   }
 };
 
-const config = examples.depositUSDCKamino;
+const config = examples.depositBonkKamino;
 
 // const config: Config = {
 //   PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
