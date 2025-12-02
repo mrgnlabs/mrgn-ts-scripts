@@ -2,98 +2,11 @@
   "address": "",
   "metadata": {
     "name": "marginfi",
-    "version": "0.1.5",
+    "version": "0.1.6",
     "spec": "0.1.0",
-    "description": "Created with Anchor"
+    "description": "Borrow Lending Prime Broker"
   },
   "instructions": [
-    {
-      "name": "admin_super_withdraw",
-      "docs": [
-        "(Arena admin) used to withdraw funds from arena liquidity pools to sunset them. Only",
-        "hard-coded arena banks can call this function."
-      ],
-      "discriminator": [
-        252,
-        21,
-        98,
-        115,
-        66,
-        189,
-        134,
-        13
-      ],
-      "accounts": [
-        {
-          "name": "group",
-          "relations": [
-            "bank"
-          ]
-        },
-        {
-          "name": "admin",
-          "signer": true,
-          "relations": [
-            "group"
-          ]
-        },
-        {
-          "name": "bank",
-          "writable": true
-        },
-        {
-          "name": "destination_token_account",
-          "writable": true
-        },
-        {
-          "name": "bank_liquidity_vault_authority",
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  108,
-                  105,
-                  113,
-                  117,
-                  105,
-                  100,
-                  105,
-                  116,
-                  121,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116,
-                  95,
-                  97,
-                  117,
-                  116,
-                  104
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "bank"
-              }
-            ]
-          }
-        },
-        {
-          "name": "liquidity_vault",
-          "writable": true,
-          "relations": [
-            "bank"
-          ]
-        },
-        {
-          "name": "token_program"
-        }
-      ],
-      "args": []
-    },
     {
       "name": "config_group_fee",
       "docs": [
@@ -151,6 +64,41 @@
         {
           "name": "enable_program_fee",
           "type": "bool"
+        }
+      ]
+    },
+    {
+      "name": "configure_deleverage_withdrawal_limit",
+      "docs": [
+        "(group admin only) Set the daily withdrawal limit for deleverages per group."
+      ],
+      "discriminator": [
+        28,
+        132,
+        205,
+        158,
+        67,
+        77,
+        177,
+        63
+      ],
+      "accounts": [
+        {
+          "name": "marginfi_group",
+          "writable": true
+        },
+        {
+          "name": "admin",
+          "signer": true,
+          "relations": [
+            "marginfi_group"
+          ]
+        }
+      ],
+      "args": [
+        {
+          "name": "limit",
+          "type": "u32"
         }
       ]
     },
@@ -288,6 +236,46 @@
       ]
     },
     {
+      "name": "end_deleverage",
+      "discriminator": [
+        114,
+        14,
+        250,
+        143,
+        252,
+        104,
+        214,
+        209
+      ],
+      "accounts": [
+        {
+          "name": "marginfi_account",
+          "writable": true
+        },
+        {
+          "name": "liquidation_record",
+          "writable": true,
+          "relations": [
+            "marginfi_account"
+          ]
+        },
+        {
+          "name": "group",
+          "relations": [
+            "marginfi_account"
+          ]
+        },
+        {
+          "name": "risk_admin",
+          "signer": true,
+          "relations": [
+            "group"
+          ]
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "end_liquidation",
       "discriminator": [
         110,
@@ -351,6 +339,68 @@
           "relations": [
             "fee_state"
           ]
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "init_bank_metadata",
+      "docs": [
+        "(permissionless) pay the rent to open a bank's metadata."
+      ],
+      "discriminator": [
+        94,
+        239,
+        50,
+        136,
+        137,
+        204,
+        254,
+        213
+      ],
+      "accounts": [
+        {
+          "name": "bank"
+        },
+        {
+          "name": "fee_payer",
+          "docs": [
+            "Pays the init fee"
+          ],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "metadata",
+          "docs": [
+            "Note: unique per-bank."
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  101,
+                  116,
+                  97,
+                  100,
+                  97,
+                  116,
+                  97
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          }
         },
         {
           "name": "system_program",
@@ -1158,6 +1208,7 @@
       "accounts": [
         {
           "name": "group",
+          "writable": true,
           "relations": [
             "marginfi_account",
             "bank"
@@ -1748,6 +1799,14 @@
         {
           "name": "asset_amount",
           "type": "u64"
+        },
+        {
+          "name": "liquidatee_accounts",
+          "type": "u8"
+        },
+        {
+          "name": "liquidator_accounts",
+          "type": "u8"
         }
       ]
     },
@@ -1805,10 +1864,10 @@
         {
           "name": "authority",
           "docs": [
-            "Must be marginfi_account's authority, unless in liquidation receivership",
+            "Must be marginfi_account's authority, unless in liquidation/deleverage receivership",
             "",
-            "Note: during liquidation, there are no signer checks whatsoever: any key can repay as",
-            "long as the invariants checked at the end of liquidation are met."
+            "Note: during receivership, there are no signer checks whatsoever: any key can repay as",
+            "long as the invariants checked at the end of receivership are met."
           ],
           "signer": true
         },
@@ -1869,32 +1928,6 @@
       "args": []
     },
     {
-      "name": "lending_account_sort_balances",
-      "docs": [
-        "(Permissionless) Sorts the lending account balances in descending order and removes the \"gaps\"",
-        "(i.e. inactive balances in between the active ones), if any.",
-        "This is necessary to ensure any legacy marginfi accounts are compliant with the",
-        "\"gapless and sorted\" requirements we now have."
-      ],
-      "discriminator": [
-        187,
-        194,
-        110,
-        84,
-        82,
-        170,
-        204,
-        9
-      ],
-      "accounts": [
-        {
-          "name": "marginfi_account",
-          "writable": true
-        }
-      ],
-      "args": []
-    },
-    {
       "name": "lending_account_start_flashloan",
       "discriminator": [
         14,
@@ -1945,6 +1978,7 @@
       "accounts": [
         {
           "name": "group",
+          "writable": true,
           "relations": [
             "marginfi_account",
             "bank"
@@ -1957,10 +1991,10 @@
         {
           "name": "authority",
           "docs": [
-            "Must be marginfi_account's authority, unless in liquidation receivership",
+            "Must be marginfi_account's authority, unless in liquidation/deleverage receivership",
             "",
-            "Note: during liquidation, there are no signer checks whatsoever: any key can repay as",
-            "long as the invariants checked at the end of liquidation are met."
+            "Note: during receivership, there are no signer checks whatsoever: any key can repay as",
+            "long as the invariants checked at the end of receivership are met."
           ],
           "signer": true
         },
@@ -3495,6 +3529,276 @@
       ]
     },
     {
+      "name": "lending_pool_clone_bank",
+      "docs": [
+        "Staging or localnet only, panics on mainnet"
+      ],
+      "discriminator": [
+        214,
+        93,
+        17,
+        236,
+        177,
+        228,
+        78,
+        17
+      ],
+      "accounts": [
+        {
+          "name": "marginfi_group",
+          "writable": true
+        },
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "marginfi_group"
+          ]
+        },
+        {
+          "name": "fee_payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "bank_mint"
+        },
+        {
+          "name": "source_bank",
+          "docs": [
+            "Source bank to clone from mainnet program",
+            ""
+          ]
+        },
+        {
+          "name": "bank",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "marginfi_group"
+              },
+              {
+                "kind": "account",
+                "path": "bank_mint"
+              },
+              {
+                "kind": "arg",
+                "path": "bank_seed"
+              }
+            ]
+          }
+        },
+        {
+          "name": "liquidity_vault_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  108,
+                  105,
+                  113,
+                  117,
+                  105,
+                  100,
+                  105,
+                  116,
+                  121,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          }
+        },
+        {
+          "name": "liquidity_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  108,
+                  105,
+                  113,
+                  117,
+                  105,
+                  100,
+                  105,
+                  116,
+                  121,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          }
+        },
+        {
+          "name": "insurance_vault_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  110,
+                  115,
+                  117,
+                  114,
+                  97,
+                  110,
+                  99,
+                  101,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          }
+        },
+        {
+          "name": "insurance_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  110,
+                  115,
+                  117,
+                  114,
+                  97,
+                  110,
+                  99,
+                  101,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          }
+        },
+        {
+          "name": "fee_vault_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  101,
+                  101,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          }
+        },
+        {
+          "name": "fee_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  101,
+                  101,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_program"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "bank_seed",
+          "type": "u64"
+        }
+      ]
+    },
+    {
       "name": "lending_pool_close_bank",
       "discriminator": [
         22,
@@ -4099,6 +4403,51 @@
         }
       ],
       "args": []
+    },
+    {
+      "name": "lending_pool_set_fixed_oracle_price",
+      "docs": [
+        "(admin only)"
+      ],
+      "discriminator": [
+        28,
+        126,
+        127,
+        127,
+        60,
+        37,
+        211,
+        125
+      ],
+      "accounts": [
+        {
+          "name": "group",
+          "relations": [
+            "bank"
+          ]
+        },
+        {
+          "name": "admin",
+          "signer": true,
+          "relations": [
+            "group"
+          ]
+        },
+        {
+          "name": "bank",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "price",
+          "type": {
+            "defined": {
+              "name": "WrappedI80F48"
+            }
+          }
+        }
+      ]
     },
     {
       "name": "lending_pool_setup_emissions",
@@ -5037,6 +5386,14 @@
           "type": "pubkey"
         },
         {
+          "name": "new_metadata_admin",
+          "type": "pubkey"
+        },
+        {
+          "name": "new_risk_admin",
+          "type": "pubkey"
+        },
+        {
           "name": "is_arena_group",
           "type": "bool"
         }
@@ -5096,6 +5453,30 @@
           "type": "bool"
         }
       ]
+    },
+    {
+      "name": "migrate_curve",
+      "docs": [
+        "(Permissionless) Convert a bank from the legacy curve setup to the new setup, with no effect",
+        "on how interest accrues."
+      ],
+      "discriminator": [
+        151,
+        254,
+        50,
+        13,
+        112,
+        235,
+        152,
+        72
+      ],
+      "accounts": [
+        {
+          "name": "bank",
+          "writable": true
+        }
+      ],
+      "args": []
     },
     {
       "name": "panic_pause",
@@ -5306,6 +5687,104 @@
         {
           "name": "bank",
           "writable": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "purge_deleverage_balance",
+      "docs": [
+        "(risk admin only) Purge a user's lending balance without withdrawing anything. Only usable",
+        "after all the debt has been settled on a bank in deleveraging mode, e.g. when",
+        "`TOKENLESS_REPAYMENTS_ALLOWED` and `TOKENLESS_REPAYMENTS_COMPLETE`. used to purge remaining",
+        "lending assets in a now-worthless bank before it is fully sunset."
+      ],
+      "discriminator": [
+        132,
+        187,
+        25,
+        149,
+        181,
+        59,
+        253,
+        136
+      ],
+      "accounts": [
+        {
+          "name": "group",
+          "relations": [
+            "marginfi_account",
+            "bank"
+          ]
+        },
+        {
+          "name": "marginfi_account",
+          "writable": true
+        },
+        {
+          "name": "risk_admin",
+          "signer": true,
+          "relations": [
+            "group"
+          ]
+        },
+        {
+          "name": "bank",
+          "writable": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "start_deleverage",
+      "discriminator": [
+        10,
+        138,
+        10,
+        57,
+        40,
+        232,
+        182,
+        193
+      ],
+      "accounts": [
+        {
+          "name": "marginfi_account",
+          "docs": [
+            "Account to deleverage"
+          ],
+          "writable": true
+        },
+        {
+          "name": "liquidation_record",
+          "docs": [
+            "The associated liquidation record PDA for the given `marginfi_account`"
+          ],
+          "writable": true,
+          "relations": [
+            "marginfi_account"
+          ]
+        },
+        {
+          "name": "group",
+          "relations": [
+            "marginfi_account"
+          ]
+        },
+        {
+          "name": "risk_admin",
+          "docs": [
+            "The risk admin will have the authority to withdraw/repay as if they are the user authority",
+            "until the end of the tx."
+          ],
+          "signer": true,
+          "relations": [
+            "group"
+          ]
+        },
+        {
+          "name": "instruction_sysvar",
+          "address": "Sysvar1nstructions1111111111111111111111111"
         }
       ],
       "args": []
@@ -5530,6 +6009,63 @@
           }
         }
       ]
+    },
+    {
+      "name": "write_bank_metadata",
+      "docs": [
+        "(metadata admin only) Write ticker/descrption information for a bank on-chain. Optional, not",
+        "all Banks are guranteed to have metadata."
+      ],
+      "discriminator": [
+        147,
+        78,
+        81,
+        133,
+        129,
+        138,
+        233,
+        59
+      ],
+      "accounts": [
+        {
+          "name": "group",
+          "relations": [
+            "bank"
+          ]
+        },
+        {
+          "name": "bank",
+          "relations": [
+            "metadata"
+          ]
+        },
+        {
+          "name": "metadata_admin",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "group"
+          ]
+        },
+        {
+          "name": "metadata",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "ticker",
+          "type": {
+            "option": "bytes"
+          }
+        },
+        {
+          "name": "description",
+          "type": {
+            "option": "bytes"
+          }
+        }
+      ]
     }
   ],
   "accounts": [
@@ -5544,6 +6080,19 @@
         66,
         97,
         188
+      ]
+    },
+    {
+      "name": "BankMetadata",
+      "discriminator": [
+        49,
+        207,
+        31,
+        34,
+        67,
+        225,
+        169,
+        186
       ]
     },
     {
@@ -5639,6 +6188,19 @@
     }
   ],
   "events": [
+    {
+      "name": "DeleverageEvent",
+      "discriminator": [
+        161,
+        8,
+        108,
+        204,
+        209,
+        198,
+        12,
+        30
+      ]
+    },
     {
       "name": "EditStakedSettingsEvent",
       "discriminator": [
@@ -5819,6 +6381,19 @@
         94,
         10,
         57
+      ]
+    },
+    {
+      "name": "LendingPoolBankSetFixedOraclePriceEvent",
+      "discriminator": [
+        65,
+        72,
+        8,
+        85,
+        229,
+        20,
+        90,
+        26
       ]
     },
     {
@@ -6295,8 +6870,8 @@
     },
     {
       "code": 6081,
-      "name": "Placeholder81",
-      "msg": "Reserved for future use"
+      "name": "MetadataTooLong",
+      "msg": "Metadata is too long"
     },
     {
       "code": 6082,
@@ -6347,6 +6922,61 @@
       "code": 6091,
       "name": "NotAllowedInCPI",
       "msg": "Start and end liquidation and flashloan must be top-level instructions"
+    },
+    {
+      "code": 6092,
+      "name": "ZeroSupplyInStakePool",
+      "msg": "Stake pool supply is zero: cannot compute price"
+    },
+    {
+      "code": 6093,
+      "name": "InvalidGroup",
+      "msg": "Invalid group: account constraint violated"
+    },
+    {
+      "code": 6094,
+      "name": "InvalidLiquidityVault",
+      "msg": "Invalid liquidity vault: account constraint violated"
+    },
+    {
+      "code": 6095,
+      "name": "InvalidLiquidationRecord",
+      "msg": "Invalid liquidation record: account constraint violated"
+    },
+    {
+      "code": 6096,
+      "name": "InvalidLiquidationReceiver",
+      "msg": "Invalid liquidation receiver: account constraint violated"
+    },
+    {
+      "code": 6097,
+      "name": "InvalidEmissionsMint",
+      "msg": "Invalid emissions mint: account constraint violated"
+    },
+    {
+      "code": 6098,
+      "name": "InvalidMint",
+      "msg": "Invalid mint: account constraint violated"
+    },
+    {
+      "code": 6099,
+      "name": "InvalidFeeWallet",
+      "msg": "Invalid fee wallet: account constraint violated"
+    },
+    {
+      "code": 6100,
+      "name": "FixedOraclePriceNegative",
+      "msg": "Fixed oracle price must be zero or greater"
+    },
+    {
+      "code": 6101,
+      "name": "DailyWithdrawalLimitExceeded",
+      "msg": "Daily withdrawal limit exceeded: try again later"
+    },
+    {
+      "code": 6102,
+      "name": "ZeroWithdrawalLimit",
+      "msg": "Cannot set daily withdrawal limit to zero"
     },
     {
       "code": 6200,
@@ -6412,6 +7042,16 @@
       "code": 6212,
       "name": "KaminoPositionLimitExceeded",
       "msg": "Maximum Kamino positions limit exceeded (max 8 positions per account)"
+    },
+    {
+      "code": 6213,
+      "name": "InvalidKaminoReserve",
+      "msg": "Invalid Kamino reserve: account constraint violated"
+    },
+    {
+      "code": 6214,
+      "name": "InvalidKaminoObligation",
+      "msg": "Invalid Kamino obligation: account constraint violated"
     }
   ],
   "types": [
@@ -6696,6 +7336,8 @@
               "- EMISSIONS_FLAG_LENDING_ACTIVE: 2",
               "- PERMISSIONLESS_BAD_DEBT_SETTLEMENT: 4",
               "- FREEZE_SETTINGS: 8",
+              "- CLOSE_ENABLED_FLAG: 16",
+              "- TOKENLESS_REPAYMENTS_ACTIVE: 32",
               ""
             ],
             "type": "u64"
@@ -7069,11 +7711,22 @@
             "type": "u32"
           },
           {
+            "name": "fixed_price",
+            "docs": [
+              "Stored oracle price for `OracleSetup::Fixed`, otherwise does nothing"
+            ],
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
             "name": "_padding1",
             "type": {
               "array": [
                 "u8",
-                32
+                16
               ]
             }
           }
@@ -7344,6 +7997,107 @@
             "type": {
               "option": "bool"
             }
+          },
+          {
+            "name": "tokenless_repayments_allowed",
+            "type": {
+              "option": "bool"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "BankMetadata",
+      "serialization": "bytemuck",
+      "repr": {
+        "kind": "c"
+      },
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bank",
+            "docs": [
+              "Bank this metadata corresponds to"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "placeholder",
+            "type": "u64"
+          },
+          {
+            "name": "ticker",
+            "docs": [
+              "The token's ticker name, e.g. USDC",
+              "* utf-8"
+            ],
+            "type": {
+              "array": [
+                "u8",
+                64
+              ]
+            }
+          },
+          {
+            "name": "description",
+            "docs": [
+              "The token's plain english descripion, e.g US Dollar Coin",
+              "* utf-8"
+            ],
+            "type": {
+              "array": [
+                "u8",
+                128
+              ]
+            }
+          },
+          {
+            "name": "data_blob",
+            "docs": [
+              "Reserved for future use. Room for a very small icon or something else cool"
+            ],
+            "type": {
+              "array": [
+                "u8",
+                256
+              ]
+            }
+          },
+          {
+            "name": "end_description_byte",
+            "docs": [
+              "The last data byte in description (padding follows)"
+            ],
+            "type": "u16"
+          },
+          {
+            "name": "end_data_blob",
+            "docs": [
+              "The last data byte in data_blob (padding follows)"
+            ],
+            "type": "u16"
+          },
+          {
+            "name": "end_ticker_byte",
+            "docs": [
+              "The last data byte in ticker (padding follows)"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "_pad0",
+            "type": {
+              "array": [
+                "u8",
+                2
+              ]
+            }
           }
         ]
       }
@@ -7367,6 +8121,30 @@
           },
           {
             "name": "KilledByBankruptcy"
+          }
+        ]
+      }
+    },
+    {
+      "name": "DeleverageEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "marginfi_account",
+            "type": "pubkey"
+          },
+          {
+            "name": "risk_admin",
+            "type": "pubkey"
+          },
+          {
+            "name": "deleveragee_assets_seized",
+            "type": "f64"
+          },
+          {
+            "name": "deleveragee_liability_repaid",
+            "type": "f64"
           }
         ]
       }
@@ -8058,7 +8836,69 @@
             }
           },
           {
-            "name": "_padding0",
+            "name": "zero_util_rate",
+            "docs": [
+              "The base rate at utilization = 0",
+              "* a %, as u32, out of 1000%, e.g. 100% = 0.1 * u32::MAX"
+            ],
+            "type": "u32"
+          },
+          {
+            "name": "hundred_util_rate",
+            "docs": [
+              "The base rate at utilization = 100",
+              "* a %, as u32, out of 1000%, e.g. 100% = 0.1 * u32::MAX"
+            ],
+            "type": "u32"
+          },
+          {
+            "name": "points",
+            "docs": [
+              "The base rate at various points between 0 and 100%, exclusive. Essentially a piece-wise",
+              "linear curve.",
+              "* always in ascending order, e.g. points[0] = first kink point, points[1] = second kink",
+              "point, and so forth.",
+              "* points where util = 0 are unused"
+            ],
+            "type": {
+              "array": [
+                {
+                  "defined": {
+                    "name": "RatePoint"
+                  }
+                },
+                5
+              ]
+            }
+          },
+          {
+            "name": "curve_type",
+            "docs": [
+              "Determines which interest rate curve implementation is active. 0 (INTEREST_CURVE_LEGACY) =",
+              "legacy three point curve, 1 (INTEREST_CURVE_SEVEN_POINT) = multi-point curve."
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "_pad0",
+            "type": {
+              "array": [
+                "u8",
+                7
+              ]
+            }
+          },
+          {
+            "name": "_padding1",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "_padding2",
             "type": {
               "array": [
                 "u8",
@@ -8067,16 +8907,11 @@
             }
           },
           {
-            "name": "_padding1",
+            "name": "_padding3",
             "type": {
               "array": [
-                {
-                  "array": [
-                    "u8",
-                    32
-                  ]
-                },
-                3
+                "u8",
+                8
               ]
             }
           }
@@ -8092,30 +8927,6 @@
         "kind": "struct",
         "fields": [
           {
-            "name": "optimal_utilization_rate",
-            "type": {
-              "defined": {
-                "name": "WrappedI80F48"
-              }
-            }
-          },
-          {
-            "name": "plateau_interest_rate",
-            "type": {
-              "defined": {
-                "name": "WrappedI80F48"
-              }
-            }
-          },
-          {
-            "name": "max_interest_rate",
-            "type": {
-              "defined": {
-                "name": "WrappedI80F48"
-              }
-            }
-          },
-          {
             "name": "insurance_fee_fixed_apr",
             "type": {
               "defined": {
@@ -8153,6 +8964,42 @@
               "defined": {
                 "name": "WrappedI80F48"
               }
+            }
+          },
+          {
+            "name": "zero_util_rate",
+            "docs": [
+              "The base rate at utilization = 0",
+              "* a %, as u32, out of 1000%, e.g. 100% = 0.1 * u32::MAX"
+            ],
+            "type": "u32"
+          },
+          {
+            "name": "hundred_util_rate",
+            "docs": [
+              "The base rate at utilization = 100",
+              "* a %, as u32, out of 1000%, e.g. 100% = 0.1 * u32::MAX"
+            ],
+            "type": "u32"
+          },
+          {
+            "name": "points",
+            "docs": [
+              "The base rate at various points between 0 and 100%, exclusive. Essentially a piece-wise",
+              "linear curve.",
+              "* always in ascending order, e.g. points[0] = first kink point, points[1] = second kink",
+              "point, and so forth.",
+              "* points where util = 0 are unused"
+            ],
+            "type": {
+              "array": [
+                {
+                  "defined": {
+                    "name": "RatePoint"
+                  }
+                },
+                5
+              ]
             }
           }
         ]
@@ -8164,36 +9011,6 @@
         "kind": "struct",
         "fields": [
           {
-            "name": "optimal_utilization_rate",
-            "type": {
-              "option": {
-                "defined": {
-                  "name": "WrappedI80F48"
-                }
-              }
-            }
-          },
-          {
-            "name": "plateau_interest_rate",
-            "type": {
-              "option": {
-                "defined": {
-                  "name": "WrappedI80F48"
-                }
-              }
-            }
-          },
-          {
-            "name": "max_interest_rate",
-            "type": {
-              "option": {
-                "defined": {
-                  "name": "WrappedI80F48"
-                }
-              }
-            }
-          },
-          {
             "name": "insurance_fee_fixed_apr",
             "type": {
               "option": {
@@ -8240,6 +9057,48 @@
                 "defined": {
                   "name": "WrappedI80F48"
                 }
+              }
+            }
+          },
+          {
+            "name": "zero_util_rate",
+            "docs": [
+              "The base rate at utilization = 0",
+              "* a %, as u32, out of 1000%, e.g. 100% = 0.1 * u32::MAX"
+            ],
+            "type": {
+              "option": "u32"
+            }
+          },
+          {
+            "name": "hundred_util_rate",
+            "docs": [
+              "The base rate at utilization = 100",
+              "* a %, as u32, out of 1000%, e.g. 100% = 0.1 * u32::MAX"
+            ],
+            "type": {
+              "option": "u32"
+            }
+          },
+          {
+            "name": "points",
+            "docs": [
+              "The base rate at various points between 0 and 100%, exclusive. Essentially a piece-wise",
+              "linear curve.",
+              "* always in ascending order, e.g. points[0] = first kink point, points[1] = second kink",
+              "point, and so forth.",
+              "* points where util = 0 are unused"
+            ],
+            "type": {
+              "option": {
+                "array": [
+                  {
+                    "defined": {
+                      "name": "RatePoint"
+                    }
+                  },
+                  5
+                ]
               }
             }
           }
@@ -8781,6 +9640,34 @@
           {
             "name": "socialized_amount",
             "type": "f64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "LendingPoolBankSetFixedOraclePriceEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "header",
+            "type": {
+              "defined": {
+                "name": "GroupEventHeader"
+              }
+            }
+          },
+          {
+            "name": "bank",
+            "type": "pubkey"
+          },
+          {
+            "name": "price",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
           }
         ]
       }
@@ -9349,6 +10236,33 @@
             }
           },
           {
+            "name": "deleverage_withdraw_window_cache",
+            "docs": [
+              "Keeps track of the liquidity withdrawn from the group over the day as a result of",
+              "deleverages. Used as a protection mechanism against too big (and unwanted) withdrawals (e.g.",
+              "when the risk admin is compromised)."
+            ],
+            "type": {
+              "defined": {
+                "name": "WithdrawWindowCache"
+              }
+            }
+          },
+          {
+            "name": "risk_admin",
+            "docs": [
+              "Can run bankruptcy and forced deleverage ixes to e.g. sunset risky/illiquid assets"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "metadata_admin",
+            "docs": [
+              "Can modify a Bank's metadata, and nothing else."
+            ],
+            "type": "pubkey"
+          },
+          {
             "name": "_padding_0",
             "type": {
               "array": [
@@ -9358,7 +10272,7 @@
                     2
                   ]
                 },
-                17
+                12
               ]
             }
           },
@@ -10031,6 +10945,9 @@
           },
           {
             "name": "KaminoSwitchboardPull"
+          },
+          {
+            "name": "Fixed"
           }
         ]
       }
@@ -10146,6 +11063,33 @@
               "Timestamp when this cache was last updated"
             ],
             "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "RatePoint",
+      "repr": {
+        "kind": "c"
+      },
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "util",
+            "docs": [
+              "The utilization rate where `rate` applies",
+              "* a %, as u32, out of 100%, e.g. 50% = .5 * u32::MAX"
+            ],
+            "type": "u32"
+          },
+          {
+            "name": "rate",
+            "docs": [
+              "The base rate that applies",
+              "* a %, as u32, out of 1000%, e.g. 100% = 0.1 * u32::MAX"
+            ],
+            "type": "u32"
           }
         ]
       }
@@ -10399,6 +11343,29 @@
                 }
               }
             }
+          }
+        ]
+      }
+    },
+    {
+      "name": "WithdrawWindowCache",
+      "repr": {
+        "kind": "c"
+      },
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "daily_limit",
+            "type": "u32"
+          },
+          {
+            "name": "withdrawn_today",
+            "type": "u32"
+          },
+          {
+            "name": "last_daily_reset_timestamp",
+            "type": "i64"
           }
         ]
       }

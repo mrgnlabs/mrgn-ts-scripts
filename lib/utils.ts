@@ -6,7 +6,6 @@ import {
   Connection,
   Keypair,
   PublicKey,
-  sendAndConfirmTransaction,
   Transaction,
   TransactionInstruction,
   TransactionMessage,
@@ -31,13 +30,12 @@ import {
   MARGINFI_SPONSORED_SHARD_ID,
 } from "./constants";
 import { Environment, MarginfiAccountRaw } from "@mrgnlabs/marginfi-client-v2";
-import { Marginfi } from "../idl/marginfi_kamino";
-import { AnchorProvider, Program, Provider } from "@coral-xyz/anchor";
-import { loadSponsoredOracle } from "./pyth-oracle-helpers";
+import { Program, Provider } from "@coral-xyz/anchor";
 import * as sb from "@switchboard-xyz/on-demand";
 import { CrossbarClient } from "@switchboard-xyz/common";
 import { KaminoLending } from "../idl/kamino_lending";
 import { simpleRefreshReserve } from "../scripts/kamino/ixes-common";
+import { Marginfi } from "../idl/marginfi";
 
 export const u32_MAX: number = 4294967295;
 

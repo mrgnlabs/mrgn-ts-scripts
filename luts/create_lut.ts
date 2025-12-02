@@ -7,7 +7,11 @@ import {
 } from "@solana/web3.js";
 import { Program, AnchorProvider, BN } from "@coral-xyz/anchor";
 
-import { DEFAULT_API_URL, loadEnvFile, loadKeypairFromFile } from "../scripts/utils";
+import {
+  DEFAULT_API_URL,
+  loadEnvFile,
+  loadKeypairFromFile,
+} from "../scripts/utils";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 
 /**
@@ -28,26 +32,35 @@ async function main() {
   const apiUrl = process.env.API_URL || DEFAULT_API_URL;
   console.log("api: " + apiUrl);
   const connection = new Connection(apiUrl, "confirmed");
-  const wallet = loadKeypairFromFile(process.env.HOME + "/keys/staging-shared.json");
+  const wallet = loadKeypairFromFile(
+    process.env.HOME + "/.config/stage/id.json"
+  );
 
   const transaction = new Transaction();
   const currentSlot = (await connection.getSlot()) - 1;
 
   // Create a new lookup table. The authority and payer are set to the wallet's public key.
-  const [createLookupTableIx, lutKey] = AddressLookupTableProgram.createLookupTable({
-    authority: wallet.publicKey,
-    payer: wallet.publicKey,
-    recentSlot: currentSlot,
-  });
+  const [createLookupTableIx, lutKey] =
+    AddressLookupTableProgram.createLookupTable({
+      authority: wallet.publicKey,
+      payer: wallet.publicKey,
+      recentSlot: currentSlot,
+    });
   transaction.add(createLookupTableIx);
   console.log("lut key: " + lutKey);
 
   if (sendTx) {
     try {
-      const signature = await sendAndConfirmTransaction(connection, transaction, [wallet]);
+      const signature = await sendAndConfirmTransaction(
+        connection,
+        transaction,
+        [wallet]
+      );
       console.log("Transaction signature:", signature);
     } catch (error) {
-      console.log("NOTE: ERROR DOES NOT MEAN IT ACTUALLY FAILED. CHECK CHAIN FIRST, DON'T WASTE RENT");
+      console.log(
+        "NOTE: ERROR DOES NOT MEAN IT ACTUALLY FAILED. CHECK CHAIN FIRST, DON'T WASTE RENT"
+      );
       console.error("Transaction failed:", error);
     }
   } else {
@@ -62,6 +75,8 @@ async function main() {
   }
 }
 
-main().catch((err) => {
-  console.error(err);
-});
+if (require.main === module) {
+  main().catch((err) => {
+    console.error(err);
+  });
+}

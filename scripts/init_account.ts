@@ -18,20 +18,25 @@ type Config = {
 };
 
 const config: Config = {
-  PROGRAM_ID: "5UDghkpgW1HfYSrmEj2iAApHShqU44H6PKTAar9LL9bY",
-  GROUP: new PublicKey("ERBiJdWtnVBBd4gFm7YVHT3a776x5NbGbJBR5BDvsxtj"),
-  AUTHORITY: new PublicKey("725Z4QQUVhRiXcCdf4cQTrxXYmQXyW9zgVkW5PDVSJz4"),
+  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
+  GROUP: new PublicKey("DnzhBmNmXgwoUSsKxs5LkMmArf95DmgeZQA1G4xuDSQB"),
+  AUTHORITY: new PublicKey("6DdJqQYD8AizuXiCkbn19LiyWRwUsRMzy2Sgyoyasyj7"),
 
   // Not required if sending without multisig.
-  MULTISIG: new PublicKey("ToM1VY97cMeAiyN3MUFKKLuPdG8CaNiqhoDDGJ3a9cg"),
+  //MULTISIG: new PublicKey("ToM1VY97cMeAiyN3MUFKKLuPdG8CaNiqhoDDGJ3a9cg"),
 };
 
 async function main() {
+  await initAccount(sendTx, config, "/.config/stage/id.json");
+}
+
+export async function initAccount(sendTx: boolean, config: Config, walletPath: string, version?: "current"): Promise<PublicKey> {
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
-    "/keys/zerotrade_admin.json",
-    config.MULTISIG
+    walletPath,
+    config.MULTISIG,
+    version
   );
   const program = user.program;
   const connection = user.connection;
@@ -76,8 +81,11 @@ async function main() {
   }
 
   console.log("Account init: " + accountKeypair.publicKey);
+  return accountKeypair.publicKey;
 }
 
-main().catch((err) => {
-  console.error(err);
-});
+if (require.main === module) {
+  main().catch((err) => {
+    console.error(err);
+  });
+}

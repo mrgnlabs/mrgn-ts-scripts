@@ -20,10 +20,8 @@ type Config = {
 };
 
 const config: Config = {
-  PROGRAM_ID: "5UDghkpgW1HfYSrmEj2iAApHShqU44H6PKTAar9LL9bY",
-  ADMIN_KEY: new PublicKey("725Z4QQUVhRiXcCdf4cQTrxXYmQXyW9zgVkW5PDVSJz4"),
-
-  MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
+  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
+  ADMIN_KEY: new PublicKey("6DdJqQYD8AizuXiCkbn19LiyWRwUsRMzy2Sgyoyasyj7"),
 };
 
 const deriveGlobalFeeState = (programId: PublicKey) => {
@@ -34,10 +32,21 @@ const deriveGlobalFeeState = (programId: PublicKey) => {
 };
 
 async function main() {
+  await initGroup(sendTx, config, "/.config/stage/id.json");
+}
+
+export async function initGroup(
+  sendTx: boolean,
+  config: Config,
+  walletPath: string,
+  version?: "current"
+): Promise<PublicKey> {
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
-    "/keys/zerotrade_admin.json"
+    walletPath,
+    config.MULTISIG_PAYER,
+    version
   );
   const program = user.program;
   const connection = user.connection;
@@ -82,8 +91,11 @@ async function main() {
   }
 
   console.log("Group init: " + marginfiGroup.publicKey);
+  return marginfiGroup.publicKey;
 }
 
-main().catch((err) => {
-  console.error(err);
-});
+if (require.main === module) {
+  main().catch((err) => {
+    console.error(err);
+  });
+}
