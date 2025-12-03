@@ -17,7 +17,7 @@ import { RiskTierRaw } from "@mrgnlabs/marginfi-client-v2";
 /**
  * If true, send the tx. If false, output the unsigned b58 tx to console.
  */
-const sendTx = true;
+const sendTx = false;
 
 const ASSET_TAG_DEFAULT = 0;
 

@@ -28,11 +28,10 @@ type Config = {
 };
 
 const config: Config = {
-  LUT: new PublicKey("FtQ5uKQvFoKQ27SWY15tgBeJQnGKmKGzWqDz7kGUbeiq"),
+  LUT: new PublicKey("CQ8omkUwDtsszuJLo9grtXCeEyDU4QqBLRv9AjRDaUZ3"),
   KEYS: [
-    new PublicKey("52AJuRJJcejMYS9nNDCk1vYmyG1uHSsXoSPkctS3EfhA"),
-    new PublicKey("4eFzqYFZr2UnWQqSfwZxB4r1W1kSJ9XG6M6H17Eq4x2Z"),
-    new PublicKey("jLfQHXX6hNnGBECzDraZFZTtFYNXaYzw817eAzGMXUP"),
+    new PublicKey("8w1GuQwSf2w8huS6PzNJVFBwLvYYJ8aaFwxgYLsEK9S6"),
+    new PublicKey("cPQPBN7WubB3zyQDpzTK2ormx1BMdAym9xkrYUJsctm"),
     // new PublicKey("E1dNntvZo6pXmkZq43wommAdxe6qF1wcXkjz2M2QEb14"),
     // new PublicKey("AHTqUF4LyDxCnpHWL89RjsJWGEGXKSYyQPWx3fUAcj1H"),
     // new PublicKey("8nUGEsT5VJijkpnn6fJXWTyyZjExhwipFuDyotqwyzhz"),
@@ -44,7 +43,7 @@ const config: Config = {
 };
 
 async function main() {
-  await updateLut(sendTx, config, "/.config/stage/id.json");
+  await updateLut(sendTx, config, "/keys/phantom-wallet.json");
 }
 
 export async function updateLut(

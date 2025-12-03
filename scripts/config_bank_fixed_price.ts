@@ -22,7 +22,7 @@ type SharedConfig = {
 
 const configCommon: SharedConfig = {
   PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-  ADMIN: new PublicKey("mfC1LoEk4mpM5yx1LjwR9QLZQ49AitxxWkK5Aciw7ZC"),
+  ADMIN: new PublicKey("725Z4QQUVhRiXcCdf4cQTrxXYmQXyW9zgVkW5PDVSJz4"),
   MULTISIG: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 };
 
@@ -34,7 +34,7 @@ type BankOracleConfig = {
 /** One entry per bank to update */
 const configs: BankOracleConfig[] = [
   {
-    bank: new PublicKey("Ek5JSFJFD8QgXM6rPDCzf31XhDp1q3xezaWYSkJWqbqc"),
+    bank: new PublicKey("GM98Qmzdoc7PSD64t7bG5Gqt4XEcZV9RKGcgsFCxTY4e"),
     price: 1,
   },
   // ...More entries here as needed. The limit even without using LUTs is fairly high (at least 6)
@@ -44,7 +44,7 @@ async function main() {
   const user = commonSetup(
     sendTx,
     configCommon.PROGRAM_ID,
-    "/keys/staging-deploy.json",
+    "/keys/zerotrade_admin.json",
     configCommon.MULTISIG,
     "1.6"
   );

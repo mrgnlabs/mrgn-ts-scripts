@@ -15,14 +15,14 @@ type Config = {
 
 const config: Config = {
   PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-  BANK: new PublicKey("6hTqUxXyF6rDPoYAQrFftezorJpC9c5hPr9Go75Saobb"),
+  BANK: new PublicKey("9rhsPZVrya9aqdFRUi9RoSNZTqsmYuU1fdPWLreS4fNo"),
 };
 
 async function main() {
   const user = commonSetup(
     true,
     config.PROGRAM_ID,
-    "/keys/staging-deploy.json",
+    "/keys/zerotrade_admin.json",
     undefined,
     "1.6"
   );
