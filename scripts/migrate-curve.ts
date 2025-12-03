@@ -15,7 +15,7 @@ type Config = {
 
 const config: Config = {
   PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-  BANK: new PublicKey("4Gg6pW1U8W6ZQ22TbUWYRetx2nxjhUAydfKoCTSHhkkG"),
+  BANK: new PublicKey("6hTqUxXyF6rDPoYAQrFftezorJpC9c5hPr9Go75Saobb"),
 };
 
 async function main() {

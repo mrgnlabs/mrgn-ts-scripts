@@ -7,7 +7,7 @@ import {
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 import { commonSetup } from "../lib/common-setup";
 
-const sendTx = false;
+const sendTx = true;
 
 type Config = {
   PROGRAM_ID: string;
@@ -24,14 +24,14 @@ type Config = {
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  ACCOUNT: new PublicKey("GZxaVQQMp7Vv6rF4jYn3FBJwyNujVYibm6TM4ouRp5gR"),
+  ACCOUNT: new PublicKey("C1w1Jw37ci5HeWDFrY8vabcRinxFDPpuYdHfkHTMErxt"),
   // OLD_AUTHORITY: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
-  NEW_AUTHORITY: new PublicKey("DBNRpvecWpcxckFs2uDeuioR8Bcad6v68TDJKPeYBNHG"),
+  NEW_AUTHORITY: new PublicKey("BSQX5SNk8dTMsP6MBkyrH3ET2WdWvWVVpE3wKYPQqaTH"),
   GLOBAL_FEE_WALLET: new PublicKey(
     "CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"
   ),
   ACCOUNT_INDEX: 0,
-  THIRD_PARTY_SEED: 789,
+  THIRD_PARTY_SEED: 615,
 
   MULTISIG: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 };

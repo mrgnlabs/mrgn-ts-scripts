@@ -91,7 +91,7 @@ const config: Config = {
           protocolIrFee: null,
           protocolOriginationFee: null,
         },
-        operationalState: { reduceOnly: {} }, // { operational: {} }
+        operationalState: null, // { reduceOnly: {} } { operational: {} }
         borrowLimit: null,
         riskTier: null, // { collateral: {} }
         totalAssetValueInitLimit: null,

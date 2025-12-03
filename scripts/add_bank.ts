@@ -44,20 +44,20 @@ type Config = {
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
   GROUP_KEY: new PublicKey("4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8"),
-  ORACLE: new PublicKey("HuHwNJoqBQodnzcEwUHBCgRYK826cuT4waT2jFTb7THA"),
+  ORACLE: new PublicKey("8w1GuQwSf2w8huS6PzNJVFBwLvYYJ8aaFwxgYLsEK9S6"),
   ORACLE_TYPE: ORACLE_TYPE_SWB,
   ADMIN: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
   FEE_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
-  BANK_MINT: new PublicKey("oreoU2P8bN6jkk3jbaiVxYnG1dCXcYxwhwyK9jSybcp"),
+  BANK_MINT: new PublicKey("cPQPBN7WubB3zyQDpzTK2ormx1BMdAym9xkrYUJsctm"),
   SEED: 0,
   TOKEN_PROGRAM: TOKEN_PROGRAM_ID,
   MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 };
 
 const rate: InterestRateConfigRaw = {
-  optimalUtilizationRate: bigNumberToWrappedI80F48(0.5),
+  optimalUtilizationRate: bigNumberToWrappedI80F48(0.8),
   plateauInterestRate: bigNumberToWrappedI80F48(0.1),
-  maxInterestRate: bigNumberToWrappedI80F48(3),
+  maxInterestRate: bigNumberToWrappedI80F48(0.56),
   insuranceFeeFixedApr: bigNumberToWrappedI80F48(0),
   insuranceIrFee: bigNumberToWrappedI80F48(0),
   protocolFixedFeeApr: bigNumberToWrappedI80F48(0.00001),
@@ -66,16 +66,16 @@ const rate: InterestRateConfigRaw = {
 };
 
 const bankConfig: BankConfigRaw_v1_4 = {
-  assetWeightInit: bigNumberToWrappedI80F48(0.4),
-  assetWeightMaint: bigNumberToWrappedI80F48(0.5),
-  liabilityWeightInit: bigNumberToWrappedI80F48(1.6),
-  liabilityWeightMaint: bigNumberToWrappedI80F48(1.42),
-  depositLimit: new BN(2000 * 10 ** 11),
+  assetWeightInit: bigNumberToWrappedI80F48(0.65),
+  assetWeightMaint: bigNumberToWrappedI80F48(0.8),
+  liabilityWeightInit: bigNumberToWrappedI80F48(1.3),
+  liabilityWeightMaint: bigNumberToWrappedI80F48(1.2),
+  depositLimit: new BN(20000 * 10 ** 9),
   interestRateConfig: rate,
   operationalState: { operational: {} },
-  borrowLimit: new BN(1000 * 10 ** 11),
+  borrowLimit: new BN(2500 * 10 ** 9),
   riskTier: { collateral: {} },
-  totalAssetValueInitLimit: new BN(500_000),
+  totalAssetValueInitLimit: new BN(10000000),
   oracleMaxAge: 30,
   assetTag: 0,
   oracleMaxConfidence: 0,
@@ -88,7 +88,7 @@ async function main() {
     config.PROGRAM_ID,
     "/keys/staging-admin.json",
     config.MULTISIG_PAYER,
-    "kamino"
+    "current"
   );
   const program = user.program;
   const connection = user.connection;
