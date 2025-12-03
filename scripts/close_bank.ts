@@ -10,16 +10,20 @@ type Config = {
 
 const config: Config = {
   PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-  BANK: new PublicKey("8Ats6Ej699ELxYR4DFTteLiNEXsGRtUNgTauD9LoFPRc"),
+  BANK: new PublicKey("8qPLKaKb4F5BC6mVncKAryMp78yp5ZRGYnPkQbt9ikKt"),
 };
 
 async function main() {
+  await closeBank(sendTx, config, "/.config/stage/id.json");
+}
+
+export async function closeBank(sendTx: boolean, config: Config, walletPath: string, version?: "current") {
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
-    "/keys/staging-deploy.json",
+    walletPath,
     undefined,
-    "current"
+    version
   );
   const program = user.program;
   const connection = user.connection;
@@ -41,6 +45,8 @@ async function main() {
   }
 }
 
-main().catch((err) => {
-  console.error(err);
-});
+if (require.main === module) {
+  main().catch((err) => {
+    console.error(err);
+  });
+}

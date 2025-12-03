@@ -5,7 +5,6 @@ import {
   AccountMeta,
   PublicKey,
 } from "@solana/web3.js";
-import { Marginfi } from "../../idl/marginfi_kamino";
 import { KaminoConfigCompact, KLEND_PROGRAM_ID } from "./kamino-types";
 import {
   deriveBankWithSeed,
@@ -21,6 +20,7 @@ import {
   deriveUserMetadata,
 } from "./pdas";
 import { KaminoLending } from "../../idl/kamino_lending";
+import { Marginfi } from "../../idl/marginfi";
 
 export interface AddKaminoBankArgs {
   seed: BN;
@@ -263,6 +263,69 @@ export const makeKaminoDepositIx = async (
       liquidityTokenProgram: TOKEN_PROGRAM_ID,
       ...accs,
     })
+    .instruction();
+};
+
+const DEFAULT_KAMINO_WITHDRAW_OPTIONAL_ACCOUNTS = {
+  obligationFarmUserState: null,
+  reserveFarmState: null,
+} as const;
+
+export interface KaminoWithdrawAccounts {
+  marginfiAccount: PublicKey;
+  bank: PublicKey;
+  destinationTokenAccount: PublicKey;
+  lendingMarket: PublicKey;
+  reserveLiquidityMint: PublicKey;
+
+  obligationFarmUserState?: PublicKey | null;
+  reserveFarmState?: PublicKey | null;
+}
+
+export const makeKaminoWithdrawIx = async (
+  program: Program<Marginfi>,
+  accounts: KaminoWithdrawAccounts,
+  amount: BN,
+  withdraw_all: boolean,
+  remaining: AccountMeta[]
+): Promise<TransactionInstruction> => {
+  // Merge with defaults...
+  const accs = {
+    ...DEFAULT_KAMINO_WITHDRAW_OPTIONAL_ACCOUNTS,
+    ...accounts,
+  };
+
+  const [lendingMarketAuthority] = deriveLendingMarketAuthority(
+    KLEND_PROGRAM_ID,
+    accounts.lendingMarket
+  );
+  const [reserveLiquiditySupply] = deriveReserveLiquiditySupply(
+    KLEND_PROGRAM_ID,
+    accounts.lendingMarket,
+    accounts.reserveLiquidityMint
+  );
+  const [reserveCollateralMint] = deriveReserveCollateralMint(
+    KLEND_PROGRAM_ID,
+    accounts.lendingMarket,
+    accounts.reserveLiquidityMint
+  );
+  const [reserveCollateralSupply] = deriveReserveCollateralSupply(
+    KLEND_PROGRAM_ID,
+    accounts.lendingMarket,
+    accounts.reserveLiquidityMint
+  );
+
+  return program.methods
+    .kaminoWithdraw(amount, withdraw_all)
+    .accounts({
+      lendingMarketAuthority,
+      reserveLiquiditySupply,
+      reserveCollateralMint,
+      reserveSourceCollateral: reserveCollateralSupply,
+      liquidityTokenProgram: TOKEN_PROGRAM_ID,
+      ...accs,
+    })
+    .remainingAccounts(remaining)
     .instruction();
 };
 

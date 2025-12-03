@@ -18,20 +18,30 @@ type Config = {
 };
 
 const config: Config = {
-  PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  GROUP: new PublicKey("4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8"),
-  AUTHORITY: new PublicKey("H4QMTHMVbJ3KrB5bz573cBBZKoYSZ2B4mSST1JKzPUrH"),
+  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
+  GROUP: new PublicKey("DnzhBmNmXgwoUSsKxs5LkMmArf95DmgeZQA1G4xuDSQB"),
+  AUTHORITY: new PublicKey("6DdJqQYD8AizuXiCkbn19LiyWRwUsRMzy2Sgyoyasyj7"),
 
   // Not required if sending without multisig.
-  MULTISIG: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
+  //MULTISIG: new PublicKey("ToM1VY97cMeAiyN3MUFKKLuPdG8CaNiqhoDDGJ3a9cg"),
 };
 
 async function main() {
+  await initAccount(sendTx, config, "/.config/stage/id.json");
+}
+
+export async function initAccount(
+  sendTx: boolean,
+  config: Config,
+  walletPath: string,
+  version?: "current"
+): Promise<PublicKey> {
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
-    "/keys/phantom-wallet.json",
-    config.MULTISIG
+    walletPath,
+    config.MULTISIG,
+    version
   );
   const program = user.program;
   const connection = user.connection;
@@ -76,8 +86,11 @@ async function main() {
   }
 
   console.log("Account init: " + accountKeypair.publicKey);
+  return accountKeypair.publicKey;
 }
 
-main().catch((err) => {
-  console.error(err);
-});
+if (require.main === module) {
+  main().catch((err) => {
+    console.error(err);
+  });
+}

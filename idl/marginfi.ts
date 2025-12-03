@@ -8,98 +8,11 @@ export type Marginfi = {
   "address": "",
   "metadata": {
     "name": "marginfi",
-    "version": "0.1.5",
+    "version": "0.1.6",
     "spec": "0.1.0",
-    "description": "Created with Anchor"
+    "description": "Borrow Lending Prime Broker"
   },
   "instructions": [
-    {
-      "name": "adminSuperWithdraw",
-      "docs": [
-        "(Arena admin) used to withdraw funds from arena liquidity pools to sunset them. Only",
-        "hard-coded arena banks can call this function."
-      ],
-      "discriminator": [
-        252,
-        21,
-        98,
-        115,
-        66,
-        189,
-        134,
-        13
-      ],
-      "accounts": [
-        {
-          "name": "group",
-          "relations": [
-            "bank"
-          ]
-        },
-        {
-          "name": "admin",
-          "signer": true,
-          "relations": [
-            "group"
-          ]
-        },
-        {
-          "name": "bank",
-          "writable": true
-        },
-        {
-          "name": "destinationTokenAccount",
-          "writable": true
-        },
-        {
-          "name": "bankLiquidityVaultAuthority",
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  108,
-                  105,
-                  113,
-                  117,
-                  105,
-                  100,
-                  105,
-                  116,
-                  121,
-                  95,
-                  118,
-                  97,
-                  117,
-                  108,
-                  116,
-                  95,
-                  97,
-                  117,
-                  116,
-                  104
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "bank"
-              }
-            ]
-          }
-        },
-        {
-          "name": "liquidityVault",
-          "writable": true,
-          "relations": [
-            "bank"
-          ]
-        },
-        {
-          "name": "tokenProgram"
-        }
-      ],
-      "args": []
-    },
     {
       "name": "configGroupFee",
       "docs": [
@@ -157,6 +70,41 @@ export type Marginfi = {
         {
           "name": "enableProgramFee",
           "type": "bool"
+        }
+      ]
+    },
+    {
+      "name": "configureDeleverageWithdrawalLimit",
+      "docs": [
+        "(group admin only) Set the daily withdrawal limit for deleverages per group."
+      ],
+      "discriminator": [
+        28,
+        132,
+        205,
+        158,
+        67,
+        77,
+        177,
+        63
+      ],
+      "accounts": [
+        {
+          "name": "marginfiGroup",
+          "writable": true
+        },
+        {
+          "name": "admin",
+          "signer": true,
+          "relations": [
+            "marginfiGroup"
+          ]
+        }
+      ],
+      "args": [
+        {
+          "name": "limit",
+          "type": "u32"
         }
       ]
     },
@@ -294,6 +242,46 @@ export type Marginfi = {
       ]
     },
     {
+      "name": "endDeleverage",
+      "discriminator": [
+        114,
+        14,
+        250,
+        143,
+        252,
+        104,
+        214,
+        209
+      ],
+      "accounts": [
+        {
+          "name": "marginfiAccount",
+          "writable": true
+        },
+        {
+          "name": "liquidationRecord",
+          "writable": true,
+          "relations": [
+            "marginfiAccount"
+          ]
+        },
+        {
+          "name": "group",
+          "relations": [
+            "marginfiAccount"
+          ]
+        },
+        {
+          "name": "riskAdmin",
+          "signer": true,
+          "relations": [
+            "group"
+          ]
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "endLiquidation",
       "discriminator": [
         110,
@@ -357,6 +345,68 @@ export type Marginfi = {
           "relations": [
             "feeState"
           ]
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "initBankMetadata",
+      "docs": [
+        "(permissionless) pay the rent to open a bank's metadata."
+      ],
+      "discriminator": [
+        94,
+        239,
+        50,
+        136,
+        137,
+        204,
+        254,
+        213
+      ],
+      "accounts": [
+        {
+          "name": "bank"
+        },
+        {
+          "name": "feePayer",
+          "docs": [
+            "Pays the init fee"
+          ],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "metadata",
+          "docs": [
+            "Note: unique per-bank."
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  101,
+                  116,
+                  97,
+                  100,
+                  97,
+                  116,
+                  97
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          }
         },
         {
           "name": "systemProgram",
@@ -1164,6 +1214,7 @@ export type Marginfi = {
       "accounts": [
         {
           "name": "group",
+          "writable": true,
           "relations": [
             "marginfiAccount",
             "bank"
@@ -1754,6 +1805,14 @@ export type Marginfi = {
         {
           "name": "assetAmount",
           "type": "u64"
+        },
+        {
+          "name": "liquidateeAccounts",
+          "type": "u8"
+        },
+        {
+          "name": "liquidatorAccounts",
+          "type": "u8"
         }
       ]
     },
@@ -1811,10 +1870,10 @@ export type Marginfi = {
         {
           "name": "authority",
           "docs": [
-            "Must be marginfi_account's authority, unless in liquidation receivership",
+            "Must be marginfi_account's authority, unless in liquidation/deleverage receivership",
             "",
-            "Note: during liquidation, there are no signer checks whatsoever: any key can repay as",
-            "long as the invariants checked at the end of liquidation are met."
+            "Note: during receivership, there are no signer checks whatsoever: any key can repay as",
+            "long as the invariants checked at the end of receivership are met."
           ],
           "signer": true
         },
@@ -1875,32 +1934,6 @@ export type Marginfi = {
       "args": []
     },
     {
-      "name": "lendingAccountSortBalances",
-      "docs": [
-        "(Permissionless) Sorts the lending account balances in descending order and removes the \"gaps\"",
-        "(i.e. inactive balances in between the active ones), if any.",
-        "This is necessary to ensure any legacy marginfi accounts are compliant with the",
-        "\"gapless and sorted\" requirements we now have."
-      ],
-      "discriminator": [
-        187,
-        194,
-        110,
-        84,
-        82,
-        170,
-        204,
-        9
-      ],
-      "accounts": [
-        {
-          "name": "marginfiAccount",
-          "writable": true
-        }
-      ],
-      "args": []
-    },
-    {
       "name": "lendingAccountStartFlashloan",
       "discriminator": [
         14,
@@ -1951,6 +1984,7 @@ export type Marginfi = {
       "accounts": [
         {
           "name": "group",
+          "writable": true,
           "relations": [
             "marginfiAccount",
             "bank"
@@ -1963,10 +1997,10 @@ export type Marginfi = {
         {
           "name": "authority",
           "docs": [
-            "Must be marginfi_account's authority, unless in liquidation receivership",
+            "Must be marginfi_account's authority, unless in liquidation/deleverage receivership",
             "",
-            "Note: during liquidation, there are no signer checks whatsoever: any key can repay as",
-            "long as the invariants checked at the end of liquidation are met."
+            "Note: during receivership, there are no signer checks whatsoever: any key can repay as",
+            "long as the invariants checked at the end of receivership are met."
           ],
           "signer": true
         },
@@ -3501,6 +3535,276 @@ export type Marginfi = {
       ]
     },
     {
+      "name": "lendingPoolCloneBank",
+      "docs": [
+        "Staging or localnet only, panics on mainnet"
+      ],
+      "discriminator": [
+        214,
+        93,
+        17,
+        236,
+        177,
+        228,
+        78,
+        17
+      ],
+      "accounts": [
+        {
+          "name": "marginfiGroup",
+          "writable": true
+        },
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "marginfiGroup"
+          ]
+        },
+        {
+          "name": "feePayer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "bankMint"
+        },
+        {
+          "name": "sourceBank",
+          "docs": [
+            "Source bank to clone from mainnet program",
+            ""
+          ]
+        },
+        {
+          "name": "bank",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "marginfiGroup"
+              },
+              {
+                "kind": "account",
+                "path": "bankMint"
+              },
+              {
+                "kind": "arg",
+                "path": "bankSeed"
+              }
+            ]
+          }
+        },
+        {
+          "name": "liquidityVaultAuthority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  108,
+                  105,
+                  113,
+                  117,
+                  105,
+                  100,
+                  105,
+                  116,
+                  121,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          }
+        },
+        {
+          "name": "liquidityVault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  108,
+                  105,
+                  113,
+                  117,
+                  105,
+                  100,
+                  105,
+                  116,
+                  121,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          }
+        },
+        {
+          "name": "insuranceVaultAuthority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  110,
+                  115,
+                  117,
+                  114,
+                  97,
+                  110,
+                  99,
+                  101,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          }
+        },
+        {
+          "name": "insuranceVault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  110,
+                  115,
+                  117,
+                  114,
+                  97,
+                  110,
+                  99,
+                  101,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          }
+        },
+        {
+          "name": "feeVaultAuthority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  101,
+                  101,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          }
+        },
+        {
+          "name": "feeVault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  101,
+                  101,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          }
+        },
+        {
+          "name": "tokenProgram"
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "bankSeed",
+          "type": "u64"
+        }
+      ]
+    },
+    {
       "name": "lendingPoolCloseBank",
       "discriminator": [
         22,
@@ -4105,6 +4409,51 @@ export type Marginfi = {
         }
       ],
       "args": []
+    },
+    {
+      "name": "lendingPoolSetFixedOraclePrice",
+      "docs": [
+        "(admin only)"
+      ],
+      "discriminator": [
+        28,
+        126,
+        127,
+        127,
+        60,
+        37,
+        211,
+        125
+      ],
+      "accounts": [
+        {
+          "name": "group",
+          "relations": [
+            "bank"
+          ]
+        },
+        {
+          "name": "admin",
+          "signer": true,
+          "relations": [
+            "group"
+          ]
+        },
+        {
+          "name": "bank",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "price",
+          "type": {
+            "defined": {
+              "name": "wrappedI80f48"
+            }
+          }
+        }
+      ]
     },
     {
       "name": "lendingPoolSetupEmissions",
@@ -5043,6 +5392,14 @@ export type Marginfi = {
           "type": "pubkey"
         },
         {
+          "name": "newMetadataAdmin",
+          "type": "pubkey"
+        },
+        {
+          "name": "newRiskAdmin",
+          "type": "pubkey"
+        },
+        {
           "name": "isArenaGroup",
           "type": "bool"
         }
@@ -5102,6 +5459,30 @@ export type Marginfi = {
           "type": "bool"
         }
       ]
+    },
+    {
+      "name": "migrateCurve",
+      "docs": [
+        "(Permissionless) Convert a bank from the legacy curve setup to the new setup, with no effect",
+        "on how interest accrues."
+      ],
+      "discriminator": [
+        151,
+        254,
+        50,
+        13,
+        112,
+        235,
+        152,
+        72
+      ],
+      "accounts": [
+        {
+          "name": "bank",
+          "writable": true
+        }
+      ],
+      "args": []
     },
     {
       "name": "panicPause",
@@ -5312,6 +5693,104 @@ export type Marginfi = {
         {
           "name": "bank",
           "writable": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "purgeDeleverageBalance",
+      "docs": [
+        "(risk admin only) Purge a user's lending balance without withdrawing anything. Only usable",
+        "after all the debt has been settled on a bank in deleveraging mode, e.g. when",
+        "`TOKENLESS_REPAYMENTS_ALLOWED` and `TOKENLESS_REPAYMENTS_COMPLETE`. used to purge remaining",
+        "lending assets in a now-worthless bank before it is fully sunset."
+      ],
+      "discriminator": [
+        132,
+        187,
+        25,
+        149,
+        181,
+        59,
+        253,
+        136
+      ],
+      "accounts": [
+        {
+          "name": "group",
+          "relations": [
+            "marginfiAccount",
+            "bank"
+          ]
+        },
+        {
+          "name": "marginfiAccount",
+          "writable": true
+        },
+        {
+          "name": "riskAdmin",
+          "signer": true,
+          "relations": [
+            "group"
+          ]
+        },
+        {
+          "name": "bank",
+          "writable": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "startDeleverage",
+      "discriminator": [
+        10,
+        138,
+        10,
+        57,
+        40,
+        232,
+        182,
+        193
+      ],
+      "accounts": [
+        {
+          "name": "marginfiAccount",
+          "docs": [
+            "Account to deleverage"
+          ],
+          "writable": true
+        },
+        {
+          "name": "liquidationRecord",
+          "docs": [
+            "The associated liquidation record PDA for the given `marginfi_account`"
+          ],
+          "writable": true,
+          "relations": [
+            "marginfiAccount"
+          ]
+        },
+        {
+          "name": "group",
+          "relations": [
+            "marginfiAccount"
+          ]
+        },
+        {
+          "name": "riskAdmin",
+          "docs": [
+            "The risk admin will have the authority to withdraw/repay as if they are the user authority",
+            "until the end of the tx."
+          ],
+          "signer": true,
+          "relations": [
+            "group"
+          ]
+        },
+        {
+          "name": "instructionSysvar",
+          "address": "Sysvar1nstructions1111111111111111111111111"
         }
       ],
       "args": []
@@ -5536,6 +6015,63 @@ export type Marginfi = {
           }
         }
       ]
+    },
+    {
+      "name": "writeBankMetadata",
+      "docs": [
+        "(metadata admin only) Write ticker/descrption information for a bank on-chain. Optional, not",
+        "all Banks are guranteed to have metadata."
+      ],
+      "discriminator": [
+        147,
+        78,
+        81,
+        133,
+        129,
+        138,
+        233,
+        59
+      ],
+      "accounts": [
+        {
+          "name": "group",
+          "relations": [
+            "bank"
+          ]
+        },
+        {
+          "name": "bank",
+          "relations": [
+            "metadata"
+          ]
+        },
+        {
+          "name": "metadataAdmin",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "group"
+          ]
+        },
+        {
+          "name": "metadata",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "ticker",
+          "type": {
+            "option": "bytes"
+          }
+        },
+        {
+          "name": "description",
+          "type": {
+            "option": "bytes"
+          }
+        }
+      ]
     }
   ],
   "accounts": [
@@ -5550,6 +6086,19 @@ export type Marginfi = {
         66,
         97,
         188
+      ]
+    },
+    {
+      "name": "bankMetadata",
+      "discriminator": [
+        49,
+        207,
+        31,
+        34,
+        67,
+        225,
+        169,
+        186
       ]
     },
     {
@@ -5645,6 +6194,19 @@ export type Marginfi = {
     }
   ],
   "events": [
+    {
+      "name": "deleverageEvent",
+      "discriminator": [
+        161,
+        8,
+        108,
+        204,
+        209,
+        198,
+        12,
+        30
+      ]
+    },
     {
       "name": "editStakedSettingsEvent",
       "discriminator": [
@@ -5825,6 +6387,19 @@ export type Marginfi = {
         94,
         10,
         57
+      ]
+    },
+    {
+      "name": "lendingPoolBankSetFixedOraclePriceEvent",
+      "discriminator": [
+        65,
+        72,
+        8,
+        85,
+        229,
+        20,
+        90,
+        26
       ]
     },
     {
@@ -6301,8 +6876,8 @@ export type Marginfi = {
     },
     {
       "code": 6081,
-      "name": "placeholder81",
-      "msg": "Reserved for future use"
+      "name": "metadataTooLong",
+      "msg": "Metadata is too long"
     },
     {
       "code": 6082,
@@ -6353,6 +6928,61 @@ export type Marginfi = {
       "code": 6091,
       "name": "notAllowedInCpi",
       "msg": "Start and end liquidation and flashloan must be top-level instructions"
+    },
+    {
+      "code": 6092,
+      "name": "zeroSupplyInStakePool",
+      "msg": "Stake pool supply is zero: cannot compute price"
+    },
+    {
+      "code": 6093,
+      "name": "invalidGroup",
+      "msg": "Invalid group: account constraint violated"
+    },
+    {
+      "code": 6094,
+      "name": "invalidLiquidityVault",
+      "msg": "Invalid liquidity vault: account constraint violated"
+    },
+    {
+      "code": 6095,
+      "name": "invalidLiquidationRecord",
+      "msg": "Invalid liquidation record: account constraint violated"
+    },
+    {
+      "code": 6096,
+      "name": "invalidLiquidationReceiver",
+      "msg": "Invalid liquidation receiver: account constraint violated"
+    },
+    {
+      "code": 6097,
+      "name": "invalidEmissionsMint",
+      "msg": "Invalid emissions mint: account constraint violated"
+    },
+    {
+      "code": 6098,
+      "name": "invalidMint",
+      "msg": "Invalid mint: account constraint violated"
+    },
+    {
+      "code": 6099,
+      "name": "invalidFeeWallet",
+      "msg": "Invalid fee wallet: account constraint violated"
+    },
+    {
+      "code": 6100,
+      "name": "fixedOraclePriceNegative",
+      "msg": "Fixed oracle price must be zero or greater"
+    },
+    {
+      "code": 6101,
+      "name": "dailyWithdrawalLimitExceeded",
+      "msg": "Daily withdrawal limit exceeded: try again later"
+    },
+    {
+      "code": 6102,
+      "name": "zeroWithdrawalLimit",
+      "msg": "Cannot set daily withdrawal limit to zero"
     },
     {
       "code": 6200,
@@ -6418,6 +7048,16 @@ export type Marginfi = {
       "code": 6212,
       "name": "kaminoPositionLimitExceeded",
       "msg": "Maximum Kamino positions limit exceeded (max 8 positions per account)"
+    },
+    {
+      "code": 6213,
+      "name": "invalidKaminoReserve",
+      "msg": "Invalid Kamino reserve: account constraint violated"
+    },
+    {
+      "code": 6214,
+      "name": "invalidKaminoObligation",
+      "msg": "Invalid Kamino obligation: account constraint violated"
     }
   ],
   "types": [
@@ -6702,6 +7342,8 @@ export type Marginfi = {
               "- EMISSIONS_FLAG_LENDING_ACTIVE: 2",
               "- PERMISSIONLESS_BAD_DEBT_SETTLEMENT: 4",
               "- FREEZE_SETTINGS: 8",
+              "- CLOSE_ENABLED_FLAG: 16",
+              "- TOKENLESS_REPAYMENTS_ACTIVE: 32",
               ""
             ],
             "type": "u64"
@@ -7075,11 +7717,22 @@ export type Marginfi = {
             "type": "u32"
           },
           {
+            "name": "fixedPrice",
+            "docs": [
+              "Stored oracle price for `OracleSetup::Fixed`, otherwise does nothing"
+            ],
+            "type": {
+              "defined": {
+                "name": "wrappedI80f48"
+              }
+            }
+          },
+          {
             "name": "padding1",
             "type": {
               "array": [
                 "u8",
-                32
+                16
               ]
             }
           }
@@ -7350,6 +8003,107 @@ export type Marginfi = {
             "type": {
               "option": "bool"
             }
+          },
+          {
+            "name": "tokenlessRepaymentsAllowed",
+            "type": {
+              "option": "bool"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "bankMetadata",
+      "serialization": "bytemuck",
+      "repr": {
+        "kind": "c"
+      },
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bank",
+            "docs": [
+              "Bank this metadata corresponds to"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "placeholder",
+            "type": "u64"
+          },
+          {
+            "name": "ticker",
+            "docs": [
+              "The token's ticker name, e.g. USDC",
+              "* utf-8"
+            ],
+            "type": {
+              "array": [
+                "u8",
+                64
+              ]
+            }
+          },
+          {
+            "name": "description",
+            "docs": [
+              "The token's plain english descripion, e.g US Dollar Coin",
+              "* utf-8"
+            ],
+            "type": {
+              "array": [
+                "u8",
+                128
+              ]
+            }
+          },
+          {
+            "name": "dataBlob",
+            "docs": [
+              "Reserved for future use. Room for a very small icon or something else cool"
+            ],
+            "type": {
+              "array": [
+                "u8",
+                256
+              ]
+            }
+          },
+          {
+            "name": "endDescriptionByte",
+            "docs": [
+              "The last data byte in description (padding follows)"
+            ],
+            "type": "u16"
+          },
+          {
+            "name": "endDataBlob",
+            "docs": [
+              "The last data byte in data_blob (padding follows)"
+            ],
+            "type": "u16"
+          },
+          {
+            "name": "endTickerByte",
+            "docs": [
+              "The last data byte in ticker (padding follows)"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "pad0",
+            "type": {
+              "array": [
+                "u8",
+                2
+              ]
+            }
           }
         ]
       }
@@ -7373,6 +8127,30 @@ export type Marginfi = {
           },
           {
             "name": "killedByBankruptcy"
+          }
+        ]
+      }
+    },
+    {
+      "name": "deleverageEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "marginfiAccount",
+            "type": "pubkey"
+          },
+          {
+            "name": "riskAdmin",
+            "type": "pubkey"
+          },
+          {
+            "name": "deleverageeAssetsSeized",
+            "type": "f64"
+          },
+          {
+            "name": "deleverageeLiabilityRepaid",
+            "type": "f64"
           }
         ]
       }
@@ -8064,7 +8842,69 @@ export type Marginfi = {
             }
           },
           {
-            "name": "padding0",
+            "name": "zeroUtilRate",
+            "docs": [
+              "The base rate at utilization = 0",
+              "* a %, as u32, out of 1000%, e.g. 100% = 0.1 * u32::MAX"
+            ],
+            "type": "u32"
+          },
+          {
+            "name": "hundredUtilRate",
+            "docs": [
+              "The base rate at utilization = 100",
+              "* a %, as u32, out of 1000%, e.g. 100% = 0.1 * u32::MAX"
+            ],
+            "type": "u32"
+          },
+          {
+            "name": "points",
+            "docs": [
+              "The base rate at various points between 0 and 100%, exclusive. Essentially a piece-wise",
+              "linear curve.",
+              "* always in ascending order, e.g. points[0] = first kink point, points[1] = second kink",
+              "point, and so forth.",
+              "* points where util = 0 are unused"
+            ],
+            "type": {
+              "array": [
+                {
+                  "defined": {
+                    "name": "ratePoint"
+                  }
+                },
+                5
+              ]
+            }
+          },
+          {
+            "name": "curveType",
+            "docs": [
+              "Determines which interest rate curve implementation is active. 0 (INTEREST_CURVE_LEGACY) =",
+              "legacy three point curve, 1 (INTEREST_CURVE_SEVEN_POINT) = multi-point curve."
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "pad0",
+            "type": {
+              "array": [
+                "u8",
+                7
+              ]
+            }
+          },
+          {
+            "name": "padding1",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "padding2",
             "type": {
               "array": [
                 "u8",
@@ -8073,16 +8913,11 @@ export type Marginfi = {
             }
           },
           {
-            "name": "padding1",
+            "name": "padding3",
             "type": {
               "array": [
-                {
-                  "array": [
-                    "u8",
-                    32
-                  ]
-                },
-                3
+                "u8",
+                8
               ]
             }
           }
@@ -8098,30 +8933,6 @@ export type Marginfi = {
         "kind": "struct",
         "fields": [
           {
-            "name": "optimalUtilizationRate",
-            "type": {
-              "defined": {
-                "name": "wrappedI80f48"
-              }
-            }
-          },
-          {
-            "name": "plateauInterestRate",
-            "type": {
-              "defined": {
-                "name": "wrappedI80f48"
-              }
-            }
-          },
-          {
-            "name": "maxInterestRate",
-            "type": {
-              "defined": {
-                "name": "wrappedI80f48"
-              }
-            }
-          },
-          {
             "name": "insuranceFeeFixedApr",
             "type": {
               "defined": {
@@ -8159,6 +8970,42 @@ export type Marginfi = {
               "defined": {
                 "name": "wrappedI80f48"
               }
+            }
+          },
+          {
+            "name": "zeroUtilRate",
+            "docs": [
+              "The base rate at utilization = 0",
+              "* a %, as u32, out of 1000%, e.g. 100% = 0.1 * u32::MAX"
+            ],
+            "type": "u32"
+          },
+          {
+            "name": "hundredUtilRate",
+            "docs": [
+              "The base rate at utilization = 100",
+              "* a %, as u32, out of 1000%, e.g. 100% = 0.1 * u32::MAX"
+            ],
+            "type": "u32"
+          },
+          {
+            "name": "points",
+            "docs": [
+              "The base rate at various points between 0 and 100%, exclusive. Essentially a piece-wise",
+              "linear curve.",
+              "* always in ascending order, e.g. points[0] = first kink point, points[1] = second kink",
+              "point, and so forth.",
+              "* points where util = 0 are unused"
+            ],
+            "type": {
+              "array": [
+                {
+                  "defined": {
+                    "name": "ratePoint"
+                  }
+                },
+                5
+              ]
             }
           }
         ]
@@ -8170,36 +9017,6 @@ export type Marginfi = {
         "kind": "struct",
         "fields": [
           {
-            "name": "optimalUtilizationRate",
-            "type": {
-              "option": {
-                "defined": {
-                  "name": "wrappedI80f48"
-                }
-              }
-            }
-          },
-          {
-            "name": "plateauInterestRate",
-            "type": {
-              "option": {
-                "defined": {
-                  "name": "wrappedI80f48"
-                }
-              }
-            }
-          },
-          {
-            "name": "maxInterestRate",
-            "type": {
-              "option": {
-                "defined": {
-                  "name": "wrappedI80f48"
-                }
-              }
-            }
-          },
-          {
             "name": "insuranceFeeFixedApr",
             "type": {
               "option": {
@@ -8246,6 +9063,48 @@ export type Marginfi = {
                 "defined": {
                   "name": "wrappedI80f48"
                 }
+              }
+            }
+          },
+          {
+            "name": "zeroUtilRate",
+            "docs": [
+              "The base rate at utilization = 0",
+              "* a %, as u32, out of 1000%, e.g. 100% = 0.1 * u32::MAX"
+            ],
+            "type": {
+              "option": "u32"
+            }
+          },
+          {
+            "name": "hundredUtilRate",
+            "docs": [
+              "The base rate at utilization = 100",
+              "* a %, as u32, out of 1000%, e.g. 100% = 0.1 * u32::MAX"
+            ],
+            "type": {
+              "option": "u32"
+            }
+          },
+          {
+            "name": "points",
+            "docs": [
+              "The base rate at various points between 0 and 100%, exclusive. Essentially a piece-wise",
+              "linear curve.",
+              "* always in ascending order, e.g. points[0] = first kink point, points[1] = second kink",
+              "point, and so forth.",
+              "* points where util = 0 are unused"
+            ],
+            "type": {
+              "option": {
+                "array": [
+                  {
+                    "defined": {
+                      "name": "ratePoint"
+                    }
+                  },
+                  5
+                ]
               }
             }
           }
@@ -8787,6 +9646,34 @@ export type Marginfi = {
           {
             "name": "socializedAmount",
             "type": "f64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "lendingPoolBankSetFixedOraclePriceEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "header",
+            "type": {
+              "defined": {
+                "name": "groupEventHeader"
+              }
+            }
+          },
+          {
+            "name": "bank",
+            "type": "pubkey"
+          },
+          {
+            "name": "price",
+            "type": {
+              "defined": {
+                "name": "wrappedI80f48"
+              }
+            }
           }
         ]
       }
@@ -9355,6 +10242,33 @@ export type Marginfi = {
             }
           },
           {
+            "name": "deleverageWithdrawWindowCache",
+            "docs": [
+              "Keeps track of the liquidity withdrawn from the group over the day as a result of",
+              "deleverages. Used as a protection mechanism against too big (and unwanted) withdrawals (e.g.",
+              "when the risk admin is compromised)."
+            ],
+            "type": {
+              "defined": {
+                "name": "withdrawWindowCache"
+              }
+            }
+          },
+          {
+            "name": "riskAdmin",
+            "docs": [
+              "Can run bankruptcy and forced deleverage ixes to e.g. sunset risky/illiquid assets"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "metadataAdmin",
+            "docs": [
+              "Can modify a Bank's metadata, and nothing else."
+            ],
+            "type": "pubkey"
+          },
+          {
             "name": "padding0",
             "type": {
               "array": [
@@ -9364,7 +10278,7 @@ export type Marginfi = {
                     2
                   ]
                 },
-                17
+                12
               ]
             }
           },
@@ -10037,6 +10951,9 @@ export type Marginfi = {
           },
           {
             "name": "kaminoSwitchboardPull"
+          },
+          {
+            "name": "fixed"
           }
         ]
       }
@@ -10152,6 +11069,33 @@ export type Marginfi = {
               "Timestamp when this cache was last updated"
             ],
             "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ratePoint",
+      "repr": {
+        "kind": "c"
+      },
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "util",
+            "docs": [
+              "The utilization rate where `rate` applies",
+              "* a %, as u32, out of 100%, e.g. 50% = .5 * u32::MAX"
+            ],
+            "type": "u32"
+          },
+          {
+            "name": "rate",
+            "docs": [
+              "The base rate that applies",
+              "* a %, as u32, out of 1000%, e.g. 100% = 0.1 * u32::MAX"
+            ],
+            "type": "u32"
           }
         ]
       }
@@ -10405,6 +11349,29 @@ export type Marginfi = {
                 }
               }
             }
+          }
+        ]
+      }
+    },
+    {
+      "name": "withdrawWindowCache",
+      "repr": {
+        "kind": "c"
+      },
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "dailyLimit",
+            "type": "u32"
+          },
+          {
+            "name": "withdrawnToday",
+            "type": "u32"
+          },
+          {
+            "name": "lastDailyResetTimestamp",
+            "type": "i64"
           }
         ]
       }

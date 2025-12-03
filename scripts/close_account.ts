@@ -1,4 +1,8 @@
-import { PublicKey, Transaction, sendAndConfirmTransaction } from "@solana/web3.js";
+import {
+  PublicKey,
+  Transaction,
+  sendAndConfirmTransaction,
+} from "@solana/web3.js";
 import { commonSetup } from "../lib/common-setup";
 
 const sendTx = true;
@@ -10,16 +14,25 @@ type Config = {
 
 const config: Config = {
   PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-  ACCOUNT: new PublicKey("EtVhwiGacGjvZ48XvmYJebfxfWFxqhxHvSx9arsfFDCW"),
+  ACCOUNT: new PublicKey("829Rvt2ewWRhCj1N1PQWwXtTCPNRgGLTx76yhtyiPiaC"),
 };
 
 async function main() {
+  await closeAccount(sendTx, config, "/.config/stage/id.json");
+}
+
+export async function closeAccount(
+  sendTx: boolean,
+  config: Config,
+  walletPath: string,
+  version?: "current"
+) {
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
-    "/.config/stage/id.json",
+    walletPath,
     undefined,
-    "current"
+    version
   );
   const program = user.program;
   const connection = user.connection;
@@ -34,13 +47,17 @@ async function main() {
   );
 
   try {
-    const signature = await sendAndConfirmTransaction(connection, transaction, [user.wallet.payer]);
+    const signature = await sendAndConfirmTransaction(connection, transaction, [
+      user.wallet.payer,
+    ]);
     console.log("Transaction signature:", signature);
   } catch (error) {
     console.error("Transaction failed:", error);
   }
 }
 
-main().catch((err) => {
-  console.error(err);
-});
+if (require.main === module) {
+  main().catch((err) => {
+    console.error(err);
+  });
+}
