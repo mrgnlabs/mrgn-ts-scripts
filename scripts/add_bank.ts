@@ -49,11 +49,12 @@ type Config = {
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
   GROUP_KEY: new PublicKey("4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8"),
-  ORACLE: new PublicKey("8w1GuQwSf2w8huS6PzNJVFBwLvYYJ8aaFwxgYLsEK9S6"),
+  ORACLE: new PublicKey("7neNQ7tobjJFT6AJrNmrAY4TwgTWzJdQNdg6h6spdMBg"),
   ORACLE_TYPE: ORACLE_TYPE_SWB,
   ADMIN: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
   FEE_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
-  BANK_MINT: new PublicKey("cPQPBN7WubB3zyQDpzTK2ormx1BMdAym9xkrYUJsctm"),
+  // Note: Bw6zsBWadivcKo1n2wEyF79pSrKDGyggif4a7wv3dtVi = Feb 26, 2026 PT BulkSOL
+  BANK_MINT: new PublicKey("Bw6zsBWadivcKo1n2wEyF79pSrKDGyggif4a7wv3dtVi"),
   SEED: 0,
   TOKEN_PROGRAM: TOKEN_PROGRAM_ID,
   MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
@@ -71,17 +72,17 @@ const rate: InterestRateConfig1_5 = {
 };
 
 const bankConfig: BankConfig1_5 = {
-  assetWeightInit: bigNumberToWrappedI80F48(0.65),
-  assetWeightMaint: bigNumberToWrappedI80F48(0.8),
+  assetWeightInit: bigNumberToWrappedI80F48(0.2),
+  assetWeightMaint: bigNumberToWrappedI80F48(0.3),
   liabilityWeightInit: bigNumberToWrappedI80F48(1.3),
   liabilityWeightMaint: bigNumberToWrappedI80F48(1.2),
-  depositLimit: new BN(20000 * 10 ** 9),
+  depositLimit: new BN(10_000 * 10 ** 9),
   interestRateConfig: rate,
   operationalState: { operational: {} },
-  borrowLimit: new BN(2500 * 10 ** 9),
+  borrowLimit: new BN(0 * 10 ** 9),
   riskTier: { collateral: {} },
-  totalAssetValueInitLimit: new BN(10000000),
-  oracleMaxAge: 30,
+  totalAssetValueInitLimit: new BN(3_000_000),
+  oracleMaxAge: 70,
   assetTag: 0,
   oracleMaxConfidence: 0,
   configFlags: 0,

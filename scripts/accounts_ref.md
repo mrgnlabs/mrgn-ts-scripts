@@ -126,7 +126,7 @@
 - Liquidation test (H4QMTHMVbJ3KrB5bz573cBBZKoYSZ2B4mSST1JKzPUrH owned)\* -
   F7R6gDWoAoPFHtEpudW41MaxzTrpP5E4ghu6pppE7jYF
 - Transfer test (H4QMTHMVbJ3KrB5bz573cBBZKoYSZ2B4mSST1JKzPUrH owned) -
-  12W8kr21RZX3tLR8CxZvnqo8fgFirKF3gNhAwSmhsuCg transfered to MS
+  12W8kr21RZX3tLR8CxZvnqo8fgFirKF3gNhAwSmhsuCg transferred to MS
   (CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw owned) at
   8P6JTEqUW8RWopp1RU4jfbiVbnb9Dzuvtk3Kj6oa3tci
 

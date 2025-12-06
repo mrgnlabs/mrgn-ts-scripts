@@ -18,7 +18,7 @@ import {
   TOKEN_2022_PROGRAM_ID,
 } from "@solana/spl-token";
 
-const sendTx = true;
+const sendTx = false;
 
 type Config = {
   PROGRAM_ID: string;
