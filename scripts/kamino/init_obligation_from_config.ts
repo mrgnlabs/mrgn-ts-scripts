@@ -18,10 +18,16 @@ import {
   Transaction,
   sendAndConfirmTransaction,
   ComputeBudgetProgram,
+  SystemProgram,
+  LAMPORTS_PER_SOL,
 } from "@solana/web3.js";
 import { BN } from "@coral-xyz/anchor";
-import { TOKEN_PROGRAM_ID } from "@mrgnlabs/mrgn-common";
-import { getAssociatedTokenAddressSync } from "@solana/spl-token";
+import { TOKEN_PROGRAM_ID, NATIVE_MINT } from "@mrgnlabs/mrgn-common";
+import {
+  getAssociatedTokenAddressSync,
+  createAssociatedTokenAccountIdempotentInstruction,
+  createSyncNativeInstruction,
+} from "@solana/spl-token";
 import * as fs from "fs";
 import * as path from "path";
 
@@ -192,6 +198,40 @@ export async function initObligationFromConfig(
   // ============================================
   console.log("--- Building Transaction ---");
 
+  const depositAmount = new BN(100);
+  const tx = new Transaction().add(
+    ComputeBudgetProgram.setComputeUnitLimit({ units: 1_400_000 })
+  );
+
+  // If native SOL, wrap SOL into the ATA first
+  const isNativeSol = mint.equals(NATIVE_MINT);
+  if (isNativeSol) {
+    console.log("Native SOL detected - adding wrap instructions");
+
+    // Create ATA if needed (idempotent)
+    tx.add(
+      createAssociatedTokenAccountIdempotentInstruction(
+        user.wallet.publicKey,
+        userAta,
+        user.wallet.publicKey,
+        mint,
+        tokenProgram
+      )
+    );
+
+    // Transfer lamports to the ATA
+    tx.add(
+      SystemProgram.transfer({
+        fromPubkey: user.wallet.publicKey,
+        toPubkey: userAta,
+        lamports: depositAmount.toNumber(),
+      })
+    );
+
+    // Sync native to update the wrapped balance
+    tx.add(createSyncNativeInstruction(userAta, tokenProgram));
+  }
+
   const ix = await makeInitObligationIx(
     program,
     {
@@ -206,13 +246,10 @@ export async function initObligationFromConfig(
       obligationFarmUserState: userState,
       liquidityTokenProgram: tokenProgram,
     },
-    new BN(100)
+    depositAmount
   );
 
-  const tx = new Transaction().add(
-    ComputeBudgetProgram.setComputeUnitLimit({ units: 1_400_000 }),
-    ix
-  );
+  tx.add(ix);
 
   console.log("Transaction built successfully");
   console.log("");
@@ -262,6 +299,35 @@ export async function initObligationFromConfig(
     console.log(`Obligation: ${baseObligation.toBase58()}`);
     console.log(`Solscan: https://solscan.io/account/${baseObligation.toBase58()}`);
     console.log("");
+
+    // Update output.md file with obligation info
+    const outputPath = resolvedPath.replace(".json", ".output.md");
+    if (fs.existsSync(outputPath)) {
+      let outputContent = fs.readFileSync(outputPath, "utf-8");
+
+      const obligationSection = `
+## Init Obligation
+
+**Executed:** ${new Date().toISOString()}
+
+| Field | Value |
+|-------|-------|
+| Obligation | \`${baseObligation.toBase58()}\` |
+| Signature | \`${signature}\` |
+| Solscan TX | [View](https://solscan.io/tx/${signature}) |
+| Solscan Obligation | [View](https://solscan.io/account/${baseObligation.toBase58()}) |
+`;
+
+      // Append before "## Next Steps" or at the end
+      if (outputContent.includes("## Next Steps")) {
+        outputContent = outputContent.replace("## Next Steps", obligationSection + "\n## Next Steps");
+      } else {
+        outputContent += obligationSection;
+      }
+
+      fs.writeFileSync(outputPath, outputContent);
+      console.log(`Updated: ${outputPath}`);
+    }
 
     console.log("=".repeat(60));
     console.log("COMPLETE");

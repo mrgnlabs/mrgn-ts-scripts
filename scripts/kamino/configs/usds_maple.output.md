@@ -80,6 +80,18 @@ No existing Kamino banks found for USDS
 }
 ```
 
+
+## Init Obligation
+
+**Executed:** 2025-12-12T08:41:06.993Z
+
+| Field | Value |
+|-------|-------|
+| Obligation | `28s1QWzHGiJheDYPzCMYb7WZw8usBDbLwM1AtSdDZWDG` |
+| Signature | `5jio1VrdQA8ANo7CFG2qEQUktfajfKr7UbSkNuG99wAxGEFRAJgcX3Qm9gSTRyZBXAaaGBXX6kgXdampgezAJjC3` |
+| Solscan TX | [View](https://solscan.io/tx/5jio1VrdQA8ANo7CFG2qEQUktfajfKr7UbSkNuG99wAxGEFRAJgcX3Qm9gSTRyZBXAaaGBXX6kgXdampgezAJjC3) |
+| Solscan Obligation | [View](https://solscan.io/account/28s1QWzHGiJheDYPzCMYb7WZw8usBDbLwM1AtSdDZWDG) |
+
 ## Next Steps
 
 1. Submit base58 transaction to Squads multisig

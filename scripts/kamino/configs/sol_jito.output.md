@@ -112,6 +112,18 @@ Generated: 2025-12-08T20:08:50.013Z
 }
 ```
 
+
+## Init Obligation
+
+**Executed:** 2025-12-12T08:40:32.724Z
+
+| Field | Value |
+|-------|-------|
+| Obligation | `CgWecaZxtRDZHXKkPrywSt1b4ABp76EcKV5unbAGkdDS` |
+| Signature | `4h9KPHNHDDC5s3WGSd9iWkuYVsjYXdw2zApQDpWfSCohgr3GbqrbCKxfLHqZNEKihAP4s5GffDkcJLKgSbeBoRax` |
+| Solscan TX | [View](https://solscan.io/tx/4h9KPHNHDDC5s3WGSd9iWkuYVsjYXdw2zApQDpWfSCohgr3GbqrbCKxfLHqZNEKihAP4s5GffDkcJLKgSbeBoRax) |
+| Solscan Obligation | [View](https://solscan.io/account/CgWecaZxtRDZHXKkPrywSt1b4ABp76EcKV5unbAGkdDS) |
+
 ## Next Steps
 
 1. Submit base58 transaction to Squads multisig
