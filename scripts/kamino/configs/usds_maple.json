@@ -1,0 +1,29 @@
+{
+  "asset": "USDS",
+  "market": "maple",
+  "bankMint": "USDSwr9ApdHk5bvJKMjzff41FfuX8bSxdKcR81vTwcA",
+  "kaminoMarket": "6WEGfej9B9wjxRs6t4BYpb9iCXd8CpTpJ8fVSNzHCC5y",
+  "kaminoReserve": "BiSRKTadXSiyTSpiqw9nJge33N32AXewUPY7skFJwMvA",
+  "oracle": "EtEbRr1fiigYs51PVaX6Ldupda4aMxz9qQE2iTBwLpZD",
+  "oracleType": "kaminoSwitchboardPull",
+  "assetWeightInit": 0.85,
+  "assetWeightMaint": 0.9,
+  "depositLimit": "500000000000",
+  "totalAssetValueInitLimit": "500000",
+  "oracleMaxAge": 300,
+  "oracleMaxConfidence": 0,
+  "seed": null,
+  "comments": {
+    "depositLimitHuman": "500,000 USDS (6 decimals)",
+    "totalAssetValueHuman": "$500K USD",
+    "notes": "USDS on Kamino Maple Market"
+  },
+  "derived": {
+    "bankAddress": "FLwQ2tV4gPHKWY1jwdB3Hp8Z18nU4WngvNgJn3qZVGd7",
+    "reserveOracle": "3t4JZcueEzTbVP6kLxXrL3VpWx45jDer4eqysweBchNH",
+    "farmState": "35aAYJ31KUuX86ggq1VEbW9fGcWW6phAYbYrFKL4eenB",
+    "tokenProgram": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+    "decimals": 6,
+    "seed": 300
+  }
+}
