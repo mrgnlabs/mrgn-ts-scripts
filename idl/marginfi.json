@@ -3799,6 +3799,44 @@
       ]
     },
     {
+      "name": "lending_pool_clone_emode",
+      "docs": [
+        "(admin or emode_admin) Copies emode settings from one bank to another. Useful when applying",
+        "emode settings from e.g. one LST to another."
+      ],
+      "discriminator": [
+        146,
+        167,
+        94,
+        106,
+        184,
+        202,
+        15,
+        10
+      ],
+      "accounts": [
+        {
+          "name": "group",
+          "relations": [
+            "copy_from_bank",
+            "copy_to_bank"
+          ]
+        },
+        {
+          "name": "signer",
+          "signer": true
+        },
+        {
+          "name": "copy_from_bank"
+        },
+        {
+          "name": "copy_to_bank",
+          "writable": true
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "lending_pool_close_bank",
       "discriminator": [
         22,
@@ -4259,6 +4297,44 @@
           "type": "pubkey"
         }
       ]
+    },
+    {
+      "name": "lending_pool_force_tokenless_repay_complete",
+      "docs": [
+        "(risk_admin only) - Signals all of a bank's liability have been deleveraged. Used if a bank",
+        "still has liability dust after the risk admin has completed deleveraging all debts. The",
+        "risk admin is trusted not to execute this until all non-dust debts have been deleveraged."
+      ],
+      "discriminator": [
+        15,
+        203,
+        147,
+        232,
+        199,
+        14,
+        231,
+        37
+      ],
+      "accounts": [
+        {
+          "name": "group",
+          "relations": [
+            "bank"
+          ]
+        },
+        {
+          "name": "risk_admin",
+          "signer": true,
+          "relations": [
+            "group"
+          ]
+        },
+        {
+          "name": "bank",
+          "writable": true
+        }
+      ],
+      "args": []
     },
     {
       "name": "lending_pool_handle_bankruptcy",
@@ -10000,7 +10076,8 @@
               "moved, original owner can now call `set_account_transfer_authority`",
               "- 16: `ACCOUNT_IN_RECEIVERSHIP` - the account is eligible to be liquidated and has entered",
               "receivership, a liquidator is able to control borrows and withdraws until the end of the",
-              "tx. This flag will only appear within a tx."
+              "tx. This flag will only appear within a tx.",
+              "- 32: `ACCOUNT_IN_DELEVERAGE - the account is being deleveraged by the risk admin"
             ],
             "type": "u64"
           },

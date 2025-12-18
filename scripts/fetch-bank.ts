@@ -7,7 +7,7 @@ import {
 import type { WrappedI80F48 } from "@mrgnlabs/mrgn-common";
 import BigNumber from "bignumber.js";
 import { commonSetup } from "../lib/common-setup";
-import { getTokenBalance, u32ToApr } from "../lib/utils";
+import { getTokenBalance, u32ToApr, u32ToUtil } from "../lib/utils";
 
 // If true, prints this bank's settings in a format to be copy-pasted into add_bank
 const printForCopy = false;
@@ -24,7 +24,7 @@ const config: Config = {
     // new PublicKey("HmpMfL8942u22htC4EMiWgLX931g3sacXFR6KjuLgKLV"), // usdt
     // new PublicKey("8UEiPmgZHXXEDrqLS3oiTxQxTbeYTtPbeMBxAd2XGbpu"), // py
     // new PublicKey("FDsf8sj6SoV313qrA91yms3u5b3P4hBxEPvanVs8LtJV"), // usds
-    new PublicKey("FDsf8sj6SoV313qrA91yms3u5b3P4hBxEPvanVs8LtJV"),
+    new PublicKey("4kNXetv8hSv9PzvzPZzEs1CTH6ARRRi2b8h6jk1ad1nP"),
   ],
 };
 
@@ -34,7 +34,7 @@ async function printBankInfo(bankKey: PublicKey) {
     config.PROGRAM_ID,
     "/.config/solana/id.json",
     undefined,
-    "kamino"
+    "current"
   );
 
   const program = user.program;
@@ -210,7 +210,7 @@ async function printBankInfo(bankKey: PublicKey) {
   // Interest Rate Config
   const irc = bank.config.interestRateConfig;
   console.log("Interest Rate Config:");
-  console.table([
+  const interestRateRows = [
     {
       Field: "Optimal Utilization Rate",
       Value: toStr(irc.optimalUtilizationRate),
@@ -228,7 +228,41 @@ async function printBankInfo(bankKey: PublicKey) {
       Field: "Protocol Origination Fee",
       Value: toStr(irc.protocolOriginationFee),
     },
-  ]);
+  ];
+
+  if (irc.zeroUtilRate !== undefined) {
+    interestRateRows.push({
+      Field: "Zero Utilization Rate (APR)",
+      Value: `${(u32ToApr(Number(irc.zeroUtilRate)) * 100).toFixed(4)}%`,
+    });
+  }
+
+  if (irc.hundredUtilRate !== undefined) {
+    interestRateRows.push({
+      Field: "Hundred Utilization Rate (APR)",
+      Value: `${(u32ToApr(Number(irc.hundredUtilRate)) * 100).toFixed(4)}%`,
+    });
+  }
+
+  console.table(interestRateRows);
+
+  if (Array.isArray((irc as any).points)) {
+    const points = (irc as any).points;
+    const formattedPoints = points
+      .filter(
+        (point: any) => point?.util !== undefined && point?.rate !== undefined
+      )
+      .map((point: any, idx: number) => ({
+        Point: idx,
+        Utilization: `${(u32ToUtil(Number(point.util)) * 100).toFixed(4)}%`,
+        Rate: `${(u32ToApr(Number(point.rate)) * 100).toFixed(4)}%`,
+      }));
+
+    if (formattedPoints.length > 0) {
+      console.log("Interest Curve Points:");
+      console.table(formattedPoints);
+    }
+  }
 
   // Rates Cache
   const cache = bank.cache;

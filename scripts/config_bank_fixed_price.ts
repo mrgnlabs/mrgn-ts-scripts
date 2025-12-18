@@ -11,7 +11,7 @@ import { bigNumberToWrappedI80F48 } from "@mrgnlabs/mrgn-common";
 /**
  * If true, send the tx. If false, output the unsigned b58 tx to console.
  */
-const sendTx = true;
+const sendTx = false;
 
 /** Shared settings across all entries */
 type SharedConfig = {
@@ -21,8 +21,8 @@ type SharedConfig = {
 };
 
 const configCommon: SharedConfig = {
-  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-  ADMIN: new PublicKey("725Z4QQUVhRiXcCdf4cQTrxXYmQXyW9zgVkW5PDVSJz4"),
+  PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
+  ADMIN: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
   MULTISIG: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 };
 
@@ -34,8 +34,8 @@ type BankOracleConfig = {
 /** One entry per bank to update */
 const configs: BankOracleConfig[] = [
   {
-    bank: new PublicKey("GM98Qmzdoc7PSD64t7bG5Gqt4XEcZV9RKGcgsFCxTY4e"),
-    price: 1,
+    bank: new PublicKey("FWZbU8TSPyjyrWQASzujo7FjgF9f3GEkjaFAtbKWqjMH"),
+    price: 1.1,
   },
   // ...More entries here as needed. The limit even without using LUTs is fairly high (at least 6)
 ];
@@ -46,7 +46,7 @@ async function main() {
     configCommon.PROGRAM_ID,
     "/keys/zerotrade_admin.json",
     configCommon.MULTISIG,
-    "1.6"
+    "current"
   );
   const program = user.program;
   const connection = user.connection;
