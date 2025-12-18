@@ -1,0 +1,29 @@
+{
+  "asset": "SOL",
+  "market": "marinade",
+  "bankMint": "So11111111111111111111111111111111111111112",
+  "kaminoMarket": "GVDUXFwS8uvBG35RjZv6Y8S1AkV5uASiMJ9qTUKqb5PL",
+  "kaminoReserve": "DQ126djx5db6SMCbejHLNxoosonVes3qW5eVVUQuT93v",
+  "oracle": "4Hmd6PdjVA9auCoScE12iaBogfwS4ZXQ6VZoBeqanwWW",
+  "oracleType": "kaminoSwitchboardPull",
+  "assetWeightInit": 0.75,
+  "assetWeightMaint": 0.85,
+  "depositLimit": "150000000000000",
+  "totalAssetValueInitLimit": "20000000",
+  "oracleMaxAge": 70,
+  "oracleMaxConfidence": 0,
+  "seed": null,
+  "comments": {
+    "depositLimitHuman": "150,000 SOL (9 decimals)",
+    "totalAssetValueHuman": "$20M USD",
+    "notes": "SOL on Kamino Marinade Market"
+  },
+  "derived": {
+    "bankAddress": "4uawSqEM2jDPKkQRtnoSTmBjFJ51Ehu79EvGfu3R45o7",
+    "reserveOracle": "3NJYftD5sjVfxSnUdZ1wVML8f3aC6mp1CXCL6L7TnU8C",
+    "farmState": "9C3ZmYzfkYLfUDyCoRR4sxYYUNSQJFEXK8FtJuomnQk9",
+    "tokenProgram": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+    "decimals": 9,
+    "seed": 301
+  }
+}
