@@ -68,14 +68,32 @@ async function main() {
   console.log("\n\n\n 1. INIT GROUP");
   const marginfiGroup = await initGroup(true, {PROGRAM_ID: config.PROGRAM_ID, ADMIN_KEY: liquidatorWallet.publicKey}, config.LIQUIDATOR_WALLET_PATH);
   await sleep(1000);
+  let state = {
+    marginfiGroup: pkToString(marginfiGroup),
+  };
+  writeJsonFile(
+    "liquidation_e2e_state.json",
+    state
+  );
 
   console.log("\n\n\n 2. INIT MARGINFI ACCOUNTS");
   const liquidator = await initAccount(true, {PROGRAM_ID: config.PROGRAM_ID, GROUP: marginfiGroup, AUTHORITY: liquidatorWallet.publicKey}, config.LIQUIDATOR_WALLET_PATH);
   console.log("liquidator: " + liquidator);
   await sleep(1000);
+  state["liquidator"] = pkToString(liquidator);
+  writeJsonFile(
+    "liquidation_e2e_state.json",
+    state
+  );
+
   const liquidatee = await initAccount(true, {PROGRAM_ID: config.PROGRAM_ID, GROUP: marginfiGroup, AUTHORITY: liquidateeWallet.publicKey}, config.LIQUIDATEE_WALLET_PATH);
   console.log("liquidatee: " + liquidatee);
   await sleep(1000);
+  state["liquidatee"] = pkToString(liquidatee);
+  writeJsonFile(
+    "liquidation_e2e_state.json",
+    state
+  );
 
   console.log("\n\n\n 3. ADD KAMINO (USDC) BANKS");
   let kaminoBankConfig = {
@@ -95,6 +113,11 @@ async function main() {
     kaminoBanks.push(await addKaminoBank(true, kaminoBankConfig, config.LIQUIDATOR_WALLET_PATH));
     await sleep(1000);
   }
+  state["kaminoBanks"] = kaminoBanks.map(pkToString);
+  writeJsonFile(
+    "liquidation_e2e_state.json",
+    state
+  );
 
   console.log("\n\n\n 4. INIT KAMINO OBLIGATIONS");
   let kaminoObligationConfig = {
@@ -114,6 +137,11 @@ async function main() {
     kaminoObligations.push(await initKaminoObligation(true, kaminoObligationConfig, config.LIQUIDATOR_WALLET_PATH));
     await sleep(1000);
   }
+  state["kaminoObligations"] = kaminoObligations.map(pkToString);
+  writeJsonFile(
+    "liquidation_e2e_state.json",
+    state
+  );
 
   console.log("\n\n\n 5. DEPOSIT TO ALL KAMINO BANKS BY LIQUIDATEE");
   let kaminoDepositConfig = {
@@ -145,6 +173,11 @@ async function main() {
   };
   const debtBank = await addBank(true, bankConfig, config.LIQUIDATOR_WALLET_PATH);
   await sleep(1000);
+  state["debtBank"] = pkToString(debtBank);
+  writeJsonFile(
+    "liquidation_e2e_state.json",
+    state
+  );
 
   let paddingBanks = [];
   bankConfig.BANK_MINT = config.COLLATERAL_MINT;
@@ -154,6 +187,11 @@ async function main() {
     paddingBanks.push(await addBank(true, bankConfig, config.LIQUIDATOR_WALLET_PATH));
     await sleep(1000);
   }
+  state["paddingBanks"] = paddingBanks.map(pkToString);
+  writeJsonFile(
+    "liquidation_e2e_state.json",
+    state
+  );
 
   console.log("\n\n\n 7. DEPOSIT TO DEBT BANK BY LIQUIDATOR AND TO PADDING BANKS - BY LIQUIDATEE");
   let regularDepositConfig = {
@@ -245,21 +283,6 @@ async function main() {
   writeJsonFile(
     "liquidation_e2e_config.json",
     serializeConfig(config)
-  );
-
-  const state = {
-    marginfiGroup: pkToString(marginfiGroup),
-    liquidator: pkToString(liquidator),
-    liquidatee: pkToString(liquidatee),
-    debtBank: pkToString(debtBank),
-    kaminoBanks: kaminoBanks.map(pkToString),
-    kaminoObligations: kaminoObligations.map(pkToString),
-    paddingBanks: paddingBanks.map(pkToString),
-  };
-
-  writeJsonFile(
-    "liquidation_e2e_state.json",
-    state
   );
 }
 
