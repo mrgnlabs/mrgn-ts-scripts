@@ -1,6 +1,4 @@
-import {
-  PublicKey,
-} from "@solana/web3.js";
+import { PublicKey } from "@solana/web3.js";
 import { loadKeypairFromFile } from "../scripts/utils";
 import { initGroup } from "./init_group";
 import { initAccount } from "./init_account";
@@ -50,32 +48,74 @@ const config: Config = {
   PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
   LIQUIDATOR_WALLET_PATH: "/.config/stage/id.json",
   LIQUIDATEE_WALLET_PATH: "/.config/arena/id.json",
-  COLLATERAL_MINT: new PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"), // usdc
-  COLLATERAL_ORACLE: new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"), // usdc PythPull
+  COLLATERAL_MINT: new PublicKey(
+    "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+  ), // usdc
+  COLLATERAL_ORACLE: new PublicKey(
+    "Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"
+  ), // usdc PythPull
   DEBT_MINT: new PublicKey("DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263"), // bonk
   DEBT_ORACLE: new PublicKey("DBE3N8uNjhKPRHfANdwGvCZghWXyLPdqdSbEW2XFwBiX"), // bonk PythPull
   KAMINO_RESERVE: new PublicKey("D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59"), // usdc
   KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"), // main
-  KAMINO_RESERVE_ORACLE: new PublicKey("3t4JZcueEzTbVP6kLxXrL3VpWx45jDer4eqysweBchNH"), 
-  KAMINO_FARM_STATE: new PublicKey("JAvnB9AKtgPsTEoKmn24Bq64UMoYcrtWtq42HHBdsPkh"),
+  KAMINO_RESERVE_ORACLE: new PublicKey(
+    "3t4JZcueEzTbVP6kLxXrL3VpWx45jDer4eqysweBchNH"
+  ),
+  KAMINO_FARM_STATE: new PublicKey(
+    "JAvnB9AKtgPsTEoKmn24Bq64UMoYcrtWtq42HHBdsPkh"
+  ),
   LUT: new PublicKey("FtQ5uKQvFoKQ27SWY15tgBeJQnGKmKGzWqDz7kGUbeiq"),
 };
 
 async function main() {
-  const liquidatorWallet = loadKeypairFromFile(process.env.HOME + config.LIQUIDATOR_WALLET_PATH);
-  const liquidateeWallet = loadKeypairFromFile(process.env.HOME + config.LIQUIDATEE_WALLET_PATH);
+  const liquidatorWallet = loadKeypairFromFile(
+    process.env.HOME + config.LIQUIDATOR_WALLET_PATH
+  );
+  const liquidateeWallet = loadKeypairFromFile(
+    process.env.HOME + config.LIQUIDATEE_WALLET_PATH
+  );
+  writeJsonFile("liquidation_e2e_config.json", serializeConfig(config));
 
   console.log("\n\n\n 1. INIT GROUP");
-  const marginfiGroup = await initGroup(true, {PROGRAM_ID: config.PROGRAM_ID, ADMIN_KEY: liquidatorWallet.publicKey}, config.LIQUIDATOR_WALLET_PATH);
+  const marginfiGroup = await initGroup(
+    true,
+    { PROGRAM_ID: config.PROGRAM_ID, ADMIN_KEY: liquidatorWallet.publicKey },
+    config.LIQUIDATOR_WALLET_PATH
+  );
   await sleep(1000);
+  let state = {
+    marginfiGroup: pkToString(marginfiGroup),
+  };
+  writeJsonFile("liquidation_e2e_state.json", state);
 
   console.log("\n\n\n 2. INIT MARGINFI ACCOUNTS");
-  const liquidator = await initAccount(true, {PROGRAM_ID: config.PROGRAM_ID, GROUP: marginfiGroup, AUTHORITY: liquidatorWallet.publicKey}, config.LIQUIDATOR_WALLET_PATH);
+  const liquidator = await initAccount(
+    true,
+    {
+      PROGRAM_ID: config.PROGRAM_ID,
+      GROUP: marginfiGroup,
+      AUTHORITY: liquidatorWallet.publicKey,
+    },
+    config.LIQUIDATOR_WALLET_PATH
+  );
   console.log("liquidator: " + liquidator);
   await sleep(1000);
-  const liquidatee = await initAccount(true, {PROGRAM_ID: config.PROGRAM_ID, GROUP: marginfiGroup, AUTHORITY: liquidateeWallet.publicKey}, config.LIQUIDATEE_WALLET_PATH);
+  state["liquidator"] = pkToString(liquidator);
+  writeJsonFile("liquidation_e2e_state.json", state);
+
+  const liquidatee = await initAccount(
+    true,
+    {
+      PROGRAM_ID: config.PROGRAM_ID,
+      GROUP: marginfiGroup,
+      AUTHORITY: liquidateeWallet.publicKey,
+    },
+    config.LIQUIDATEE_WALLET_PATH
+  );
   console.log("liquidatee: " + liquidatee);
   await sleep(1000);
+  state["liquidatee"] = pkToString(liquidatee);
+  writeJsonFile("liquidation_e2e_state.json", state);
 
   console.log("\n\n\n 3. ADD KAMINO (USDC) BANKS");
   let kaminoBankConfig = {
@@ -92,9 +132,13 @@ async function main() {
   let kaminoBanks = [];
   for (let i = 0; i < 8; i++) {
     kaminoBankConfig.SEED = i;
-    kaminoBanks.push(await addKaminoBank(true, kaminoBankConfig, config.LIQUIDATOR_WALLET_PATH));
+    kaminoBanks.push(
+      await addKaminoBank(true, kaminoBankConfig, config.LIQUIDATOR_WALLET_PATH)
+    );
     await sleep(1000);
   }
+  state["kaminoBanks"] = kaminoBanks.map(pkToString);
+  writeJsonFile("liquidation_e2e_state.json", state);
 
   console.log("\n\n\n 4. INIT KAMINO OBLIGATIONS");
   let kaminoObligationConfig = {
@@ -104,16 +148,24 @@ async function main() {
     BANK_MINT: config.COLLATERAL_MINT,
     KAMINO_RESERVE: config.KAMINO_RESERVE,
     KAMINO_MARKET: config.KAMINO_MARKET,
-    RESERVE_ORACLE: config.KAMINO_RESERVE_ORACLE, 
+    RESERVE_ORACLE: config.KAMINO_RESERVE_ORACLE,
     FARM_STATE: config.KAMINO_FARM_STATE,
     SEED: 0,
   };
   let kaminoObligations = [];
   for (let i = 0; i < 8; i++) {
     kaminoObligationConfig.SEED = i;
-    kaminoObligations.push(await initKaminoObligation(true, kaminoObligationConfig, config.LIQUIDATOR_WALLET_PATH));
+    kaminoObligations.push(
+      await initKaminoObligation(
+        true,
+        kaminoObligationConfig,
+        config.LIQUIDATOR_WALLET_PATH
+      )
+    );
     await sleep(1000);
   }
+  state["kaminoObligations"] = kaminoObligations.map(pkToString);
+  writeJsonFile("liquidation_e2e_state.json", state);
 
   console.log("\n\n\n 5. DEPOSIT TO ALL KAMINO BANKS BY LIQUIDATEE");
   let kaminoDepositConfig = {
@@ -124,12 +176,16 @@ async function main() {
     BANK_MINT: config.COLLATERAL_MINT,
     KAMINO_RESERVE: config.KAMINO_RESERVE,
     KAMINO_MARKET: config.KAMINO_MARKET,
-    RESERVE_ORACLE: config.KAMINO_RESERVE_ORACLE, 
+    RESERVE_ORACLE: config.KAMINO_RESERVE_ORACLE,
     FARM_STATE: config.KAMINO_FARM_STATE,
   };
   for (let i = 0; i < 8; i++) {
     kaminoDepositConfig.BANK = kaminoBanks[i];
-    await depositKamino(true, kaminoDepositConfig, config.LIQUIDATEE_WALLET_PATH);
+    await depositKamino(
+      true,
+      kaminoDepositConfig,
+      config.LIQUIDATEE_WALLET_PATH
+    );
     await sleep(1000);
   }
 
@@ -143,19 +199,31 @@ async function main() {
     BANK_MINT: config.DEBT_MINT,
     SEED: 0,
   };
-  const debtBank = await addBank(true, bankConfig, config.LIQUIDATOR_WALLET_PATH);
+  const debtBank = await addBank(
+    true,
+    bankConfig,
+    config.LIQUIDATOR_WALLET_PATH
+  );
   await sleep(1000);
+  state["debtBank"] = pkToString(debtBank);
+  writeJsonFile("liquidation_e2e_state.json", state);
 
   let paddingBanks = [];
   bankConfig.BANK_MINT = config.COLLATERAL_MINT;
   bankConfig.ORACLE = config.COLLATERAL_ORACLE;
   for (let i = 8; i < 15; i++) {
     bankConfig.SEED = i;
-    paddingBanks.push(await addBank(true, bankConfig, config.LIQUIDATOR_WALLET_PATH));
+    paddingBanks.push(
+      await addBank(true, bankConfig, config.LIQUIDATOR_WALLET_PATH)
+    );
     await sleep(1000);
   }
+  state["paddingBanks"] = paddingBanks.map(pkToString);
+  writeJsonFile("liquidation_e2e_state.json", state);
 
-  console.log("\n\n\n 7. DEPOSIT TO DEBT BANK BY LIQUIDATOR AND TO PADDING BANKS - BY LIQUIDATEE");
+  console.log(
+    "\n\n\n 7. DEPOSIT TO DEBT BANK BY LIQUIDATOR AND TO PADDING BANKS - BY LIQUIDATEE"
+  );
   let regularDepositConfig = {
     PROGRAM_ID: config.PROGRAM_ID,
     BANK: debtBank,
@@ -163,7 +231,11 @@ async function main() {
     AMOUNT: new BN(50000 * 10 ** 5), // 50'000 BONK (** 5 decimals)
     MINT: config.DEBT_MINT,
   };
-  await depositRegular(true, regularDepositConfig, config.LIQUIDATOR_WALLET_PATH);
+  await depositRegular(
+    true,
+    regularDepositConfig,
+    config.LIQUIDATOR_WALLET_PATH
+  );
   await sleep(1000);
 
   regularDepositConfig.ACCOUNT = liquidatee;
@@ -171,14 +243,22 @@ async function main() {
   regularDepositConfig.AMOUNT = new BN(1 * 10 ** 5); // 0.1 USDC
   for (let i = 0; i < 7; i++) {
     regularDepositConfig.BANK = paddingBanks[i];
-    await depositRegular(true, regularDepositConfig, config.LIQUIDATEE_WALLET_PATH);
+    await depositRegular(
+      true,
+      regularDepositConfig,
+      config.LIQUIDATEE_WALLET_PATH
+    );
     await sleep(1000);
   }
 
   console.log("\n\n\n 8. BORROW FROM DEBT BANK BY LIQUIDATEE");
   let remainingAccounts: PublicKey[][] = [];
   for (let i = 0; i < 8; i++) {
-    remainingAccounts.push([kaminoBanks[i], config.COLLATERAL_ORACLE, config.KAMINO_RESERVE]);
+    remainingAccounts.push([
+      kaminoBanks[i],
+      config.COLLATERAL_ORACLE,
+      config.KAMINO_RESERVE,
+    ]);
   }
   for (let i = 0; i < 7; i++) {
     remainingAccounts.push([paddingBanks[i], config.COLLATERAL_ORACLE]);
@@ -194,7 +274,7 @@ async function main() {
     ADD_COMPUTE_UNITS: true,
     KAMINO_RESERVE: config.KAMINO_RESERVE,
     KAMINO_MARKET: config.KAMINO_MARKET,
-    RESERVE_ORACLE: config.KAMINO_RESERVE_ORACLE, 
+    RESERVE_ORACLE: config.KAMINO_RESERVE_ORACLE,
     FARM_STATE: config.KAMINO_FARM_STATE,
     NEW_REMAINING: composeRemainingAccounts(remainingAccounts),
   };
@@ -202,7 +282,9 @@ async function main() {
   await borrow(true, borrowConfig, config.LIQUIDATEE_WALLET_PATH);
   await sleep(1000);
 
-  console.log("\n\n\n 9. SET ALL COLLATERAL BANKS' ASSET WEIGHT TO 0.1 TO RENDER LIQUIDATEE UNHEALTHY");
+  console.log(
+    "\n\n\n 9. SET ALL COLLATERAL BANKS' ASSET WEIGHT TO 0.1 TO RENDER LIQUIDATEE UNHEALTHY"
+  );
   let updatedBankConfig = bankConfigOptDefault();
   updatedBankConfig.assetWeightInit = bigNumberToWrappedI80F48(0.1);
   updatedBankConfig.assetWeightMaint = bigNumberToWrappedI80F48(0.1);
@@ -215,7 +297,7 @@ async function main() {
   };
 
   // config all banks in bulk
-  let bankEntries = []
+  let bankEntries = [];
   for (let i = 0; i < 8; i++) {
     bankEntries.push({
       bank: kaminoBanks[i],
@@ -237,30 +319,10 @@ async function main() {
     PROGRAM_ID: config.PROGRAM_ID,
     ACCOUNT: liquidatee,
     LUT: new PublicKey("CQ8omkUwDtsszuJLo9grtXCeEyDU4QqBLRv9AjRDaUZ3"), // copied from health_pulse.ts
-  }
+  };
   await pulseHealth(pulseHealthConfig, config.LIQUIDATEE_WALLET_PATH);
 
   console.log("Account " + liquidatee + " is now liquidatable.");
-
-  writeJsonFile(
-    "liquidation_e2e_config.json",
-    serializeConfig(config)
-  );
-
-  const state = {
-    marginfiGroup: pkToString(marginfiGroup),
-    liquidator: pkToString(liquidator),
-    liquidatee: pkToString(liquidatee),
-    debtBank: pkToString(debtBank),
-    kaminoBanks: kaminoBanks.map(pkToString),
-    kaminoObligations: kaminoObligations.map(pkToString),
-    paddingBanks: paddingBanks.map(pkToString),
-  };
-
-  writeJsonFile(
-    "liquidation_e2e_state.json",
-    state
-  );
 }
 
 function pkToString(pk: PublicKey | string): string {

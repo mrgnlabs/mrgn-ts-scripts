@@ -70,18 +70,6 @@ const examples: Record<string, Config> = {
 
 const config = examples.depositBonkKamino;
 
-// const config: Config = {
-//   PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-//   GROUP: new PublicKey("CgAQhTn6c2XCeFigriP8aapiKn33R16cMKjgZTyjP3PA"),
-//   ACCOUNT: new PublicKey("EtVhwiGacGjvZ48XvmYJebfxfWFxqhxHvSx9arsfFDCW"),
-//   ACCOUNT_AUTHORITY: new PublicKey(
-//     "6DdJqQYD8AizuXiCkbn19LiyWRwUsRMzy2Sgyoyasyj7"
-//   ),
-//   BANK: new PublicKey("64NtNrDgwY4U8ktazsPMNSBNdwjeFgxauqxi9f6u9ym8"),
-//   MINT: new PublicKey("DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263"),
-//   AMOUNT: new BN(100000 * 10 ** 5),
-// };
-
 async function main() {
   await depositRegular(sendTx, config, "/.config/stage/id.json");
 }
