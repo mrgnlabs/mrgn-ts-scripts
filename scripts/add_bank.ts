@@ -52,34 +52,34 @@ const config: Config = {
   ORACLE: new PublicKey("7neNQ7tobjJFT6AJrNmrAY4TwgTWzJdQNdg6h6spdMBg"),
   ORACLE_TYPE: ORACLE_TYPE_SWB,
   ADMIN: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
-  FEE_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
   // Note: Bw6zsBWadivcKo1n2wEyF79pSrKDGyggif4a7wv3dtVi = Feb 26, 2026 PT BulkSOL
   BANK_MINT: new PublicKey("Bw6zsBWadivcKo1n2wEyF79pSrKDGyggif4a7wv3dtVi"),
   SEED: 0,
-  TOKEN_PROGRAM: TOKEN_PROGRAM_ID,
   MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 };
 
-const rate: InterestRateConfig1_5 = {
-  optimalUtilizationRate: bigNumberToWrappedI80F48(0.8),
-  plateauInterestRate: bigNumberToWrappedI80F48(0.1),
-  maxInterestRate: bigNumberToWrappedI80F48(0.56),
+const rate: InterestRateConfig1_6 = {
   insuranceFeeFixedApr: bigNumberToWrappedI80F48(0),
   insuranceIrFee: bigNumberToWrappedI80F48(0),
   protocolFixedFeeApr: bigNumberToWrappedI80F48(0.0),
   protocolIrFee: bigNumberToWrappedI80F48(0.0),
   protocolOriginationFee: bigNumberToWrappedI80F48(0),
+
+  zeroUtilRate: 0.0,
+  hundredUtilRate: 0.0,
+  points: [{ util: 0.0, rate: 0.0 }, { util: 0.0, rate: 0.0 }, { util: 0.0, rate: 0.0 }, { util: 0.0, rate: 0.0 }, { util: 0.0, rate: 0.0 }],
+  curveType: 1
 };
 
-const bankConfig: BankConfig1_5 = {
-  assetWeightInit: bigNumberToWrappedI80F48(0.2),
-  assetWeightMaint: bigNumberToWrappedI80F48(0.3),
-  liabilityWeightInit: bigNumberToWrappedI80F48(1.3),
-  liabilityWeightMaint: bigNumberToWrappedI80F48(1.2),
+const bankConfig: BankConfig = {
+  assetWeightInit: bigNumberToWrappedI80F48(1.0),
+  assetWeightMaint: bigNumberToWrappedI80F48(1.0),
+  liabilityWeightInit: bigNumberToWrappedI80F48(1.0),
+  liabilityWeightMaint: bigNumberToWrappedI80F48(1.0),
   depositLimit: new BN(10_000 * 10 ** 9),
   interestRateConfig: rate,
   operationalState: { operational: {} },
-  borrowLimit: new BN(0 * 10 ** 9),
+  borrowLimit: new BN(5000 * 10 ** 9),
   riskTier: { collateral: {} },
   totalAssetValueInitLimit: new BN(3_000_000),
   oracleMaxAge: 70,
@@ -104,7 +104,7 @@ export async function addBank(
     config.PROGRAM_ID,
     walletPath,
     config.MULTISIG_PAYER,
-    "1.5"
+    version
   );
   const program = user.program;
   const connection = user.connection;
@@ -213,20 +213,6 @@ export type RatePoint = {
   rate: number;
 };
 
-type InterestRateConfig1_5 = {
-  // Fees
-  optimalUtilizationRate: WrappedI80F48;
-  plateauInterestRate: WrappedI80F48;
-  maxInterestRate: WrappedI80F48;
-
-  insuranceFeeFixedApr: WrappedI80F48;
-  insuranceIrFee: WrappedI80F48;
-  protocolFixedFeeApr: WrappedI80F48;
-  protocolIrFee: WrappedI80F48;
-
-  protocolOriginationFee: WrappedI80F48;
-};
-
 type InterestRateConfig1_6 = {
   // Fees
   insuranceFeeFixedApr: WrappedI80F48;
@@ -256,30 +242,6 @@ type BankConfig = {
 
   depositLimit: BN;
   interestRateConfig: InterestRateConfig1_6;
-
-  /** Paused = 0, Operational = 1, ReduceOnly = 2 */
-  operationalState: OperationalStateRaw;
-
-  borrowLimit: BN;
-  /** Collateral = 0, Isolated = 1 */
-  riskTier: RiskTierRaw;
-  assetTag: number;
-  configFlags: number;
-  totalAssetValueInitLimit: BN;
-  oracleMaxAge: number;
-  /** A u32, e.g. for 100% pass u32::MAX */
-  oracleMaxConfidence: number;
-};
-
-type BankConfig1_5 = {
-  assetWeightInit: WrappedI80F48;
-  assetWeightMaint: WrappedI80F48;
-
-  liabilityWeightInit: WrappedI80F48;
-  liabilityWeightMaint: WrappedI80F48;
-
-  depositLimit: BN;
-  interestRateConfig: InterestRateConfig1_5;
 
   /** Paused = 0, Operational = 1, ReduceOnly = 2 */
   operationalState: OperationalStateRaw;
