@@ -38,10 +38,10 @@ export type BankLimitsEntry = {
  */
 const bankLimits: BankLimitsEntry[] = [
   {
-    bank: new PublicKey("Gj72XAUuNxNeDnW4tUh3H1U2Jbzshz27vtH8KvB972gi"),
-    depositLimit: cap(20, 8),
-    borrowLimit: cap(5, 8),
-    initValue: new BN(4_000_000),
+    bank: new PublicKey("6zN8tRxMpuqruDF4ChjeNGCVggqWBMQQ9KmiNhYeiqXb"),
+    depositLimit: cap(80000, 9),
+    borrowLimit: cap(20000, 9),
+    initValue: new BN(16_000_000),
   },
 ];
 

@@ -30,7 +30,7 @@ async function main() {
     config.PROGRAM_ID,
     config.DEPLOY_KEYPAIR_PATH,
     undefined,
-    "1.6"
+    "current"
   );
   const { program, connection, wallet } = user;
 

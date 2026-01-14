@@ -11,8 +11,8 @@ type Config = {
 };
 
 const config: Config = {
-  PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  GROUP: new PublicKey("4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8"),
+  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
+  GROUP: new PublicKey("FCPfpHA69EbS8f9KKSreTRkXbzFpunsKuYf5qNmnJjpo"),
 };
 
 async function main() {
@@ -21,17 +21,19 @@ async function main() {
     config.PROGRAM_ID,
     "/keys/staging-admin.json",
     undefined,
-    "1.6"
+    "current"
   );
   const program = user.program;
 
   let group = await program.account.marginfiGroup.fetch(config.GROUP);
 
   console.log("admin: " + group.admin);
-  console.log("emode admin:....." + group.emodeAdmin);
-  console.log("curve admin:....." + group.delegateCurveAdmin);
-  console.log("limit admin:....." + group.delegateLimitAdmin);
-  console.log("emissions admin:." + group.delegateEmissionsAdmin);
+  console.log("emode admin:..... " + group.emodeAdmin);
+  console.log("curve admin:..... " + group.delegateCurveAdmin);
+  console.log("limit admin:..... " + group.delegateLimitAdmin);
+  console.log("emissions admin:. " + group.delegateEmissionsAdmin);
+  console.log("risk admin:...... " + group.riskAdmin);
+  console.log("metadata admin:.. " + group.metadataAdmin);
 
   console.log("flags: " + group.groupFlags.toNumber());
   console.log("fee wallet: " + group.feeStateCache.globalFeeWallet);
