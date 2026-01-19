@@ -9,7 +9,7 @@ import { commonSetup } from "../lib/common-setup";
 /**
  * If true, send the tx. If false, output the unsigned b58 tx to console.
  */
-const sendTx = true;
+const sendTx = false;
 
 export type Config = {
   PROGRAM_ID: string;
@@ -20,10 +20,10 @@ export type Config = {
 };
 
 const config: Config = {
-  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
+  PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
   ADMIN: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
-  CLONE_FROM: new PublicKey("EJuhmswifV6wumS28Sfr5W8B18CJ29m1ZNKkhbhbYDCA"),
-  CLONE_TO: new PublicKey("3ZumPvYAJYBmEbXn9GdE4XSkdzF8qtXg5owG9EB8o4ty"),
+  CLONE_FROM: new PublicKey("Bohoc1ikHLD7xKJuzTyiTyCwzaL5N7ggJQu75A8mKYM8"),
+  CLONE_TO: new PublicKey("6zN8tRxMpuqruDF4ChjeNGCVggqWBMQQ9KmiNhYeiqXb"),
   MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 };
 
@@ -47,7 +47,7 @@ async function main() {
       copyToBank: config.CLONE_TO,
     })
     .accountsPartial({
-      signer: user.wallet.publicKey,
+      signer: config.ADMIN,
     })
     .instruction();
 
