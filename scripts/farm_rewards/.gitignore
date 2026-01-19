@@ -1,0 +1,7 @@
+# Ignore mainnet config files (to prevent accidental commits of production configs)
+*-mainnet.json
+*-prod.json
+
+# But keep the example
+!config.example.json
+
