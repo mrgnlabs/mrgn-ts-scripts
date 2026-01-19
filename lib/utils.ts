@@ -473,7 +473,7 @@ export const getTokenBalance = async (
 ) => {
   const accountInfo = await provider.connection.getAccountInfo(account);
   if (!accountInfo) {
-    console.error("Tried to balance of acc that doesn't exist");
+    console.error("Tried to load balance of acc that doesn't exist");
     return 0;
   }
   const data: RawAccount = AccountLayout.decode(accountInfo.data);
