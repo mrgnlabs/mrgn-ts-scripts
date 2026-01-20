@@ -63,7 +63,8 @@
 - BONK - Ds4ZD4M1rLjo4anQnkhCRU9tkmjzx9AsmMkPdPCo4U1t
 - PUMP - B72N46iVnhfX8b3oAPGZL6mrfJj5V684cStXv7XTMw9Q
 - Drift SOL - 5poS1bs6jTuiKJUe4kzP7TdKw9QftoRC9AZbCKtBMJEs
-- Drift JitoSOL (LST market) - E8HCoufVewFDZbzYDyRdqwrcxLtrXCLkchgM7JuW1nET
+- Drift JitoSOL (Main market) - E8HCoufVewFDZbzYDyRdqwrcxLtrXCLkchgM7JuW1nET
+- Drift JitoSOL (LST market) - HTk1SaW5ngQ2my6fKK924rjHsMTG1uKEJJ2CtEtBvrV9
 - Drift PYUSD - 7orqowokyyXEX8yRLSkPCocjpEFXktCdsvUAt3XD4XsW
 - Drift USDS - 8kVdNTKro2eaFvM1JTfo5d3WFbf98Xz9SNxWbgZadgvK
 

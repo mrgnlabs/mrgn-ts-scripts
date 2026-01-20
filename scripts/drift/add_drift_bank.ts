@@ -71,6 +71,7 @@ async function main() {
   console.log("Derived Accounts:");
   console.log("  Bank:", bank.toString());
   console.log("  Drift Spot Market:", driftSpotMarket.toString());
+  console.log("  Drift Spot Market Vault:", driftSpotMarketVault.toString());
   console.log("  Drift State:", driftState.toString());
   console.log();
 
