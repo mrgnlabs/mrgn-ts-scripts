@@ -13,6 +13,7 @@ import {
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 import { commonSetup } from "../lib/common-setup";
 import { RiskTierRaw } from "@mrgnlabs/marginfi-client-v2";
+import { aprToU32, utilToU32 } from "../lib/utils";
 
 /**
  * If true, send the tx. If false, output the unsigned b58 tx to console.
@@ -27,12 +28,12 @@ const ORACLE_TYPE_SWB = 4;
 type Config = {
   PROGRAM_ID: string;
   GROUP_KEY: PublicKey;
-  /** 
-   * For Pyth, This is the feed, and is owned by rec5EKMGg6MxZYaMdyBfgwp4d5rB9T1VQH5pJv5LtFJ 
+  /**
+   * For Pyth, This is the feed, and is owned by rec5EKMGg6MxZYaMdyBfgwp4d5rB9T1VQH5pJv5LtFJ
    * Pyth Feed IDs can be taken from: https://www.pyth.network/developers/price-feed-ids
-   * 
+   *
    * For swb this is called the "address" if exploring at https://ondemand.switchboard.xyz
-  */
+   */
   ORACLE: PublicKey;
   /** Generally 3 (Pyth) or 4 (Switchboard) */
   ORACLE_TYPE: number;
@@ -49,40 +50,45 @@ type Config = {
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
   GROUP_KEY: new PublicKey("4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8"),
-  ORACLE: new PublicKey("7neNQ7tobjJFT6AJrNmrAY4TwgTWzJdQNdg6h6spdMBg"),
+  ORACLE: new PublicKey("AEq1mcpesN4u9CSd8uUQbQar6qLghNQx7rnhdQhAnUyn"),
   ORACLE_TYPE: ORACLE_TYPE_SWB,
   ADMIN: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
-  // Note: Bw6zsBWadivcKo1n2wEyF79pSrKDGyggif4a7wv3dtVi = Feb 26, 2026 PT BulkSOL
-  BANK_MINT: new PublicKey("Bw6zsBWadivcKo1n2wEyF79pSrKDGyggif4a7wv3dtVi"),
+  BANK_MINT: new PublicKey("Dso1bDeDjCQxTrWHqUUi63oBvV7Mdm6WaobLbQ7gnPQ"),
   SEED: 0,
   MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 };
 
-const rate: InterestRateConfig1_6 = {
+const rate: InterestRateConfig1_7 = {
   insuranceFeeFixedApr: bigNumberToWrappedI80F48(0),
   insuranceIrFee: bigNumberToWrappedI80F48(0),
-  protocolFixedFeeApr: bigNumberToWrappedI80F48(0.0),
-  protocolIrFee: bigNumberToWrappedI80F48(0.0),
+  protocolFixedFeeApr: bigNumberToWrappedI80F48(0.00001),
+  protocolIrFee: bigNumberToWrappedI80F48(0.05),
   protocolOriginationFee: bigNumberToWrappedI80F48(0),
 
-  zeroUtilRate: 0.0,
-  hundredUtilRate: 0.0,
-  points: [{ util: 0.0, rate: 0.0 }, { util: 0.0, rate: 0.0 }, { util: 0.0, rate: 0.0 }, { util: 0.0, rate: 0.0 }, { util: 0.0, rate: 0.0 }],
-  curveType: 1
+  zeroUtilRate: 0,
+  hundredUtilRate: aprToU32(0.56),
+  points: [
+    { util: utilToU32(0.8), rate: aprToU32(0.1) },
+    { util: 0, rate: 0 },
+    { util: 0, rate: 0 },
+    { util: 0, rate: 0 },
+    { util: 0, rate: 0 },
+  ],
+  curveType: 1,
 };
 
 const bankConfig: BankConfig = {
-  assetWeightInit: bigNumberToWrappedI80F48(1.0),
-  assetWeightMaint: bigNumberToWrappedI80F48(1.0),
-  liabilityWeightInit: bigNumberToWrappedI80F48(1.0),
-  liabilityWeightMaint: bigNumberToWrappedI80F48(1.0),
-  depositLimit: new BN(10_000 * 10 ** 9),
+  assetWeightInit: bigNumberToWrappedI80F48(0.65),
+  assetWeightMaint: bigNumberToWrappedI80F48(0.8),
+  liabilityWeightInit: bigNumberToWrappedI80F48(1.3),
+  liabilityWeightMaint: bigNumberToWrappedI80F48(1.2),
+  depositLimit: new BN(20_000 * 10 ** 9),
   interestRateConfig: rate,
   operationalState: { operational: {} },
-  borrowLimit: new BN(5000 * 10 ** 9),
+  borrowLimit: new BN(2_500 * 10 ** 9),
   riskTier: { collateral: {} },
-  totalAssetValueInitLimit: new BN(3_000_000),
-  oracleMaxAge: 70,
+  totalAssetValueInitLimit: new BN(5_000_000),
+  oracleMaxAge: 30,
   assetTag: 0,
   oracleMaxConfidence: 0,
   configFlags: 0,
@@ -96,7 +102,7 @@ export async function addBank(
   sendTx: boolean,
   config: Config,
   walletPath: string,
-  version?: "current"
+  version?: "current",
 ): Promise<PublicKey> {
   console.log("adding bank to group: " + config.GROUP_KEY);
   const user = commonSetup(
@@ -104,7 +110,7 @@ export async function addBank(
     config.PROGRAM_ID,
     walletPath,
     config.MULTISIG_PAYER,
-    version
+    version,
   );
   const program = user.program;
   const connection = user.connection;
@@ -113,7 +119,7 @@ export async function addBank(
     program.programId,
     config.GROUP_KEY,
     config.BANK_MINT,
-    new BN(config.SEED)
+    new BN(config.SEED),
   );
 
   let oracleMeta: AccountMeta;
@@ -143,7 +149,7 @@ export async function addBank(
           configFlags: 0,
           oracleMaxConfidence: bankConfig.oracleMaxConfidence,
         },
-        new BN(config.SEED)
+        new BN(config.SEED),
       )
       .accountsPartial({
         marginfiGroup: config.GROUP_KEY,
@@ -161,7 +167,7 @@ export async function addBank(
         bank: bankKey,
       })
       .remainingAccounts([oracleMeta])
-      .instruction()
+      .instruction(),
   );
 
   if (sendTx) {
@@ -194,11 +200,11 @@ const deriveBankWithSeed = (
   programId: PublicKey,
   group: PublicKey,
   bankMint: PublicKey,
-  seed: BN
+  seed: BN,
 ) => {
   return PublicKey.findProgramAddressSync(
     [group.toBuffer(), bankMint.toBuffer(), seed.toArrayLike(Buffer, "le", 8)],
-    programId
+    programId,
   );
 };
 
@@ -213,7 +219,7 @@ export type RatePoint = {
   rate: number;
 };
 
-type InterestRateConfig1_6 = {
+type InterestRateConfig1_7 = {
   // Fees
   insuranceFeeFixedApr: WrappedI80F48;
   insuranceIrFee: WrappedI80F48;
@@ -241,7 +247,7 @@ type BankConfig = {
   liabilityWeightMaint: WrappedI80F48;
 
   depositLimit: BN;
-  interestRateConfig: InterestRateConfig1_6;
+  interestRateConfig: InterestRateConfig1_7;
 
   /** Paused = 0, Operational = 1, ReduceOnly = 2 */
   operationalState: OperationalStateRaw;

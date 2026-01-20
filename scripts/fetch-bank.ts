@@ -24,7 +24,7 @@ const config: Config = {
     // new PublicKey("HmpMfL8942u22htC4EMiWgLX931g3sacXFR6KjuLgKLV"), // usdt
     // new PublicKey("8UEiPmgZHXXEDrqLS3oiTxQxTbeYTtPbeMBxAd2XGbpu"), // py
     // new PublicKey("FDsf8sj6SoV313qrA91yms3u5b3P4hBxEPvanVs8LtJV"), // usds
-    new PublicKey("3ZumPvYAJYBmEbXn9GdE4XSkdzF8qtXg5owG9EB8o4ty"),
+    new PublicKey("9LfTcnXVa84mTwAxgHUkLBk1yg6vCWAMLSNY1oLBnnVx"),
   ],
 };
 
@@ -170,7 +170,7 @@ async function printBankInfo(bankKey: PublicKey) {
     { Label: "Deposits per Share", Value: toStr(bank.assetShareValue) },
     {
       Label: "Liabilities per Share",
-      Value: toStr(bank.config.liabilityWeightMaint),
+      Value: toStr(bank.liabilityShareValue),
     },
     { Label: "Total Deposits (token)", Value: formatBN(totalAssets) },
     { Label: "Total Liabilities (token)", Value: formatBN(totalLiabs) },
