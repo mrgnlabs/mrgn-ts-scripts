@@ -12,7 +12,7 @@ import {
 } from "@mrgnlabs/mrgn-common";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 import { commonSetup } from "../lib/common-setup";
-import { RiskTierRaw } from "@mrgnlabs/marginfi-client-v2";
+import { OperationalStateRaw, RiskTierRaw } from "@mrgnlabs/marginfi-client-v2";
 import { aprToU32, utilToU32 } from "../lib/utils";
 
 /**
@@ -233,11 +233,6 @@ type InterestRateConfig1_7 = {
   points: RatePoint[];
   curveType: number;
 };
-
-type OperationalStateRaw =
-  | { paused: {} }
-  | { operational: {} }
-  | { reduceOnly: {} };
 
 type BankConfig = {
   assetWeightInit: WrappedI80F48;

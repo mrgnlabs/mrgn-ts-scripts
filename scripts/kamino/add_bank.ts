@@ -14,7 +14,6 @@ import { KaminoConfigCompact, OracleSetupRawWithKamino } from "./kamino-types";
 import { commonSetup } from "../../lib/common-setup";
 import { makeAddKaminoBankIx } from "./ixes-common";
 import { deriveBankWithSeed } from "../common/pdas";
-import { TOKEN_2022_PROGRAM_ID } from "@solana/spl-token";
 
 /**
  * If true, send the tx. If false, output the unsigned b58 tx to console.

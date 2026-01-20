@@ -73,7 +73,7 @@ export const makeAddKaminoBankIx = (
   const ix = program.methods
     .lendingPoolAddBankKamino(args.config, args.seed)
     .accounts({
-      kaminoObligation,
+      integrationAcc2: kaminoObligation,
       tokenProgram: accounts.tokenProgram || TOKEN_PROGRAM_ID,
       ...accounts,
     })

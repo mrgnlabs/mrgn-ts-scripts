@@ -3,8 +3,8 @@ import { AnchorProvider, Program, Wallet } from "@coral-xyz/anchor";
 import { readFileSync } from "fs";
 import { homedir } from "os";
 import { loadEnvFile } from "../../utils";
-import marginfiDriftIdl from "../../../idl/marginfi_drift.json";
-import { Marginfi as MarginfiDrift } from "../../../idl/marginfi_drift";
+import marginfiDriftIdl from "../../../idl/marginfi.json";
+import { Marginfi as MarginfiDrift } from "../../../idl/marginfi";
 
 export interface DriftSetup {
   connection: Connection;

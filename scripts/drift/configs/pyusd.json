@@ -1,0 +1,21 @@
+{
+  "programId": "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
+  "group": "FCPfpHA69EbS8f9KKSreTRkXbzFpunsKuYf5qNmnJjpo",
+  "bankMint": "2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo",
+  "bankAddress": "7orqowokyyXEX8yRLSkPCocjpEFXktCdsvUAt3XD4XsW",
+  "driftMarketIndex": 22,
+  "driftSpotMarket": "GyyHYVCrZGc2AQPuvNbcP1babmU3L42ptmxZthUfD9q",
+  "oracle": "9zXQxpYH3kYhtoybmZfUNNCRVuud7fY9jswTg1hLyT8k",
+  "driftOracle": "5QZMnsyndmphvZF4BNgoMHwVZaREXeE2rpBoCPMxgCCd",
+  "depositLimit": "50000000000000",
+  "totalAssetValueInitLimit": "5000000000000",
+  "seed": "1",
+  "initDepositAmount": "100",
+  "comments": {
+    "asset": "PYUSD (PayPal USD)",
+    "tokenProgram": "Token-2022",
+    "decimals": 6,
+    "note": "Token-2022 mint - important for testing Token-2022 support",
+    "marginfiOracleType": "pythPushOracle"
+  }
+}

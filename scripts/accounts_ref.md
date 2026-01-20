@@ -4,7 +4,7 @@
 
 - Mainnet - MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA
 - Staging - stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct
-- Staging Alt (Kamino) - 5UDghkpgW1HfYSrmEj2iAApHShqU44H6PKTAar9LL9bY
+- Staging Alt (JupLend) - 5UDghkpgW1HfYSrmEj2iAApHShqU44H6PKTAar9LL9bY
 - Mocks - HfCg2Re4BnZmQ7SzUcw3fhBtf1fqWmtMY1wov59VFrYs
 
 ## MULTISIG
@@ -26,7 +26,7 @@
 - Main group - 4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8
 - Staging - FCPfpHA69EbS8f9KKSreTRkXbzFpunsKuYf5qNmnJjpo
 - Staging mainnet clone - Diu1q9gniR1qR4Daaej3rcHd6949HMmxLGsnQ94Z3rLz
-- Kamino Integration - ERBiJdWtnVBBd4gFm7YVHT3a776x5NbGbJBR5BDvsxtj
+- Staging Alt (JupLend) - ERBiJdWtnVBBd4gFm7YVHT3a776x5NbGbJBR5BDvsxtj
 
 ## STAKED SETTINGS
 
@@ -62,8 +62,12 @@
 - WIF - DDLVJyj5sT3knnVDoTifrtQmroLnRCkBmGZ1QXCUDUUd
 - BONK - Ds4ZD4M1rLjo4anQnkhCRU9tkmjzx9AsmMkPdPCo4U1t
 - PUMP - B72N46iVnhfX8b3oAPGZL6mrfJj5V684cStXv7XTMw9Q
+- Drift SOL - 5poS1bs6jTuiKJUe4kzP7TdKw9QftoRC9AZbCKtBMJEs
+- Drift JitoSOL (LST market) - E8HCoufVewFDZbzYDyRdqwrcxLtrXCLkchgM7JuW1nET
+- Drift PYUSD - 7orqowokyyXEX8yRLSkPCocjpEFXktCdsvUAt3XD4XsW
+- Drift USDS - 8kVdNTKro2eaFvM1JTfo5d3WFbf98Xz9SNxWbgZadgvK
 
-## KAMINO INTEGRATION BANKS
+## KAMINO INTEGRATION BANKS (Staging Alt)
 
 - EURC (kamino) - 4TAjQVpmwKX3Zp2pRHa14W5eoPHyXk7jYbhzfZtBiHym
 - USDC (also Kamino) - DQ8AKQxPbB9iAyTqtt6UiRH8BANKTztHph9yBnPU72p9
@@ -79,6 +83,16 @@
 - usds (kamino huma pool, two rewards) - B63tbAfJFNL5ZvMYivZQdcCt6WSfUkwhe9J91MKWRUW8
 - sol (kamino, jito pool, swb oracle) - 54BbBaVDni5Eoy5AmDQ7rmXsmeeT4ginaj9PcQaZhanV
 - msol (kamino, msol pool, swb oracle) - HhKsxu1D8WnUBBiU9qpMjyUhWeosUGRKUmBwWnuwGRMK
+
+## DRIFT INTEGRATION BANKS (Staging Alt)
+
+- USDC - 73PAdXZSH7s89QBLUHntp12QaHWqdc6GChCYLSVF1RBJ
+- SOL - H2FT24RksVSq6kxhfPZacyqbEaXUtRZNi1QvMGV9RrFX
+- jitoSOL - 7TduwJSpq2zhPguaciA3GADsnspwSx6FQjZUhy37Jtgz
+- PYUSD - 8txe1gXz2yGGsy22NAtimJnCM4ivDQSQAf5kz2VZJsRR
+- USDS - 5kW3rsj6XoB2VsE7RdGkmWMo4wQy5ZgLNcH3CFRHEq7J
+- bSOL - 7iPsp3XiMFe3yJppCzSj7dLhkhnejm8id2ejBBoW4RgW
+- SOL (Isolated) - BWAm7qFe3uQ3mEzuJNU8umCjKBMvsMr3AiFKGowiD5B8
 
 ## ORACLES
 
