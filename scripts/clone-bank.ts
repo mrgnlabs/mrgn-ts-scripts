@@ -1,13 +1,12 @@
 import {
-  AccountMeta,
   PublicKey,
   Transaction,
   sendAndConfirmTransaction,
 } from "@solana/web3.js";
 import { BN } from "@coral-xyz/anchor";
-import { TOKEN_2022_PROGRAM_ID, TOKEN_PROGRAM_ID } from "@mrgnlabs/mrgn-common";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 import { commonSetup } from "../lib/common-setup";
+import { deriveBankWithSeed } from "./common/pdas";
 
 /**
  * If true, send the tx. If false, output the unsigned b58 tx to console.
@@ -48,7 +47,7 @@ async function main() {
     config.PROGRAM_ID,
     "/keys/zerotrade_admin.json",
     config.MULTISIG_PAYER,
-    "current"
+    "current",
   );
   const program = user.program;
   const connection = user.connection;
@@ -69,7 +68,7 @@ async function main() {
     program.programId,
     config.GROUP_KEY,
     bankMint,
-    new BN(config.SEED)
+    new BN(config.SEED),
   );
 
   const ix = await program.methods
@@ -112,18 +111,6 @@ async function main() {
     console.log("Base58-encoded transaction:", base58Transaction);
   }
 }
-
-const deriveBankWithSeed = (
-  programId: PublicKey,
-  group: PublicKey,
-  bankMint: PublicKey,
-  seed: BN
-) => {
-  return PublicKey.findProgramAddressSync(
-    [group.toBuffer(), bankMint.toBuffer(), seed.toArrayLike(Buffer, "le", 8)],
-    programId
-  );
-};
 
 main().catch((err) => {
   console.error(err);

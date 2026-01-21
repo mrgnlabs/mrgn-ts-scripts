@@ -3,11 +3,9 @@ import {
   Transaction,
   sendAndConfirmTransaction,
 } from "@solana/web3.js";
-import { BN } from "@coral-xyz/anchor";
-import { bigNumberToWrappedI80F48, WrappedI80F48 } from "@mrgnlabs/mrgn-common";
-import { InterestRateConfigRaw } from "@mrgnlabs/marginfi-client-v2";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 import { commonSetup } from "../lib/common-setup";
+import { InterestRateConfigOpt1_6 } from "./common/types";
 import { u32MAX } from "../lib/constants";
 
 /**
@@ -28,7 +26,7 @@ const config: Config = {
 };
 
 // ---- List your (BANK, intConfig) pairs here ----
-const ITEMS: Array<{ bank: PublicKey; int: InterestRateConfigRaw }> = [
+const ITEMS: Array<{ bank: PublicKey; int: InterestRateConfigOpt1_6 }> = [
   {
     bank: new PublicKey("2s37akK2eyBbp8DZgCm7RtsaEz8eJP3Nxd4urLHQv7yB"),
     int: {
@@ -37,9 +35,10 @@ const ITEMS: Array<{ bank: PublicKey; int: InterestRateConfigRaw }> = [
       protocolFixedFeeApr: null,
       insuranceIrFee: null,
       insuranceFeeFixedApr: null,
-      maxInterestRate: null,
-      optimalUtilizationRate: bigNumberToWrappedI80F48(0.9),
-      plateauInterestRate: bigNumberToWrappedI80F48(0.075),
+
+      zeroUtilRate: u32MAX / 10,
+      hundredUtilRate: u32MAX,
+      points: null,
     },
   },
   {
@@ -50,9 +49,10 @@ const ITEMS: Array<{ bank: PublicKey; int: InterestRateConfigRaw }> = [
       protocolFixedFeeApr: null,
       insuranceIrFee: null,
       insuranceFeeFixedApr: null,
-      maxInterestRate: null,
-      optimalUtilizationRate: bigNumberToWrappedI80F48(0.9),
-      plateauInterestRate: bigNumberToWrappedI80F48(0.075),
+
+      zeroUtilRate: u32MAX / 10,
+      hundredUtilRate: u32MAX,
+      points: null,
     },
   },
   {
@@ -63,9 +63,10 @@ const ITEMS: Array<{ bank: PublicKey; int: InterestRateConfigRaw }> = [
       protocolFixedFeeApr: null,
       insuranceIrFee: null,
       insuranceFeeFixedApr: null,
-      maxInterestRate: null,
-      optimalUtilizationRate: bigNumberToWrappedI80F48(0.9),
-      plateauInterestRate: bigNumberToWrappedI80F48(0.075),
+
+      zeroUtilRate: u32MAX / 10,
+      hundredUtilRate: u32MAX,
+      points: null,
     },
   },
   {
@@ -76,13 +77,12 @@ const ITEMS: Array<{ bank: PublicKey; int: InterestRateConfigRaw }> = [
       protocolFixedFeeApr: null,
       insuranceIrFee: null,
       insuranceFeeFixedApr: null,
-      maxInterestRate: null,
-      optimalUtilizationRate: bigNumberToWrappedI80F48(0.9),
-      plateauInterestRate: bigNumberToWrappedI80F48(0.075),
+
+      zeroUtilRate: u32MAX / 10,
+      hundredUtilRate: u32MAX,
+      points: null,
     },
   },
-  // Add more items as needed:
-  // { bank: new PublicKey("..."), int: { ...intConfig(), maxInterestRate: new BN(123) } },
 ];
 
 async function main() {

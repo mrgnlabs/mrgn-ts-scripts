@@ -49,30 +49,30 @@ const config: Config = {
   LIQUIDATOR_WALLET_PATH: "/.config/stage/id.json",
   LIQUIDATEE_WALLET_PATH: "/.config/arena/id.json",
   COLLATERAL_MINT: new PublicKey(
-    "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+    "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
   ), // usdc
   COLLATERAL_ORACLE: new PublicKey(
-    "Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"
+    "Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX",
   ), // usdc PythPull
   DEBT_MINT: new PublicKey("DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263"), // bonk
   DEBT_ORACLE: new PublicKey("DBE3N8uNjhKPRHfANdwGvCZghWXyLPdqdSbEW2XFwBiX"), // bonk PythPull
   KAMINO_RESERVE: new PublicKey("D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59"), // usdc
   KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"), // main
   KAMINO_RESERVE_ORACLE: new PublicKey(
-    "3t4JZcueEzTbVP6kLxXrL3VpWx45jDer4eqysweBchNH"
+    "3t4JZcueEzTbVP6kLxXrL3VpWx45jDer4eqysweBchNH",
   ),
   KAMINO_FARM_STATE: new PublicKey(
-    "JAvnB9AKtgPsTEoKmn24Bq64UMoYcrtWtq42HHBdsPkh"
+    "JAvnB9AKtgPsTEoKmn24Bq64UMoYcrtWtq42HHBdsPkh",
   ),
   LUT: new PublicKey("FtQ5uKQvFoKQ27SWY15tgBeJQnGKmKGzWqDz7kGUbeiq"),
 };
 
 async function main() {
   const liquidatorWallet = loadKeypairFromFile(
-    process.env.HOME + config.LIQUIDATOR_WALLET_PATH
+    process.env.HOME + config.LIQUIDATOR_WALLET_PATH,
   );
   const liquidateeWallet = loadKeypairFromFile(
-    process.env.HOME + config.LIQUIDATEE_WALLET_PATH
+    process.env.HOME + config.LIQUIDATEE_WALLET_PATH,
   );
   writeJsonFile("liquidation_e2e_config.json", serializeConfig(config));
 
@@ -80,7 +80,7 @@ async function main() {
   const marginfiGroup = await initGroup(
     true,
     { PROGRAM_ID: config.PROGRAM_ID, ADMIN_KEY: liquidatorWallet.publicKey },
-    config.LIQUIDATOR_WALLET_PATH
+    config.LIQUIDATOR_WALLET_PATH,
   );
   await sleep(1000);
   let state = {
@@ -96,7 +96,7 @@ async function main() {
       GROUP: marginfiGroup,
       AUTHORITY: liquidatorWallet.publicKey,
     },
-    config.LIQUIDATOR_WALLET_PATH
+    config.LIQUIDATOR_WALLET_PATH,
   );
   console.log("liquidator: " + liquidator);
   await sleep(1000);
@@ -110,7 +110,7 @@ async function main() {
       GROUP: marginfiGroup,
       AUTHORITY: liquidateeWallet.publicKey,
     },
-    config.LIQUIDATEE_WALLET_PATH
+    config.LIQUIDATEE_WALLET_PATH,
   );
   console.log("liquidatee: " + liquidatee);
   await sleep(1000);
@@ -133,7 +133,11 @@ async function main() {
   for (let i = 0; i < 8; i++) {
     kaminoBankConfig.SEED = i;
     kaminoBanks.push(
-      await addKaminoBank(true, kaminoBankConfig, config.LIQUIDATOR_WALLET_PATH)
+      await addKaminoBank(
+        true,
+        kaminoBankConfig,
+        config.LIQUIDATOR_WALLET_PATH,
+      ),
     );
     await sleep(1000);
   }
@@ -159,8 +163,8 @@ async function main() {
       await initKaminoObligation(
         true,
         kaminoObligationConfig,
-        config.LIQUIDATOR_WALLET_PATH
-      )
+        config.LIQUIDATOR_WALLET_PATH,
+      ),
     );
     await sleep(1000);
   }
@@ -184,7 +188,7 @@ async function main() {
     await depositKamino(
       true,
       kaminoDepositConfig,
-      config.LIQUIDATEE_WALLET_PATH
+      config.LIQUIDATEE_WALLET_PATH,
     );
     await sleep(1000);
   }
@@ -202,7 +206,7 @@ async function main() {
   const debtBank = await addBank(
     true,
     bankConfig,
-    config.LIQUIDATOR_WALLET_PATH
+    config.LIQUIDATOR_WALLET_PATH,
   );
   await sleep(1000);
   state["debtBank"] = pkToString(debtBank);
@@ -214,7 +218,7 @@ async function main() {
   for (let i = 8; i < 15; i++) {
     bankConfig.SEED = i;
     paddingBanks.push(
-      await addBank(true, bankConfig, config.LIQUIDATOR_WALLET_PATH)
+      await addBank(true, bankConfig, config.LIQUIDATOR_WALLET_PATH),
     );
     await sleep(1000);
   }
@@ -222,7 +226,7 @@ async function main() {
   writeJsonFile("liquidation_e2e_state.json", state);
 
   console.log(
-    "\n\n\n 7. DEPOSIT TO DEBT BANK BY LIQUIDATOR AND TO PADDING BANKS - BY LIQUIDATEE"
+    "\n\n\n 7. DEPOSIT TO DEBT BANK BY LIQUIDATOR AND TO PADDING BANKS - BY LIQUIDATEE",
   );
   let regularDepositConfig = {
     PROGRAM_ID: config.PROGRAM_ID,
@@ -234,7 +238,7 @@ async function main() {
   await depositRegular(
     true,
     regularDepositConfig,
-    config.LIQUIDATOR_WALLET_PATH
+    config.LIQUIDATOR_WALLET_PATH,
   );
   await sleep(1000);
 
@@ -246,7 +250,7 @@ async function main() {
     await depositRegular(
       true,
       regularDepositConfig,
-      config.LIQUIDATEE_WALLET_PATH
+      config.LIQUIDATEE_WALLET_PATH,
     );
     await sleep(1000);
   }
@@ -283,7 +287,7 @@ async function main() {
   await sleep(1000);
 
   console.log(
-    "\n\n\n 9. SET ALL COLLATERAL BANKS' ASSET WEIGHT TO 0.1 TO RENDER LIQUIDATEE UNHEALTHY"
+    "\n\n\n 9. SET ALL COLLATERAL BANKS' ASSET WEIGHT TO 0.1 TO RENDER LIQUIDATEE UNHEALTHY",
   );
   let updatedBankConfig = bankConfigOptDefault();
   updatedBankConfig.assetWeightInit = bigNumberToWrappedI80F48(0.1);

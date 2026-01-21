@@ -1,17 +1,6 @@
-import { Connection } from "@solana/web3.js";
-import {
-  Program,
-  AnchorProvider,
-  EventParser,
-  BorshCoder,
-  Wallet,
-} from "@coral-xyz/anchor";
-
-import { loadKeypairFromFile } from "./utils";
-
-import { Marginfi } from "../idl/marginfi1.3";
-import marginfiIdl from "../idl/marginfi.json";
+import { EventParser, BorshCoder } from "@coral-xyz/anchor";
 import { base64 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
+import { commonSetup } from "../lib/common-setup";
 
 type Config = {
   PROGRAM_ID: string;
@@ -28,22 +17,14 @@ const config: Config = {
 };
 
 async function main() {
-  marginfiIdl.address = config.PROGRAM_ID;
-  const connection = new Connection(
-    "https://api.mainnet-beta.solana.com",
-    "confirmed"
+  const user = commonSetup(
+    true,
+    config.PROGRAM_ID,
+    "/keys/staging-deploy.json",
+    undefined,
   );
-  const wallet = new Wallet(
-    loadKeypairFromFile(process.env.HOME + "/keys/staging-deploy.json")
-  );
-
-  const provider = new AnchorProvider(connection, wallet, {
-    preflightCommitment: "confirmed",
-  });
-  const program: Program<Marginfi> = new Program(
-    marginfiIdl as Marginfi,
-    provider
-  );
+  const program = user.program;
+  const connection = user.connection;
 
   const tx = await connection.getTransaction(config.TX_SIG, {
     maxSupportedTransactionVersion: 0,
@@ -78,7 +59,7 @@ async function main() {
         console.log(
           `[${i.toString().padStart(4, "0")}..${(i + chunk.length - 1)
             .toString()
-            .padStart(4, "0")}]  ${hexLine}`
+            .padStart(4, "0")}]  ${hexLine}`,
         );
       }
 
@@ -102,7 +83,7 @@ async function main() {
 
   const decoded = Array.from(parser.parseLogs(logs, false));
   const liquidateEvent = decoded.find(
-    (evt) => evt.name === "lendingAccountLiquidateEvent"
+    (evt) => evt.name === "lendingAccountLiquidateEvent",
   );
   if (!liquidateEvent) {
     throw new Error("No lendingAccountLiquidateEvent found in logs");
@@ -159,25 +140,25 @@ async function main() {
 
   console.log("In native token....");
   console.log(
-    `Asset amount seized (actual): ${assetSeizedActual / 10 ** assetDecimals}`
+    `Asset amount seized (actual): ${assetSeizedActual / 10 ** assetDecimals}`,
   );
   console.log(
-    `Asset amount seized (alt calc): ${assetSeizedAlt / 10 ** assetDecimals}`
+    `Asset amount seized (alt calc): ${assetSeizedAlt / 10 ** assetDecimals}`,
   );
 
   console.log(
     `Liability repaid to liquidatee: ${
       liabilityRepaidToLiquidatee / 10 ** liabDecimals
-    }`
+    }`,
   );
   console.log(
     `Liability paid by liquidator: ${
       liabilityPaidByLiquidator / 10 ** liabDecimals
-    }`
+    }`,
   );
 
   console.log(
-    `Insurance fund amount paid: ${insuranceFundPaid / 10 ** liabDecimals}`
+    `Insurance fund amount paid: ${insuranceFundPaid / 10 ** liabDecimals}`,
   );
 }
 

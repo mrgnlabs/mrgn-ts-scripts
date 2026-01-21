@@ -5,6 +5,9 @@ import { Program, AnchorProvider, Wallet, Idl } from "@coral-xyz/anchor";
 import { KaminoLending } from "../idl/kamino_lending";
 import KaminoLendingIdl from "../idl/kamino_lending.json";
 
+import { Drift } from "../idl/drift";
+import DriftIdl from "../idl/drift.json";
+
 import { Marginfi as MarginfiCurrent } from "../idl/marginfi";
 import marginfiIdlCurrent from "../idl/marginfi.json";
 
@@ -20,6 +23,7 @@ import { DEFAULT_API_URL, loadEnvFile } from "../scripts/utils";
 export type User<IDL extends Idl> = {
   program: Program<IDL>;
   kaminoProgram: Program<KaminoLending>;
+  driftProgram: Program<Drift>;
   wallet: ReadOnlyWallet | Wallet;
   provider: AnchorProvider;
   connection: Connection;
@@ -101,6 +105,7 @@ export function commonSetup(
     return {
       program: new Program<MarginfiV1_6>(selectedJsonIdl as any, provider),
       kaminoProgram: undefined,
+      driftProgram: undefined,
       wallet,
       provider,
       connection,
@@ -109,6 +114,7 @@ export function commonSetup(
     return {
       program: new Program<MarginfiCurrent>(selectedJsonIdl as any, provider),
       kaminoProgram: undefined,
+      driftProgram: undefined,
       wallet,
       provider,
       connection,
@@ -123,6 +129,17 @@ export function registerKaminoProgram<IDL extends Idl>(
   const kaminoIdl = { ...(KaminoLendingIdl as Idl), address: kaminoProgramId };
   user.kaminoProgram = new Program<KaminoLending>(
     kaminoIdl as any,
+    user.provider
+  );
+}
+
+export function registerDriftProgram<IDL extends Idl>(
+  user: User<IDL>,
+  driftProgramId: string
+): void {
+  const driftIdl = { ...(DriftIdl as Idl), address: driftProgramId };
+  user.driftProgram = new Program<Drift>(
+    driftIdl as any,
     user.provider
   );
 }

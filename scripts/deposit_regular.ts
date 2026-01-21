@@ -65,7 +65,7 @@ const examples: Record<string, Config> = {
     //   new PublicKey("CoEDGeYda7Mi6c1BAsHE2LL6zEVcitX43wPABSLgQfpB"), // uxd oracle
     // ],
     MULTISIG: undefined,
-  }
+  },
 };
 
 const config = examples.depositBonkKamino;
@@ -74,13 +74,18 @@ async function main() {
   await depositRegular(sendTx, config, "/.config/stage/id.json");
 }
 
-export async function depositRegular(sendTx: boolean, config: Config, walletPath: string, version?: "current") {
+export async function depositRegular(
+  sendTx: boolean,
+  config: Config,
+  walletPath: string,
+  version?: "current",
+) {
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
     walletPath,
     config.MULTISIG,
-    version
+    version,
   );
   const program = user.program;
   const connection = user.connection;
@@ -88,7 +93,7 @@ export async function depositRegular(sendTx: boolean, config: Config, walletPath
   const ata = getAssociatedTokenAddressSync(
     config.MINT,
     user.wallet.publicKey,
-    true
+    true,
   );
 
   const transaction = new Transaction();
@@ -97,8 +102,8 @@ export async function depositRegular(sendTx: boolean, config: Config, walletPath
       user.wallet.publicKey,
       ata,
       user.wallet.publicKey,
-      config.MINT
-    )
+      config.MINT,
+    ),
   );
   if (config.MINT.toString() == "So11111111111111111111111111111111111111112") {
     transaction.add(
@@ -106,7 +111,7 @@ export async function depositRegular(sendTx: boolean, config: Config, walletPath
         fromPubkey: user.wallet.publicKey,
         toPubkey: ata,
         lamports: config.AMOUNT.toNumber(),
-      })
+      }),
     );
     transaction.add(createSyncNativeInstruction(ata));
   }
@@ -125,7 +130,7 @@ export async function depositRegular(sendTx: boolean, config: Config, walletPath
       //   group: config.GROUP,
       //   authority: config.ACCOUNT_AUTHORITY,
       // })
-      .instruction()
+      .instruction(),
   );
 
   if (sendTx) {
@@ -133,7 +138,7 @@ export async function depositRegular(sendTx: boolean, config: Config, walletPath
       const signature = await sendAndConfirmTransaction(
         connection,
         transaction,
-        [user.wallet.payer]
+        [user.wallet.payer],
       );
       console.log("Transaction signature:", signature);
     } catch (error) {

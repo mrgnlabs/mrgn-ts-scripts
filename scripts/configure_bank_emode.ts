@@ -8,8 +8,8 @@ import {
 import { commonSetup } from "../lib/common-setup";
 import { EmodeTag, MAX_EMODE_ENTRIES } from "../lib/constants";
 import { I80F48_ZERO } from "./utils";
-import { entriesIn, groupBy } from "lodash";
-import { Marginfi } from "../idl/marginfi_kamino";
+import { groupBy } from "lodash";
+import { Marginfi } from "../idl/marginfi";
 
 /**
  * If true, send the tx. If false, output the unsigned b58 tx to console.
@@ -124,7 +124,7 @@ async function main() {
     config.PROGRAM_ID,
     "/keys/emode-admin.json",
     config.MULTISIG,
-    "kamino"
+    "current"
   );
   const program = user.program;
   const connection = user.connection;

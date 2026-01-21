@@ -35,7 +35,7 @@ async function main() {
     config.PROGRAM_ID,
     "/keys/staging-deploy.json",
     config.MULTISIG,
-    "kamino"
+    "current",
   );
   const program = user.program;
   const connection = user.connection;
@@ -52,7 +52,7 @@ async function main() {
       .accounts({
         marginfiGroup: config.GROUP,
       })
-      .instruction()
+      .instruction(),
   );
 
   if (sendTx) {

@@ -1,7 +1,6 @@
 // TODO add a LUT and send these all in one tx to avoid burning so many tx fees.
 import {
   AccountMeta,
-  Connection,
   PublicKey,
   sendAndConfirmTransaction,
   Transaction,
@@ -9,9 +8,7 @@ import {
 import {
   createAssociatedTokenAccountIdempotentInstruction,
   getAssociatedTokenAddressSync,
-  getMint,
   TOKEN_2022_PROGRAM_ID,
-  TOKEN_PROGRAM_ID,
 } from "@mrgnlabs/mrgn-common";
 import { commonSetup } from "../lib/common-setup";
 

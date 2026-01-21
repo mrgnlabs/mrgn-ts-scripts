@@ -77,13 +77,3 @@ export function deriveDriftUserStatsPDA(authority: PublicKey): [PublicKey, numbe
     DRIFT_PROGRAM_ID
   );
 }
-
-export function deriveLiquidityVaultAuthority(
-  programId: PublicKey,
-  bank: PublicKey
-): [PublicKey, number] {
-  return PublicKey.findProgramAddressSync(
-    [Buffer.from("liquidity_vault_auth"), bank.toBuffer()],
-    programId
-  );
-}

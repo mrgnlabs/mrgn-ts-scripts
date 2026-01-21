@@ -1,9 +1,6 @@
 import { PublicKey } from "@solana/web3.js";
-
 import { wrappedI80F48toBigNumber } from "@mrgnlabs/mrgn-common";
 import { commonSetup } from "../lib/common-setup";
-
-const verbose = true;
 
 type Config = {
   PROGRAM_ID: string;
@@ -21,7 +18,7 @@ async function main() {
     config.PROGRAM_ID,
     "/keys/staging-admin.json",
     undefined,
-    "current"
+    "current",
   );
   const program = user.program;
 
@@ -39,11 +36,11 @@ async function main() {
   console.log("fee wallet: " + group.feeStateCache.globalFeeWallet);
   console.log(
     "interest to program (fixed): " +
-      wrappedI80F48toBigNumber(group.feeStateCache.programFeeFixed)
+      wrappedI80F48toBigNumber(group.feeStateCache.programFeeFixed),
   );
   console.log(
     "interest to program (ir): " +
-      wrappedI80F48toBigNumber(group.feeStateCache.programFeeRate)
+      wrappedI80F48toBigNumber(group.feeStateCache.programFeeRate),
   );
 
   let cache = group.feeStateCache;

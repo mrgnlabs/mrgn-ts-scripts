@@ -7,16 +7,10 @@ import {
   sendAndConfirmTransaction,
 } from "@solana/web3.js";
 import { BN } from "@coral-xyz/anchor";
-import {
-  getAssociatedTokenAddressSync,
-} from "@mrgnlabs/mrgn-common";
+import { getAssociatedTokenAddressSync } from "@mrgnlabs/mrgn-common";
 import { commonSetup } from "../lib/common-setup";
-import {
-  composeRemainingAccounts,
-} from "../lib/utils";
-import {
-  TOKEN_2022_PROGRAM_ID,
-} from "@solana/spl-token";
+import { composeRemainingAccounts } from "../lib/utils";
+import { TOKEN_2022_PROGRAM_ID } from "@solana/spl-token";
 
 const sendTx = false;
 
@@ -88,8 +82,7 @@ const withdrawKaminoLiquidatorUSDC: Config = {
   MINT: new PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"),
   AMOUNT: new BN(20 * 10 ** 6),
   WITHDRAW_ALL: true,
-  REMAINING: [
-  ],
+  REMAINING: [],
   ADD_COMPUTE_UNITS: false,
 };
 
@@ -99,13 +92,18 @@ async function main() {
   await withdraw(sendTx, config, "/.config/stage/id.json");
 }
 
-export async function withdraw(sendTx: boolean, config: Config, walletPath: string, version?: "current") {
+export async function withdraw(
+  sendTx: boolean,
+  config: Config,
+  walletPath: string,
+  version?: "current",
+) {
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
     walletPath,
     config.MULTISIG,
-    version
+    version,
   );
   const program = user.program;
   const connection = user.connection;
@@ -135,7 +133,7 @@ export async function withdraw(sendTx: boolean, config: Config, walletPath: stri
 
   if (config.ADD_COMPUTE_UNITS) {
     transaction.add(
-      ComputeBudgetProgram.setComputeUnitPrice({ microLamports: 100_000 })
+      ComputeBudgetProgram.setComputeUnitPrice({ microLamports: 100_000 }),
     );
   }
 
@@ -143,7 +141,7 @@ export async function withdraw(sendTx: boolean, config: Config, walletPath: stri
     config.MINT,
     user.wallet.publicKey,
     true,
-    tokenProgram
+    tokenProgram,
   );
 
   transaction.add(
@@ -163,7 +161,7 @@ export async function withdraw(sendTx: boolean, config: Config, walletPath: stri
         tokenProgram: tokenProgram,
       })
       .remainingAccounts(meta)
-      .instruction()
+      .instruction(),
   );
 
   console.log(
@@ -172,7 +170,7 @@ export async function withdraw(sendTx: boolean, config: Config, walletPath: stri
       ") withdrawing " +
       config.AMOUNT.toString() +
       " from " +
-      config.BANK
+      config.BANK,
   );
 
   try {

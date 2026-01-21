@@ -1,85 +1,98 @@
-import { PublicKey, Transaction, sendAndConfirmTransaction, AccountMeta } from "@solana/web3.js";
-import { BN, Program } from "@coral-xyz/anchor";
-import { TOKEN_PROGRAM_ID, getAssociatedTokenAddressSync } from "@solana/spl-token";
-import { readFileSync } from "fs";
-import { join } from "path";
-import { driftSetup } from "./lib/setup";
 import {
-  deriveBankWithSeed,
+  PublicKey,
+  Transaction,
+  sendAndConfirmTransaction,
+  AccountMeta,
+} from "@solana/web3.js";
+import { BN } from "@coral-xyz/anchor";
+import {
+  TOKEN_PROGRAM_ID,
+  getAssociatedTokenAddressSync,
+} from "@solana/spl-token";
+import {
   deriveDriftStatePDA,
   deriveSpotMarketVaultPDA,
   deriveDriftSignerPDA,
-  deriveLiquidityVaultAuthority,
-  deriveDriftUserPDA,
   DRIFT_PROGRAM_ID,
+  deriveSpotMarketPDA,
 } from "./lib/utils";
-import { Drift } from "../../../idl/drift";
-import driftIdl from "../../../idl/drift.json";
+import { commonSetup, registerDriftProgram } from "../../lib/common-setup";
+import { bs58 } from "@switchboard-xyz/common";
+
+const sendTx = true;
+
+type Config = {
+  PROGRAM_ID: string;
+  BANK: PublicKey;
+  ACCOUNT: PublicKey;
+  AMOUNT: BN;
+
+  DRIFT_MARKET_INDEX: number;
+
+  /** Oracle address the Drift User uses. Can be read from bank.integrationAcc1 */
+  DRIFT_ORACLE: PublicKey;
+
+  MULTISIG_PAYER?: PublicKey; // May be omitted if not using squads
+};
+
+const config: Config = {
+  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
+  BANK: new PublicKey("8qPLKaKb4F5BC6mVncKAryMp78yp5ZRGYnPkQbt9ikKt"),
+  ACCOUNT: new PublicKey("89ViS63BocuvZx5NE5oS9tBJ4ZbKZe3GkvurxHuSqFhz"),
+  AMOUNT: new BN(1 * 10 ** 5), // 0.1 USDC
+  DRIFT_MARKET_INDEX: 0, // USDC
+  DRIFT_ORACLE: new PublicKey("3t4JZcueEzTbVP6kLxXrL3VpWx45jDer4eqysweBchNH"),
+};
 
 /**
  * Drift Harvest Rewards Script
  *
  * Harvests accumulated rewards from admin deposits (positions 2-7).
  * Only relevant when 2+ admin deposits are active in drift user.
- *
- * Usage: npx ts-node scripts/drift-staging/harvest_rewards.ts <config-file>
- * Example: npx ts-node scripts/drift-staging/harvest_rewards.ts configs/usdc.json
  */
 
 async function main() {
-  // Get config file from args
-  const configFile = process.argv[2];
+  await harvestDriftRewards(sendTx, config, "/keys/staging-deploy.json");
+}
 
-  if (!configFile) {
-    console.error("Usage: npx ts-node scripts/drift-staging/harvest_rewards.ts <config-file>");
-    console.error("Example: npx ts-node scripts/drift-staging/harvest_rewards.ts configs/usdc.json");
-    process.exit(1);
-  }
+export async function harvestDriftRewards(
+  sendTx: boolean,
+  config: Config,
+  walletPath: string,
+  version?: "current",
+) {
+  const user = commonSetup(
+    sendTx,
+    config.PROGRAM_ID,
+    walletPath,
+    config.MULTISIG_PAYER,
+    version,
+  );
+  registerDriftProgram(user, DRIFT_PROGRAM_ID.toString());
+  const connection = user.connection;
+  const wallet = user.wallet;
+  const program = user.program;
 
-  // Load config
-  const configPath = join(__dirname, configFile);
-  const config = JSON.parse(readFileSync(configPath, "utf-8"));
+  const bank = await program.account.bank.fetch(config.BANK);
+  const mint = bank.mint;
 
   console.log("=== Drift Harvest Rewards ===\n");
-  console.log("Config:", configFile);
-  console.log("Bank mint:", config.bankMint);
+  console.log("Bank mint:", mint);
   console.log();
-
-  // Setup connection and program
-  const { connection, wallet, program } = driftSetup(config.programId);
-
-  // Also create drift program to fetch spot market and user
-  const driftProgram = new Program<Drift>(
-    driftIdl as any,
-    DRIFT_PROGRAM_ID,
-    program.provider
-  );
-
-  // Parse config values
-  const groupPubkey = new PublicKey(config.group);
-  const bankMint = new PublicKey(config.bankMint);
-  const seed = new BN(config.seed);
-
-  // Derive accounts
-  const [bankPubkey] = deriveBankWithSeed(
-    program.programId,
-    groupPubkey,
-    bankMint,
-    seed
-  );
 
   const [driftState] = deriveDriftStatePDA();
   const [driftSigner] = deriveDriftSignerPDA();
 
   console.log("Derived Accounts:");
-  console.log("  Bank:", bankPubkey.toString());
+  console.log("  Bank:", bank.toString());
   console.log("  Drift State:", driftState.toString());
   console.log();
 
   // Fetch bank to get drift user
   console.log("Fetching bank and drift user to check for rewards...");
-  const bank = await program.account.bank.fetch(bankPubkey);
-  const driftUser = await driftProgram.account.user.fetch(bank.driftUser);
+  const driftUser = await user.driftProgram.account.user.fetch(
+    bank.integrationAcc2,
+  );
 
   // Check active positions for rewards (positions 2-7)
   console.log("Drift user positions:");
@@ -88,7 +101,9 @@ async function main() {
     const pos = driftUser.spotPositions[i];
     const scaledBalance = new BN(pos.scaledBalance.toString());
     if (i >= 2 && i <= 7 && !scaledBalance.isZero()) {
-      console.log(`  Position ${i}: Market ${pos.marketIndex}, Balance: ${scaledBalance.toString()}`);
+      console.log(
+        `  Position ${i}: Market ${pos.marketIndex}, Balance: ${scaledBalance.toString()}`,
+      );
       rewardPositions.push(i);
     }
   }
@@ -99,7 +114,9 @@ async function main() {
     process.exit(0);
   }
 
-  console.log(`\nFound ${rewardPositions.length} reward position(s) to harvest`);
+  console.log(
+    `\nFound ${rewardPositions.length} reward position(s) to harvest`,
+  );
   console.log();
 
   // For now, harvest the first reward position
@@ -107,21 +124,20 @@ async function main() {
   const rewardPosIndex = rewardPositions[0];
   const rewardPos = driftUser.spotPositions[rewardPosIndex];
 
-  console.log(`Harvesting reward from position ${rewardPosIndex} (market ${rewardPos.marketIndex})...`);
-
-  // Derive the harvest spot market PDA
-  const [harvestDriftSpotMarket] = PublicKey.findProgramAddressSync(
-    [
-      Buffer.from("spot_market"),
-      new BN(rewardPos.marketIndex).toArrayLike(Buffer, "le", 2),
-    ],
-    DRIFT_PROGRAM_ID
+  console.log(
+    `Harvesting reward from position ${rewardPosIndex} (market ${rewardPos.marketIndex})...`,
   );
 
-  const [harvestDriftSpotMarketVault] = deriveSpotMarketVaultPDA(rewardPos.marketIndex);
+  // Derive the harvest spot market PDA
+  const [harvestDriftSpotMarket] = deriveSpotMarketPDA(rewardPos.marketIndex);
+  const [harvestDriftSpotMarketVault] = deriveSpotMarketVaultPDA(
+    rewardPos.marketIndex,
+  );
 
   // Fetch the harvest spot market to get the mint
-  const harvestSpotMarket = await driftProgram.account.spotMarket.fetch(harvestDriftSpotMarket);
+  const harvestSpotMarket = await user.driftProgram.account.spotMarket.fetch(
+    harvestDriftSpotMarket,
+  );
   const rewardMint = harvestSpotMarket.mint;
 
   console.log("  Harvest Spot Market:", harvestDriftSpotMarket.toString());
@@ -131,7 +147,7 @@ async function main() {
   // Fetch fee state to get global fee wallet
   const [feeState] = PublicKey.findProgramAddressSync(
     [Buffer.from("feeState")],
-    program.programId
+    program.programId,
   );
 
   const feeStateData = await program.account.feeState.fetch(feeState);
@@ -141,11 +157,14 @@ async function main() {
   const destinationTokenAccount = getAssociatedTokenAddressSync(
     rewardMint,
     globalFeeWallet,
-    true // allowOwnerOffCurve
+    true, // allowOwnerOffCurve
   );
 
   console.log("  Global Fee Wallet:", globalFeeWallet.toString());
-  console.log("  Destination Token Account:", destinationTokenAccount.toString());
+  console.log(
+    "  Destination Token Account:",
+    destinationTokenAccount.toString(),
+  );
   console.log();
 
   // Build remaining accounts for drift (similar pattern to withdraw)
@@ -156,14 +175,16 @@ async function main() {
   const ix = await program.methods
     .driftHarvestReward()
     .accounts({
-      bank: bankPubkey,
-      driftState: driftState,
-      harvestDriftSpotMarket: harvestDriftSpotMarket,
-      harvestDriftSpotMarketVault: harvestDriftSpotMarketVault,
-      driftSigner: driftSigner,
-      rewardMint: rewardMint,
-      destinationTokenAccount: destinationTokenAccount,
+      bank: config.BANK,
+      driftState,
+      harvestDriftSpotMarket,
+      harvestDriftSpotMarketVault,
+      driftSigner,
+      rewardMint,
       tokenProgram: TOKEN_PROGRAM_ID,
+    })
+    .accountsPartial({
+      destinationTokenAccount,
     })
     .remainingAccounts(remainingAccounts)
     .instruction();
@@ -179,7 +200,7 @@ async function main() {
   const simulation = await connection.simulateTransaction(transaction);
 
   console.log("\nProgram Logs:");
-  simulation.value.logs?.forEach(log => console.log("  " + log));
+  simulation.value.logs?.forEach((log) => console.log("  " + log));
 
   if (simulation.value.err) {
     console.log("\nSimulation failed:");
@@ -191,20 +212,38 @@ async function main() {
   console.log("Compute units:", simulation.value.unitsConsumed);
   console.log();
 
-  // Execute
-  console.log("Executing transaction...");
-  const signature = await sendAndConfirmTransaction(
-    connection,
-    transaction,
-    [wallet.payer]
-  );
+  if (sendTx) {
+    try {
+      console.log("Executing transaction...");
+      const signature = await sendAndConfirmTransaction(
+        connection,
+        transaction,
+        [wallet.payer],
+      );
 
-  console.log("✓ Rewards harvested successfully!");
-  console.log("Signature:", signature);
-  console.log("Rewards sent to:", destinationTokenAccount.toString());
+      console.log("✓ Rewards harvested successfully!");
+      console.log("Signature:", signature);
+      console.log("Rewards sent to:", destinationTokenAccount.toString());
+    } catch (error) {
+      console.error("Transaction failed:", error);
+    }
+  } else {
+    transaction.feePayer = config.MULTISIG_PAYER; // Set the fee payer to Squads wallet
+    const { blockhash } = await connection.getLatestBlockhash();
+    transaction.recentBlockhash = blockhash;
+    const serializedTransaction = transaction.serialize({
+      requireAllSignatures: false,
+      verifySignatures: false,
+    });
+    const base58Transaction = bs58.encode(serializedTransaction);
+    console.log("deposit to: " + config.BANK);
+    console.log("by account: " + config.ACCOUNT);
+    console.log("Base58-encoded transaction:", base58Transaction);
+  }
 }
 
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+if (require.main === module) {
+  main().catch((err) => {
+    console.error(err);
+  });
+}

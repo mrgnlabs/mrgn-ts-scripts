@@ -3,9 +3,7 @@ import {
   Transaction,
   sendAndConfirmTransaction,
 } from "@solana/web3.js";
-import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 import { commonSetup } from "../lib/common-setup";
-import { loadSponsoredOracle } from "../lib/pyth-oracle-helpers";
 import { INTEREST_CURVE_SEVEN_POINT } from "../lib/constants";
 
 type Config = {
@@ -24,7 +22,7 @@ async function main() {
     config.PROGRAM_ID,
     "/keys/zerotrade_admin.json",
     undefined,
-    "1.6"
+    "1.6",
   );
   const program = user.program;
   const connection = user.connection;
@@ -43,7 +41,7 @@ async function main() {
         .accounts({
           bank: config.BANK,
         })
-        .instruction()
+        .instruction(),
     );
     console.log(" Migrating curve for bank: " + config.BANK);
   } else {

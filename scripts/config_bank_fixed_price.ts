@@ -1,5 +1,4 @@
 import {
-  AccountMeta,
   PublicKey,
   Transaction,
   sendAndConfirmTransaction,

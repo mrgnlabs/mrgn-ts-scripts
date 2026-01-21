@@ -31,13 +31,17 @@ async function main() {
   await pulseHealth(config, "/.config/stage/id.json");
 }
 
-export async function pulseHealth(config: Config, walletPath: string, version?: "current") {
+export async function pulseHealth(
+  config: Config,
+  walletPath: string,
+  version?: "current",
+) {
   const user = commonSetup(
     true,
     config.PROGRAM_ID,
     walletPath,
     undefined,
-    version
+    version,
   );
   registerKaminoProgram(user, KLEND_PROGRAM_ID.toString());
   const program = user.program;
@@ -48,7 +52,7 @@ export async function pulseHealth(config: Config, walletPath: string, version?: 
     user.kaminoProgram,
     config.ACCOUNT,
     connection,
-    user.wallet.payer
+    user.wallet.payer,
   );
 
   const oracleMeta: AccountMeta[] = activeBalances.flat().map((pubkey) => {
@@ -64,7 +68,7 @@ export async function pulseHealth(config: Config, walletPath: string, version?: 
         marginfiAccount: config.ACCOUNT,
       })
       .remainingAccounts(oracleMeta)
-      .instruction()
+      .instruction(),
   );
 
   try {
@@ -89,7 +93,7 @@ export async function pulseHealth(config: Config, walletPath: string, version?: 
     });
     await connection.confirmTransaction(
       { signature, blockhash, lastValidBlockHeight },
-      commitment
+      commitment,
     );
     console.log("Transaction signature:", signature);
   } catch (error) {
@@ -106,26 +110,26 @@ export async function pulseHealth(config: Config, walletPath: string, version?: 
   console.log("flags: " + cache.flags);
   console.log("");
   console.log(
-    "asset value: " + wrappedI80F48toBigNumber(cache.assetValue).toNumber()
+    "asset value: " + wrappedI80F48toBigNumber(cache.assetValue).toNumber(),
   );
   console.log(
-    "liab value: " + wrappedI80F48toBigNumber(cache.liabilityValue).toNumber()
+    "liab value: " + wrappedI80F48toBigNumber(cache.liabilityValue).toNumber(),
   );
   console.log(
     "asset value (maint): " +
-      wrappedI80F48toBigNumber(cache.assetValueMaint).toNumber()
+      wrappedI80F48toBigNumber(cache.assetValueMaint).toNumber(),
   );
   console.log(
     "liab value (maint): " +
-      wrappedI80F48toBigNumber(cache.liabilityValueMaint).toNumber()
+      wrappedI80F48toBigNumber(cache.liabilityValueMaint).toNumber(),
   );
   console.log(
     "asset value (equity): " +
-      wrappedI80F48toBigNumber(cache.assetValueEquity).toNumber()
+      wrappedI80F48toBigNumber(cache.assetValueEquity).toNumber(),
   );
   console.log(
     "liab value (equity): " +
-      wrappedI80F48toBigNumber(cache.liabilityValueEquity).toNumber()
+      wrappedI80F48toBigNumber(cache.liabilityValueEquity).toNumber(),
   );
   console.log("");
   for (let i = 0; i < cache.prices.length; i++) {

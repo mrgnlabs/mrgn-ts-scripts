@@ -1,132 +1,156 @@
-import { PublicKey, Transaction, sendAndConfirmTransaction, AccountMeta } from "@solana/web3.js";
+import {
+  PublicKey,
+  Transaction,
+  sendAndConfirmTransaction,
+  AccountMeta,
+} from "@solana/web3.js";
 import { BN } from "@coral-xyz/anchor";
-import { getAssociatedTokenAddressSync, TOKEN_PROGRAM_ID } from "@solana/spl-token";
-import { readFileSync } from "fs";
-import { join } from "path";
-import { userSetup } from "./lib/user_setup";
+import {
+  getAssociatedTokenAddressSync,
+  getMint,
+  TOKEN_2022_PROGRAM_ID,
+  TOKEN_PROGRAM_ID,
+} from "@solana/spl-token";
 import {
   deriveDriftStatePDA,
   deriveSpotMarketVaultPDA,
   deriveDriftSignerPDA,
 } from "./lib/utils";
+import { BankAndOracles } from "../../lib/utils";
+import { commonSetup } from "../../lib/common-setup";
+import { bs58 } from "@switchboard-xyz/common";
 
 /**
- * Drift Withdraw Script
- *
- * Withdraws tokens from a drift-enabled marginfi bank.
- * Requires remaining accounts for ALL other active banks for health check.
- *
- * Usage: npx ts-node scripts/drift-staging/withdraw.ts <config-file> <amount> [withdraw-all]
- * Example: npx ts-node scripts/drift-staging/withdraw.ts configs/usdc.json 500
- * Example: npx ts-node scripts/drift-staging/withdraw.ts configs/usdc.json 0 true
+ * If true, send the tx. If false, output the unsigned b58 tx to console.
  */
+const sendTx = true;
+
+type Config = {
+  PROGRAM_ID: string;
+  BANK: PublicKey;
+  ACCOUNT: PublicKey;
+  AMOUNT: BN;
+  WITHDRAW_ALL: boolean;
+
+  DRIFT_MARKET_INDEX: number;
+
+  /** Oracle address the Drift User uses. Can be read from bank.integrationAcc1 */
+  DRIFT_ORACLE: PublicKey;
+
+  LUT: PublicKey;
+  MULTISIG_PAYER?: PublicKey; // May be omitted if not using squads
+  NEW_REMAINING: BankAndOracles;
+  ADD_COMPUTE_UNITS: boolean;
+};
+
+const config: Config = {
+  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
+  BANK: new PublicKey("Ay8kyX7q2G9Yp3T6Nt8Z3p8xcMeaC19xLQjmGjTX2niq"),
+  ACCOUNT: new PublicKey("FvRj5WiHZh6mU9TSsgAeJinDeSAkBmPvbJHJCqXAxCsH"),
+  AMOUNT: new BN(40 * 10 ** 6), // 40 USDC
+  WITHDRAW_ALL: true,
+
+  DRIFT_MARKET_INDEX: 0, // USDC
+  DRIFT_ORACLE: new PublicKey("3t4JZcueEzTbVP6kLxXrL3VpWx45jDer4eqysweBchNH"),
+
+  LUT: new PublicKey("FtQ5uKQvFoKQ27SWY15tgBeJQnGKmKGzWqDz7kGUbeiq"),
+
+  NEW_REMAINING: [
+    new PublicKey("CVjHEnJWKELsbFt37znC2nq4KNrwTf7w42fcfySEifNu"),
+    new PublicKey("DBE3N8uNjhKPRHfANdwGvCZghWXyLPdqdSbEW2XFwBiX"),
+  ],
+  ADD_COMPUTE_UNITS: true,
+};
 
 async function main() {
-  // Get config file and amount from args
-  const configFile = process.argv[2];
-  const amountStr = process.argv[3];
-  const withdrawAll = process.argv[4] === "true";
+  await withdrawDrift(sendTx, config, "/.config/stage/id.json");
+}
 
-  if (!configFile || !amountStr) {
-    console.error("Usage: npx ts-node scripts/drift-staging/withdraw.ts <config-file> <amount> [withdraw-all]");
-    console.error("Example: npx ts-node scripts/drift-staging/withdraw.ts configs/usdc.json 500");
-    console.error("Example: npx ts-node scripts/drift-staging/withdraw.ts configs/usdc.json 0 true");
-    process.exit(1);
-  }
+export async function withdrawDrift(
+  sendTx: boolean,
+  config: Config,
+  walletPath: string,
+  version?: "current",
+) {
+  const user = commonSetup(
+    sendTx,
+    config.PROGRAM_ID,
+    walletPath,
+    config.MULTISIG_PAYER,
+    version,
+  );
 
-  // Load config
-  const configPath = join(__dirname, configFile);
-  const config = JSON.parse(readFileSync(configPath, "utf-8"));
+  const connection = user.connection;
+  const wallet = user.wallet;
+  const program = user.program;
 
-  const amount = new BN(amountStr);
+  const bank = await program.account.bank.fetch(config.BANK);
+  const mint = bank.mint;
 
   console.log("=== Drift Withdraw ===\n");
-  console.log("Config:", configFile);
-  console.log("Bank mint:", config.bankMint);
-  console.log("Amount:", amountStr, "base units");
-  console.log("Withdraw all:", withdrawAll);
+  console.log("Bank mint:", mint);
+  console.log("Amount:", config.AMOUNT, "base units");
+  console.log("Withdraw all:", config.WITHDRAW_ALL);
   console.log();
-
-  // Setup connection and program with USER_WALLET
-  const { connection, wallet, program } = userSetup(config.programId);
-
-  // Parse config values
-  const bankMint = new PublicKey(config.bankMint);
-  const driftOracle = new PublicKey(config.driftOracle);
-  const bankPubkey = new PublicKey(config.bankAddress);
-  const marginfiAccount = new PublicKey(config.userMarginfiAccount);
 
   const [driftState] = deriveDriftStatePDA();
   const [driftSigner] = deriveDriftSignerPDA();
-  const [driftSpotMarketVault] = deriveSpotMarketVaultPDA(config.driftMarketIndex);
+  const [driftSpotMarketVault] = deriveSpotMarketVaultPDA(
+    config.DRIFT_MARKET_INDEX,
+  );
+
+  // Detect token program
+  let tokenProgram = TOKEN_PROGRAM_ID;
+  try {
+    await getMint(connection, mint, "confirmed", TOKEN_2022_PROGRAM_ID);
+    tokenProgram = TOKEN_2022_PROGRAM_ID;
+    console.log("Detected Token-2022 mint");
+  } catch {
+    console.log("Detected SPL Token mint");
+  }
+
+  const oracleMeta: AccountMeta[] = config.NEW_REMAINING.flat().map(
+    (pubkey) => {
+      return { pubkey, isSigner: false, isWritable: false };
+    },
+  );
 
   const destinationTokenAccount = getAssociatedTokenAddressSync(
-    bankMint,
-    wallet.publicKey
+    mint,
+    wallet.publicKey,
+    false,
+    tokenProgram,
   );
 
   console.log("Derived Accounts:");
-  console.log("  Bank:", bankPubkey.toString());
-  console.log("  Marginfi Account:", marginfiAccount.toString());
+  console.log("  Bank:", config.BANK.toString());
+  console.log("  Marginfi Account:", config.ACCOUNT.toString());
   console.log("  Drift State:", driftState.toString());
-  console.log("  Destination Token Account:", destinationTokenAccount.toString());
+  console.log(
+    "  Destination Token Account:",
+    destinationTokenAccount.toString(),
+  );
   console.log();
 
-  // Fetch marginfi account to get all active banks for remaining accounts
-  console.log("Fetching marginfi account to build remaining accounts...");
-  const marginfiAccountData = await program.account.marginfiAccount.fetch(marginfiAccount);
-
-  const remainingAccounts: PublicKey[] = [];
-  for (const balance of marginfiAccountData.lendingAccount.balances) {
-    if (balance.active) {
-      // For drift banks (ASSET_TAG_DRIFT = 3), we need 3 accounts: bank + 2 oracles
-      // For regular banks, we need 2 accounts: bank + oracle
-      remainingAccounts.push(balance.bankPk);
-
-      // Fetch bank to get oracle info
-      const bankData = await program.account.bank.fetch(balance.bankPk);
-
-      // Add all oracle keys (skip default/system program)
-      for (const oracleKey of bankData.config.oracleKeys) {
-        if (!oracleKey.equals(PublicKey.default)) {
-          remainingAccounts.push(oracleKey);
-        }
-      }
-    }
-  }
-
-  console.log("Remaining accounts (banks + oracles):", remainingAccounts.length);
-  remainingAccounts.forEach((pk, i) => {
-    console.log(`  ${i + 1}. ${pk.toString()}`);
-  });
-  console.log();
-
-  // Build instruction (authority is auto-resolved from marginfiAccount)
   const ix = await program.methods
-    .driftWithdraw(amount, withdrawAll ? true : null)
+    .driftWithdraw(config.AMOUNT, config.WITHDRAW_ALL)
     .accounts({
-      marginfiAccount: marginfiAccount,
-      bank: bankPubkey,
-      destinationTokenAccount: destinationTokenAccount,
-      driftState: driftState,
-      driftSpotMarketVault: driftSpotMarketVault,
-      driftSigner: driftSigner,
-      driftOracle: driftOracle,
+      marginfiAccount: config.ACCOUNT,
+      bank: config.BANK,
+      destinationTokenAccount,
+      driftState,
+      driftSpotMarketVault,
+      driftSigner,
+      driftOracle: config.DRIFT_ORACLE,
       driftRewardOracle: null,
       driftRewardSpotMarket: null,
       driftRewardMint: null,
       driftRewardOracle2: null,
       driftRewardSpotMarket2: null,
       driftRewardMint2: null,
-      tokenProgram: TOKEN_PROGRAM_ID,
+      tokenProgram,
     })
-    .remainingAccounts(
-      remainingAccounts.map((pubkey) => ({
-        pubkey,
-        isSigner: false,
-        isWritable: false,
-      }))
-    )
+    .remainingAccounts(oracleMeta)
     .instruction();
 
   const transaction = new Transaction().add(ix);
@@ -140,7 +164,7 @@ async function main() {
   const simulation = await connection.simulateTransaction(transaction);
 
   console.log("\nProgram Logs:");
-  simulation.value.logs?.forEach(log => console.log("  " + log));
+  simulation.value.logs?.forEach((log) => console.log("  " + log));
 
   if (simulation.value.err) {
     console.log("\nSimulation failed:");
@@ -152,19 +176,36 @@ async function main() {
   console.log("Compute units:", simulation.value.unitsConsumed);
   console.log();
 
-  // Execute
-  console.log("Executing transaction...");
-  const signature = await sendAndConfirmTransaction(
-    connection,
-    transaction,
-    [wallet.payer]
-  );
-
-  console.log("✓ Withdrawal successful!");
-  console.log("Signature:", signature);
+  if (sendTx) {
+    try {
+      console.log("Executing transaction...");
+      const signature = await sendAndConfirmTransaction(
+        connection,
+        transaction,
+        [wallet.payer],
+      );
+      console.log("Signature:", signature);
+      console.log("✓ Withdrawal successful!");
+    } catch (error) {
+      console.error("Transaction failed:", error);
+    }
+  } else {
+    transaction.feePayer = config.MULTISIG_PAYER; // Set the fee payer to Squads wallet
+    const { blockhash } = await connection.getLatestBlockhash();
+    transaction.recentBlockhash = blockhash;
+    const serializedTransaction = transaction.serialize({
+      requireAllSignatures: false,
+      verifySignatures: false,
+    });
+    const base58Transaction = bs58.encode(serializedTransaction);
+    console.log("deposit to: " + config.BANK);
+    console.log("by account: " + config.ACCOUNT);
+    console.log("Base58-encoded transaction:", base58Transaction);
+  }
 }
 
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+if (require.main === module) {
+  main().catch((err) => {
+    console.error(err);
+  });
+}

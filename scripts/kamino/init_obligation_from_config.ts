@@ -19,7 +19,6 @@ import {
   sendAndConfirmTransaction,
   ComputeBudgetProgram,
   SystemProgram,
-  LAMPORTS_PER_SOL,
 } from "@solana/web3.js";
 import { BN } from "@coral-xyz/anchor";
 import { TOKEN_PROGRAM_ID, NATIVE_MINT } from "@mrgnlabs/mrgn-common";
@@ -33,7 +32,7 @@ import * as path from "path";
 
 import { commonSetup, registerKaminoProgram } from "../../lib/common-setup";
 import { makeInitObligationIx } from "./ixes-common";
-import { deriveBankWithSeed, deriveLiquidityVaultAuthority } from "../common/pdas";
+import { deriveLiquidityVaultAuthority } from "../common/pdas";
 import { deriveBaseObligation, deriveUserState } from "./pdas";
 import {
   KaminoBankConfig,

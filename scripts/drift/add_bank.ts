@@ -1,6 +1,16 @@
-import { PublicKey, Transaction, sendAndConfirmTransaction, AccountMeta } from "@solana/web3.js";
+import {
+  PublicKey,
+  Transaction,
+  sendAndConfirmTransaction,
+  AccountMeta,
+} from "@solana/web3.js";
 import { BN } from "@coral-xyz/anchor";
-import { TOKEN_PROGRAM_ID, TOKEN_2022_PROGRAM_ID, getMint } from "@solana/spl-token";
+import {
+  TOKEN_PROGRAM_ID,
+  TOKEN_2022_PROGRAM_ID,
+  getMint,
+  getAssociatedTokenAddressSync,
+} from "@solana/spl-token";
 import { readFileSync } from "fs";
 import { join } from "path";
 import {
@@ -9,9 +19,15 @@ import {
   deriveSpotMarketVaultPDA,
   I80F48_ONE,
   DriftConfigCompact,
+  deriveDriftUserPDA,
+  deriveDriftUserStatsPDA,
 } from "./lib/utils";
-import { deriveBankWithSeed } from "../common/pdas";
+import {
+  deriveBankWithSeed,
+  deriveLiquidityVaultAuthority,
+} from "../common/pdas";
 import { commonSetup } from "../../lib/common-setup";
+import { bs58 } from "@switchboard-xyz/common";
 
 /**
  * If true, send the tx. If false, output the unsigned b58 tx to console.
@@ -40,21 +56,16 @@ type Config = {
   INIT_DEPOSIT_AMOUNT?: BN; // Default: 100
 };
 
-/**
- * Add Drift Bank Script
- *
- * Adds a drift-enabled bank to the marginfi group and initializes the drift user.
- *
- * Usage: npx ts-node scripts/drift-staging/add_drift_bank.ts <config-file>
- * Example: npx ts-node scripts/drift-staging/add_drift_bank.ts configs/usdc.json
- */
-
 async function main() {
   // Get config file from args
   const configFile = process.argv[2];
   if (!configFile) {
-    console.error("Usage: npx ts-node scripts/drift/add_drift_bank.ts <config-file>");
-    console.error("Example: npx ts-node scripts/drift/add_drift_bank.ts configs/usdc.json");
+    console.error(
+      "Usage: npx ts-node scripts/drift/add_drift_bank.ts <config-file>",
+    );
+    console.error(
+      "Example: npx ts-node scripts/drift/add_drift_bank.ts configs/usdc.json",
+    );
     process.exit(1);
   }
 
@@ -76,7 +87,7 @@ export async function addDriftBank(
   sendTx: boolean,
   config: Config,
   walletPath: string,
-  version?: "current"
+  version?: "current",
 ): Promise<PublicKey> {
   // Setup connection and program
   const user = commonSetup(
@@ -95,14 +106,16 @@ export async function addDriftBank(
     program.programId,
     config.GROUP_KEY,
     config.BANK_MINT,
-    config.SEED
+    config.SEED,
   );
 
   // Use spot market address from config if provided, otherwise derive it
   const driftSpotMarket = deriveSpotMarketPDA(config.DRIFT_MARKET_INDEX)[0];
 
   const [driftState] = deriveDriftStatePDA();
-  const [driftSpotMarketVault] = deriveSpotMarketVaultPDA(config.DRIFT_MARKET_INDEX);
+  const [driftSpotMarketVault] = deriveSpotMarketVaultPDA(
+    config.DRIFT_MARKET_INDEX,
+  );
 
   console.log("Derived Accounts:");
   console.log("  Bank:", bank.toString());
@@ -119,27 +132,37 @@ export async function addDriftBank(
     depositLimit: new BN(config.DEPOSIT_LIMIT ?? 10_000_000_000),
     oracleSetup: config.ORACLE_SETUP,
     operationalState: {
-      operational: {}
+      operational: {},
     },
     riskTier: {
-      collateral: {}
+      collateral: {},
     },
     configFlags: 1, // (PYTH_PUSH_MIGRATED_DEPRECATED)
-    totalAssetValueInitLimit: new BN(config.TOTAL_ASSET_VALUE_INIT_LIMIT ?? 10_000_000_000),
+    totalAssetValueInitLimit: new BN(
+      config.TOTAL_ASSET_VALUE_INIT_LIMIT ?? 10_000_000_000,
+    ),
     oracleMaxAge: 100,
-    oracleMaxConfidence: 0 // Default: 10% confidence
+    oracleMaxConfidence: 0, // Default: 10% confidence
   };
 
   console.log("Bank Configuration:");
   console.log("  Deposit Limit:", driftConfig.depositLimit);
-  console.log("  Total Asset Value Limit:", driftConfig.totalAssetValueInitLimit);
+  console.log(
+    "  Total Asset Value Limit:",
+    driftConfig.totalAssetValueInitLimit,
+  );
   console.log();
 
   // Detect the correct token program by checking the mint's owner
   console.log("Detecting token program for mint...");
   let tokenProgram = TOKEN_PROGRAM_ID;
   try {
-    await getMint(connection, config.BANK_MINT, "confirmed", TOKEN_2022_PROGRAM_ID);
+    await getMint(
+      connection,
+      config.BANK_MINT,
+      "confirmed",
+      TOKEN_2022_PROGRAM_ID,
+    );
     tokenProgram = TOKEN_2022_PROGRAM_ID;
     console.log("  Using Token-2022 program");
   } catch {
@@ -160,78 +183,33 @@ export async function addDriftBank(
     isWritable: false,
   };
 
+  const admin = config.ADMIN ?? wallet.publicKey;
+  const feePayer = config.FEE_PAYER ?? admin;
+
   const addBankIx = await program.methods
     .lendingPoolAddBankDrift(driftConfig, config.SEED)
     .accounts({
       group: config.GROUP_KEY,
-      feePayer: config.FEE_PAYER ?? wallet.publicKey,
+      feePayer,
       bankMint: config.BANK_MINT,
       integrationAcc1: driftSpotMarket,
       tokenProgram,
     })
     .accountsPartial({
-        admin: config.ADMIN ?? wallet.publicKey,
-      })
+      admin,
+    })
     .remainingAccounts([oracleMeta, spotMarketMeta])
     .instruction();
 
-  const transaction = new Transaction().add(addBankIx);
-
-  // Simulate
-  transaction.feePayer = wallet.publicKey;
-  const { blockhash } = await connection.getLatestBlockhash();
-  transaction.recentBlockhash = blockhash;
-
-  console.log("Simulating lendingPoolAddBankDrift...");
-  const simulation = await connection.simulateTransaction(transaction);
-
-  console.log("\nProgram Logs:");
-  simulation.value.logs?.forEach(log => console.log("  " + log));
-
-  if (simulation.value.err) {
-    console.log("\nSimulation failed:");
-    console.log(JSON.stringify(simulation.value.err, null, 2));
-    process.exit(1);
-  }
-
-  console.log("\nSimulation successful!");
-  console.log("Compute units:", simulation.value.unitsConsumed);
-  console.log();
-
-  // Execute
-  console.log("Executing transaction...");
-  const signature = await sendAndConfirmTransaction(
-    connection,
-    transaction,
-    [wallet.payer]
-  );
-
-  console.log("✓ Bank added successfully!");
-  console.log("Signature:", signature);
-  console.log();
-
-  // Now initialize drift user
-  console.log("Initializing drift user...");
-
-  // Get user's token account (ATA)
-  const { getAssociatedTokenAddressSync } = await import("@solana/spl-token");
   const signerTokenAccount = getAssociatedTokenAddressSync(
     config.BANK_MINT,
-    config.ADMIN ?? wallet.publicKey,
+    admin,
     true,
-    tokenProgram
+    tokenProgram,
   );
-
-  // Derive all required accounts
-  const {
-    deriveLiquidityVaultAuthority,
-    deriveDriftUserPDA,
-    deriveDriftUserStatsPDA
-  } = await import("./lib/utils");
-
   const [liquidityVaultAuthority] = deriveLiquidityVaultAuthority(
     program.programId,
-    bank
+    bank,
   );
 
   const [driftUser] = deriveDriftUserPDA(liquidityVaultAuthority, 0);
@@ -247,46 +225,66 @@ export async function addDriftBank(
   const initUserIx = await program.methods
     .driftInitUser(config.INIT_DEPOSIT_AMOUNT ?? new BN(100))
     .accounts({
-      feePayer: wallet.publicKey,
+      feePayer,
       signerTokenAccount,
       bank,
       driftState,
       driftSpotMarketVault,
-      driftOracle,
+      driftOracle: config.DRIFT_ORACLE,
       tokenProgram,
     })
     .instruction();
 
-  const initUserTx = new Transaction().add(initUserIx);
-  initUserTx.feePayer = wallet.publicKey;
-  const { blockhash: blockhash2 } = await connection.getLatestBlockhash();
-  initUserTx.recentBlockhash = blockhash2;
+  const transaction = new Transaction().add(addBankIx, initUserIx);
 
-  console.log("Simulating driftInitUser...");
-  const initUserSimulation = await connection.simulateTransaction(initUserTx);
+  // Simulate
+  transaction.feePayer = feePayer;
+  const { blockhash } = await connection.getLatestBlockhash();
+  transaction.recentBlockhash = blockhash;
+
+  console.log("Simulating lendingPoolAddBankDrift & driftInitUser...");
+  const simulation = await connection.simulateTransaction(transaction);
 
   console.log("\nProgram Logs:");
-  initUserSimulation.value.logs?.forEach(log => console.log("  " + log));
+  simulation.value.logs?.forEach((log) => console.log("  " + log));
 
-  if (initUserSimulation.value.err) {
+  if (simulation.value.err) {
     console.log("\nSimulation failed:");
-    console.log(JSON.stringify(initUserSimulation.value.err, null, 2));
+    console.log(JSON.stringify(simulation.value.err, null, 2));
     process.exit(1);
   }
 
   console.log("\nSimulation successful!");
-  console.log("Compute units:", initUserSimulation.value.unitsConsumed);
+  console.log("Compute units:", simulation.value.unitsConsumed);
   console.log();
 
-  console.log("Executing transaction...");
-  const initUserSig = await sendAndConfirmTransaction(
-    connection,
-    initUserTx,
-    [wallet.payer]
-  );
+  if (sendTx) {
+    try {
+      console.log("Executing transaction...");
+      const signature = await sendAndConfirmTransaction(
+        connection,
+        transaction,
+        [wallet.payer],
+      );
+      console.log("✓ Bank & Drift useradded successfully!");
+      console.log("Signature:", signature);
+      console.log();
+    } catch (error) {
+      console.error("Transaction failed:", error);
+    }
+  } else {
+    transaction.feePayer = config.MULTISIG_PAYER; // Set the fee payer to Squads wallet
+    const { blockhash } = await connection.getLatestBlockhash();
+    transaction.recentBlockhash = blockhash;
+    const serializedTransaction = transaction.serialize({
+      requireAllSignatures: false,
+      verifySignatures: false,
+    });
+    const base58Transaction = bs58.encode(serializedTransaction);
+    console.log("bank key: " + bank);
+    console.log("Base58-encoded transaction:", base58Transaction);
+  }
 
-  console.log("✓ Drift user initialized successfully!");
-  console.log("Signature:", initUserSig);
   console.log();
   console.log("✓ Drift bank setup complete!");
 
@@ -304,8 +302,11 @@ const pkFromString = (s: any) => new PublicKey(s);
 function parseConfig(rawConfig: string): Config {
   const json = JSON.parse(rawConfig);
 
-let ORACLE_SETUP;
-if (json.marginfiOracleType === "switchboardPull") {
+  let ORACLE_SETUP;
+  if (
+    json.marginfiOracleType === "switchboardPull" ||
+    json.comments?.marginfiOracleType === "switchboardPull"
+  ) {
     ORACLE_SETUP = { driftSwitchboardPull: {} };
   } else {
     // Default to pythPushOracle

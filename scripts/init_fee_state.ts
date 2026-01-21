@@ -10,9 +10,11 @@ import { commonSetup } from "../lib/common-setup";
 type Config = {
   PROGRAM_ID: string;
   ADMIN_PUBKEY: PublicKey;
-  FLAT_SOL_FEE: number;
+  INIT_FLAT_SOL_FEE: number;
+  LIQUIDATION_FLAT_SOL_FEE: number;
   PROGRAM_FEE_FIXED: WrappedI80F48;
   PROGRAM_FEE_RATE: WrappedI80F48;
+  LIQUIDATION_MAX_FEE: WrappedI80F48;
 
   /// Required if using multisig only
   MULTISIG_PAYER: PublicKey;
@@ -20,9 +22,11 @@ type Config = {
 const config: Config = {
   PROGRAM_ID: "5UDghkpgW1HfYSrmEj2iAApHShqU44H6PKTAar9LL9bY",
   ADMIN_PUBKEY: new PublicKey("725Z4QQUVhRiXcCdf4cQTrxXYmQXyW9zgVkW5PDVSJz4"),
-  FLAT_SOL_FEE: 1000,
+  INIT_FLAT_SOL_FEE: 1000,
+  LIQUIDATION_FLAT_SOL_FEE: 1000,
   PROGRAM_FEE_FIXED: I80F48_ZERO,
   PROGRAM_FEE_RATE: I80F48_ZERO,
+  LIQUIDATION_MAX_FEE: I80F48_ZERO,
 
   MULTISIG_PAYER: new PublicKey("3HGdGLrnK9DsnHi1mCrUMLGfQHcu6xUrXhMY14GYjqvM"),
 };
@@ -46,7 +50,7 @@ async function initGlobalFeeState() {
     config.PROGRAM_ID,
     "/keys/zerotrade_admin.json",
     config.MULTISIG_PAYER,
-    "kamino"
+    "current",
   );
   const program = user.program;
   const connection = user.connection;
@@ -56,9 +60,11 @@ async function initGlobalFeeState() {
       .initGlobalFeeState(
         config.ADMIN_PUBKEY,
         config.ADMIN_PUBKEY,
-        config.FLAT_SOL_FEE,
+        config.INIT_FLAT_SOL_FEE,
+        config.LIQUIDATION_FLAT_SOL_FEE,
         config.PROGRAM_FEE_FIXED,
-        config.PROGRAM_FEE_RATE
+        config.PROGRAM_FEE_RATE,
+        config.LIQUIDATION_MAX_FEE,
       )
       .accounts({
         payer: user.wallet.publicKey,
@@ -66,7 +72,7 @@ async function initGlobalFeeState() {
         // rent = SYSVAR_RENT_PUBKEY,
         // systemProgram: SystemProgram.programId,
       })
-      .instruction()
+      .instruction(),
   );
 
   try {

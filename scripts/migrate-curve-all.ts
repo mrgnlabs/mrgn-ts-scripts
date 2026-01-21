@@ -30,7 +30,7 @@ async function main() {
     config.PROGRAM_ID,
     config.DEPLOY_KEYPAIR_PATH,
     undefined,
-    "current"
+    "current",
   );
   const { program, connection, wallet } = user;
 
@@ -44,7 +44,7 @@ async function main() {
 
   const bankPubkeys = banks.map((b) => new PublicKey(b.bank_address));
   console.log(
-    `Processing ${bankPubkeys.length} banks in chunks of ${CHUNK_SIZE}...`
+    `Processing ${bankPubkeys.length} banks in chunks of ${CHUNK_SIZE}...`,
   );
 
   for (let i = 0; i < bankPubkeys.length; i += CHUNK_SIZE) {
@@ -77,13 +77,13 @@ async function main() {
 
     if (!instructionsAdded) {
       console.log(
-        `No migrations needed for chunk starting at index ${i}; skipping transaction.`
+        `No migrations needed for chunk starting at index ${i}; skipping transaction.`,
       );
       continue;
     }
 
     console.log(
-      `Sending transaction for chunk starting at index ${i} (${instructionsAdded} bank(s))...`
+      `Sending transaction for chunk starting at index ${i} (${instructionsAdded} bank(s))...`,
     );
     try {
       const signature = await sendAndConfirmTransaction(connection, tx, [

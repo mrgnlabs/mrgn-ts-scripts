@@ -1,7 +1,6 @@
 // Withdraw fees (optionally set destination) for multiple banks in one v0 tx using a LUT.
 import {
   AccountMeta,
-  AddressLookupTableAccount,
   PublicKey,
   Transaction,
   TransactionInstruction,
@@ -58,7 +57,7 @@ const config: Config = {
     new PublicKey("BkUyfXjbBBALcfZvw76WAFRvYQ21xxMWWeoPtJrUqG3z"),
   ],
   DESTINATION_WALLET: new PublicKey(
-    "CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"
+    "CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw",
   ),
 
   MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
@@ -72,7 +71,7 @@ async function main() {
     config.PROGRAM_ID,
     "/keys/staging-deploy.json",
     config.MULTISIG_PAYER,
-    "current"
+    "current",
   );
   const program = user.program;
   const connection = user.connection;
@@ -92,7 +91,7 @@ async function main() {
     const isT22 = tokenProgram.toString() === TOKEN_2022_PROGRAM_ID.toString();
 
     const feesUncollected = wrappedI80F48toBigNumber(
-      bankAcc.collectedInsuranceFeesOutstanding
+      bankAcc.collectedInsuranceFeesOutstanding,
     ).toNumber();
 
     const [insuranceVault] = deriveInsuranceVault(program.programId, bankPk);
@@ -100,7 +99,7 @@ async function main() {
       connection,
       insuranceVault,
       undefined,
-      tokenProgram
+      tokenProgram,
     );
     const feesAvailable = feesVaultAcc.amount;
 
@@ -108,7 +107,7 @@ async function main() {
       `[${bankPk.toBase58()}] mint=${mint.toBase58()} t22=${isT22} dec=${
         bankAcc.mintDecimals
       } ` +
-        `insurance Uncollected=${feesUncollected.toLocaleString()} insurance Available=${feesAvailable.toLocaleString()}`
+        `insurance Uncollected=${feesUncollected.toLocaleString()} insurance Available=${feesAvailable.toLocaleString()}`,
     );
 
     // Destination ATA for this mint
@@ -116,10 +115,10 @@ async function main() {
       mint,
       config.DESTINATION_WALLET,
       true,
-      tokenProgram
+      tokenProgram,
     );
     console.log(
-      `[${bankPk.toBase58()}] fee destination ATA: ${dstAta.toBase58()}`
+      `[${bankPk.toBase58()}] fee destination ATA: ${dstAta.toBase58()}`,
     );
 
     // Create the ATA if needed (idempotent).
@@ -129,8 +128,8 @@ async function main() {
         dstAta,
         config.DESTINATION_WALLET,
         mint,
-        tokenProgram
-      )
+        tokenProgram,
+      ),
     );
 
     // Token-2022 mints require passing the mint as a remaining account.
@@ -155,14 +154,14 @@ async function main() {
       ixes.push(withdrawIx);
     } else {
       console.log(
-        `[${bankPk.toBase58()}] Skipping withdraw; available <= 1 (=${feesAvailable}).`
+        `[${bankPk.toBase58()}] Skipping withdraw; available <= 1 (=${feesAvailable}).`,
       );
     }
   }
 
   if (ixes.length === 0) {
     console.log(
-      "No instructions to send (nothing to set or withdraw). Exiting."
+      "No instructions to send (nothing to set or withdraw). Exiting.",
     );
     return;
   }
@@ -183,7 +182,7 @@ async function main() {
     });
     await connection.confirmTransaction(
       { signature, blockhash, lastValidBlockHeight },
-      "confirmed"
+      "confirmed",
     );
 
     console.log("tx signature:", signature);
@@ -205,7 +204,7 @@ async function main() {
 const deriveFeeVault = (programId: PublicKey, bank: PublicKey) => {
   return PublicKey.findProgramAddressSync(
     [Buffer.from("fee_vault", "utf-8"), bank.toBuffer()],
-    programId
+    programId,
   );
 };
 

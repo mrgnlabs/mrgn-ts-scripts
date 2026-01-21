@@ -2,11 +2,11 @@ import { Connection, PublicKey } from "@solana/web3.js";
 import { TOKEN_PROGRAM_ID, TOKEN_2022_PROGRAM_ID } from "@solana/spl-token";
 import * as dotenv from "dotenv";
 import { join } from "path";
+import { DRIFT_PROGRAM_ID } from "./lib/utils";
 
 // Load environment variables
 dotenv.config({ path: join(__dirname, "../../.env.api") });
 
-const DRIFT_PROGRAM_ID = new PublicKey("dRiftyHA39MWEi3m9aunc5MzRF1JYuBsbn6VPcn33UH");
 const bs58 = require("bs58");
 
 interface SpotMarketInfo {
@@ -19,28 +19,25 @@ interface SpotMarketInfo {
   pubkey: string;
 }
 
-// Manual deserialization of SpotMarket fields we care about
-function decodeSpotMarket(data: Buffer): Partial<SpotMarketInfo> {
+export function decodeSpotMarketV2(data: Buffer): Partial<SpotMarketInfo> {
   try {
-    // Skip discriminator (8 bytes)
-    let offset = 8;
+    let offset = 8; // Anchor discriminator
 
-    // pubkey: PublicKey (32 bytes)
-    const pubkey = new PublicKey(data.slice(offset, offset + 32));
+    // 1) pubkey: Pubkey
     offset += 32;
 
-    // oracle: PublicKey (32 bytes)
+    // 2) oracle: Pubkey
     const oracle = new PublicKey(data.slice(offset, offset + 32));
     offset += 32;
 
-    // mint: PublicKey (32 bytes)
+    // 3) mint: Pubkey
     const mint = new PublicKey(data.slice(offset, offset + 32));
     offset += 32;
 
-    // vault: PublicKey (32 bytes) - skip
+    // 4) vault: Pubkey
     offset += 32;
 
-    // name: [u8; 32]
+    // 5) name: [u8; 32]
     const nameBytes = data.slice(offset, offset + 32);
     const name = Buffer.from(nameBytes)
       .toString("utf-8")
@@ -48,181 +45,119 @@ function decodeSpotMarket(data: Buffer): Partial<SpotMarketInfo> {
       .trim();
     offset += 32;
 
-    // Skip historical_oracle_data, historical_index_data (large structs)
-    // These are complex, so we'll skip to revenue pool which is further down
+    // 6) historical_oracle_data: HistoricalOracleData = 48 bytes
+    // i64 + u64 + i64 + i64 + i64 + i64 = 6 * 8
+    offset += 48;
 
-    // Try to find market_index and decimals
-    // market_index is a u16 somewhere in the struct
-    // decimals is a u32
-
-    // Let's search for them in a reasonable range
-    // Based on Drift's SpotMarket struct, market_index should be near the beginning after some fields
-    //  and decimals shortly after
-
-    // Actually, let's just scan the whole account data for patterns
-    // Market index is usually < 100, so we can search for it
-    // Decimals are usually 6 or 9 for common tokens
-
-    // For now, return what we have
-    return {
-      pubkey: pubkey.toString(),
-      oracle: oracle.toString(),
-      mint: mint.toString(),
-      name,
-    };
-  } catch (e) {
-    console.error("Error decoding:", e);
-    return {};
-  }
-}
-
-// Better manual deserialization based on the actual Drift IDL structure
-function decodeSpotMarketV2(data: Buffer): Partial<SpotMarketInfo> {
-  try {
-    let offset = 8; // Skip discriminator
-
-    // Read fields in order from IDL:
-    // 1. pubkey: PublicKey
-    offset += 32;
-
-    // 2. oracle: PublicKey
-    const oracle = new PublicKey(data.slice(offset, offset + 32));
-    offset += 32;
-
-    // 3. mint: PublicKey
-    const mint = new PublicKey(data.slice(offset, offset + 32));
-    offset += 32;
-
-    // 4. vault: PublicKey
-    offset += 32;
-
-    // 5. name: [u8; 32]
-    const nameBytes = data.slice(offset, offset + 32);
-    const name = Buffer.from(nameBytes)
-      .toString("utf-8")
-      .replace(/\0/g, "")
-      .trim();
-    offset += 32;
-
-    // 6. historical_oracle_data: HistoricalOracleData (40 bytes based on typical size)
+    // 7) historical_index_data: HistoricalIndexData = 40 bytes
+    // u64 + u64 + u64 + u64 + i64 = 5 * 8
     offset += 40;
 
-    // 7. historical_index_data: HistoricalIndexData (40 bytes)
-    offset += 40;
+    // 8) revenue_pool: PoolBalance = 24 bytes
+    // u128 (16) + u16 (2) + [u8;6] (6) = 24
+    offset += 24;
 
-    // 8. revenue_pool: PoolBalance
-    // This has scaled_balance (u128 = 16 bytes) and market_index (u16 = 2 bytes)
-    offset += 18; // Skip revenue_pool
+    // 9) spot_fee_pool: PoolBalance = 24 bytes
+    offset += 24;
 
-    // 9. spot_fee_pool: PoolBalance
-    offset += 18;
+    // 10) insurance_fund: InsuranceFund = 112 bytes
+    // Pubkey (32)
+    // + total_shares u128 (16)
+    // + user_shares u128 (16)
+    // + shares_base u128 (16)
+    // + unstaking_period i64 (8)
+    // + last_revenue_settle_ts i64 (8)
+    // + revenue_settle_period i64 (8)
+    // + total_factor u32 (4)
+    // + user_factor u32 (4)
+    // = 112
+    offset += 112;
 
-    // 10. insurance_fund: InsuranceFund (complex, skip ~100 bytes)
-    offset += 100;
-
-    // 11. total_spot_fee: u128
+    // 11) total_spot_fee: u128
     offset += 16;
 
-    // 12. deposit_balance: u128
+    // 12) deposit_balance: u128
     offset += 16;
 
-    // 13. borrow_balance: u128
+    // 13) borrow_balance: u128
     offset += 16;
 
-    // 14. cumulative_deposit_interest: u128
+    // 14) cumulative_deposit_interest: u128
     offset += 16;
 
-    // 15. cumulative_borrow_interest: u128
+    // 15) cumulative_borrow_interest: u128
     offset += 16;
 
-    // 16. total_social_loss: u128
+    // 16) total_social_loss: u128
     offset += 16;
 
-    // 17. total_quote_social_loss: u128
+    // 17) total_quote_social_loss: u128
     offset += 16;
 
-    // 18. withdraw_guard_threshold: u64
+    // 18) withdraw_guard_threshold: u64
     offset += 8;
 
-    // 19. max_token_deposits: u64
+    // 19) max_token_deposits: u64
     offset += 8;
 
-    // 20. deposit_token_twap: u64
+    // 20) deposit_token_twap: u64
     offset += 8;
 
-    // 21. borrow_token_twap: u64
+    // 21) borrow_token_twap: u64
     offset += 8;
 
-    // 22. utilization_twap: u64
+    // 22) utilization_twap: u64
     offset += 8;
 
-    // 23. last_interest_ts: u64
+    // 23) last_interest_ts: u64
     offset += 8;
 
-    // 24. last_twap_ts: u64
+    // 24) last_twap_ts: u64
     offset += 8;
 
-    // 25. expiry_ts: i64
+    // 25) expiry_ts: i64
     offset += 8;
 
-    // 26. order_step_size: u64
+    // 26) order_step_size: u64
     offset += 8;
 
-    // 27. order_tick_size: u64
+    // 27) order_tick_size: u64
     offset += 8;
 
-    // 28. min_order_size: u64
+    // 28) min_order_size: u64
     offset += 8;
 
-    // 29. max_position_size: u64
+    // 29) max_position_size: u64
     offset += 8;
 
-    // 30. next_fill_record_id: u64
+    // 30) next_fill_record_id: u64
     offset += 8;
 
-    // 31. next_deposit_record_id: u64
+    // 31) next_deposit_record_id: u64
     offset += 8;
 
-    // 32. initial_asset_weight: u32
-    offset += 4;
+    // 32-41) ten u32 fields
+    // initial_asset_weight
+    // maintenance_asset_weight
+    // initial_liability_weight
+    // maintenance_liability_weight
+    // imf_factor
+    // liquidator_fee
+    // if_liquidation_fee
+    // optimal_utilization
+    // optimal_borrow_rate
+    // max_borrow_rate
+    offset += 10 * 4;
 
-    // 33. maintenance_asset_weight: u32
-    offset += 4;
-
-    // 34. initial_liability_weight: u32
-    offset += 4;
-
-    // 35. maintenance_liability_weight: u32
-    offset += 4;
-
-    // 36. imf_factor: u32
-    offset += 4;
-
-    // 37. liquidator_fee: u32
-    offset += 4;
-
-    // 38. if_liquidation_fee: u32
-    offset += 4;
-
-    // 39. optimal_utilization: u32
-    offset += 4;
-
-    // 40. optimal_borrow_rate: u32
-    offset += 4;
-
-    // 41. max_borrow_rate: u32
-    offset += 4;
-
-    // 42. decimals: u32
+    // 42) decimals: u32
     const decimals = data.readUInt32LE(offset);
     offset += 4;
 
-    // 43. market_index: u16
+    // 43) market_index: u16
     const marketIndex = data.readUInt16LE(offset);
     offset += 2;
 
     return {
-      pubkey: "",
       oracle: oracle.toString(),
       mint: mint.toString(),
       name,
@@ -230,7 +165,7 @@ function decodeSpotMarketV2(data: Buffer): Partial<SpotMarketInfo> {
       marketIndex,
     };
   } catch (e) {
-    console.error("Error decoding V2:", e);
+    console.error("Error decoding SpotMarket:", e);
     return {};
   }
 }
@@ -247,7 +182,9 @@ async function main() {
   console.log("Fetching all Drift spot markets...\n");
 
   // The discriminator for SpotMarket accounts
-  const spotMarketDiscriminator = Buffer.from([100, 177, 8, 107, 168, 65, 65, 39]);
+  const spotMarketDiscriminator = Buffer.from([
+    100, 177, 8, 107, 168, 65, 65, 39,
+  ]);
 
   // Get all program accounts with SpotMarket discriminator
   const accounts = await connection.getProgramAccounts(DRIFT_PROGRAM_ID, {
@@ -270,7 +207,9 @@ async function main() {
       const decoded = decodeSpotMarketV2(account.account.data);
 
       if (!decoded.marketIndex || !decoded.name || !decoded.mint) {
-        console.log(`Skipping account ${account.pubkey.toString()} - incomplete data`);
+        console.log(
+          `Skipping account ${account.pubkey.toString()} - incomplete data`,
+        );
         continue;
       }
 
@@ -278,7 +217,7 @@ async function main() {
       let tokenProgram = "Unknown";
       try {
         const mintAccount = await connection.getAccountInfo(
-          new PublicKey(decoded.mint)
+          new PublicKey(decoded.mint),
         );
         if (mintAccount) {
           if (mintAccount.owner.equals(TOKEN_2022_PROGRAM_ID)) {
@@ -311,14 +250,14 @@ async function main() {
   // Print summary table
   console.log("=== ALL DRIFT SPOT MARKETS ===\n");
   console.log(
-    "Index | Name                  | Token Program | Decimals | Mint"
+    "Index | Name                  | Token Program | Decimals | Mint",
   );
   console.log(
-    "------|-----------------------|--------------|----------|-------------"
+    "------|-----------------------|--------------|----------|-------------",
   );
   markets.forEach((m) => {
     console.log(
-      `${m.marketIndex.toString().padEnd(5)} | ${m.name.padEnd(21)} | ${m.tokenProgram.padEnd(12)} | ${m.decimals.toString().padEnd(8)} | ${m.mint}`
+      `${m.marketIndex.toString().padEnd(5)} | ${m.name.padEnd(21)} | ${m.tokenProgram.padEnd(12)} | ${m.decimals.toString().padEnd(8)} | ${m.mint}`,
     );
   });
 
@@ -341,13 +280,24 @@ async function main() {
 
   // Filter for Token-2022 assets
   const token2022Markets = markets.filter(
-    (m) => m.tokenProgram === "Token-2022"
+    (m) => m.tokenProgram === "Token-2022",
   );
 
   // Popular assets
-  const popularAssets = ["USDC", "SOL", "USDT", "jitoSOL", "mSOL", "bSOL", "JLP", "PYUSD"];
+  const popularAssets = [
+    "USDC",
+    "SOL",
+    "USDT",
+    "jitoSOL",
+    "mSOL",
+    "bSOL",
+    "JLP",
+    "PYUSD",
+  ];
   const popularMarkets = markets.filter((m) =>
-    popularAssets.some((asset) => m.name.toUpperCase().includes(asset.toUpperCase()))
+    popularAssets.some((asset) =>
+      m.name.toUpperCase().includes(asset.toUpperCase()),
+    ),
   );
 
   console.log("Token-2022 Assets:");
@@ -357,9 +307,7 @@ async function main() {
 
   console.log("\n\nPopular Assets:");
   popularMarkets.forEach((m) => {
-    console.log(
-      `  - ${m.name} (Index: ${m.marketIndex}, Mint: ${m.mint})`
-    );
+    console.log(`  - ${m.name} (Index: ${m.marketIndex}, Mint: ${m.mint})`);
   });
 
   // Create a diverse candidate list
@@ -404,7 +352,7 @@ async function main() {
     const market = markets.find(
       (m) =>
         m.name.toUpperCase().includes(candidate.toUpperCase()) &&
-        !candidates.includes(m)
+        !candidates.includes(m),
     );
     if (market) candidates.push(market);
   }
@@ -432,8 +380,8 @@ async function main() {
           tokenProgram: m.tokenProgram,
         },
         null,
-        2
-      )
+        2,
+      ),
     );
   });
 

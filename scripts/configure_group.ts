@@ -5,6 +5,8 @@ import {
 } from "@solana/web3.js";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 import { commonSetup } from "../lib/common-setup";
+import BN from "bn.js";
+import { WrappedI80F48 } from "@mrgnlabs/mrgn-common";
 
 /**
  * If true, send the tx. If false, output the unsigned b58 tx to console.
@@ -21,6 +23,8 @@ type Config = {
   EMISS_ADMIN: PublicKey;
   META_ADMIN: PublicKey;
   RISK_ADMIN: PublicKey;
+  EMODE_MAX_INIT_LEVERAGE?: WrappedI80F48;
+  EMODE_MAX_MAINT_LEVERAGE?: WrappedI80F48;
 
   MULTISIG?: PublicKey;
 };
@@ -59,7 +63,7 @@ async function main() {
     config.PROGRAM_ID,
     "/keys/zerotrade_admin.json",
     config.MULTISIG,
-    "current"
+    "current",
   );
   const program = user.program;
   const connection = user.connection;
@@ -82,12 +86,13 @@ async function main() {
         config.EMISS_ADMIN,
         config.META_ADMIN,
         config.RISK_ADMIN,
-        false
+        config.EMODE_MAX_INIT_LEVERAGE ?? null,
+        config.EMODE_MAX_MAINT_LEVERAGE ?? null,
       )
       .accounts({
         marginfiGroup: config.GROUP,
       })
-      .instruction()
+      .instruction(),
   );
 
   if (sendTx) {
@@ -95,7 +100,7 @@ async function main() {
       const signature = await sendAndConfirmTransaction(
         connection,
         transaction,
-        [user.wallet.payer]
+        [user.wallet.payer],
       );
       console.log("Transaction signature:", signature);
     } catch (error) {
@@ -109,37 +114,37 @@ async function main() {
       "new emode admin: " +
         groupAfter.emodeAdmin +
         " was " +
-        groupBefore.emodeAdmin
+        groupBefore.emodeAdmin,
     );
     console.log(
       "new curve admin: " +
         groupAfter.delegateCurveAdmin +
         " was " +
-        groupBefore.delegateCurveAdmin
+        groupBefore.delegateCurveAdmin,
     );
     console.log(
       "new limit admin: " +
         groupAfter.delegateLimitAdmin +
         " was " +
-        groupBefore.delegateLimitAdmin
+        groupBefore.delegateLimitAdmin,
     );
     console.log(
       "new emiss admin: " +
         groupAfter.delegateEmissionsAdmin +
         " was " +
-        groupBefore.delegateEmissionsAdmin
+        groupBefore.delegateEmissionsAdmin,
     );
     console.log(
       "new meta admin: " +
         groupAfter.metadataAdmin +
         " was " +
-        groupBefore.metadataAdmin
+        groupBefore.metadataAdmin,
     );
     console.log(
       "new risk admin: " +
         groupAfter.riskAdmin +
         " was " +
-        groupBefore.riskAdmin
+        groupBefore.riskAdmin,
     );
   } else {
     transaction.feePayer = config.MULTISIG;

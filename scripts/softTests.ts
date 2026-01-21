@@ -11,7 +11,7 @@ import BN from "bn.js";
 export const assertKeysEqual = (a: PublicKey, b: PublicKey) => {
   if (a.toString() !== b.toString()) {
     throw new Error(
-      `Values are not exactly equal A: ${a.toString()} b: ${b.toString()}`
+      `Values are not exactly equal A: ${a.toString()} b: ${b.toString()}`,
     );
   }
 };
@@ -37,7 +37,7 @@ export const assertBNEqual = (a: BN, b: BN | number) => {
   }
   if (a.toString() !== a.toString()) {
     throw new Error(
-      `Values are not exactly equal A: ${a.toString()} b: ${b.toString()}`
+      `Values are not exactly equal A: ${a.toString()} b: ${b.toString()}`,
     );
   }
 };
@@ -51,7 +51,7 @@ export const assertBNEqual = (a: BN, b: BN | number) => {
  */
 export const assertI80F48Equal = (
   a: WrappedI80F48,
-  b: WrappedI80F48 | BN | number
+  b: WrappedI80F48 | BN | number,
 ) => {
   const bigA = wrappedI80F48toBigNumber(a);
   let bigB: BigNumber;
@@ -68,7 +68,7 @@ export const assertI80F48Equal = (
 
   if (bigA.toString() !== bigB.toString()) {
     throw new Error(
-      `Values are not exactly equal A: ${bigA.toString()} b: ${bigB.toString()}`
+      `Values are not exactly equal A: ${bigA.toString()} b: ${bigB.toString()}`,
     );
   }
 };
@@ -82,7 +82,7 @@ export const assertI80F48Equal = (
 export const assertI80F48Approx = (
   a: WrappedI80F48,
   b: WrappedI80F48 | BN | number,
-  tolerance: number = 0.000001
+  tolerance: number = 0.000001,
 ) => {
   const bigA = wrappedI80F48toBigNumber(a);
   let bigB: BigNumber;
@@ -103,7 +103,7 @@ export const assertI80F48Approx = (
   if (diff.isGreaterThan(allowedDifference)) {
     throw new Error(
       `Values are not approximately equal. A: ${bigA.toString()} B: ${bigB.toString()} 
-        Difference: ${diff.toString()}, Allowed Tolerance: ${tolerance}`
+        Difference: ${diff.toString()}, Allowed Tolerance: ${tolerance}`,
     );
   }
 };
@@ -126,19 +126,19 @@ function isWrappedI80F48(value: any): value is WrappedI80F48 {
 export const assertBNApproximately = (
   a: BN,
   b: BN | number,
-  tolerance: BN | number
+  tolerance: BN | number,
 ) => {
   const aB = BigInt(a.toString());
   const bB = BigInt(b.toString());
   const toleranceB = BigInt(tolerance.toString());
   if (!(aB >= bB - toleranceB)) {
     throw new Error(
-      `Values are not approx within ${tolerance.toString()} A: ${a.toString()} b: ${b.toString()}`
+      `Values are not approx within ${tolerance.toString()} A: ${a.toString()} b: ${b.toString()}`,
     );
   }
   if (!(aB <= bB + toleranceB)) {
     throw new Error(
-      `Values are not approx within ${tolerance.toString()} A: ${a.toString()} b: ${b.toString()}`
+      `Values are not approx within ${tolerance.toString()} A: ${a.toString()} b: ${b.toString()}`,
     );
   }
 };

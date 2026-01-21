@@ -21,36 +21,55 @@ export type Config = {
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
   BANK: new PublicKey("FDsf8sj6SoV313qrA91yms3u5b3P4hBxEPvanVs8LtJV"),
-  DESTINATION_WALLET: new PublicKey("53kWkWcayhQfLqU2B5QAJTD9C7keD4HY7Y9Se4Mdmp9z"),
+  DESTINATION_WALLET: new PublicKey(
+    "53kWkWcayhQfLqU2B5QAJTD9C7keD4HY7Y9Se4Mdmp9z",
+  ),
 
   MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 };
 
 async function main() {
-  const user = commonSetup(false, config.PROGRAM_ID, "/keys/staging-deploy.json", config.MULTISIG_PAYER);
+  const user = commonSetup(
+    false,
+    config.PROGRAM_ID,
+    "/keys/staging-deploy.json",
+    config.MULTISIG_PAYER,
+  );
   const program = user.program;
   const connection = user.connection;
 
   let bankAcc = await program.account.bank.fetch(config.BANK);
   const mint = bankAcc.mint;
-  const feesUncollected = wrappedI80F48toBigNumber(bankAcc.collectedGroupFeesOutstanding).toNumber();
+  const feesUncollected = wrappedI80F48toBigNumber(
+    bankAcc.collectedGroupFeesOutstanding,
+  ).toNumber();
   let mintAccInfo = await connection.getAccountInfo(mint);
   const tokenProgram = mintAccInfo.owner;
   let isT22 = tokenProgram.toString() == TOKEN_2022_PROGRAM_ID.toString();
   console.log("mint: " + mint + " is 22: " + isT22);
   const [feeVault] = deriveFeeVault(program.programId, config.BANK);
-  let feesVaultAcc = await getAccount(connection, feeVault, undefined, tokenProgram);
+  let feesVaultAcc = await getAccount(
+    connection,
+    feeVault,
+    undefined,
+    tokenProgram,
+  );
   const feesAvailable = Number(feesVaultAcc.amount);
   console.log("fees uncollected (in token): " + feesUncollected);
   console.log("fees available (in token): " + feesAvailable.toLocaleString());
 
-  let dstAta = getAssociatedTokenAddressSync(mint, config.DESTINATION_WALLET, undefined, tokenProgram);
+  let dstAta = getAssociatedTokenAddressSync(
+    mint,
+    config.DESTINATION_WALLET,
+    undefined,
+    tokenProgram,
+  );
   let createAtaIx = createAssociatedTokenAccountIdempotentInstruction(
     config.MULTISIG_PAYER,
     dstAta,
     config.DESTINATION_WALLET,
     mint,
-    tokenProgram
+    tokenProgram,
   );
 
   let remaining: AccountMeta[] = [];
@@ -75,7 +94,7 @@ async function main() {
         tokenProgram: tokenProgram,
       })
       .remainingAccounts(remaining)
-      .instruction()
+      .instruction(),
   );
 
   transaction.feePayer = config.MULTISIG_PAYER;
@@ -90,7 +109,10 @@ async function main() {
 }
 
 const deriveFeeVault = (programId: PublicKey, bank: PublicKey) => {
-  return PublicKey.findProgramAddressSync([Buffer.from("fee_vault", "utf-8"), bank.toBuffer()], programId);
+  return PublicKey.findProgramAddressSync(
+    [Buffer.from("fee_vault", "utf-8"), bank.toBuffer()],
+    programId,
+  );
 };
 
 main().catch((err) => {

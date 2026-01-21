@@ -6,18 +6,16 @@ import {
   sendAndConfirmTransaction,
 } from "@solana/web3.js";
 import { BN } from "@coral-xyz/anchor";
-import { TOKEN_PROGRAM_ID, WrappedI80F48 } from "@mrgnlabs/mrgn-common";
+import { TOKEN_PROGRAM_ID } from "@mrgnlabs/mrgn-common";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 import {
   FARMS_PROGRAM_ID,
   KLEND_PROGRAM_ID,
-  OracleSetupRawWithKamino,
 } from "./kamino-types";
 import { commonSetup } from "../../lib/common-setup";
 import { makeInitObligationIx } from "./ixes-common";
 import {
   getAssociatedTokenAddressSync,
-  TOKEN_2022_PROGRAM_ID,
 } from "@solana/spl-token";
 import { deriveBaseObligation, deriveUserState } from "./pdas";
 import {

@@ -1,62 +1,83 @@
-import { PublicKey, Transaction, sendAndConfirmTransaction } from "@solana/web3.js";
-import { BN } from "@coral-xyz/anchor";
-import { getAssociatedTokenAddressSync, TOKEN_PROGRAM_ID, TOKEN_2022_PROGRAM_ID, getMint, createAssociatedTokenAccountIdempotentInstruction } from "@solana/spl-token";
-import { readFileSync } from "fs";
-import { join } from "path";
-import { userSetup } from "./lib/user_setup";
 import {
-  deriveDriftStatePDA,
-  deriveSpotMarketVaultPDA,
-} from "./lib/utils";
+  PublicKey,
+  Transaction,
+  sendAndConfirmTransaction,
+} from "@solana/web3.js";
+import { BN } from "@coral-xyz/anchor";
+import {
+  getAssociatedTokenAddressSync,
+  TOKEN_PROGRAM_ID,
+  TOKEN_2022_PROGRAM_ID,
+  getMint,
+  createAssociatedTokenAccountIdempotentInstruction,
+} from "@solana/spl-token";
+import { deriveDriftStatePDA, deriveSpotMarketVaultPDA } from "./lib/utils";
+import { commonSetup } from "../../lib/common-setup";
+import { bs58 } from "@switchboard-xyz/common";
 
-/**
- * Drift Deposit Script
- *
- * Deposits tokens into a drift-enabled marginfi bank.
- *
- * Usage: npx ts-node scripts/drift-staging/deposit.ts <config-file> <amount>
- * Example: npx ts-node scripts/drift-staging/deposit.ts configs/usdc.json 1000
- */
+const sendTx = true;
+
+type Config = {
+  PROGRAM_ID: string;
+  BANK: PublicKey;
+  ACCOUNT: PublicKey;
+  AMOUNT: BN;
+
+  DRIFT_MARKET_INDEX: number;
+
+  /** Oracle address the Drift User uses. Can be read from bank.integrationAcc1 */
+  DRIFT_ORACLE: PublicKey;
+
+  MULTISIG_PAYER?: PublicKey; // May be omitted if not using squads
+};
+
+const config: Config = {
+  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
+  BANK: new PublicKey("8qPLKaKb4F5BC6mVncKAryMp78yp5ZRGYnPkQbt9ikKt"),
+  ACCOUNT: new PublicKey("89ViS63BocuvZx5NE5oS9tBJ4ZbKZe3GkvurxHuSqFhz"),
+  AMOUNT: new BN(1 * 10 ** 5), // 0.1 USDC
+  DRIFT_MARKET_INDEX: 0, // USDC
+  DRIFT_ORACLE: new PublicKey("3t4JZcueEzTbVP6kLxXrL3VpWx45jDer4eqysweBchNH"),
+};
 
 async function main() {
-  // Get config file and amount from args
-  const configFile = process.argv[2];
-  const amountStr = process.argv[3];
+  await depositDrift(sendTx, config, "/keys/staging-deploy.json");
+}
 
-  if (!configFile || !amountStr) {
-    console.error("Usage: npx ts-node scripts/drift-staging/deposit.ts <config-file> <amount>");
-    console.error("Example: npx ts-node scripts/drift-staging/deposit.ts configs/usdc.json 1000");
-    process.exit(1);
-  }
+export async function depositDrift(
+  sendTx: boolean,
+  config: Config,
+  walletPath: string,
+  version?: "current",
+) {
+  const user = commonSetup(
+    sendTx,
+    config.PROGRAM_ID,
+    walletPath,
+    config.MULTISIG_PAYER,
+    version,
+  );
+  const connection = user.connection;
+  const wallet = user.wallet;
+  const program = user.program;
 
-  // Load config
-  const configPath = join(__dirname, configFile);
-  const config = JSON.parse(readFileSync(configPath, "utf-8"));
-
-  const amount = new BN(amountStr);
+  const bank = await program.account.bank.fetch(config.BANK);
+  const mint = bank.mint;
 
   console.log("=== Drift Deposit ===\n");
-  console.log("Config:", configFile);
-  console.log("Bank mint:", config.bankMint);
-  console.log("Amount:", amountStr, "base units");
+  console.log("Bank mint:", mint);
+  console.log("Amount:", config.AMOUNT.toString(), "base units");
   console.log();
 
-  // Setup connection and program with USER_WALLET
-  const { connection, wallet, program } = userSetup(config.programId);
-
-  // Parse config values
-  const bankMint = new PublicKey(config.bankMint);
-  const driftOracle = new PublicKey(config.driftOracle);
-  const bankPubkey = new PublicKey(config.bankAddress);
-  const marginfiAccount = new PublicKey(config.userMarginfiAccount);
-
   const [driftState] = deriveDriftStatePDA();
-  const [driftSpotMarketVault] = deriveSpotMarketVaultPDA(config.driftMarketIndex);
+  const [driftSpotMarketVault] = deriveSpotMarketVaultPDA(
+    config.DRIFT_MARKET_INDEX,
+  );
 
   // Detect token program
   let tokenProgram = TOKEN_PROGRAM_ID;
   try {
-    await getMint(connection, bankMint, "confirmed", TOKEN_2022_PROGRAM_ID);
+    await getMint(connection, mint, "confirmed", TOKEN_2022_PROGRAM_ID);
     tokenProgram = TOKEN_2022_PROGRAM_ID;
     console.log("Detected Token-2022 mint");
   } catch {
@@ -64,43 +85,34 @@ async function main() {
   }
 
   const signerTokenAccount = getAssociatedTokenAddressSync(
-    bankMint,
+    mint,
     wallet.publicKey,
     false,
-    tokenProgram
+    tokenProgram,
   );
-
-  console.log("Derived Accounts:");
-  console.log("  Bank:", bankPubkey.toString());
-  console.log("  Marginfi Account:", marginfiAccount.toString());
-  console.log("  Drift State:", driftState.toString());
-  console.log("  Signer Token Account:", signerTokenAccount.toString());
-  console.log();
 
   // Create transaction with ATA creation
   const transaction = new Transaction();
 
-  // Add create ATA instruction (idempotent - only creates if doesn't exist)
   transaction.add(
     createAssociatedTokenAccountIdempotentInstruction(
       wallet.publicKey,
       signerTokenAccount,
       wallet.publicKey,
-      bankMint,
-      tokenProgram
-    )
+      mint,
+      tokenProgram,
+    ),
   );
 
-  // Build deposit instruction (authority is auto-resolved from marginfiAccount)
   const depositIx = await program.methods
-    .driftDeposit(amount)
+    .driftDeposit(config.AMOUNT)
     .accounts({
-      marginfiAccount: marginfiAccount,
-      bank: bankPubkey,
+      marginfiAccount: config.ACCOUNT,
+      bank: config.BANK,
       signerTokenAccount: signerTokenAccount,
-      driftState: driftState,
-      driftSpotMarketVault: driftSpotMarketVault,
-      driftOracle: driftOracle,
+      driftState,
+      driftSpotMarketVault,
+      driftOracle: config.DRIFT_ORACLE,
       tokenProgram: tokenProgram,
     })
     .instruction();
@@ -116,7 +128,7 @@ async function main() {
   const simulation = await connection.simulateTransaction(transaction);
 
   console.log("\nProgram Logs:");
-  simulation.value.logs?.forEach(log => console.log("  " + log));
+  simulation.value.logs?.forEach((log) => console.log("  " + log));
 
   if (simulation.value.err) {
     console.log("\nSimulation failed:");
@@ -128,19 +140,36 @@ async function main() {
   console.log("Compute units:", simulation.value.unitsConsumed);
   console.log();
 
-  // Execute
-  console.log("Executing transaction...");
-  const signature = await sendAndConfirmTransaction(
-    connection,
-    transaction,
-    [wallet.payer]
-  );
-
-  console.log("✓ Deposit successful!");
-  console.log("Signature:", signature);
+  if (sendTx) {
+    try {
+      console.log("Executing transaction...");
+      const signature = await sendAndConfirmTransaction(
+        connection,
+        transaction,
+        [wallet.payer],
+      );
+      console.log("Signature:", signature);
+      console.log("✓ Deposit successful!");
+    } catch (error) {
+      console.error("Transaction failed:", error);
+    }
+  } else {
+    transaction.feePayer = config.MULTISIG_PAYER; // Set the fee payer to Squads wallet
+    const { blockhash } = await connection.getLatestBlockhash();
+    transaction.recentBlockhash = blockhash;
+    const serializedTransaction = transaction.serialize({
+      requireAllSignatures: false,
+      verifySignatures: false,
+    });
+    const base58Transaction = bs58.encode(serializedTransaction);
+    console.log("deposit to: " + config.BANK);
+    console.log("by account: " + config.ACCOUNT);
+    console.log("Base58-encoded transaction:", base58Transaction);
+  }
 }
 
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+if (require.main === module) {
+  main().catch((err) => {
+    console.error(err);
+  });
+}

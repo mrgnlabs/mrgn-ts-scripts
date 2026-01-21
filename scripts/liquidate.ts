@@ -4,18 +4,12 @@ import {
   AddressLookupTableAccount,
   ComputeBudgetProgram,
   PublicKey,
-  Transaction,
   TransactionInstruction,
   TransactionMessage,
   VersionedTransaction,
-  sendAndConfirmTransaction,
 } from "@solana/web3.js";
 import { BN } from "@coral-xyz/anchor";
-import {
-  createAssociatedTokenAccountIdempotentInstruction,
-  getAssociatedTokenAddressSync,
-  TOKEN_PROGRAM_ID,
-} from "@mrgnlabs/mrgn-common";
+import { TOKEN_PROGRAM_ID } from "@mrgnlabs/mrgn-common";
 import { commonSetup, registerKaminoProgram } from "../lib/common-setup";
 import { BankAndOracles } from "../lib/utils";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
@@ -61,13 +55,13 @@ const config: Config = {
   LIQUIDATOR: new PublicKey("FvRj5WiHZh6mU9TSsgAeJinDeSAkBmPvbJHJCqXAxCsH"),
   LIQUIDATEE: new PublicKey("GUPa5bHBFxqcpAKnehhwzV7McKrA92AaCMSj5MsxttPE"),
   COLLATERAL_BANK: new PublicKey(
-    "Ay8kyX7q2G9Yp3T6Nt8Z3p8xcMeaC19xLQjmGjTX2niq"
+    "Ay8kyX7q2G9Yp3T6Nt8Z3p8xcMeaC19xLQjmGjTX2niq",
   ),
   COLLATERAL_MINT: new PublicKey(
-    "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+    "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
   ),
   COLLATERAL_ORACLE: new PublicKey(
-    "Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"
+    "Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX",
   ),
   DEBT_BANK: new PublicKey("CVjHEnJWKELsbFt37znC2nq4KNrwTf7w42fcfySEifNu"),
   DEBT_MINT: new PublicKey("DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263"),
@@ -154,14 +148,14 @@ export async function liquidate(
   sendTx: boolean,
   config: Config,
   walletPath: string,
-  version?: "current"
+  version?: "current",
 ) {
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
     walletPath,
     config.MULTISIG,
-    version
+    version,
   );
   registerKaminoProgram(user, KLEND_PROGRAM_ID.toString());
   const program = user.program;
@@ -171,7 +165,7 @@ export async function liquidate(
   const lutLookup = await connection.getAddressLookupTable(config.LUT);
   if (!lutLookup || !lutLookup.value) {
     console.warn(
-      `Warning: LUT ${config.LUT.toBase58()} not found on-chain. Proceeding without it.`
+      `Warning: LUT ${config.LUT.toBase58()} not found on-chain. Proceeding without it.`,
     );
     luts = [];
   } else {
@@ -189,7 +183,9 @@ export async function liquidate(
     oracles = [config.COLLATERAL_ORACLE, config.DEBT_ORACLE];
   }
 
-  const remainingAccounts: BankAndOracles = oracles.concat(config.LIQUIDATOR_REMAINING.concat(config.LIQUIDATEE_REMAINING));
+  const remainingAccounts: BankAndOracles = oracles.concat(
+    config.LIQUIDATOR_REMAINING.concat(config.LIQUIDATEE_REMAINING),
+  );
   const oracleMeta: AccountMeta[] = remainingAccounts.flat().map((pubkey) => {
     return { pubkey, isSigner: false, isWritable: false };
   });
@@ -200,7 +196,7 @@ export async function liquidate(
     //   ComputeBudgetProgram.setComputeUnitPrice({ microLamports: 100_000 })
     // );
     instructions.push(
-      ComputeBudgetProgram.setComputeUnitLimit({ units: 1_400_000 })
+      ComputeBudgetProgram.setComputeUnitLimit({ units: 1_400_000 }),
     );
   }
 
@@ -210,8 +206,8 @@ export async function liquidate(
         user.kaminoProgram,
         config.KAMINO_RESERVE,
         config.KAMINO_MARKET,
-        config.RESERVE_ORACLE
-      )
+        config.RESERVE_ORACLE,
+      ),
     );
   }
 
@@ -221,8 +217,8 @@ export async function liquidate(
         user.kaminoProgram,
         config.KAMINO_MARKET,
         config.OBLIGATION,
-        [config.KAMINO_RESERVE]
-      )
+        [config.KAMINO_RESERVE],
+      ),
     );
   }
 
@@ -231,7 +227,7 @@ export async function liquidate(
       .lendingAccountLiquidate(
         config.AMOUNT,
         config.LIQUIDATEE_REMAINING.length,
-        config.LIQUIDATOR_REMAINING.length
+        config.LIQUIDATOR_REMAINING.length,
       )
       .accounts({
         assetBank: config.COLLATERAL_BANK,
@@ -241,7 +237,7 @@ export async function liquidate(
         tokenProgram: TOKEN_PROGRAM_ID,
       })
       .remainingAccounts(oracleMeta)
-      .instruction()
+      .instruction(),
   );
 
   console.log(
@@ -251,7 +247,7 @@ export async function liquidate(
       " for : " +
       config.AMOUNT.toString() +
       " of " +
-      config.COLLATERAL_MINT
+      config.COLLATERAL_MINT,
   );
 
   const { blockhash, lastValidBlockHeight } =
@@ -272,7 +268,7 @@ export async function liquidate(
       });
       await connection.confirmTransaction(
         { signature, blockhash, lastValidBlockHeight },
-        "confirmed"
+        "confirmed",
       );
 
       console.log("tx signature:", signature);

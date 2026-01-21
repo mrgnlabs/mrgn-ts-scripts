@@ -1,6 +1,5 @@
 import {
   PublicKey,
-  SystemProgram,
   Transaction,
   VersionedTransaction,
   TransactionMessage,
@@ -55,11 +54,11 @@ const config: Config = {
  */
 function deriveBankMetadataPda(
   programId: PublicKey,
-  bank: PublicKey
+  bank: PublicKey,
 ): [PublicKey, number] {
   return PublicKey.findProgramAddressSync(
     [Buffer.from("metadata", "utf-8"), bank.toBuffer()],
-    programId
+    programId,
   );
 }
 
@@ -70,13 +69,20 @@ async function main() {
 export async function writeBankMetadata(
   sendTx: boolean,
   config: Config,
-  walletPath: string
+  walletPath: string,
+  version?: "current",
 ) {
   if (config.BANKS.length === 0) {
     throw new Error("Config.BANKS is empty - nothing to do.");
   }
 
-  const user = commonSetup(sendTx, config.PROGRAM_ID, walletPath, config.MULTISIG_PAYER, "current");
+  const user = commonSetup(
+    sendTx,
+    config.PROGRAM_ID,
+    walletPath,
+    config.MULTISIG_PAYER,
+    version,
+  );
   const program = user.program;
   const connection = user.connection;
   const programId = new PublicKey(config.PROGRAM_ID);
@@ -88,16 +94,18 @@ export async function writeBankMetadata(
 
   for (let i = 0; i < config.BANKS.length; i++) {
     const entry = config.BANKS[i];
-    console.log(`\n[${i + 1}/${config.BANKS.length}] Bank: ${entry.bank.toBase58()}`);
+    console.log(
+      `\n[${i + 1}/${config.BANKS.length}] Bank: ${entry.bank.toBase58()}`,
+    );
     console.log(`  Ticker: ${entry.ticker}`);
     console.log(`  Description: ${entry.description}`);
 
     const payerKey = sendTx
       ? user.wallet.publicKey
-      : config.MULTISIG_PAYER ??
-      (() => {
-        throw new Error("MULTISIG_PAYER must be set when sendTx = false");
-      })();
+      : (config.MULTISIG_PAYER ??
+        (() => {
+          throw new Error("MULTISIG_PAYER must be set when sendTx = false");
+        })());
 
     const [metadataPda] = deriveBankMetadataPda(programId, entry.bank);
     console.log(`  Metadata PDA: ${metadataPda.toBase58()}`);
@@ -134,7 +142,7 @@ export async function writeBankMetadata(
         });
         await connection.confirmTransaction(
           { signature, blockhash, lastValidBlockHeight },
-          "confirmed"
+          "confirmed",
         );
         console.log(`  initBankMetadata tx: ${signature}`);
       } else {
@@ -168,8 +176,10 @@ export async function writeBankMetadata(
       })
       .instruction();
 
-    const { blockhash: writeBlockhash, lastValidBlockHeight: writeLastValidBlockHeight } =
-      await connection.getLatestBlockhash();
+    const {
+      blockhash: writeBlockhash,
+      lastValidBlockHeight: writeLastValidBlockHeight,
+    } = await connection.getLatestBlockhash();
 
     if (sendTx) {
       const v0Message = new TransactionMessage({
@@ -184,8 +194,12 @@ export async function writeBankMetadata(
         maxRetries: 2,
       });
       await connection.confirmTransaction(
-        { signature, blockhash: writeBlockhash, lastValidBlockHeight: writeLastValidBlockHeight },
-        "confirmed"
+        {
+          signature,
+          blockhash: writeBlockhash,
+          lastValidBlockHeight: writeLastValidBlockHeight,
+        },
+        "confirmed",
       );
       console.log(`  writeBankMetadata tx: ${signature}`);
     } else {
