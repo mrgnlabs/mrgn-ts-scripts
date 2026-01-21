@@ -3,7 +3,6 @@ import { BN } from "@coral-xyz/anchor";
 import { TOKEN_PROGRAM_ID, TOKEN_2022_PROGRAM_ID, getMint } from "@solana/spl-token";
 import { readFileSync } from "fs";
 import { join } from "path";
-import { driftSetup } from "./lib/setup";
 import {
   deriveSpotMarketPDA,
   deriveDriftStatePDA,
@@ -12,6 +11,34 @@ import {
   DriftConfigCompact,
 } from "./lib/utils";
 import { deriveBankWithSeed } from "../common/pdas";
+import { commonSetup } from "../../lib/common-setup";
+
+/**
+ * If true, send the tx. If false, output the unsigned b58 tx to console.
+ */
+const sendTx = false;
+
+type Config = {
+  PROGRAM_ID: string;
+  GROUP_KEY: PublicKey;
+  BANK_MINT: PublicKey;
+  DRIFT_MARKET_INDEX: number;
+  ORACLE: PublicKey;
+  /** 9 (DriftPythPush) or 10 (DriftSwitchboardPull) */
+  ORACLE_SETUP: { driftPythPull: {} } | { driftSwitchboardPull: {} };
+  DRIFT_ORACLE: PublicKey;
+  /** Group admin (generally the MS on mainnet) */
+  ADMIN?: PublicKey; // If omitted, defaults to wallet.pubkey
+  /** Pays flat sol fee to init and rent (generally the MS on mainnet) */
+  FEE_PAYER?: PublicKey; // If omitted, defaults to ADMIN
+  SEED: BN;
+  MULTISIG_PAYER?: PublicKey; // May be omitted if not using squads
+
+  // Optional Bank Config fields
+  DEPOSIT_LIMIT?: string; // Default: 10^13 (10_000_000_000)
+  TOTAL_ASSET_VALUE_INIT_LIMIT?: string; // Default: 10^13 (10_000_000_000)
+  INIT_DEPOSIT_AMOUNT?: BN; // Default: 100
+};
 
 /**
  * Add Drift Bank Script
@@ -33,40 +60,49 @@ async function main() {
 
   // Load config
   const configPath = join(__dirname, configFile);
-  const config = JSON.parse(readFileSync(configPath, "utf-8"));
+  const raw_config = readFileSync(configPath, "utf8");
+  const config = parseConfig(raw_config);
 
   console.log("=== Add Drift Bank ===\n");
   console.log("Config:", configFile);
-  console.log("Bank mint:", config.bankMint);
-  console.log("Drift market index:", config.driftMarketIndex);
+  console.log("Bank mint:", config.BANK_MINT);
+  console.log("Drift market index:", config.DRIFT_MARKET_INDEX);
   console.log();
 
-  // Setup connection and program
-  const { connection, wallet, program } = driftSetup(config.programId);
+  await addDriftBank(sendTx, config, "/keys/staging-deploy.json");
+}
 
-  // Parse config values
-  const group = new PublicKey(config.group);
-  const bankMint = new PublicKey(config.bankMint);
-  const oracle = new PublicKey(config.oracle);
-  const driftOracle = new PublicKey(config.driftOracle);
-  const seed = new BN(config.seed);
-  const initDepositAmount = new BN(config.initDepositAmount);
+export async function addDriftBank(
+  sendTx: boolean,
+  config: Config,
+  walletPath: string,
+  version?: "current"
+): Promise<PublicKey> {
+  // Setup connection and program
+  const user = commonSetup(
+    sendTx,
+    config.PROGRAM_ID,
+    walletPath,
+    config.MULTISIG_PAYER,
+    version,
+  );
+  const connection = user.connection;
+  const wallet = user.wallet;
+  const program = user.program;
 
   // Derive accounts
   const [bank] = deriveBankWithSeed(
     program.programId,
-    group,
-    bankMint,
-    seed
+    config.GROUP_KEY,
+    config.BANK_MINT,
+    config.SEED
   );
 
   // Use spot market address from config if provided, otherwise derive it
-  const driftSpotMarket = config.driftSpotMarket
-    ? new PublicKey(config.driftSpotMarket)
-    : deriveSpotMarketPDA(config.driftMarketIndex)[0];
+  const driftSpotMarket = deriveSpotMarketPDA(config.DRIFT_MARKET_INDEX)[0];
 
   const [driftState] = deriveDriftStatePDA();
-  const [driftSpotMarketVault] = deriveSpotMarketVaultPDA(config.driftMarketIndex);
+  const [driftSpotMarketVault] = deriveSpotMarketVaultPDA(config.DRIFT_MARKET_INDEX);
 
   console.log("Derived Accounts:");
   console.log("  Bank:", bank.toString());
@@ -75,22 +111,13 @@ async function main() {
   console.log("  Drift State:", driftState.toString());
   console.log();
 
-  // Determine oracle setup type from config comments
-  let oracleSetup;
-  if (config.comments?.marginfiOracleType === "switchboardPull") {
-    oracleSetup = { driftSwitchboardPull: {} };
-  } else {
-    // Default to pythPushOracle
-    oracleSetup = { driftPythPull: {} };
-  }
-
   // Build drift bank config
   const driftConfig: DriftConfigCompact = {
-    oracle,
+    oracle: config.ORACLE,
     assetWeightInit: I80F48_ONE, // 100%
     assetWeightMaint: I80F48_ONE, // 100%
-    depositLimit: new BN(config.depositLimit),
-    oracleSetup,
+    depositLimit: new BN(config.DEPOSIT_LIMIT ?? 10_000_000_000),
+    oracleSetup: config.ORACLE_SETUP,
     operationalState: {
       operational: {}
     },
@@ -98,21 +125,21 @@ async function main() {
       collateral: {}
     },
     configFlags: 1, // (PYTH_PUSH_MIGRATED_DEPRECATED)
-    totalAssetValueInitLimit: new BN(config.totalAssetValueInitLimit),
+    totalAssetValueInitLimit: new BN(config.TOTAL_ASSET_VALUE_INIT_LIMIT ?? 10_000_000_000),
     oracleMaxAge: 100,
     oracleMaxConfidence: 0 // Default: 10% confidence
   };
 
   console.log("Bank Configuration:");
-  console.log("  Deposit Limit:", config.depositLimit);
-  console.log("  Total Asset Value Limit:", config.totalAssetValueInitLimit);
+  console.log("  Deposit Limit:", driftConfig.depositLimit);
+  console.log("  Total Asset Value Limit:", driftConfig.totalAssetValueInitLimit);
   console.log();
 
   // Detect the correct token program by checking the mint's owner
   console.log("Detecting token program for mint...");
   let tokenProgram = TOKEN_PROGRAM_ID;
   try {
-    await getMint(connection, bankMint, "confirmed", TOKEN_2022_PROGRAM_ID);
+    await getMint(connection, config.BANK_MINT, "confirmed", TOKEN_2022_PROGRAM_ID);
     tokenProgram = TOKEN_2022_PROGRAM_ID;
     console.log("  Using Token-2022 program");
   } catch {
@@ -123,7 +150,7 @@ async function main() {
 
   // Build lendingPoolAddBankDrift instruction
   const oracleMeta: AccountMeta = {
-    pubkey: oracle,
+    pubkey: driftConfig.oracle,
     isSigner: false,
     isWritable: false,
   };
@@ -134,14 +161,17 @@ async function main() {
   };
 
   const addBankIx = await program.methods
-    .lendingPoolAddBankDrift(driftConfig, seed)
+    .lendingPoolAddBankDrift(driftConfig, config.SEED)
     .accounts({
-      group,
-      feePayer: wallet.publicKey,
-      bankMint,
+      group: config.GROUP_KEY,
+      feePayer: config.FEE_PAYER ?? wallet.publicKey,
+      bankMint: config.BANK_MINT,
       integrationAcc1: driftSpotMarket,
       tokenProgram,
     })
+    .accountsPartial({
+        admin: config.ADMIN ?? wallet.publicKey,
+      })
     .remainingAccounts([oracleMeta, spotMarketMeta])
     .instruction();
 
@@ -186,8 +216,8 @@ async function main() {
   // Get user's token account (ATA)
   const { getAssociatedTokenAddressSync } = await import("@solana/spl-token");
   const signerTokenAccount = getAssociatedTokenAddressSync(
-    bankMint,
-    wallet.publicKey,
+    config.BANK_MINT,
+    config.ADMIN ?? wallet.publicKey,
     true,
     tokenProgram
   );
@@ -215,7 +245,7 @@ async function main() {
   console.log();
 
   const initUserIx = await program.methods
-    .driftInitUser(initDepositAmount)
+    .driftInitUser(config.INIT_DEPOSIT_AMOUNT ?? new BN(100))
     .accounts({
       feePayer: wallet.publicKey,
       signerTokenAccount,
@@ -259,9 +289,40 @@ async function main() {
   console.log("Signature:", initUserSig);
   console.log();
   console.log("✓ Drift bank setup complete!");
+
+  return bank;
 }
 
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+if (require.main === module) {
+  main().catch((err) => {
+    console.error(err);
+  });
+}
+
+const pkFromString = (s: any) => new PublicKey(s);
+
+function parseConfig(rawConfig: string): Config {
+  const json = JSON.parse(rawConfig);
+
+let ORACLE_SETUP;
+if (json.marginfiOracleType === "switchboardPull") {
+    ORACLE_SETUP = { driftSwitchboardPull: {} };
+  } else {
+    // Default to pythPushOracle
+    ORACLE_SETUP = { driftPythPull: {} };
+  }
+
+  return {
+    PROGRAM_ID: json.programId,
+    GROUP_KEY: pkFromString(json.group),
+    BANK_MINT: pkFromString(json.COLLATERAL_MINT),
+    DRIFT_MARKET_INDEX: json.driftMarketIndex,
+    ORACLE: pkFromString(json.oracle),
+    ORACLE_SETUP,
+    DRIFT_ORACLE: pkFromString(json.driftOracle),
+    DEPOSIT_LIMIT: json.depositLimit,
+    TOTAL_ASSET_VALUE_INIT_LIMIT: json.totalAssetValueInitLimit,
+    SEED: new BN(json.seed),
+    INIT_DEPOSIT_AMOUNT: new BN(json.initDepositAmount),
+  };
+}
