@@ -571,6 +571,19 @@ async function main() {
             console.log("\n✅ Transaction successful!");
             console.log("Signature:", signature);
             console.log("View on Solana Explorer:", `https://explorer.solana.com/tx/${signature}`);
+
+            // Output structured JSON result for automation
+            const harvestResult = {
+                success: true,
+                dryRun: false,
+                farm: configPath,
+                bank: config.BANK.toString(),
+                rewardMint: config.REWARD_MINT.toString(),
+                signature: signature,
+                timestamp: new Date().toISOString(),
+            };
+            console.log("---HARVEST_RESULT_JSON---");
+            console.log(JSON.stringify(harvestResult));
         } catch (error: any) {
             console.error("\n❌ Transaction failed:", error.message || error);
 
