@@ -3,6 +3,7 @@ import {
 } from "@solana/web3.js";
 import { wrappedI80F48toBigNumber } from "@mrgnlabs/mrgn-common";
 import { commonSetup } from "../lib/common-setup";
+import { deriveStakedSettings } from "./common/pdas";
 
 const verbose = true;
 
@@ -46,14 +47,6 @@ async function main() {
   console.log("init limit: " + settings.totalAssetValueInitLimit);
   console.log("risk tier: " + JSON.stringify(settings.riskTier));
 }
-
-// TODO remove after package updates
-const deriveStakedSettings = (programId: PublicKey, group: PublicKey) => {
-  return PublicKey.findProgramAddressSync(
-    [Buffer.from("staked_settings", "utf-8"), group.toBuffer()],
-    programId,
-  );
-};
 
 main().catch((err) => {
   console.error(err);

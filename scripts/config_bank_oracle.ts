@@ -24,7 +24,7 @@ type SharedConfig = {
 
 const configCommon: SharedConfig = {
   PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-  ADMIN: new PublicKey("FbfXs6D1BGUqyz6ya5AfVi3eoyfhin6hfM9d7yt1WK3L"),
+  ADMIN: new PublicKey("mfC1LoEk4mpM5yx1LjwR9QLZQ49AitxxWkK5Aciw7ZC"),
 };
 
 type BankOracleConfig = {
@@ -37,9 +37,9 @@ type BankOracleConfig = {
 /** One entry per bank to update */
 const configs: BankOracleConfig[] = [
   {
-    bank: new PublicKey("8Ats6Ej699ELxYR4DFTteLiNEXsGRtUNgTauD9LoFPRc"),
-    oracle: new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
-    oracleType: ORACLE_TYPE_PYTH,
+    bank: new PublicKey("4Gg6pW1U8W6ZQ22TbUWYRetx2nxjhUAydfKoCTSHhkkG"),
+    oracle: new PublicKey("BWK8Wnybb7rPteNMqJs9uWoqdfYApNym6WgE59BwLe1v"),
+    oracleType: ORACLE_TYPE_SWB,
   },
   // ...More entries here as needed. The limit even without using LUTs is fairly high (at least 6)
 ];
@@ -48,7 +48,7 @@ async function main() {
   const user = commonSetup(
     sendTx,
     configCommon.PROGRAM_ID,
-    "/.config/arena/id.json",
+    "/keys/staging-deploy.json",
     configCommon.MULTISIG
   );
   const program = user.program;

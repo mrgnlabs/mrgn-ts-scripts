@@ -13,6 +13,7 @@ import {
 import { RiskTierRaw } from "@mrgnlabs/marginfi-client-v2";
 import { assertBNEqual, assertI80F48Approx, assertKeysEqual } from "./softTests";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
+import { deriveStakedSettings } from "../scripts/common/pdas";
 
 /**
  * If true, send the tx. If false, output the unsigned b58 tx to console.
@@ -173,10 +174,6 @@ const defaultStakedInterestSettings = (oracle: PublicKey) => {
     },
   };
   return settings;
-};
-
-const deriveStakedSettings = (programId: PublicKey, group: PublicKey) => {
-  return PublicKey.findProgramAddressSync([Buffer.from("staked_settings", "utf-8"), group.toBuffer()], programId);
 };
 
 main().catch((err) => {
