@@ -62,6 +62,7 @@
 - WIF - DDLVJyj5sT3knnVDoTifrtQmroLnRCkBmGZ1QXCUDUUd
 - BONK - Ds4ZD4M1rLjo4anQnkhCRU9tkmjzx9AsmMkPdPCo4U1t
 - PUMP - B72N46iVnhfX8b3oAPGZL6mrfJj5V684cStXv7XTMw9Q
+- USDS - 7LnunEHq8sETRjeqftMsAUQZ9xsCENbfV8RegNH758Rr
 - Drift SOL - 5poS1bs6jTuiKJUe4kzP7TdKw9QftoRC9AZbCKtBMJEs
 - Drift JitoSOL (Main market) - E8HCoufVewFDZbzYDyRdqwrcxLtrXCLkchgM7JuW1nET
 - Drift JitoSOL (LST market) - HTk1SaW5ngQ2my6fKK924rjHsMTG1uKEJJ2CtEtBvrV9
