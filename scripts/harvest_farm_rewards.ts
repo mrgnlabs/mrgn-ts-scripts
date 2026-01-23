@@ -558,6 +558,25 @@ async function main() {
                 }
             }
 
+            // Check for dry-run mode - skip actual transaction send
+            const dryRunMode = process.argv.includes('--dry-run');
+            if (dryRunMode) {
+                console.log("\n🔍 DRY RUN MODE - Skipping actual transaction send");
+                const harvestResult = {
+                    success: true,
+                    dryRun: true,
+                    farm: configPath,
+                    bank: config.BANK.toString(),
+                    rewardMint: config.REWARD_MINT.toString(),
+                    signature: null,
+                    timestamp: new Date().toISOString(),
+                };
+                console.log("---HARVEST_RESULT_JSON---");
+                console.log(JSON.stringify(harvestResult));
+                console.log("✨ Harvest farm rewards complete (dry run)!");
+                return;
+            }
+
             console.log("\n📤 Sending transaction...");
             const signature = await sendAndConfirmTransaction(
                 connection,
