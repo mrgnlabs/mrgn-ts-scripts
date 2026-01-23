@@ -7,6 +7,8 @@ import {
 import { BN } from "@coral-xyz/anchor";
 import {
   bigNumberToWrappedI80F48,
+  getMint,
+  TOKEN_2022_PROGRAM_ID,
   TOKEN_PROGRAM_ID,
 } from "@mrgnlabs/mrgn-common";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
@@ -35,30 +37,42 @@ type Config = {
   KAMINO_RESERVE: PublicKey;
   KAMINO_MARKET: PublicKey;
   SEED: number;
-  TOKEN_PROGRAM?: PublicKey; // If omitted, defaults to TOKEN_PROGRAM_ID
   MULTISIG_PAYER?: PublicKey; // May be omitted if not using squads
 };
 
 const config: Config = {
   PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-  GROUP_KEY: new PublicKey("DnzhBmNmXgwoUSsKxs5LkMmArf95DmgeZQA1G4xuDSQB"),
-  ORACLE: new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
-  ORACLE_TYPE: { kaminoPythPush: {} },
-  ADMIN: new PublicKey("6DdJqQYD8AizuXiCkbn19LiyWRwUsRMzy2Sgyoyasyj7"),
-  BANK_MINT: new PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"), // usdc
-  KAMINO_RESERVE: new PublicKey("D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59"), // usdc
+  GROUP_KEY: new PublicKey("FCPfpHA69EbS8f9KKSreTRkXbzFpunsKuYf5qNmnJjpo"),
+  ORACLE_TYPE: { kaminoSwitchboardPull: {} },
+  ADMIN: new PublicKey("mfC1LoEk4mpM5yx1LjwR9QLZQ49AitxxWkK5Aciw7ZC"),
+  // USDS
+  // ORACLE: new PublicKey("DyYBBWEi9xZvgNAeMDCiFnmC1U9gqgVsJDXkL5WETpoX"), // usds
+  // BANK_MINT: new PublicKey("USDSwr9ApdHk5bvJKMjzff41FfuX8bSxdKcR81vTwcA"), // usds
+  // KAMINO_RESERVE: new PublicKey("BiSRKTadXSiyTSpiqw9nJge33N32AXewUPY7skFJwMvA"), // usds
+  // KAMINO_MARKET: new PublicKey("6WEGfej9B9wjxRs6t4BYpb9iCXd8CpTpJ8fVSNzHCC5y"), // maple
+
+  // USDC
+  // ORACLE: new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"), // usdc
+  // BANK_MINT: new PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"), // usdc
+  // KAMINO_RESERVE: new PublicKey("D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59"), // usdc
+  // KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"), // main
+
+  // SOL
+  ORACLE: new PublicKey("4Hmd6PdjVA9auCoScE12iaBogfwS4ZXQ6VZoBeqanwWW"),
+  BANK_MINT: new PublicKey("So11111111111111111111111111111111111111112"), // sol
+  KAMINO_RESERVE: new PublicKey("d4A2prbA2whesmvHaL88BH6Ewn5N4bTSU2Ze8P6Bc4Q"), // sol
   KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"), // main
-  SEED: 7,
+  SEED: 41,
 };
 
 const bankConfig: KaminoConfigCompact = {
-  assetWeightInit: bigNumberToWrappedI80F48(1.0),
-  assetWeightMaint: bigNumberToWrappedI80F48(1.0),
+  assetWeightInit: bigNumberToWrappedI80F48(0.8),
+  assetWeightMaint: bigNumberToWrappedI80F48(0.9),
   depositLimit: new BN(100 * 10 ** 6),
   operationalState: { operational: {} },
   riskTier: { collateral: {} },
-  totalAssetValueInitLimit: new BN(20000000),
-  oracleMaxAge: 70,
+  totalAssetValueInitLimit: new BN(2000000000),
+  oracleMaxAge: 30,
   oracleMaxConfidence: 0,
   oracle: config.ORACLE,
   oracleSetup: config.ORACLE_TYPE,
@@ -66,7 +80,7 @@ const bankConfig: KaminoConfigCompact = {
 };
 
 async function main() {
-  await addKaminoBank(sendTx, config, "/.config/stage/id.json");
+  await addKaminoBank(sendTx, config, "/keys/staging-deploy.json");
 }
 
 export async function addKaminoBank(sendTx: boolean, config: Config, walletPath: string, version?: "current"): Promise<PublicKey> {
@@ -80,6 +94,23 @@ export async function addKaminoBank(sendTx: boolean, config: Config, walletPath:
   );
   const program = user.program;
   const connection = user.connection;
+
+  console.log("Detecting token program for mint...");
+  let tokenProgram = TOKEN_PROGRAM_ID;
+  try {
+    await getMint(
+      connection,
+      config.BANK_MINT,
+      "confirmed",
+      TOKEN_2022_PROGRAM_ID,
+    );
+    tokenProgram = TOKEN_2022_PROGRAM_ID;
+    console.log("  Using Token-2022 program");
+  } catch {
+    // If it fails with Token-2022, it's a regular SPL token
+    console.log("  Using SPL Token program");
+  }
+  console.log();
 
   const [bankKey] = deriveBankWithSeed(
     program.programId,
@@ -95,10 +126,10 @@ export async function addKaminoBank(sendTx: boolean, config: Config, walletPath:
         group: config.GROUP_KEY,
         feePayer: config.FEE_PAYER ?? config.ADMIN,
         bankMint: config.BANK_MINT,
-        kaminoReserve: config.KAMINO_RESERVE,
+        integrationAcc1: config.KAMINO_RESERVE,
         kaminoMarket: config.KAMINO_MARKET,
         oracle: config.ORACLE,
-        tokenProgram: config.TOKEN_PROGRAM ?? TOKEN_PROGRAM_ID,
+        tokenProgram,
         admin: config.ADMIN,
       },
       {

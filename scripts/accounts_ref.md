@@ -63,6 +63,9 @@
 - BONK - Ds4ZD4M1rLjo4anQnkhCRU9tkmjzx9AsmMkPdPCo4U1t
 - PUMP - B72N46iVnhfX8b3oAPGZL6mrfJj5V684cStXv7XTMw9Q
 - USDS - 7LnunEHq8sETRjeqftMsAUQZ9xsCENbfV8RegNH758Rr
+- Kamino USDS - 44WmBHm3bKvrwy1jnf9EkgX8hBT61Dz7Z9yfLCSmdEyy
+- Kamino USDC - 8u7NuUBxckF2ouC3XKFkuxurinBYQTQiTcXVyqqoyRgM
+- Kamino SOL - 98sBXvVx6rHLuTWWBJG1hw1RjEEssUWwnrjfXoGmBgYk
 - Drift SOL - 5poS1bs6jTuiKJUe4kzP7TdKw9QftoRC9AZbCKtBMJEs
 - Drift JitoSOL (Main market) - E8HCoufVewFDZbzYDyRdqwrcxLtrXCLkchgM7JuW1nET
 - Drift JitoSOL (LST market) - HTk1SaW5ngQ2my6fKK924rjHsMTG1uKEJJ2CtEtBvrV9
