@@ -34,7 +34,7 @@ async function printBankInfo(bankKey: PublicKey) {
     config.PROGRAM_ID,
     "/.config/solana/id.json",
     undefined,
-    "current"
+    "current",
   );
 
   const program = user.program;
@@ -58,11 +58,11 @@ async function printBankInfo(bankKey: PublicKey) {
 
   const liquidityBalPromise = getTokenBalance(
     program.provider,
-    bankLiquidityVault
+    bankLiquidityVault,
   );
   const insuranceBalPromise = getTokenBalance(
     program.provider,
-    bankInsuranceVault
+    bankInsuranceVault,
   );
   const feePromise = getTokenBalance(program.provider, bankFeeVault);
   const liquidityBal = await liquidityBalPromise;
@@ -150,10 +150,10 @@ async function printBankInfo(bankKey: PublicKey) {
     .multipliedBy(toBN(bank.liabilityShareValue))
     .dividedBy(scale);
   const depositLimitToken = new BigNumber(
-    bank.config.depositLimit.toString()
+    bank.config.depositLimit.toString(),
   ).dividedBy(scale);
   const borrowLimitToken = new BigNumber(
-    bank.config.borrowLimit.toString()
+    bank.config.borrowLimit.toString(),
   ).dividedBy(scale);
 
   // Deposit information
@@ -185,20 +185,20 @@ async function printBankInfo(bankKey: PublicKey) {
   // Fees
   console.log("Fees:");
   const insuranceOwedBN = toBN(
-    bank.collectedInsuranceFeesOutstanding
+    bank.collectedInsuranceFeesOutstanding,
   ).dividedBy(scale);
   const groupOwedBN = toBN(bank.collectedGroupFeesOutstanding).dividedBy(scale);
   const programOwedBN = toBN(bank.collectedProgramFeesOutstanding).dividedBy(
-    scale
+    scale,
   );
   const vaultAcc = await getAccount(
     program.provider.connection,
     bank.feeVault,
     undefined,
-    mintInfo.owner
+    mintInfo.owner,
   );
   const availableBN = new BigNumber(vaultAcc.amount.toString()).dividedBy(
-    scale
+    scale,
   );
   console.table([
     { Fee: "Owed to Insurance", Value: formatBN(insuranceOwedBN) },
@@ -250,7 +250,7 @@ async function printBankInfo(bankKey: PublicKey) {
     const points = (irc as any).points;
     const formattedPoints = points
       .filter(
-        (point: any) => point?.util !== undefined && point?.rate !== undefined
+        (point: any) => point?.util !== undefined && point?.rate !== undefined,
       )
       .map((point: any, idx: number) => ({
         Point: idx,
@@ -280,7 +280,7 @@ async function printBankInfo(bankKey: PublicKey) {
       (e) =>
         e.collateralBankEmodeTag !== 0 &&
         e.assetWeightInit != null &&
-        e.assetWeightMaint != null
+        e.assetWeightMaint != null,
     )
     .map((e) => ({
       Tag: e.collateralBankEmodeTag,
@@ -314,21 +314,21 @@ async function main() {
 const deriveLiquidityVault = (programId: PublicKey, bank: PublicKey) => {
   return PublicKey.findProgramAddressSync(
     [Buffer.from("liquidity_vault", "utf-8"), bank.toBuffer()],
-    programId
+    programId,
   );
 };
 
 const deriveInsuranceVault = (programId: PublicKey, bank: PublicKey) => {
   return PublicKey.findProgramAddressSync(
     [Buffer.from("insurance_vault", "utf-8"), bank.toBuffer()],
-    programId
+    programId,
   );
 };
 
 const deriveFeeVault = (programId: PublicKey, bank: PublicKey) =>
   PublicKey.findProgramAddressSync(
     [Buffer.from("fee_vault"), bank.toBuffer()],
-    programId
+    programId,
   );
 
 const formatI80F48 = (x: WrappedI80F48): string =>

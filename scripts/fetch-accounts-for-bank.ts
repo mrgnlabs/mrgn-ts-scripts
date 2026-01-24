@@ -13,7 +13,7 @@ type Config = {
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  BANK: new PublicKey("DeyH7QxWvnbbaVB4zFrf4hoq7Q8z1ZT14co42BGwGtfM"),
+  BANK: new PublicKey("FDsf8sj6SoV313qrA91yms3u5b3P4hBxEPvanVs8LtJV"),
 };
 
 // ---- Layout constants ----
@@ -22,6 +22,8 @@ const LENDING_ACCOUNT_OFFSET = 64;
 const BALANCE_SIZE = 104;
 const BALANCE_BANK_PK_OFFSET = 1;
 const MAX_BALANCES = 16;
+//** Count how many users have more or less than this many shares */
+const MIN_SHARES = 841683837;
 
 function bankPkOffsetForIndex(i: number): number {
   return (
@@ -43,7 +45,7 @@ async function main() {
     config.PROGRAM_ID,
     "/keys/phantom-wallet.json",
     undefined,
-    "current"
+    "current",
   );
   const program = user.program;
 
@@ -71,6 +73,8 @@ async function main() {
   let totalAssetSharesForBank = 0;
   let totalLiabilitySharesForBank = 0;
   let totalAssetsForPureLenders = 0; // accounts with NO liabilities anywhere
+  let countAboveMinShares = 0;
+  let countBelowMinShares = 0;
 
   // Collateral-at-risk map: bankPk -> total assetShares (for accounts borrowing the target bank)
   const collateralByBank: Record<string, number> = {};
@@ -90,6 +94,7 @@ async function main() {
     let hasThisBank = false;
     let hasAnyLiabilities = false;
     let hasTargetBankLiability = false;
+    let targetBankAssetShares = 0;
 
     // First pass over balances: collect info & summary numbers
     for (let i = 0; i < balances.length; i++) {
@@ -118,6 +123,7 @@ async function main() {
         hasThisBank = true;
         totalAssetSharesForBank += asset;
         totalLiabilitySharesForBank += liab;
+        targetBankAssetShares += asset;
 
         if (liab > 0) {
           hasTargetBankLiability = true;
@@ -128,6 +134,11 @@ async function main() {
     // Account must contain a position in this BANK to be included in main output / file
     if (hasThisBank) {
       jsonOutput.push(accountEntry);
+      if (targetBankAssetShares > MIN_SHARES) {
+        countAboveMinShares += 1;
+      } else if (targetBankAssetShares < MIN_SHARES) {
+        countBelowMinShares += 1;
+      }
 
       if (accountEntry.balances.length > 0) {
         console.table(accountEntry.balances);
@@ -185,11 +196,15 @@ async function main() {
   console.log("====== SUMMARY TOTALS ======");
   console.log(`Total Asset Shares for bank:        ${totalAssetSharesForBank}`);
   console.log(
-    `Total Liability Shares for bank:     ${totalLiabilitySharesForBank}`
+    `Total Liability Shares for bank:     ${totalLiabilitySharesForBank}`,
   );
   console.log(
-    `Total Asset Shares NOT AT RISK: ${totalAssetsForPureLenders}`
+    `Accounts with bank assetShares > ${MIN_SHARES}: ${countAboveMinShares}`,
   );
+  console.log(
+    `Accounts with bank assetShares < ${MIN_SHARES}: ${countBelowMinShares}`,
+  );
+  console.log(`Total Asset Shares NOT AT RISK: ${totalAssetsForPureLenders}`);
   console.log("=============================\n");
 
   // ----- PRINT COLLATERAL FUNDS AT RISK -----

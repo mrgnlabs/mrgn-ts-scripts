@@ -1,0 +1,2262 @@
+{
+  "wallet": "HPeLmNJgQdZ2yzxqiDY5v1EBW8ADF1Fx5Mt4xArjPbuX",
+  "generatedAt": "2026-01-24T00:05:25.713Z",
+  "events": [
+    {
+      "signature": "34h6wEpVCSLxccXykM1QsnLAuxFcdFQnxRA34sF1pRjvfgwR6txKs5RUQNf1i4B6w7FB6LaBtWra1knfsopox7Hx",
+      "time": "2026-01-23T20:36:33.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5AH54Krsjy5eu6kMJNupwgaCnYDWCSya8rTu2MzTHuLUEUSg85jHoRvJXV4YJQe5DiGoBaZ3th1gHvby1Lt1e6qL",
+      "time": "2026-01-23T20:36:12.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3aYRWiUtm42trGRecF7kbr4v7vsT81T3FmXtQ8KDGspnnBL2vrpUzosJdX6GXFNZHUN82sbspvKXU3ai2Cug6fpK",
+      "time": "2026-01-23T14:52:09.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "F76CFZ2ZRnZVVqaYPQRxQx4ePBSqrsp1cJqdaV4gma4ji5VKjp5KE2VLzor9Ca2K8oH3Jv5rLH9ekFEk7riEJ7C",
+      "time": "2026-01-23T14:39:22.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "MHKUuU92g2BF2iKRkgZLWVavjZtMmyvL7fJEtMW3A2X5KkKXRxV3S54QbPxAS8RAG68YhwydyUb19PaJFbp2wzf",
+      "time": "2026-01-23T13:58:48.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "56Vc7nW8FWGT8GMv7ouH5jRYT6uW9PCXqmQNRAxA8kznaCcvpYKsVZmaBnUkuabVKjmQGKZ2JJuwesLemzjNnyBE",
+      "time": "2026-01-23T13:58:11.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5sXZz4JaU6WFmSsqzNVPDyUpZXZPh6LQARyELknk1bYUiHPxESBjmRePw9ZZjr4574nPEecjtbb6zkWeubzqid7H",
+      "time": "2026-01-23T08:36:25.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5DArR6r91e5mwWjC89NkD2DAPjMdvd3T7tPfDQtWigQXUTjXKgYtz1WGU6GQwzMUSorwDbt4jcrgG6iZDP1fPPai",
+      "time": "2026-01-23T08:35:50.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "ZSqXboCJQAKKNFYgDRUYu1iVJ9d4MRGjgCx52saHZprXNDM1hoBdhcbfM5TT9KnrcrWicMtveVuijP45nLnqGa2",
+      "time": "2026-01-23T07:01:11.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "442sdwKyb44oyWEn22mEMKupTwmAwmipfpZBHYanLgurjfam7Yq1BAxg3nQ7zTEgaFg3iEeGXHj68ahMuSwJTKLC",
+      "time": "2026-01-23T07:00:35.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3QbrzqjJahMApHjYBtSmrCcPAXW6keBqp3aNsugExdxpwf3nCpAcvj44U7UWYegroRjnLQKwbKggjgsfCALT9VMD",
+      "time": "2026-01-22T18:59:29.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "ym9ox1bz7LcQLBPX6M9tTngcbFGmsvwhNSJnR78NPK95oNuw6HxNjh7e5YgQheoqceNKm4KGoGJpyyMKKkCzSjG",
+      "time": "2026-01-22T18:58:53.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4zEVZEssA2ujJHYgHTh1RfGH677mT7eokkSFqyYpkW2F99tTr9q5DuYJ8G17yFGd4F9i4gENBhyt5cayPcgALWFa",
+      "time": "2026-01-22T18:18:55.000Z",
+      "status": "success",
+      "instruction": "Titan"
+    },
+    {
+      "signature": "3SP7i4SFuLpgZeGCy6NN4bpixvAwCpQfQXFRkiUsCeiRGVNpsbYoP4CtnCKpGRf3239E1ifvjMrDExCfd9uKpYyA",
+      "time": "2026-01-22T18:18:15.000Z",
+      "status": "success",
+      "instruction": "Titan"
+    },
+    {
+      "signature": "44RazpyZCbjve43wC6Ndivdu6Rj2AeJC9YCmULxZH8oiC6UccHRPL386Dacrm6sVX2TLQAbnxc9ZtFhkUUd2x5mS",
+      "time": "2026-01-21T17:17:10.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3ZkHuTBWA5sfHwxtboJJf1LvkU4GkQWcmZS2QCwSrN3Mh8GodcJSXGL8hDcfZYw26RaCtZ4xNTWPXz4hnwCJfKtD",
+      "time": "2026-01-21T17:16:23.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "RFFXq7EWAH7gL9K1yfo9iooFrtLG2jxMNNwhD2cQmHWr7DBKsKGVSKeFLEmgZWcMWj2UHTX7uQjU2zTdBw1sGNT",
+      "time": "2026-01-21T17:03:21.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "m2GC5cFoPmn1W11j32k2n9Y3MNgNTY8rfQFmskjn3maxEmvLvYP5FjAdYeThBdsWbFV3mSU3FdCX44DaUfgyWyG",
+      "time": "2026-01-21T17:02:27.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4HJC2EdnDu352CdkEfWzjjA6Q8XzdZxcjk7pJ6zLh1MPe7hVvMeSVLXuyKwUmXmsCUZjdWKKck7gfGh5YprA9gyn",
+      "time": "2026-01-21T16:59:19.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3K43zo8UnenxENppqJ23i5YCyd8F1Db2CuKTzBebmT32ZwNuj9PQRJZKViHiW89Adu9Gsw8Lz8hynFW7RSG8YZtG",
+      "time": "2026-01-21T16:58:42.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3ZC1gdD79wD8y4RL52uvTV767m48mQpU6u9arcbjm6v4Bb8U2iDzRR9oP2ZZe1sLBTRjK6qHeTB28AzL4KqKXofk",
+      "time": "2026-01-21T16:57:20.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "Ha4BgjjYY9eRD9iEYGaTqahGgV4bDcBSyEqAjbL2qEJQGGV4RuMLwGywuVtEpo3rtzL2JM7dAvUbpke3Zc8sc9g",
+      "time": "2026-01-21T16:56:57.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4dLYXJ8EJbyzCeRRk5EFhdmcr3E3aqBZmMsKCPzKauY74YRkHzq99ZY9tVWyMychANttb81Z8TUSL3to4g3Fxczu",
+      "time": "2026-01-21T16:42:47.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "678uHgLFk5w5Nh1hXzEA8xwKr5Tebr5tu6rZpftBwPTGpVacVF9Y9FJvkbg3H1RCp72xBZp7zFGAdyLYCBhYowdZ",
+      "time": "2026-01-21T16:41:59.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5MvBCJEXzmC5tPKFujkECyzKc7F3eiecmPu5SBwUoRTzMPnjowqHsK2yxPuePXjy4bw9V3So8g9FXNm63V6JqN74",
+      "time": "2026-01-21T16:37:59.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3mXX76M9mrJ5MqL3KSzhMf4XWzNRjAUVrBH4StM9rucsCZtmoBUKUwbCi8EfKJ3cQYNxZJEeShWd6hkdiHEXbuyr",
+      "time": "2026-01-21T16:37:11.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "Y6JAA1bW8bsb6aiT8Q5hZ95ju37Vyfv3s1GaRwtHQwDFspzgWzVpeeTspn6ZaeTybaFy1HcqrErodXEjk5UHjWa",
+      "time": "2026-01-21T12:49:49.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4X8d3bsyQJpZSZSANg6EzBs8AsJ2Q9ABTTZqJ3s3pJMvA7D5TiXG5L5uupNJWcUHsMQDTXS2NEkbBdKfauEm94EJ",
+      "time": "2026-01-21T12:47:09.000Z",
+      "status": "failed",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4yqTeXqTCgxwMdg2VSTGqWArmVuDhe6hshraH9MTCA797JtJZSB2hMABgDucDdHxD9T47YP35rj6PfkCinieX5Ea",
+      "time": "2026-01-21T12:47:04.000Z",
+      "status": "failed",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "51e71RLMCEunQNHcp8zT8EWAiToydA2RS9EH2xREAyznTNXE2TRneSXCtQkN4GreXCbFRq8L1B9tk13jgs9PwYXD",
+      "time": "2026-01-21T12:46:38.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3Yo839hJ3MzhbsnEJQQnZ728FsW7QLjACE3p1jTgxLeBohZAi5k3LQGZ3t92HzhzApUf9XTp1aEXKysR2MZuATdN",
+      "time": "2026-01-21T12:46:24.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3Q2kgp199gzm9GSUxMuz3PjMbMbsCLYzvay8BTxEYJDSvRkVcEQ2a6oHHXvDFQ5FTLT9Wijbt71R3SNwBJjMVDAu",
+      "time": "2026-01-21T12:45:25.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5v9xadAttSaWGASu9eyjcFbE2UBPxFzp1NPhEpJNissRRE3zx1EzXDt2AeZdtGXZi6JUXKG71YahHaJszbAZrUzH",
+      "time": "2026-01-21T12:45:24.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3qduccatHjXnktzqPDXFuPJNdaszRcBra6zUoYgLbyzhWCAsvKamW1KsNqTB121doquB7s9mBiy6hjYe7HVuwrNm",
+      "time": "2026-01-21T12:45:00.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4KTdZfiaKCeBvKuZBFUAiyFcYXt4TK1Rs92vL4Udd81TmrR4nketM2YrdTUPSHPJuVRqyHy7NasHkkBMhFMHS869",
+      "time": "2026-01-21T12:43:48.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5G7V8kiyG4Gzgab6CQoZCDkWajKgx3oza8CRiEDT3kXVJNdaLziMX1yN72C7vNm65BJZjK64gwbCguq8dcbKLHfH",
+      "time": "2026-01-21T12:43:32.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3werYSBiETBbrjosdbKxzTDEZbdfQwGEEKgFUjMwpvQtNd56jk13Uf9n4LTuRHLUrZagayRUPa1EuVu5ijRzFXzc",
+      "time": "2026-01-21T12:43:15.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2ZdUuu2qa3M6Hfwo6uviPYxuNDhFkw5XwoM4tnmSJ6RDv9NLakLG6JN1W1D36XHzLmXYRJTTp9HsArKjpD4zDzQ1",
+      "time": "2026-01-21T12:41:58.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "T1LNU4sSyFRbAg3i7BEq4LU2CAeUBHRL8g1C9JEnnLCRtq6nD1KMcqqxS29YJHR1hEDXFHtxjWD38p2jfaW4t32",
+      "time": "2026-01-21T12:41:35.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "LnVsvaX9BYuavXiUQjX9CqDRoyPpEydGVTuVah98CpmZ6wGM9VDnhfxwnuaMhcTvDUegb9oS3LBbbvJAcGvWurY",
+      "time": "2026-01-21T12:41:21.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4Fok4j61Z8dccgQRdrY1MNW6UYPquQ8ufywqpNFYmLDDYT6USkp6ZgqKBfi4ErRHvsioc8jRWMH3uU9R57SmaH4K",
+      "time": "2026-01-21T12:41:04.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5tuUJH1nFfinZr942ACrYjUmjJdmPv36U4ytuQnDfmzFCS2Qd2VRiEVTa11k6thQtSUpYhxk4hMFk7FbsUUfgc9m",
+      "time": "2026-01-21T12:39:43.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4csWA6xyyu7JyZhNgqPww9tUUrC9drPUZ9477RvMgAzovEzYqVAw2tkTSQ16zPsDA5o4fFMohisM3TjTL6JHuyao",
+      "time": "2026-01-21T12:39:41.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "BUUiRj91MW9w3NkYkH3BtxrRMSq7YpzbU86j37msFmz9ouNXdFC9Rd5FhNTQ9EKp553x2XhsCdR9qJhYgncFxoS",
+      "time": "2026-01-21T12:39:18.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5f4dXk714LaUdkVXAEA8ETauyryGcSnTYAsFLaFTq5NWUNm6PTTH8TLPaYHWXiL5i85DhEkLnrHUjvvwtsJsDUom",
+      "time": "2026-01-21T12:39:00.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4oGmJckpT3UaGDoBz85juspv3NgjojoKdzsLcTndw1dRur4czXuYJv7o8wWCfdcyWe42gTvVe8cb64mygkztXboF",
+      "time": "2026-01-21T12:38:29.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "355zh2j4iDexWSNBSmvR4C74o7KEHhGLVFNGSMNzZFQhvFUjTMtRB27v6okcvUniN4xvBjqNRvJ9qJvtFdW7woMR",
+      "time": "2026-01-21T12:38:28.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "Nt6QTpfMoKqkb76JcVybZBZp5yEwieHTDKFfzxNajMruf9fuZysZRcCvdSRFxfzfPR33Xozqhz6N35JXofhqAGS",
+      "time": "2026-01-21T12:38:26.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5Z8cVDT3SggzTWFSmUuvtFUeopDpt1AyWusRwhkRv28cK6rdaVuJDKraks1Xh6v7HZtvarUQti8yhWSHnZfZV4JZ",
+      "time": "2026-01-21T12:38:25.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2HbKaSFw9Vzb7yZuCnY2ABpUXgKfRNKV6737oBtxZKpWY56rACYGq5NsQTS4QuBtHA8DH551j2aAzxYBSE76kdVM",
+      "time": "2026-01-21T12:38:24.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4t8vNY462s4WZMX62WWatTzgw1TTGnaUt3SEuBWc146uvJXGA5U7cPhR3fekZCb64h7JHuQVYbtjEo3mNna3VyUp",
+      "time": "2026-01-21T12:38:22.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5r64HnvVB8Qw5cTiffFKcKt99GKsx1UYKZXDNKuawDZCzfpkFfRYsX8HSS8cXkUD6M2H3ekogZX2FF3fNDgz1h9m",
+      "time": "2026-01-21T12:37:42.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4df9iDi28SnEf5xQ7HgXFWNXuWNQJ9KngxHGHtf6pVb1Kwy9czJzHLkAxhX24QswBJ5rnXTaUZm6UycQWWD2YzHz",
+      "time": "2026-01-21T12:37:27.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3HbpopvPLarE7p9u4j5Dop49nmx42bfkp6A8hBjjyz221NuAWP9S7Pf1QFX5h4yExEn37VBeLL134sniNa5V9RQr",
+      "time": "2026-01-21T12:37:09.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3xgbW7F6zfrv3iC7Z9suKTsuzesSutcT4ZE1xWDMMCbYrNVUWG9NcxWp8kWAcXbtwrFXQb7byzPTGnrMCnf1c8AG",
+      "time": "2026-01-21T12:36:54.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3F7EvVaAZxGPgXzGJDkCh9UUM4KUyG8A8PqisEKgeeZo1jZmfisUKyqMXiswswDNvEyGUJbutwoNPN9EWLGjs9g3",
+      "time": "2026-01-21T12:36:37.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "TRvfgvjSm26wM1cBrZbcoZCk6vwuGQY6T3MWizoC9Mj3mTFt85t3PS4HVEJLv5ydwJD5hNJMBaqxymum6cRavuB",
+      "time": "2026-01-21T12:36:22.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "419PETez38fyVvcy8gQi4p48kgiU2bBxchRqvDAyRC2QyDugMx3gT2XpoRsYg6dqoySNFFCAizsG9vqGMCV69Byg",
+      "time": "2026-01-21T12:36:05.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4bys5mDkA6UoBLztCQKHGFXAPoivD4h7DHKsyB1nt9jZWMhQgboD6Lwgw23Rw3aR1ctdHFiczK1aPjzghYHGzVis",
+      "time": "2026-01-21T12:35:02.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2fLLqUSctCLSBYAiv9ber2ot6cWgEgS1wV2PA2RKmuQ9kuwVKnZhwGuk74JMGmxLPcN1n8tVJ37SS6VkrspakxrA",
+      "time": "2026-01-21T12:34:12.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "EecX9VkcXKTgDLxsLSTxZC1eDUerNuJ1YRvZwUChQFQEn1Xd4kRGYrPYGxVFw96eS4jEqTskfaZWXYgEAGgRcDS",
+      "time": "2026-01-21T12:33:54.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "CbqP9NnYeb2fSetvHwxUQW3pWzgKVUnbbsTJtgEPedrxAP9JiDF73tXDUgtaEF5sn6v5D5yurLffyHGsJn1a4mQ",
+      "time": "2026-01-21T12:33:37.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3kye6fybC7Qg6LbM45N5niDAhehfgJWJcWVfFNASoEqwn4mTXTgicKrBETohYi31t86Cvij63sSHmrDix3durTNr",
+      "time": "2026-01-21T12:33:04.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2uZPdAWTxLwYLfYMPYxLrn4oby93L3BsY5ZgZ8P8hiUPyr6b27xiG9w2z2Po8Y29MmdgmopWL1QXKhCPdibGLqbf",
+      "time": "2026-01-21T12:32:12.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2eDgTjUEitTXTpsaDASfk5qNiRVmmFUrno8mLrnWzz4wGqg2dB73jodrRq7F43DAXVX3JkTgHWkrwA9BmZwiDzu6",
+      "time": "2026-01-21T12:31:50.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3CYxDKrfTFJa8fDDLReea4AZEJR1gBQxHzL6LJjinZXnaCtbpEnDxFH22en2aq3RjkjcKu9y6X5WSfbyV3T9f6YX",
+      "time": "2026-01-21T12:31:33.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3cfhvnrYyh3iSXjGjxQwZroigkJRHAkNJYYsF9hHczbHtsHemjiyYWGpxtburJM4m5SZzs9p1Vx4xgVnp7XWRR6y",
+      "time": "2026-01-21T12:30:57.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2TAkQHSSAeEzjDtwtoSjgMcUWyqC3X9HaaSwdYZq8tRGdw3M6JBa3SEXbXFsdhFDxPdWnaKiAdU8U3amKa6dwZ2x",
+      "time": "2026-01-21T12:30:38.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5DJAxrReabBcCKLYVdHtLHzH3HaREZJfPXQUYYJDiX2xCP8bgQq4EJ7aSDXjmCtmtXLUSEVxHdVhTCJz7bp5wpXH",
+      "time": "2026-01-21T12:30:15.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2DAfVskgJQVMo994q51P1TAZ8TqGyQojqnhJMJuDJs5t2vuJS4TdP5YX3njgKryzzcXrrYkbjN35GRUo1FXJa9Zp",
+      "time": "2026-01-21T12:29:54.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5uhGLX4yPEcG8ibcuYAhoqaqBkK6bJLiVuEAQ6QNFHqW2cmNXdgCVJ3Wn8jcfJ87xBJr11K6BGYfdFtLFUdkCVwu",
+      "time": "2026-01-21T12:29:19.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2qz7RGukKRB3NnL5VDGneZ56D44vMb8Cevnh8kNBf52t1jD6TwSZoT73m2QqJZcq1WXtEzTKyfdBTyVwZ887xMKJ",
+      "time": "2026-01-21T12:28:59.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2tYn2okVzFHE9Ab763A2E22E13ZWmwUCaLGftv9pdbr82P9Bfa27E81CvPb9gJDGD93oHW83eC9dPSG9AUBNrREy",
+      "time": "2026-01-21T12:28:22.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "vUAfuP8D5YnX224g757Mw8TRm1fJ1m5H7BxBd1s5vZkjxveLnS8ErNdrvEdYUB1HoyTmALQJDg5HKnCUXFNbFtY",
+      "time": "2026-01-20T22:36:42.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "56Np8WZRTtFjmvCD7ixBWMUQLqLfntNzdAG9nmccT2SL14cJqHTAFrzmsE9VAW9kdb4QehZrcQujtVpr2Df4nnF9",
+      "time": "2026-01-20T22:36:05.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2WSxzskJX8k7u9Jy4Nj1yKoWdJVF2SjMbPe4ywG83rJCJ3RpUpTWRc1PgrahQozjvE2vRcbTCuD3T7fNJvghPKBk",
+      "time": "2026-01-20T16:46:44.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2AQaeUop6rJC4e6cV7HKhqFCa2XbYnwg74x9GNEvC95crqwm6SLWWgf4YCMegRAG61YMaoLkD48jr7m4iL4AZfP1",
+      "time": "2026-01-20T16:46:08.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2V6TPSK68S8s9V1HkinpEzUyaQmuuFGMjAsYek6SHsi4YdmjZV8BZHW5ZfmmQMC6D4FgEF7BYEBurz2sSMUbkv72",
+      "time": "2026-01-20T15:11:18.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3qe3qHnPUpffvijfT4daKzG8GK7H2vz4MjqkVzrW4gdfCbRryuVZZFjY8X5rVR619z8pmdrBhiQfyDXks6GCReHh",
+      "time": "2026-01-20T15:10:18.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "34VriZqXkN8EbzXRPoBq9fLYHDSrjYWg8eEKPhWSaPF9hbMP5p9ENBz3WbQ65tjoEM8BgDRQfU52GGWikNYK28oq",
+      "time": "2026-01-20T13:25:29.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2PQdo2xfv793GqqqZwtxjCoeaKq7CPb2vNi5t5EkkCdok3Cu2hFpXKrdhoYLYfhFvtFjyYiNCWb8vMx5Nfw1o1qt",
+      "time": "2026-01-20T13:25:09.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "6R1z9EMhKkhdkdZrqPgG1EsEe3dRQAdtj84j6HKn44BA1ubP3QKbZ282q11CLjHq2ompn2XdYmwgTsRDoae7Ccu",
+      "time": "2026-01-20T08:47:47.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5jYFjw9oF9RGESrtDecmUpbcAMXqbDX8sn6DGYRZz6qAPT8FChUDhutgi1LaDYEhnYrTcPCVLCpH3viaVeMn8Moa",
+      "time": "2026-01-20T08:47:10.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "ggPHBT5kTbCLiRddDLQM9uYRknGN4H2fjo52b1qhd1jrXHeDL4RA5UeaA1tHz5KkULT7ywgnJiH2WCx8jDX6zSr",
+      "time": "2026-01-20T08:38:29.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5HFfPscM2fedMRqsymtfKM6TyQnkbn16JbmPr2dmh7Ptf4HdQcofh87VKb2e8krS6siRF8E4gbdx2tuG8RPwnWD",
+      "time": "2026-01-20T08:37:47.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2DXZ8Ab6EohqXPQYvoaKQ3iBfDFY3P53RaFhj8pb5YWfByzY6vJfcKKJcZEetrCzUztTiQQwYtkhU2U88UgvmDLz",
+      "time": "2026-01-20T08:14:26.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5vBtHbsxKjZKhU3eSUAUDUrDUQLvLVZr7tpXd9fWDF2xF76UZwy6cVxS2XFv8aS9s9Pd415CHyGRxgzbDaB8CbjQ",
+      "time": "2026-01-20T08:13:50.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2FNGQm1tpn7D4anFUJx1Cy4psZ6wcecs4jZWQUpock6drzgmUFoZJQdiPfUH9hehriqgESk5qcpEwSJnUm8EPc5N",
+      "time": "2026-01-20T07:59:07.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4r7n1iVrvLA6smGZ7yqwUY6xuh5ovDqsLNS3tT3yFtA9voTnektWXy9QpLVjez17knd41JmrsVFbMZ4zDDhAXWfN",
+      "time": "2026-01-20T07:58:31.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "ztriMiHf2JBfjGGt6y5DZLGh1ttavsyEZ8wKSeZTEKT9nsURX1bTbzdyz9KC7V5Fcp6ei6TdhPPhQyHJJ4JsWVY",
+      "time": "2026-01-20T06:19:02.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5c4KQKJLDELQ4EZS4q6wiDKt88LKLn4JBmju1SPh6aKTmA9319uMqDGdcBbvuWQuCtajQmPEYwDhxyrprjKLjZM8",
+      "time": "2026-01-20T06:18:23.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "42doTJ6WjHup33cQmQwKB3nsousVNw1ySdaAs65sGFDgk3swundaSsPz9bg61Y38TmGNejq3qgV8hedbjNvHrGqB",
+      "time": "2026-01-20T05:16:52.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5GBgTYnvLKrjAb4T2T2yzUitj1GDGS4Gd38JuxXR5Wq9rvf2mrq4zWaM2uQrHrytYqiwjTDA1GMGZVeAs122Q3RD",
+      "time": "2026-01-20T05:16:14.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5AS6MgGV7wDrkeJwAXa7gWyPB1xDkwaPhJZd4AbqjN9AXm6G56mkoJXaFRAbFQA36Sg5zpiJiaazHsyYmC9VLeV7",
+      "time": "2026-01-19T23:05:50.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5oYizr8uSvUZu6Zk9Zgj9UP4yw17WYgeeMn5PUnt5B7A6aC9T2r87MJ6s7sRLknbAJBgRdiqXsFZrUsF2Gn7buH6",
+      "time": "2026-01-19T23:05:11.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2S9MtQ6Snaug3EDjRQw7kncaAxchV3Z2V2cNFLoRPn8GGefuYDqcoY3z4hciSJCQFjyJeoRXkDfQ7qX8uVHFvmMj",
+      "time": "2026-01-19T21:37:54.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3zSbem65XgFaoXdnJfzNFYKiuX8J3MfA4BemxrqdnKT7m8L7ZfxCz51DPsv6x9xktcechVd4bgJEFjaNRVfKSHv6",
+      "time": "2026-01-19T21:37:13.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4EfNQSBFTVv8ZrfcqAM3BxsdsvG2YFb5xhMSvKRZLr1ucF2xU1ZLWyqimGd1oDi3PKgGViUF6yWtRuF29EpLcqE7",
+      "time": "2026-01-19T14:27:56.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "35k2zcJApxR1Xwx5swVugHZg4PNSdiy2h91RN3EFW2hAwZ8T8eEcyevj4PgFvctCqTYmxzmKVXuuGus9bX4C3FWR",
+      "time": "2026-01-19T14:27:21.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "53A9q1zVN3HHkYVGTrdFz7Qg7PLNdWURWs9dXZR5CyvymfhToXhdspya4SJogbUsZ21AcWFWnHywbyvCxCfJhSvo",
+      "time": "2026-01-19T00:18:09.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2bqZdZhhzSPmp5qNMyycnhEJwTkbUsMNL4hiaEphiZkTZGUFrTzWu1Ue7hEkqKaU2rwVkJXrYR8BdPZ1w2MHDRgs",
+      "time": "2026-01-19T00:16:55.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4tDz4c3JY7uhFcig7wohmD82gV5trnF68YJAgcVKBFXPJmdehbpaYHJ4SrYePrRrD6o3kMVxeBuSuwNiwrSxynCb",
+      "time": "2026-01-19T00:09:35.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5iMyCjqWtrb9aBog86xMzKvANTYc6SDZf7d58hc3nbnHa8qsXsyqU94ggBixhfEu9RaHwEgEo2niTcb54SH6fRjd",
+      "time": "2026-01-19T00:08:55.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2PQL6EY8pSUHSCY2AJNzkEW9TqMP5CSg1tUSv7ZwSRHbjgasr6h2r2xMqZXueULe6EKKfARgLpDmNvieT2XV7fzP",
+      "time": "2026-01-19T00:08:44.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2AxuQEMnUDkobG9vq23KXmZ6fkh8PCkoAuRaXMawD88NsNHPpT9skw1D6Ep7Yu4w8t7qHNo4CygKwBJR6pSyr76B",
+      "time": "2026-01-19T00:08:03.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5XHzojioq7uXDoCwQ44LDPWW9LB44J7GNNuuUGakxDkGwKUSegaWN1qDZKfqzhxYqyH2CFCEAXSBSBq7EAMuzcb2",
+      "time": "2026-01-18T23:59:02.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "48tbmTr6gqMZn9H4tCQLCp54hsx1Ya4GdmPFK8yxqHxVEM7BMEX1B7gWdU3b4BU2fayVYpTvZfPS3jLXKJQJuukc",
+      "time": "2026-01-18T23:58:25.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3WYGWrcQnWQBHBFr2q31DbsRbf27Z43VfU2S4djr4SNQae61Ba83TBXWnxZwBcgqgRRrwt7cuoFTPmdZwxkxa7gU",
+      "time": "2026-01-18T23:58:10.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3BgHwh5V1s5g1i77FLUsDSH7ZW41Nd3983XGrUeBnC947gW4JRH6TTr2gwZejRdRZy7JYBLsbbF8HS5yTHwoP9B",
+      "time": "2026-01-18T23:57:52.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5qrNaXdJxZE4Xp7rmvqcQLnVw4mzGBawtxNU8dsnNyjTMH6ZSkEtMPYfXEHgfG3jvRckVUP9AgSx5umZGuqWXx6e",
+      "time": "2026-01-18T23:49:49.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5QeYWgLErVM3ZtwxAvb86jV96yTn8xxmg8YJmfUdzjPpe5CXjdSrtqHKWqmfTVs3GeujYN2TKAuiPjvbce7cBJwa",
+      "time": "2026-01-18T23:49:35.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "42mtnnjLNyRuM7aKDxB4n5ydeW6ewf8nn4ZnXqDsJkZCH33d2rombotLLgWj1qztbDwb7uBcuqP5jhmyVxCm6RRK",
+      "time": "2026-01-18T23:49:21.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5B19fcnMaskeSHJj6YfmxJd1udhQyiG2GUbk8CRcY28dPp3ZXRkDKJTXZgih3sTDC9kDuL7KmEXZxe72388MpRcA",
+      "time": "2026-01-18T23:48:42.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2f116jYo6b2BH3MnQdLAdjRDmXgCaGqXVwdctSYca2NC5mt4BLmv79PLDjnTE1guZo2728ukAH7o4mX4mxdTB885",
+      "time": "2026-01-18T23:48:20.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "AH7VLBmZoLvAnVm5fRHRf3JY6utSPoFeufkCoxJ5qRmnFbx73cBPPKyD6VkCEkX6YW38yN75FjwCntYFEMgJPmX",
+      "time": "2026-01-18T23:47:11.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4wDm3d9XGQde3RHWhhmtpmPmLESQpEqDetGESrSr4y3zxNjbUGrgkJdHkBAKCw8Qeer48LF4dM5CnvJzMt1PhnwN",
+      "time": "2026-01-18T23:37:59.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "BkzBVWuYemLkhLGPFsUNUprTMhjrVQXBFV5HVnYXwDHiSHR32d5mrooZxPw3faSuiXwsJaQvtLassGZncHUdkZr",
+      "time": "2026-01-18T23:37:23.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2VWNkPawoJqLdc7RsPF7VKy6vAroi2tUDrDF1WhvFVLofpzChTUQafe1imLgiX1XryGEEG7LbhaSHwjDGwAiwSXN",
+      "time": "2026-01-18T23:34:51.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2AZpLgv4orLBN6aEHtHfUS1JkB9NoSS1KT6xd6jFXzTsRnppme7gU8QHbVV36PcfUcNZSixR4HykZntK6DQyavPQ",
+      "time": "2026-01-18T23:34:13.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "NvxxngSkWCw45MruBKKzoAJaPMmkmU9KF5pAbZ2tN2XboUwxmqHtwsHZUni5F9RVc4wvVMehJFqftMHjf3urtF7",
+      "time": "2026-01-18T23:29:42.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3QfJcFHWSgXWXKjtfDZWMDAfeXYsoBpCUfbkrj4Ku5mBVzicPHbVX3p3Pdan9N3UJsazoGjaE8tmAr4dT3kRZEFb",
+      "time": "2026-01-18T23:29:18.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "seZxCTAv95ZSrZHSfoA7HkTzbEQvKqnBtwfPbwiusEqxRQYSBpPXAtK2BqS73pAkm74SSSBReLhYtH6A7MwE6iT",
+      "time": "2026-01-18T23:24:00.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4Dci2XyuNVh4LXKDSmpjnzTsS2C1u6NTMwz6ib73gtm73xchDXkCeKMoKo6MbwH4P8e1WZ3ejGjgMzYqRsEdZiLR",
+      "time": "2026-01-18T23:23:25.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "44jpnRQbwh9KJCvVz1fPGEJJi6vUwCJDNBAw56a18tD2uaL6mub2U87dMFtDpK8KjTp9G8SzePfHGUMFory6s1ja",
+      "time": "2026-01-18T23:18:19.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "29vuaKgtTGRvKgPbCUsmCn1oF1CzvHHd4smDUiptMr8RYv7AZKU7qPAYqKjuWrYkCAc1SoZFgUzyv95ef1hcer69",
+      "time": "2026-01-18T23:17:39.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2cT8ebEBr3wVnBLjL6yvMUjvZaQye4Z3PUoPq5DuNCDK2qbEvsXXPBeNdA9EejXALHgrGvwy6UpSBkZGqngR9sMH",
+      "time": "2026-01-18T23:16:49.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "46ooA2LZawJx43MWDwTH5QHLppd9iaj4p5pjf2qCLCo4DRjC2FDSAFXA2MazoE1Sktw42nEGALSv5Usza78d4bct",
+      "time": "2026-01-18T23:16:32.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "CxnAUVLTihaEBdtAK33yPj1KgNBzsYYJhCb9LbQLGY4ycc9Kx5WPEqxVMRT3RGwe4vK9BVX6jg3awsUBWAPxZWV",
+      "time": "2026-01-18T23:13:58.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4z6zyw2ZhRNupt9acoLs9txGw6rsGJaiBwP62TagkPrkLvcEZH8S38uG2dXot7G5qa5rbKVGkPQQQA1zFFEcazh1",
+      "time": "2026-01-18T23:13:21.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5db61UoXBx1vPtsmuCsMppusY5yNwLAK1U3QYqQu9aJQWHSNs2YT1LJX2vDSqGAP6UoP1gsB5w7erF8ogD2db4q7",
+      "time": "2026-01-18T23:11:02.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "yPPbAnMQkCuXPgMC9ojYw6VjVhr6vJYLEKDQV9MYpTgQWmEF1i6Ne7oQyiqQW2gr6SacyfBLS7NJApAi8Y6dKkr",
+      "time": "2026-01-18T23:10:24.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2nsxAAXo1K1fmAGBwKkMnFpVAsBoreSiWTHb4nQRRYZjfE6e3VZDTr8JB4LRiTaiTssBXaNcekut4VcVEiMonSiL",
+      "time": "2026-01-18T23:05:27.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4dqFRvTp9hkAmXVTSdgHhx7jMtY6EiSF9zzk8pFPujoBKtnSAFZpqcAdmwv4TDaXG2EbZKcVintFp1L9rE8DXsx1",
+      "time": "2026-01-18T23:04:50.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4rfTtxU5dX5BuamvHTd1jkknS1nmPESFMCk9qHMUdVUi8kdkJd4r35UjTm2tgMPASML37GxLb58zXEvhE3P2BSAV",
+      "time": "2026-01-18T22:50:44.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3BLpp6VNoJEvmQ3eZTLYf3CgenSkz4yCrSRE5JFgWTiFkS4LaU3YjyDt81fubma4o9iA7n39ZTuoMtxDfiFdZim7",
+      "time": "2026-01-18T22:50:07.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5s4gVZYYNMispNwA9efaEMGJ5uWehbUex6PrMVspxfisZbu7HW7APA6Uo2pHs6k5dFe4yYDggP1FFSJ1PXb6xTMv",
+      "time": "2026-01-18T22:43:18.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "59tbnnNxZ5TW8iqKWAJ7QxCA4pnmsBwKVSwVDib3okEcn4WPmw1MyF837jJCYGk2nkBve8Yu3QiUmpuTQvEozGUk",
+      "time": "2026-01-18T22:42:42.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "pk1W4C3S5HMbC6kP32pX5EG1S4uAgpLgeqvcCSiy9nHcELMssFVbjf8iZkc5rZ7VRr2vBXahS6hMEys7eutaxKT",
+      "time": "2026-01-18T20:50:47.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4LFq4mUxMER547ioEsAP2esoYHwbTtzRDD63XoiW2ZPHjLA6qyn1qjZvcwZQLH9P7SCm1b6ogLzveTAccB28A2Zg",
+      "time": "2026-01-18T20:50:09.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2mVAQ3gYxSXUZC8XfN759TJhzsXKXzPJqxiLD4ypD3Gvec1dTdh8G14y6QfTwAGbpj4aeK3JvPPWv8ov966wV9DP",
+      "time": "2026-01-18T14:59:40.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "8L3d4b5ydbANdLxXC45fShNnRbk9mYiHezyKq2ji86NkjMGbuu7eybBsHVommE5ooHaJQEPasRJLEboEoQkucyw",
+      "time": "2026-01-18T14:59:15.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "37tyeTUYeMuribikKowyMjnVU6sf8sbmRJnLVrcBM4w65u3tp3Z2x2wBvpzyZvAKaUZeki8pttUWJXiSTnsSA7Mv",
+      "time": "2026-01-18T07:56:30.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3ZoWGJC8Hrh96qTcm56G5jvgLfFhSBs73uwihXt19wq4P1TGp2z8euQMDSwxUiqNsitqiw8LajcQS7FGdN6SXDHX",
+      "time": "2026-01-18T07:55:55.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "43bUybV1QyZiQdJStkj3WEdUwAcpZZHNyooqU7nQ2S2nZ85gFMJEwjb3CBmveZgMToHFnDtg6yUhh89z1BNdUihZ",
+      "time": "2026-01-18T01:13:07.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3bf6UpFKfGfQLET5ousNdfzY9VtSqDrx6aKNRLtLfw4Pd5MtH2KxKTStXiJmuvPZoE1Ze4HDsnLB7o723S2weinE",
+      "time": "2026-01-18T01:12:22.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4WuRghvRXCA5jDZuRAYqf9Gp4UfCK8cvtrQNjbAPdNAZfqQmgX7baJ1ovwJvddmW2i9Vfu8ka475JMtmi7t2yVQs",
+      "time": "2026-01-18T00:47:18.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5ULLru2Za81t1z1n9obbDQKoJxqU164Myf7YLY4gMLj9oHM4CaZKx43yRHAG56h35rtn1HpaxTLfsVyqYk4q36gJ",
+      "time": "2026-01-18T00:46:42.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5y87sanWWVtCLoEe1W2rQRAtoDGZwSRGpeP1oyfv7A5GcUpi7UmPKRBpS93ExcurD9wLkzYfMFcxvDD7PotdYP7Y",
+      "time": "2026-01-17T22:48:38.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2TDoG5qNMZW16PxfQ48CA35YfxhoxHDNJY1Qk5A3XASXtYRWZdUHdNWAtj9pRCx9t47dc12nsrufbND7hAiyHc6Z",
+      "time": "2026-01-17T22:48:18.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4v8FAcnZeXQ5zXwRXZ785gFynvWAah9JSoyU8nC3fyuyebUd8AokA1rrxDS5VKJ7LNSG1LWVRWWuFP1k7kQfWSLv",
+      "time": "2026-01-17T13:44:16.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "BkU1MQ6dQ5vJftAuwHEuCzrYK7p7uK6CKr9mZddzKfWkcVAwQHqLP4Mh7yFAnWj4RwtFVaivQLCXMm7AT8P5eim",
+      "time": "2026-01-17T13:43:28.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "6sRqeYMzzsFi1CcqTqaz7JMvB5SrvfDQPBt61My1GNucGZuUi6KUF6yb4u8s5aWyUsRsDGBbAv67QmkNcgbFDLZ",
+      "time": "2026-01-16T15:49:09.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "AAXhRKWJKZ9CZBYymbhBnctD7iSuhDy3TELR6gk3qqaDsWvEvVFNaSp78bwoHqdQN51NJustpMMgusNXcM1x1Q1",
+      "time": "2026-01-16T15:48:28.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4dAYeLfj9ziCbVKCNr1vgmnUhk5wyZMaYrDT37WELTDv8hwvr3GndurhFkEZcL9xHqyvJ9ayFGM1kTgqGbrH3FU7",
+      "time": "2026-01-16T15:43:52.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4yGtv3a7X9aGmZd8EPBaigaKGT2PLaSqdPXPWV6pBsPj1tWLNc5EoJmW8RhdhjPoR1t5zej4kYrLAoiLmd3UT3Mr",
+      "time": "2026-01-16T15:43:15.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4s6DPbBzd3cejuxBfrQmkrKzTyYUCH9fZs73wqEj76v77mgKuAukEVLDiy4AYQWo35Hp19z7fzn3igqNu55HqWXg",
+      "time": "2026-01-16T15:35:29.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2o55Y18peiVZGmhk2Zq5Lvn9rtzR6fM5cs9GgFuUPFCUs4RBGW3dFzjs4RhSRK7rUN1HJP547FMmknmyr8QQPoh3",
+      "time": "2026-01-16T15:34:48.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "K8H67U15QxhTxKsoYdshzZ8mRi78yTk9Gh41xtRa59fVNMtWfSUrpfPvE63Q8z1njCPbUW646mow8GrDJXKuNyi",
+      "time": "2026-01-16T15:34:33.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2e7DeYgNxABKMyT4X75Mt3sGqRQGd3z2VmbMrVZdAiJ6DgEyGJTo1ihQ9JWszw6QVCiszf7v8rSZEopuDXxC2riZ",
+      "time": "2026-01-16T15:34:12.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "vpVnvMZ3YzLNECmRKW4t44eKsdzDa3pHWcRj4pBVb9Q1M41ZLTBgRhTwhy4FJccJ3gLH6ueZhYm8Ght9qD6f2hG",
+      "time": "2026-01-16T15:31:36.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2krgSzm17BZ4JHQEouSrfxTzaHongmsf5EEG6zJfbPmXQL8DBvsxUAbh2ZghBqdndDFCJ9fpQDmnA6n4EdFRqetB",
+      "time": "2026-01-16T15:31:01.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5yGXgZaGbMSJrWcxUw5rJdxPVSraWCzQvrTzCdKe9urqw4vzSXEgPbamUVwVnEQxoKtdfrps1jTnVChYHHeBKLSg",
+      "time": "2026-01-16T15:30:43.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "27kd3KAhpbxEKsc9aq5EKWMtL6ckKoW5uVydPeyQRjBRuKwbWeUkSuzXCrNm7j8A4C5rsuG2aPWAqnieSok1pLEn",
+      "time": "2026-01-16T15:30:22.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5KbmNtbcf2U2L4qbPjLCywJ5n7q8J8aGByiWKbXDZRqZEPkBaYq9Dpafy9an35NpqDNgYasKCHTLLWsya7GNMnNh",
+      "time": "2026-01-16T15:22:55.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5LpuBKoEG4nL2DyxM7FmtfvdvTNcADvFPZLfDqGAgmH7SKEC3QJS2fXdpnFQ7nxeiYmJhMjDzUCPFGxkqCzbff6P",
+      "time": "2026-01-16T15:22:15.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2zXSckd9zvAw7UHsPBb7BcXchzzAsp7AE6kGEBVjnL5s2Pci87WxpjP7vUMiCZaFxigNwTVUtvS7aVDXLrVLy6mg",
+      "time": "2026-01-16T14:15:41.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5P4V3mMvvgZrpdCAnLRU7GEDEcFsKqKFbuPX9MjEUP3MRW4jdCMZCVdcyfVYBkHycdGJC2SrZ7JJdACD2RnA1moz",
+      "time": "2026-01-16T14:15:03.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2K9E989LX2gH3q1Msjt2etcFhLoWZpN9QJifsJ6ihGyKVsYDLN2Km1XCuABzXto62otLkZuz9i5Eqocdtd4t5pAj",
+      "time": "2026-01-16T13:22:20.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5yrRqAM6ye6Dqs8oSQMG3XhLoVVpC5aBbxXWTLkmEvy5WLZrkEuPvg6LDGntKJCnxvBCFHFVQEjbpwsSA8424ceQ",
+      "time": "2026-01-16T13:21:45.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3QMGVgmkQT53HVWmioL97u1JXkvnojzuYeDYuCLLgcPBC2iSefbnDh9GnHXfFLtDumkyXFPEvcHMYDHchxuGp5Ng",
+      "time": "2026-01-15T19:43:34.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5xWwZpzZ6a4H2mD94dfSQ2TUAvPq3kvWZn3APiCcWXwRagtzCkjGXoo3g3XZJtHJFBiAyDRnkkWV2KeUx9Tw8vLG",
+      "time": "2026-01-15T19:42:59.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3TTQgLpBq32qTAkoxBmQGzq8y7HB4tYST3UGsuiadcMGSQWcPkkScUqzrdK1qpe74dceoFj9wjQExFTRbhgqbfqZ",
+      "time": "2026-01-15T19:37:53.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "62FEvGpvyzZyNyb3SxDnYcBsq6acpX2SEDcKphy8Lk5tmDat7JaQQZMuFCt7xq7BVnvXTXNyxypvvEzfdZ8NHfRB",
+      "time": "2026-01-15T19:37:27.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "24sikdexqkHDDnF1jE1tozNKTyMbnaXSDonb3oxTmUBUfrTPRNA1jRgnhtY8HzexkPdHuYc2NViMEytoQBvVSSHT",
+      "time": "2026-01-15T19:04:07.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "VRBYgtizw6Z5Ucw3kwYRYg5GhkTBjrYTdHxU5NucTkHUuDbQT4DxHY3fHopapxmWDtHVmxuQVgJzuXmYRC66Xdr",
+      "time": "2026-01-15T19:03:29.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5zHoEk5UJWz7SduiirFRWMewXdtRr343GQiC3z3DtFpknMxZgBJ3S3JfAhsE41eeoPYrVUnWS9cnvNRYnCyPjqK6",
+      "time": "2026-01-15T18:41:57.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2ekiNbwCvrLE3zZR1r3SdEWpR4V3qm4A9d8J6azmqBcD9HxnxKW68hBMjb78fV2jayEvPVCLwN8PwBattq2BL35Z",
+      "time": "2026-01-15T18:41:21.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4m6bqPhbkCUNt11vRJLriZoa1zNPLj484cgzonnG7ivN7qj8uqM2EEaVmU5JXccZ5PtULVASkccFfLFeTek7u5bi",
+      "time": "2026-01-15T15:56:20.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4cBaCdHLVQrXfMrHq3pVfjRKzJXWdGqVgvaz173ujgjBBir9jhRWbo1JdUzqFwswYujwBWydwFukUr4SEC3dokv8",
+      "time": "2026-01-15T15:55:39.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4G6co5SFXVNgVA3yjo9WdmJJq5qFSYzXbDbHnbMYBq7d8NfChQDwQEBHrYhhpbGHKmTmipW5UWsWfDmrJsnTTHga",
+      "time": "2026-01-15T15:42:14.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2Lp3Hyq2b7Fz9L7HGEohzKmG2oG1auViKb4X4wWBvNFMTLv62TPugJRqiJpJqBHjYWwmGjix9n2pdntzFVK27GWT",
+      "time": "2026-01-15T15:41:36.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4gvbmu1h1D5TfXfaNQx387AzCwZGiKd7xChNdpe7MzzVZz5f7oxAsLvcdTvjxn8c97SCpzStgJmFYG82FaQiG9sE",
+      "time": "2026-01-15T15:27:56.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4FHhmV1A3TRx99wbF6GCsEkKH2BFswiUFqirKScndzVwqja2mrvEGF74gncBqfWJknjcTuxkmdTh8n9sL69wr8dW",
+      "time": "2026-01-15T15:27:15.000Z",
+      "status": "success",
+      "instruction": "Titan"
+    },
+    {
+      "signature": "5PgY9TQfyPqZz1t3gJs5Zyzng3cs7svhhhP3RbCK9sL7Zsgz7rARSrkFL4v6kUC2jgQPnhJjzYDnSCCSDAKqfxba",
+      "time": "2026-01-15T15:26:24.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2izRUjSuKX7sdnRo4ztjNsx79FrfWaRCpjNWNb6gxnXVbJ6cVT7xd7A78WbVA32JsFcEHRc5C76Xo4e6k5S5k7K1",
+      "time": "2026-01-15T15:26:03.000Z",
+      "status": "success",
+      "instruction": "Titan"
+    },
+    {
+      "signature": "3nMD5pgXguX5pqQQpFrVXPSsQEv2vSMiZS97LJ3Er9NWtKDAQC1DzGkS1MCn8Qj3hV6eL2jsfBPm2oBFtM8sxggV",
+      "time": "2026-01-13T03:09:24.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "37Per7a4a6wKnMb2t5QaFoeLRvM81SqcxJ5UuzDbA54VvedDbv1abo7CTdUzzjSFZV5LPaBNtrNpz6zD8h6uGCKj",
+      "time": "2026-01-13T03:08:50.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "31CJQyFoL3AeUkEBogCPG328sbcj2qAJ3PW158cvEA6GMVH3ADAbu6YPVS3EQUBs9BAEjiSULDEzYnWvTUjr5XYV",
+      "time": "2026-01-13T02:46:05.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4MQpfgpMqXEJe8Wqz5wUupTG4jEML1b4hPDAWJBM6WHRMDdWGWZPvWMvTyRogBh9T5SiBAzsFsD241Kx5dfb17Ut",
+      "time": "2026-01-13T02:45:34.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2An7o65ddwu4DSn9X5jQWwqWJbdimzFWRLgFrZwG1jQFoWnuSGBB3ExeFdLEk1ib2eQJvJTeEgXDVkFJpmgQWMVC",
+      "time": "2026-01-13T02:34:00.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3GDG21frzDxCFx98bBHNXoP7vjMXZPdJ8MKQcpc3RL92Fnfn8BnS2kTt77HqR7JjqfnL6YSDbvdeTSNEdUkBavrG",
+      "time": "2026-01-13T02:33:41.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "WybvLtARaZ9bjxsw2kprz8tA6kQzJXiMTNtB97q7P9jLJUDmpj7431Vx2cBkUspaQCMuixmasJQSeBXn7sGAddy",
+      "time": "2026-01-13T00:12:46.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2T6aYu1NSLMU4Af6PkEsmipFYT7JX9XdrCYgezLtVyf2bF2aAMqyRuumdxWVzi6PNAa5z8ZBtTR3qvGFuL8iusKP",
+      "time": "2026-01-13T00:12:30.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2rwYWcnnV3hBDrKb1w69V2yDL11woKVFpYc9PgJBmrDMHJcM5vfgM76t4EeZbtKHe7jXyC4JZCsgqvB6Yn1D1747",
+      "time": "2026-01-13T00:11:23.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2RKASZJzDVNTAzoDoEeADnDfjYJVNifbLAhhCQoGfdMnAVefFVdaCerKeSmqEsJfvnN7q2VDk5vj8dLJdmhAhat3",
+      "time": "2026-01-13T00:11:14.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "45z9SFSuAGmMnFs6EkjZYLunoEKYfBwyUk68cYQsnUaBdFuWBHwP2vUPFNYv7Y2xP8m8yexvYwCJa1SDvTwQFjtj",
+      "time": "2026-01-12T23:58:22.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5kBa38FgqjdgZF2TLxnubTeCdxoBYQy5KoisTrouxRFqMZJqAJ7iWh1udqmAJyg9cQAjWYY5MM43BL9DYViXfdEH",
+      "time": "2026-01-12T23:57:44.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5TQwyEUuN1g7m5jx7ct7xGj5HHAjRocpJckvgiJiXoafHntZTnQr9P8vGeAF5u81mXjANpz97GGMSrqHvcZQf3zp",
+      "time": "2026-01-12T21:48:17.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4nJrV5775ZWGJH15Aqixc5m32uBGHVgzdVfrKVYP9gTHF3uYquCqyPRcscQYpFXNZdKQ2kBL53HNYQSwiUP9UXvS",
+      "time": "2026-01-12T21:47:42.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2WamN1Zxm21mAdK6LKc43uKe1v6fj8DetXn7eD2yTUgo9YnbRs7oDBP4T2GNNFp8RcRX8CQ2upwfdRy4GVKEKmBs",
+      "time": "2026-01-12T18:13:17.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "36JEabD5HkjGeu9Uxw5AsSYSYsk8uvDoRDGSWpfk8SCtLVqRCQdmcVnMwsavuMkyTjW2cqnpZzjPQq2YfhHRFXU9",
+      "time": "2026-01-12T18:12:25.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5g9EWthAAsvm2mn7TraiBnACgmqkUGxPP4B6KSqsprpTJ2sKmK4gUpBMigrgs2LgK3xxmCNwsrAnXhoa7C1EQc58",
+      "time": "2026-01-12T17:36:39.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "61xvTkhLLMbvyiuRcrKXpHHs8njyVxzEqgahzETN2RgjMqxttsLQefztbgd3vvMgM1usxcnuja61vzoJhp3LXg8F",
+      "time": "2026-01-12T17:11:11.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4yZYchFwaVVcjU789Y9QMdwyvLXD3jk6GKz8AQsWyH4wtLRDq677Q2JqcQh2R7rGZr7hzPtX9483PZwZ1CabvAJd",
+      "time": "2026-01-12T17:10:18.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "456jCR4wbGNTF6YjTVbJeBtg7o7cbadQLUvbaUX1p7Sym3XHiZXQ1Wip4oVsCzwWfJN1JXHuuyFBDFWJEfuNSaHD",
+      "time": "2026-01-12T17:09:52.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2PX8Xx8tyHxYkxkpDBNXWMMmhkqfa5VBLR9NyTCRPqWjrUe64o25o73eGt2fdWoFF8cAJEL7LArV1VzLvSjX66fJ",
+      "time": "2026-01-12T17:09:47.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2UX9qNhZDpb1ucWiDJFSA48rkDKLMTbE2j15LJmd7ZDf2RJ5797HmGhEDRaAHuCFddkB6bXm72ii6zA9ujYxVpjs",
+      "time": "2026-01-12T17:09:23.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3KcJW8aqKZYffMc5z3o95B9a7zVYvGa1cYaFSuM39V6o1LpjNogDmu5ez3nsDAgVcDKLEEPMrRuPxD6VxAq8BSSR",
+      "time": "2026-01-12T17:09:07.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "TiVSj3Y2mqhFLcdXd5ogCNtwofaGKEJYJtdfWpqwFbwqa1RHMbrNiVn2kmacbHoec9bdpEXocRNVUmpceaGUGiN",
+      "time": "2026-01-12T17:08:15.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5aTjEgARWGfQf8S3Lyjioc3EW1F4auFh9YfWfTJyef2oPRjuwDZoxPyxAsoVBoQnkBGHUrMfDwCMeR7ayRgd56qn",
+      "time": "2026-01-12T17:01:17.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2NkYfzcQXtdMH1Pfctaf3VGLw2FCty9NBkLJmXTXaFqXv35wACswRpiKvKK714ZGk9ZhXSDoSz5mkweZEAk65tQH",
+      "time": "2026-01-12T17:00:31.000Z",
+      "status": "failed",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5RvyqD2Gf6m949BN5jrT5w6iibC821DF845JhowsyMrPCHroLBDAj2egso9gaC4a8UcjokFo6QD1zUQeeMe1HSBX",
+      "time": "2026-01-12T16:59:39.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4mbhEsCH2dRbY4CWnf2ePfhY4t6oVtpgFLQjY7D89myAqibNnUvtQA66EjTGwuTT6sGpgADEzTdPzwVQs3hhyLeu",
+      "time": "2026-01-12T16:58:44.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2axnAie89AzsBxyTdPVe8aA78tgCWNg5oGHYfBy4TeswFPk62copLP9AqSVTQsBxRgN1g2bNA6cmTsJexFN5dT78",
+      "time": "2026-01-12T16:58:21.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2pvsThFnArqebU7R8QvfnnLWGHT53dcZkuSCT9QYQG57644CVcuVS2BGpsxQWox6tGcMqp2d5NNU7vYMTvZuvs6T",
+      "time": "2026-01-12T16:58:19.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4yf4qiWFMH2LBLUDxHG28CATbVoKBu3PiTMinz7QdMndHNE9sUsKTxBP6cY9Ppnr98CtEpHZFVWPntvGn96WehYg",
+      "time": "2026-01-12T16:57:56.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5gVj8P19wbvzptAnyw76iuiFzSz6CJ8wPkn9WQZn5gRrGBsY9tHJSNFEGXTDHQ6jmJeYTXay2QmwrE8QfbxNKvoj",
+      "time": "2026-01-12T16:57:00.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3fVxD1M61QoEqJ3zzKUSBoAvy98XWV3qPJBC6ghpq2DBiZk4hyALkWHKzbDxYE3LSGi5rC2rBNks2ZmEV9kKcwgd",
+      "time": "2026-01-12T16:56:03.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3Jxuji3dD6p9B7pnZHYkZjifR5eWY4S7xSyartPoVo1AxaTtxGFQvxpp26E7B5ak3T86pWs7dYbQFALv8Kf9KbrU",
+      "time": "2026-01-12T16:56:01.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "DjcBhFNYJpXdTmhP8k3eNFb3eCCTj6BkMSp33iRZo7M88fjbGPvYCp1ix1tK8RvKqgSJRDYu8YFDfXj57w6Pmpr",
+      "time": "2026-01-12T16:55:34.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "6gpaLJLUFp5mvHTRGxFS2cn8iPJpgRaLduxKUN12W33KXdSEML8GEACLhkeRfQ9H9TVZj9pRauaFRzNj4CcT9mC",
+      "time": "2026-01-12T16:54:39.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "37112ZEH1zCUkPSaVBWA3YXXMcWBwkyceAmPhhnZ7t39Nzi1cMdaVKsFH2DHPQLNcQTJgBgu2M9enp95ECBEk1EH",
+      "time": "2026-01-12T16:52:54.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2ei7wUxBQtPKfhr7jhVYayt8WTzqs5oTVqjmq9GGhMdKJn2pRsp3iZHxBWNJGSuEXExqhavrP45k8JSm4nuzhepP",
+      "time": "2026-01-12T16:52:49.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "pfDex74drttidMBy9SqnbCCb2WiqdUSsKzBfiaVjCw7gvEzirfg3bNQkWQrkFyY8AA4cn2frMQaVsEdwCbY6znR",
+      "time": "2026-01-12T16:52:25.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4e2g416LEG3iD6ym4zYmLhtdHfJEHgBkknJZGqNn213ymiGAoZBDxjV9PasN1ALeEzTv9nU1FNYFJg852NjRJY3H",
+      "time": "2026-01-12T16:51:35.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3NEMDmxhNWUH9aq4wTiivzSqbjQz5jXfYhpsMX46S1XrTJK7nnCFxDhXZX8TMShDGpezb8MwLajXMLqiwztMJ531",
+      "time": "2026-01-12T16:51:10.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5DK1nCphCn1Ltmydnx3pp3PaAARsSfvnWWi76gVD7nbqHJkmJoKdR1PUmd5Dm35yyZxJi6otDSkUMWdbSbvKkQ4Y",
+      "time": "2026-01-12T16:51:07.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4fV9MLX7RvxQVYuXLQDz6kJbSkGiEuWRH1U7sGJjYJkUHpLjwpsSvJvgMVT5yp2RvCyZnPAVmX8c21cuMiRPo72Y",
+      "time": "2026-01-12T16:50:39.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5vWq7RP6Et2BwALFoWenB6v8DFq4wj2SkDVj2CQUJgg3qhpsCRwgmsib5RxmEXAmMZNc2grgrESY1fQYCtTN9eWu",
+      "time": "2026-01-12T16:49:48.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3Cj5Y6sRvugVtT65oo7PEptXtmeV6MAZxBnq8QZSuZF92kHSJhXtmtms3TW4LMoA9P3wrKxdqZdedBg4dNuUgt2M",
+      "time": "2026-01-12T16:49:24.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5duTH2Q1vkeXLChMLz1bB37BM9KtxQqv7SRrGbzTFZqmfzbrEUYboi1BmGEvDfhhJYbduV75U9wT8Nie9zPStiWn",
+      "time": "2026-01-12T16:49:23.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "xLXZx8ckTBv1Q2xpnwTAL2x3Qy8rbcvyqmERpHbjgeatBfavAXEafqMePX2fAMDDXrcZbBKSpuiQAk7zFAZSQUb",
+      "time": "2026-01-12T16:49:01.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "Bmtc6vh8RuLvzxFnanimWhb5AYp5epFK2LGN1opP7SxH9VrLP83VQ1wv3VKpv5ixDpizZkuP6wM3worKFA9nTyE",
+      "time": "2026-01-12T16:48:09.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "EUkPMGgfUpH9tqf7NQgj5jJrPiCU7kgWEsq7TWaYF1gDtYdxxXoyTdknvBiDhYLBTVSAbEHN5rUzs1dGGrK7kgp",
+      "time": "2026-01-12T16:47:54.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "oKTgh2GFEyuMjt1oWdsGfwhRnR8G3KRcYmg2acjhEP8m57JQTEi6PeGDC3vq8MmTZ2sYc8EK7yPETC33fFgJj4U",
+      "time": "2026-01-12T16:47:30.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3WD5AQoSAvatsmxSMscpntZbaydMUMMgJm2st32VRC4fDfr32LT7drTP3pBxkHZqT4Vdvnm9htJ1rhsbnQ6pkdJU",
+      "time": "2026-01-12T16:46:36.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "hZQeJ252Nw9rMgoq944D7gaztzQktkeo23EgziyPkVzDARZPDbugGu3sb1R4Hb65RPBL38RhpU7eRXBvZnK8qwm",
+      "time": "2026-01-12T16:46:11.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "RDe7xPYGsMhkrRTwHd2n6gGkvtzgXGFYuGdZkcLAG5W8RMdPwR2teoZVu2MH7ZMziszF7voknnsVax1CEA6wiPd",
+      "time": "2026-01-12T16:46:08.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "uKekZDgiaGNzjTnproubVQzccTe7CD17DGyM77JMd9LtaTyRnaNm56XeU85q5J8v1usYf7LvaF4S3k7dzdW44tA",
+      "time": "2026-01-12T16:45:43.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2sy4fheskqrnrGkzwVwLCU72VgHqe2cNYUH6yz9ZemHDBxUZHjwAd1WcaAssoy82KJzgs6EqqqwXAyVFjnCeNJgP",
+      "time": "2026-01-12T16:44:56.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "DqoFM44d9x5p4UKXixqGHrVXv95s33DzPqutHK6FRfnVJxTDzNrtxa9NicTuMAM7Yf5oGWXeYmiLmLQ9efgd3S4",
+      "time": "2026-01-12T16:44:34.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3ghBiEDArjqpc1Nua3JwBB8URgCmXXW4ynNV4LJDvmJkxXuJnMeLA2om2xm64ttdoQpsUNxyFSzaymV6X9mYMBPF",
+      "time": "2026-01-12T16:44:33.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "j9gdUDxY82i7k3CTgdfa93g4AJaeSgEb1wouv49LAeBcFK8B8Et8WCe1cDuQM9rUD9afV54QLyY2HCxYXomPErk",
+      "time": "2026-01-12T16:44:04.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "44wrasNaK7wpxH8dPg7ybtX6PaJ6MCXFSzD3NMqCE7nTiiv3PBQ4S3tXkzzW3MyUVLCowAtiEHy7dHwjCkvZUD4L",
+      "time": "2026-01-12T16:43:09.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4ZFBuz4VAMaU5guA5cRjNGVpj7WZb4buCcgnZKMg1ydjaoae2w63jKxqUuFmm9HCba5zDgddqx3f4YSyGZRiiMk2",
+      "time": "2026-01-12T16:42:54.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2wEZKGAhqY1yLuX5512j61sjFHJcoo2ondif3Z3EAtounV2orQ9ZJfhZEZWYTaquqHPU7FptvdhiNoPi6tuoZMGw",
+      "time": "2026-01-12T16:42:30.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5Bs2c3wWgLkUu8WoBYeQQf7tgC2oLx8Tbk1Dk7fC3B2qqXMHi6gsLhJxbxxYdU72UiRfr5f2e5JwgvDzZ94sgox1",
+      "time": "2026-01-12T16:41:36.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2MPw45PvsTTA8qYZr3ZCGgBAYNvAsxyC6P4JX2ktM1mKCR3wTNEDce7Rai2FvNYJTiL5YVwq7dUv1mXJergPW7cw",
+      "time": "2026-01-12T16:41:12.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5izjM12gyZBFT4kqbUHUDLDVDMK4vYHFxgDbdDwXrYFYzqVfL9dXktrB6Vch7vbB7Bnpty7RBt8395LwpjRfxzPP",
+      "time": "2026-01-12T16:41:11.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4WanbUks87pzxBKnNnhuDTi3BHjSqjeKZ3aZZogNiWtdvej4AKBKVb3tyPGXYcsB8E6DJecQo1cU7FvqM8fLJRL7",
+      "time": "2026-01-12T16:40:44.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2yaaWnHaJgcjRB5whboZu3vyXCZm4htHALCAqPpjEcu34XdYYHRXChbXDWpzLqkU7ZpP5414V7yXvbuUqgort9LD",
+      "time": "2026-01-12T16:40:06.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "42ofLaH8QVUAepLYmwWR9vruqBVN5ksSfNdqsHcJ577ifSaAJgb7HbVXnbN8ASmkYNFhKBarvTRKGeErikRNwQyV",
+      "time": "2026-01-12T16:39:44.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4YzEXopGJ5o8vsrD92Ky4sjiVbEfbdoybVYqyH84KXyvAWE3sHnqTk8jHQjTNkLPW3XggbSDrubFszHYUtfR1nFF",
+      "time": "2026-01-12T16:39:40.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "43fpmFPZgtJHFW385RKp2MCmYWbBZ7Wdfhb9sLH3tvfKhHZ3oWtk6YxaJLsjpGmQ9ZnV2TYrmbQpNUhzjaZtRrkr",
+      "time": "2026-01-12T16:39:12.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "45Zv3LZiJrPmpoLqaYciU1SwdRSr6tHkWSebsUbSa8hu3gZBDy3WhsYfhZ8PmifAYwfzTvCsL6gVtfphRLSYmkWw",
+      "time": "2026-01-12T16:38:20.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5ZuXhZ4vpn97MVgG6wBTSk3hnMt7NirjpXrJv7ia2CcbE9NGedevMaRRsEL6CoiVQLW6XRtVZkiKYNg72kWZoEtF",
+      "time": "2026-01-12T16:38:04.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5eYWYkvJPugCVwmM1pvXcGMJoqYFvgFiBi1UGpCifUszekikFJivmKWfg2t5cA5qwn2cDgo4Jmt7aAQX9ryYgwvY",
+      "time": "2026-01-12T16:37:37.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "wHmhuowUzQf1ioGjTBHETfqeyeduoR9GyicqwvXxVMEDbq2oWjFeuHmbLp1fTspujz5PvThuYxRUjzaFjdH38js",
+      "time": "2026-01-12T16:36:47.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4ZPoyS9JZrwqVEpLwd1oogLCmqhBcWvU67W5Bu3TgGFxUD6ksxKw2pT2J8sFZHfiznoyDucUy3uL8ZHJysS2hRFK",
+      "time": "2026-01-12T16:36:21.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "AWQkWC1F4XESkCL7YC7MCyVkjDcHkw12u2hH3pRQpt9MnKTTNNfp5Rrauk8ZoDyZSUxDJdy5kfAdD3eLpBtwkbh",
+      "time": "2026-01-12T16:36:20.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3vpwtBRMmTnxe8vE9oMUmEuDcLxnJCMsmWUvYrV9dBzpMwrhX4fnAAWZiSGHEcn9AEJ911RRcVAsyzyLSEC1Maap",
+      "time": "2026-01-12T16:35:55.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2FqLm2uCwxvNFsY1VX9DrkgH3W3js12DiNmCMUCWc9Jhod5Hb1nd2FKpQ4j1UwBrcMC3AzXoKFYWaacuMUXzReqk",
+      "time": "2026-01-12T16:35:01.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4MqUsBfJwKjnpbqCgiXGxXyCJedMvBWphvf9oQtnGUPDdTVa22ubBVDbtv4TfVGmPCNVdMezMDt5erdksvxFLXQU",
+      "time": "2026-01-12T16:34:47.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2aPqK3CN436uBJAbgtPg7pU4eJG7DvGETxWGMTnMhExTqzBobMoeubzSfC67XgCQai9fYiXgpcBCj31wbu9zejtw",
+      "time": "2026-01-12T16:34:21.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2pqEq6rxpUgBjr9q57yzCJm4r1SKyMQndesqgpvNvE1gqefYLp38zQECZXvjEqyMKvFRtLAY6m3WvxphyWZWo7XV",
+      "time": "2026-01-12T16:33:29.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "43K6h7zfTkqRHTfHQoVNv4yDReJPn4nbnJF9CMbAMEWmqjT3mYMpXCkLMRpm8BtTxhr6e19Cn82DK1xTyJAwDivd",
+      "time": "2026-01-12T16:33:05.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3VnNmYQiZ61Z5rR95Y9Cxqu3ZcnU4nfFuAGGoohJV1JcELtmTxqF5t7doz61JD4pkbfKEHsGJK6qCtBYJwEiUGb",
+      "time": "2026-01-12T16:33:04.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2gTUEQWn3LGxTZwmQ9FkULeKessCewFfm9y9xWJ5Zv3sae8v4Gru8ZZLWF6QU1DtpRHaCAxmDquunXSoTFgSigfP",
+      "time": "2026-01-12T16:32:40.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5qxV5uyoiddmWmcCLerwwKppHVAjd9n124bc8m2qVEXG79oqH8hPCefDPE4X1RvC812E86ESW8D9NK3xuAdJXFj8",
+      "time": "2026-01-12T16:32:24.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2e4DR7oGmqiDDPxdqCtLZKddtyVg8gvrtZ6DDgf82r1eBbHRXUTuCSag1EZXarcmkiP56xLaNzZWj6s43tbZdcZx",
+      "time": "2026-01-12T16:31:37.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "26B7Ztqnxh7k6Lp68jLCy63jVHdn2vnMmn4NP7JbnbRbKgzgwGJSkASdsLN83p152LD8WaJxmCPLbDTfrwMgrR5o",
+      "time": "2026-01-12T16:30:57.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4o6TnA93N68MtuWxL19EnFDG6HzYEft2GdnFEscTjxTC68Tt1hambasbQSpYjK1R74ZbKtCZa7ESQDPNwwm3UFyC",
+      "time": "2026-01-12T16:30:27.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "8n3itZXsfmYuvAhtij8DxLk94iYvAApeJGqHmz6aaerB6qLvc6Bn4mZwzBzz3t5RVtconHoANztSjnWraBbH2nL",
+      "time": "2026-01-12T16:30:07.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4t2pXvrmf6fsnVwdYuCMUSn2obZZ9VjVfCApWxAYSpGHdtQYqYj18X4pbVyLzmPapfqWomRNJRSD5xrzeE2RrkG7",
+      "time": "2026-01-12T16:29:15.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "21AJsUH5MnCQDV4ZrhNcAbhEyBc2ibpk9WvbXmReP16pTYDwJnT1rhxDvYyTrHmcpu4H51aPqrYv435ed9GNe2VL",
+      "time": "2026-01-12T16:29:03.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4bh5rq36UrGuS2sX8u1Cn4XkiYzPcHtbiCLG7j1psjd2nK3gioHY65NpZDECRLQcrfWdbkfsvPVD46ra2DgLe9mQ",
+      "time": "2026-01-12T16:28:36.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3QGmTNkY6btbrdjUevDm1ivioipwzu2LPd6et7pxbAtV5EEAJaMhBzQCcbV2EiWqMRHMGskCDnKqHFRyLNYoGTEM",
+      "time": "2026-01-12T16:27:47.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3pQ8K9X8msvQ6FH5qDBLSnTYz17k6dCg3xqkcQWNXvMLkm63FcvD2hyTfwebDQFWrov5KWoSheDQ3Jnj1VyhxEvN",
+      "time": "2026-01-12T16:27:21.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4zmmWCbArPNJHf1w2wnuurZD7HhW9XCZ5BUh1iSjqGezeE3VqbAz2H2di6akViveHp6YX4tCKP8MQgWqwYkPJMer",
+      "time": "2026-01-12T16:27:17.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "66iQrXq5CX7NRtX7oNS6MZW88vH2VAPcg6nu8JNH5VsVRk9ufRiVaPpQZav9rrVRrKYJbY9b2sPX5Us7okZ755pH",
+      "time": "2026-01-12T13:32:13.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "a6mMht2a3a3wo9nRaSbccq6qbKkbeFuEuFuqdAwTSkjNjrRKBvQgeurcZW3CCMfNQbmRYymiqw1uEjQurN71thL",
+      "time": "2026-01-12T13:31:50.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "je5ox2cwGFmQQd3uAXcGuHyjfMpcuFwkuEtD6VsUXchUrvXgcZVZj1W2G3imWNT5jE3p1L7qGeqADUUaXBU4jjy",
+      "time": "2026-01-12T13:31:16.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3tMVe9aPqZS75Tvowfhgyxa8qsDshQ4vSkpRcdhEtGpAFiqwehJferJMKoMVfR6Dd6ejxL4Ff71mF88Xx7yj93yk",
+      "time": "2026-01-12T13:30:54.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4m7yonTTtVDNWQe24VZwjMXbon2UNnSgNmANKdDT2A4o1RMpNL1WT5nDHCQ9tgfC3SxjPGtrfBZyLehq3YGqCNrV",
+      "time": "2026-01-12T13:17:30.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "33zAyXBJdVBikXyMJJei74pZv4q2DWnZWXneJBct2faqsrHw97qLsoU6zCHJUGdXgsGmVGwuyLSeCTKJRAV3229H",
+      "time": "2026-01-12T13:16:42.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2yFsPP6QtSZn1HUZgkqyjuwBPEsJE5wYvxKQqH28heWhPKVh7joswo8aVWEzezCAHfdZ88ssLoFXLYBM5YjYSCMa",
+      "time": "2026-01-12T13:03:30.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2G7MC2VqnzCqdTtajE8npnXUd5nTSm2gW6yNSZrBWaevyxiWcFjMUnyYiGohWpRGXe7jT9DFiN2FVZ3gZWDB24qu",
+      "time": "2026-01-12T13:02:43.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "25a14DK6KUqgLMsAgtPBZ3pSRzMS8ooivN8n1srRJScF1rgrt7BQGLmgqMGUrncWFv5xkqGthRj2qrjscrBttTUQ",
+      "time": "2026-01-12T12:39:02.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4hA4HkUqY2Npi8fUaEoY9MGyTeKGjGutQRufC6vZ8MkBzaKnSUrQKL17jBP4zjvf29JFsXyC6Pb8iZ9CYV5Pftoe",
+      "time": "2026-01-12T12:38:15.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2GrtZGTFeyhfFGCsfYjxCfeJzoeMgGtDYfUp59PdLvFQhuHaHvGFpe9aezR3RTYcrNnuW8hpMP6sbbXM94vUhvfe",
+      "time": "2026-01-12T12:37:52.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "mh15p6C18xZqbaCZSpWmdg92NMoiyKtEEhCJKHvmZqycqVHkXf74h3weCmdmjq91WSBDf9ipFxqsn4pfJ5SEorV",
+      "time": "2026-01-12T12:37:00.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5k9Vbc4aRRkQNnJp2c6zA9SUEtQ2zXSePq7YW1188ynVbtDrZye3zPpKRiYwxtxbrAJc7PxQrnCaND6xLvhrzgfz",
+      "time": "2026-01-12T12:36:36.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3nHsdmAeCN1cUHJdW9ziQotBxWGrd3FWqdvkMGn2rRAbutobgH8a9RbzgAr2SpEJpNeduuBUUxXWduE3HGQiwZ2n",
+      "time": "2026-01-12T12:36:35.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4LQBu9njP6gMPU9Nvaa3Kdd25JSphFETUueNbMZnffsjB3MDBUuknvdXTcCGRXRNfsXBvmNjyCLBofWRgTvoXzQd",
+      "time": "2026-01-12T12:36:08.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4UC3iWcHJETfn5rLinDubRXZkyicpkYKMrM5BeC5fS6rY5g4czraZPNBAWCEHEBC1dHALr9iDWftcLLc6cWNznK7",
+      "time": "2026-01-12T12:35:13.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "REPXRDeTfR1TCZpPu19Bhsk8vqhUDXptPwo2wjpuwqgrQ8AFdhph7uNKqvuf7yqsrGcPDeSVP7tLL1v47VDTa1K",
+      "time": "2026-01-12T12:34:48.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4oTiqb7Ps2qB4DCerRyNiKawsra2NKymoX5WhNdGqaTmX7PaHNsEPqTmDFssng3SdG65ZVH8NdHhWPZnQUqnpzRt",
+      "time": "2026-01-12T12:34:47.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4JN2xSgQCbGPjdyQqEARK7s4YE3DygeuXiCusSbwu7Ka2jQwRJqVVedshpRN9SjcNMzJziVEk6Ey8xagY2ieZuTb",
+      "time": "2026-01-12T12:34:21.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4L42jaAKFP1Lhenq5YX4xpVwMLHad8Dca5yRnUZAT9BCFLJy333LS9Ueh85AV4LiNyTzSadQ3qwUL8TMXrgztgLN",
+      "time": "2026-01-12T12:33:27.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "yzKguVXTu2VVLEdUJq1XtxFB94gLN5WQotkWvoHFsdha4PyfHytAUGbyNV1vreMWZXJnFvzv7q2xHf9Vkf5WfBg",
+      "time": "2026-01-12T12:32:57.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "58oNFEmDiD5nm5M54mMKtkDQWwSN16cp63DzFV3yTWnjFkJeDPb67FLSsskrjiAm59x1GV6NbZ1eWJ8VaS8a3H6h",
+      "time": "2026-01-12T12:32:55.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "64oFyknchTMrUR3PDCkcMJxR4SujCMfX9b1ckjxeGNTjis8LtB7s3FGyDGrCi9fLujEAJGtrPh8W9ekSNrW6bgcZ",
+      "time": "2026-01-12T12:32:28.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "e2s9eHgEycWTD7kHGazsUUqNqEuCJq7EWXAznq9NoVyNeur2y9azgPBAZJcyEosihB2dPqgU6b2ryca3UNh8Y6L",
+      "time": "2026-01-12T12:31:38.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "21frw91z9RqxYiW7KHGrhwc1cYNBJDQvB4F7AZtj3CzVdH6GNjmZ3vcvjSVNVNNeXFo6hT5ZXVhLHhADMPwcamw1",
+      "time": "2026-01-12T12:31:25.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "47VAcxtuiFy9oG6crZtxUHPW8GCX3WwiBW5R6AUF91vGxHwydB6vuGAP7Xcfa1TPnfpMbZfU5skVygLm33sFxkDF",
+      "time": "2026-01-12T12:31:01.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3Cus8Lbg3ZPgQbk2hHf5XL99S9WdWwj4vH6GjbPZtJjw4xpe8Bikt9VmLYqtBoUPhykFUtPcatnBnpBt4a9fexZh",
+      "time": "2026-01-12T12:30:07.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5WM41NPJGUUmx492C22uQEsjHoGEmREndCe1tK1dn1iew2Emr947sJPaG5MV3yHjr5Ub5H5iTks4CyhTpmft6471",
+      "time": "2026-01-12T12:29:51.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3S4b27Q2uHSUtJCdWb8qS3U9QWFRAypEbJ88BvmCZQcXq7pXzLEMTodq2pvUPWumYhawoVyTpo9AP56yNB4h9kVB",
+      "time": "2026-01-12T12:29:25.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4gNqFfc2jTspS8TazvBtFhykoxKnnkmcGo1ggJ7sycdHYxC2ejw51AvH6P6Z41Si5HneyfiefUUmStW12kpQsx7Q",
+      "time": "2026-01-12T12:29:07.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5bNDEiiPsbJiiHRM5v1rLEHgeT3spSg27Mnrg5sMdXKujRReShPSqjzRktJA5YeZWUwkDetkybdBSzkdgSXvk8Vm",
+      "time": "2026-01-12T12:29:07.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "43TcnYmnNEyUFgyCZFnzhEockeHZS9RAMhjYvxRNQEyJpsZCQFJr4ZPYU5vRR8CXBezqocHf2JTj3gVMQcun9ywV",
+      "time": "2026-01-12T12:28:44.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3maBRJNT27HnbDrbef7iv98gN94wernG8Dpk57GVZPZFMaMLHLjtUNzuYobfmBYPnoJHEH9M6tm6KHPP1CNp2FmY",
+      "time": "2026-01-12T12:27:51.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3rjN8GXrwy7FsSoE3Sg53nnHZBspuz7iEeBDvESdxspgAJuggjEFwrjdUZiXxvUZWAgaMW7mZ6CtqsYFSwWkP3j4",
+      "time": "2026-01-12T12:27:40.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5aeZb2aev2mSvkiQwZfiGUvbnET4rhkRyjNY1AzfEmV8L2ZhBiczTvUuWGhS9usphAZFNAZ2hAuYbCRNZcUVqrnK",
+      "time": "2026-01-12T12:27:14.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2SjFaW6sUZGL8AL7gaCWk5R6jrzi75yhMVEuvKYEsZk62nG1McM4t6z6CcKUNXYTYP9SwjVpBrsPVZrP6Afo1eR4",
+      "time": "2026-01-12T12:26:26.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "usQcjxFpJsjfjJtspo5bDhG9JewmFvG4jUnxoVUDYcHPqJXTAX2qbP2sqYoaF5H6rk5K4SJstxRtLK76NmHHDRp",
+      "time": "2026-01-12T12:26:02.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "59UZSBptJAMr3ALwRWW1ujYerKaFHeJ1dMVanTwpZzcw1r26hMrTaEgNSHg55u72H9wnpP8WZeiryJupmRSmMLNN",
+      "time": "2026-01-12T12:25:56.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5zghS5WjMawq81ywCT4ZBDDYwJrXBEWKdo43jjmCUraPdDjA4a6HwtryNmHenVdrHsM72HT8aFV7gRRys8AnUv1p",
+      "time": "2026-01-12T12:24:55.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5EfhcXVyLCPZ5PFuuFDtezq6BwfxY5DUXkjfr7vrb2DxtXqJcHCL9NnZJgzpmCanpSUi6qi54uCeSb48pDWsebHM",
+      "time": "2026-01-12T12:24:37.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3FcSxSiXK6jzdfMzXLquVAZVCMfFAAiVQfxKFGTVxKF6wHFTrDKDgMVR9DHHpcrsgLuvzdZLNio7K9qgs9cg86T4",
+      "time": "2026-01-12T12:23:23.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "sMbsTK9JkX7bCftCZPgFaCKEMpyq99v8shUAFJNkMfJm125rq5dDZQNyodjgJSWAr6AGVJPY2CshWh8RS5iYpQC",
+      "time": "2026-01-12T12:23:04.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "26rvGE3p8rCqRjJboFmd8Ymg2dPfbGR2gSfRwnVmHSnPeteSqQBG4WfVnPiTDvD2UyyS9NGZrMGEZbyDaEceJ4Tf",
+      "time": "2026-01-12T12:22:38.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "44b8Xueidskjtiw8kxccu4peyopYvqfzyzVWCnneAkcRKhvUFB3ghiSU73kyyuryV3BPsJa7gq9MxYnR8sfvEUKC",
+      "time": "2026-01-12T12:22:37.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3MAJXhgpvFdv1vDYKr9M5Yq4trgscv3mjVnhjq7W5oobtHDea3ZQGREYjPaAiNBZFjmmGiVjGkwGY4Sw9dqP7tRY",
+      "time": "2026-01-12T12:22:11.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "22vmvxHpEdnJwLhzZxUXjHrkofTGikWX1fm5s94mfJMU1V5DkT3Fu5meGmLp74MYggxKyBNho4ijaKThr1wKcUdx",
+      "time": "2026-01-12T12:21:16.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5SEg25s5g4a6EdVSi2vjgcXQiB4oUnd7GoayukLwApyeu2Bg4pSByitK44HYx7f1Sp3xYqPuoLbzveYcsG1sdv5e",
+      "time": "2026-01-12T12:20:50.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5rVeY9D1tiVFTww4ggmdrBjmSfoMozTVGqc9LjgWNzsoanzfh3eL7rjumsuyFt1BNdTu4R5j27s7ZhZdWm4MaxM2",
+      "time": "2026-01-12T12:20:48.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3W8pdxT1WmNqzpL7qLPMvkhNfUKB1ztSbegjpbNgCpdjQKcr8eMKumZzZ3Q3Fjfh3mnucCiF3eAmWugZVQenwMEh",
+      "time": "2026-01-09T20:06:07.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3L4VZhdmSets9mUW9nTn5YsgBQpNqGvViJ84ZcXme8tVQUWvTDZC4JuJcHEEnKuDTRGiHap4DYRDEvPuRTjUNXK5",
+      "time": "2026-01-09T20:05:15.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4uejhx4bcwLG8ByMMkDEZYDqtCxB1kCMn2vnYSh19iyCaAspnCcSsQTgCrpmXbxprdPuURuBy2z1LikTziopHA4f",
+      "time": "2026-01-09T15:07:35.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4ektbRnPWAHFgRc5EhCVpJaXpujG5pQBpVWVKRCQ5SXb7zXGeKbAwPLW5Fb2spantkmtve3PZ7y26EUirVRgJTpX",
+      "time": "2026-01-09T15:06:43.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5XxGucWzyEyFocpjPFgLmVCAPCBSoyC7f3HMdkqpmZEHtMmBfxczs9VfB38nZwQKDPZB5VE6VRTdcbcGCw8ZXB7z",
+      "time": "2026-01-09T14:14:44.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5ZWTYmmeWeZZHPugh2XRwLeen7FZVG4YXLUn3fkER4WyuNdrQaZe86Cvw2KD3hcuR6BKNDV6fsrxj4HdSxsQE6wX",
+      "time": "2026-01-09T14:13:31.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "YfCnYSBKYDzrBJVnsiytn4SBhAGjmqp8rGauoxxbwsEZT2EaT1VWa2XPAsHvvTJhBEn2t4ePQcbZKC8DrJmWVgZ",
+      "time": "2026-01-09T13:25:53.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5HCVqvyEWsb747aw6M3uh833raeYjmvVtXMD2WWWPY6JphqBx2AhT2CJjMSRjZmDeD7d8w2WArbFzmeajWgmReb4",
+      "time": "2026-01-09T13:25:02.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3AQR6ytsjsKtuQhvvpKp4sNtaPskrYDBNJVXW6FyJmDeDvEBGDrCEQFKCzNBWHxNkd47VMWWo95YxVcTBSfpxpbk",
+      "time": "2026-01-08T14:46:13.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2aahyjzkvxFkpezqiX8qJkhTnqnx282NTZatVGmkG9ts984P7s5CGToHeUEXSbwp6Fe6A48PR8LzRqGEjSNksBN4",
+      "time": "2026-01-08T14:45:19.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3cDxPTgCmGTRUvqgMZ4QxWSvRt4qHDebZBV3H1E3KUnSeUrsmbj7bNgdQq1bPMDLXaDtGUD8fB896VbsjYB3Hxp9",
+      "time": "2026-01-08T14:29:58.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5oMDWwvx3N69ymq59b7KxQK3fEWnmebo7Jvz4XJTyyKyNTgEQFMz79CzAWZz6owdYczkitxGpu5MX3dBFsH2H7hE",
+      "time": "2026-01-08T12:37:50.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4SkUr3Y3LC9TCFhq5FNZxQKeYFToDLNwW6VdcsF6jqoDB6Yzm1AsN3uEvDPRWQATVnHMHekKkRwwWcC4UKWJVke3",
+      "time": "2026-01-08T12:22:06.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4s1EfdJWotsbnihGS1XBe2qMWoTaVAsJx1ebjnJbqtyAgh7YwKFkAXHzdLbCihpVkp3aK2quBYyH4GSHBHq6i54J",
+      "time": "2026-01-08T12:21:15.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5a2CruQnRNnxyQB9Uey3tTPGswJeZBkqdS3oH512PX4vSboFmNcygoDpAGnfYN1XBVtD3dcQtivUjMVed9kaq8Ro",
+      "time": "2026-01-07T17:16:36.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3o7yXtRxkNL9sUke5BghPt7t227vxvVfwWEP6VWJKa4Jrue363nS3PixCXY159cjFaYwcmGpgvnH3mVQc6t1wTQR",
+      "time": "2026-01-07T17:15:48.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2bGFew6XUosWpEQQFevvBQRAZbRgTkenfTAcm13ELzWNBwNCgrqDaNwY9eU5aZFygW6UoDUbsbeR4MHjHJhykms9",
+      "time": "2026-01-07T17:15:24.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4BoYJwGwBweJwukroJJ4N5CmazzEzzkB3LpYMkXfnzxBWmGfm5mcZXwA1P4qg4stBtW5MPxFFWRFFJvBPWw1iRKq",
+      "time": "2026-01-07T17:14:52.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5ndQXK7PBAiCxR9bCiEbg7UYtf69kfinvLTfAhVuiP7AnJ1FC1G3oA7EJqQXkvU8PJBkzibcen39QbcKCSZdAcMf",
+      "time": "2026-01-07T10:49:08.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3sbSZC6DBF83mGCoKHfy635Xgs8KJ8m24TRd4QA7FrAxMoHkGmj5fRzVj6Rh3xyfmpWsV19wo3YjMGushptdpy5D",
+      "time": "2026-01-07T10:48:22.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2tKM9XoatX5h2HRLBzS6GueHm3iyQoLVtrvYfNAe8Csy861PjM1L4GvwGa2o6pfRsuaVERRkJNSAw827mYU2VRCQ",
+      "time": "2026-01-06T17:50:48.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "62ZS9wVqAKcfBt1mWgcrWSLByy9Cqst7TVvwrGqVr6Q2azGPmoEvrGATU7WkLZbLAE5oAZ9dM3ZJbrLzT1bqXM6b",
+      "time": "2026-01-06T17:49:58.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2pbAddKwaXS4p3gAQD5bC6FKJeiqzJyScDaA4Bp1LYa2P5xCjjF5HsH4oD3mb7diwpHie8kkx4bD51nuqQWYTS3t",
+      "time": "2026-01-06T16:46:51.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "62kzgk6CdgfRwNgmn96r12xeiNveg4MF1AZcij4U1thwooihpVwnYNnr9AHUadPgqN8aekHwifrDbfYHFCEzG9AV",
+      "time": "2026-01-06T16:45:50.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "chV4YJJ9MuM91j7pbEn1RBzxof7uPvVXVCtJaUMrkrABMtjCqaBumYJkSSTRQywvbC8RcpB5mbwBsXE1vfjwbmq",
+      "time": "2026-01-06T16:12:08.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5o6MdiMa9gZEVdMeRN3bTJJTidvm6oPVVLqeFkb2jzxKvotqHyeesct3USxSseUztvRC5o7Fvzkk1RmTnqQE8pWL",
+      "time": "2026-01-06T16:11:18.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "jcXiismMf3uqtbD1BdaFdsjoCePvkA4XZ2kCnUV81jNAnYukpu3nV8ircDuh9X2ChuiwB5fhr16UrbyRoqYxkqG",
+      "time": "2026-01-06T15:34:10.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5oQZ6HYQWmy63E1bGHk2q1tyXwCxhbEcY9goZkdkLaJtATnyBtVMCCPPFhjcFRoorCabMkUEFxp1L3WiZfpgV73A",
+      "time": "2026-01-06T14:51:00.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "27ggJZjZx8QktkacvvJYETRfdYDcptbnkqwu7ic3isbEbtkxiG6WmEFeFWgiyhyLBgbXQmbVHxikAeysKLB6bvkw",
+      "time": "2026-01-06T14:49:47.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3o64ZaFrPZxAaErKiHcgaLxtsNDkse6MCrcd12NfCNnBvLUj8vPAbsmmfLfCGouo9VqH9aczJiW72EvhJjmxgSRG",
+      "time": "2026-01-06T14:26:33.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3V8ML1gPh2P8MLJCrPQXYgdDfrzZEyUmwVu8VsXAffms17m89aiTT1AxSE2NtMyP9rfSZGiMb6kGmZVJKzK9xjVs",
+      "time": "2026-01-06T14:25:42.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2F7n6HKVfAKyH5ypEumyrEznRNENs9YjkQnh9nm4BzeQqJqg8TGiC9H2Gx251AfmHMv5fDwbgv9PjH96PTvF94bf",
+      "time": "2026-01-06T14:20:28.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "x3MshTwwKzrHsfWNRvi4Yf1EiM948MtcXQ7jkn6J8o72E3oPNCjFyFBA2UUnx2v4YPHRk2fGafHFspXkK8URZtr",
+      "time": "2026-01-06T14:20:25.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "nqpMUop3kq2ayYNNHGLowsYSiNbcwNGs7NQ8SJ4CNjq4nSEfmMXuS7ZLef5dw28QpuAWAhHewFDAsSh4Ni5E8Zd",
+      "time": "2026-01-06T13:11:42.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3ySb41oQa2snM5fgVLuY9RjWTkhGhT4d5K2BBjLUCGXAupgGKArTkqqDymYeJE5ErYoyJ46Dsp7wuWjLrtAadcGZ",
+      "time": "2026-01-06T13:10:48.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5gi3LYpvnj1bBrUz5xzzskbteSc3aaKsYRyv3YWtXFbnAvKs5Qcmj68S8wuDcNJqrwsCEFcFKFB68kudJcRbmB77",
+      "time": "2026-01-06T13:10:04.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2rRwNFT826MHBZyXERayaUaQt3c1Ywb3E9Chwtky11yKowUS5RBTKP4gJsJM1oXFRufZJYGcpPAv5iAC2JzPbEmn",
+      "time": "2026-01-06T12:58:41.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2w4WbdhmoMjq5wdpFhLSk5TpKZgwyWt2Nt1suBQe2Dr7wkzVkXNgdiDrCHwM2tdRxhqenZgu7UfeYZcEcHWhE6KJ",
+      "time": "2026-01-06T12:55:18.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2FSPVQV5cpPt7q974KcxaXWoY5xKK6yM99FHPcGh21u4UDthsDdJ4XjyRoYbEDN82Yjm4uWPaHpufdfJG1CSTSRP",
+      "time": "2026-01-06T12:55:03.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4pTjD1fNTMH7vYfqjYgZhjnf44hPvqWcufhMzVLFkCs1DDCSByqheRpq1EiBXDReu7BxPyvURvvnDEbWRki2gdx1",
+      "time": "2026-01-06T12:53:58.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5waaohEXTqg9EGFyBXfG5gTNHTMjeKbGUTW6vwVGCjumn9wiRa5aLDgEn1BDLzsz6UZqiD1NpmnfxzdbD8VRosER",
+      "time": "2026-01-06T12:53:41.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2imqSDnGSffr7HTN6tw3AzYbcF1nLXpjAeAcensoenxmSKc8SdKeMDSmdjbMFjKM16Tr9xLBFSoBWZBabDRZpXBz",
+      "time": "2026-01-06T12:53:16.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2v5WpUttHP53ZUFpAUaKWpo8YNWsLgH9roxKbrrmY6p44Z2heqCPQJLNXfrouxCjS9RZpYkk4xbKzKxbxGohGAz7",
+      "time": "2026-01-06T12:53:01.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4qq3L7fZkmBkcbNpDBbSgygZJtbErZcFZTQ66X8arXetAfW59f7ggVoWeani1QkkgZiRqQDpFnBqd7T1TJtLGZpv",
+      "time": "2026-01-06T12:52:45.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "hc9hfs6MKSR87PTyAShZQdnh4A5LMeLaQ31KJmpmiRxvri2QZvCoYhZMKcqyKEeRSXFTYsuZc6akJSvzdyfdxSh",
+      "time": "2026-01-06T12:52:28.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4pWRbJh7xTYbTQcmL8UveFPcnFyGz8rrgVCxsPbjoHEQeD1fdPnqgHCmXjQG24wm4HQuAmLVsAsGobY6rd5u1cXL",
+      "time": "2026-01-05T01:11:21.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2mYHB17oMejYMaQsZySEPhPkNnrD3ghWRNKWZeffuNPzFeuPub2d7nVWQk6C12J855oLuZ56Rzh3TKX3omB8j5Yr",
+      "time": "2025-12-31T17:57:20.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "55yYebyGDa1dhvLm8rb1fgyRMjAHNGYZSZFqZEkW4m7jjmT1Seqm6E7qNX4wBJbDJH7p27Db2rQPH7sQ8HWjxn4s",
+      "time": "2025-12-31T00:05:48.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3qEN6xC6PAbMKdJQ1LjkLjUqvPD99tPbkbdUwcTZ889iRCmXELMzYPqMj1F9cqpzJoYsBgXYuFHkN5NsF8oRtdJe",
+      "time": "2025-12-26T01:34:03.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    }
+  ]
+}
