@@ -14,6 +14,21 @@ const config: Config = {
   WALLET: new PublicKey("HPeLmNJgQdZ2yzxqiDY5v1EBW8ADF1Fx5Mt4xArjPbuX"),
 };
 
+const LOG_ACTIVITY_TO_FILE = true;
+const WINDOW_DEFS = {
+  "1h": 1 * 60 * 60,
+  "24h": 24 * 60 * 60,
+  // !! WARN also restore `WINDOW_ORDER`. Note: 24h+ uses a lot of time + rpc resources
+
+  //  "7d": 7 * 24 * 60 * 60,
+  //  "30d": 30 * 24 * 60 * 60,
+};
+const WINDOW_ORDER = [
+  "1h",
+  "24h",
+  // "7d", "30d"
+] as const;
+
 async function main() {
   const user = commonSetup(true, config.PROGRAM_ID, "/.config/solana/id.json");
   const connection = user.connection;
@@ -56,17 +71,35 @@ async function main() {
   const LENDING_ACCOUNT_LIQUIDATE_DISCRIMINATOR = [
     214, 169, 151, 213, 251, 167, 86, 219,
   ];
+  const LENDING_ACCOUNT_WITHDRAW_DISCRIMINATOR = [
+    36, 72, 74, 19, 210, 210, 192, 192,
+  ];
+  const LENDING_ACCOUNT_REPAY_DISCRIMINATOR = [
+    79, 209, 172, 177, 222, 51, 173, 151,
+  ];
+  const TOKEN_PROGRAM_ID = new PublicKey(
+    "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+  );
+  const TOKEN_2022_PROGRAM_ID = new PublicKey(
+    "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
+  );
+  const BANK_ACCOUNT_INDEX = 3;
 
   const nowSec = Math.floor(Date.now() / 1000);
-  const windows = {
-    "1h": 1 * 60 * 60,
-    "24h": 24 * 60 * 60,
-    "7d": 7 * 24 * 60 * 60,
-    "30d": 30 * 24 * 60 * 60,
-  };
-  const windowOrder = ["1h", "24h", "7d", "30d"] as const;
+  const windows = WINDOW_DEFS;
+  const windowOrder = WINDOW_ORDER;
 
-  const cutoff30d = nowSec - windows["30d"];
+  const windowSeconds = windowOrder
+    .map((label) => windows[label])
+    .filter((value): value is number => typeof value === "number");
+  if (windowSeconds.length === 0) {
+    throw new Error(
+      "WINDOW_DEFS/WINDOW_ORDER must include at least one window.",
+    );
+  }
+  const maxWindowSeconds = Math.max(...windowSeconds);
+  const maxWindowLabel = windowOrder[windowSeconds.indexOf(maxWindowSeconds)];
+  const cutoffMax = nowSec - maxWindowSeconds;
   const signatures = [];
   let before: string | undefined;
 
@@ -82,13 +115,13 @@ async function main() {
     signatures.push(...batch);
     before = batch[batch.length - 1].signature;
     const oldestBlockTime = batch[batch.length - 1].blockTime ?? 0;
-    if (oldestBlockTime && oldestBlockTime < cutoff30d) {
+    if (oldestBlockTime && oldestBlockTime < cutoffMax) {
       break;
     }
   }
 
   const candidates = signatures.filter(
-    (sig) => sig.blockTime && sig.blockTime >= cutoff30d,
+    (sig) => sig.blockTime && sig.blockTime >= cutoffMax,
   );
 
   const matches: {
@@ -110,6 +143,8 @@ async function main() {
   }[] = [];
   const titanTxs: { signature: string; blockTime: number; success: boolean }[] =
     [];
+  const withdrawTotals = new Map<string, bigint>();
+  const repayTotals = new Map<string, bigint>();
 
   const matchesDiscriminator = (data: Uint8Array, discriminator: number[]) => {
     if (data.length < discriminator.length) {
@@ -121,6 +156,33 @@ async function main() {
       }
     }
     return true;
+  };
+  const readU64LE = (data: Uint8Array, offset: number) => {
+    let value = 0n;
+    for (let i = 0; i < 8; i += 1) {
+      value |= BigInt(data[offset + i]) << (8n * BigInt(i));
+    }
+    return value;
+  };
+  const parseTokenTransferAmount = (data: Uint8Array) => {
+    if (data.length < 9) {
+      return null;
+    }
+    const instruction = data[0];
+    if (instruction === 3 && data.length >= 9) {
+      return readU64LE(data, 1);
+    }
+    if (instruction === 12 && data.length >= 10) {
+      return readU64LE(data, 1);
+    }
+    return null;
+  };
+  const addTotal = (
+    totals: Map<string, bigint>,
+    bank: string,
+    amount: bigint,
+  ) => {
+    totals.set(bank, (totals.get(bank) ?? 0n) + amount);
   };
 
   for (const sigInfo of candidates) {
@@ -146,9 +208,14 @@ async function main() {
     }
 
     const instructionNames: string[] = [];
+    const withdrawRepayByIndex = new Map<
+      number,
+      { type: "withdraw" | "repay"; bank: PublicKey }
+    >();
+    let hasStartLiquidation = false;
     let hasJupiter = false;
     let hasTitan = false;
-    for (const ix of message.compiledInstructions) {
+    for (const [ixIndex, ix] of message.compiledInstructions.entries()) {
       if (ix.programIdIndex >= accountKeys.length) {
         continue;
       }
@@ -165,10 +232,80 @@ async function main() {
       const data = typeof ix.data === "string" ? bs58.decode(ix.data) : ix.data;
       if (matchesDiscriminator(data, START_LIQUIDATION_DISCRIMINATOR)) {
         instructionNames.push("startLiquidation");
+        hasStartLiquidation = true;
       } else if (
         matchesDiscriminator(data, LENDING_ACCOUNT_LIQUIDATE_DISCRIMINATOR)
       ) {
         instructionNames.push("lendingAccountLiquidate");
+      } else if (
+        matchesDiscriminator(data, LENDING_ACCOUNT_WITHDRAW_DISCRIMINATOR)
+      ) {
+        const accountIndexes =
+          (ix as { accountKeyIndexes?: number[]; accounts?: number[] })
+            .accountKeyIndexes ?? (ix as { accounts?: number[] }).accounts;
+        const bankIndex =
+          accountIndexes && accountIndexes.length > BANK_ACCOUNT_INDEX
+            ? accountIndexes[BANK_ACCOUNT_INDEX]
+            : undefined;
+        const bankKey =
+          bankIndex === undefined ? undefined : accountKeys[bankIndex];
+        if (bankKey) {
+          withdrawRepayByIndex.set(ixIndex, {
+            type: "withdraw",
+            bank: bankKey,
+          });
+        }
+      } else if (
+        matchesDiscriminator(data, LENDING_ACCOUNT_REPAY_DISCRIMINATOR)
+      ) {
+        const accountIndexes =
+          (ix as { accountKeyIndexes?: number[]; accounts?: number[] })
+            .accountKeyIndexes ?? (ix as { accounts?: number[] }).accounts;
+        const bankIndex =
+          accountIndexes && accountIndexes.length > BANK_ACCOUNT_INDEX
+            ? accountIndexes[BANK_ACCOUNT_INDEX]
+            : undefined;
+        const bankKey =
+          bankIndex === undefined ? undefined : accountKeys[bankIndex];
+        if (bankKey) {
+          withdrawRepayByIndex.set(ixIndex, { type: "repay", bank: bankKey });
+        }
+      }
+    }
+
+    if (hasStartLiquidation && tx.meta?.innerInstructions?.length) {
+      for (const inner of tx.meta.innerInstructions) {
+        const parent = withdrawRepayByIndex.get(inner.index);
+        if (!parent) {
+          continue;
+        }
+        for (const innerIx of inner.instructions) {
+          if (innerIx.programIdIndex >= accountKeys.length) {
+            continue;
+          }
+          const innerProgram = accountKeys[innerIx.programIdIndex];
+          if (
+            !innerProgram ||
+            (!innerProgram.equals(TOKEN_PROGRAM_ID) &&
+              !innerProgram.equals(TOKEN_2022_PROGRAM_ID))
+          ) {
+            continue;
+          }
+          const data =
+            typeof innerIx.data === "string"
+              ? bs58.decode(innerIx.data)
+              : innerIx.data;
+          const amount = parseTokenTransferAmount(data);
+          if (amount === null) {
+            continue;
+          }
+          const bankKey = parent.bank.toBase58();
+          if (parent.type === "withdraw") {
+            addTotal(withdrawTotals, bankKey, amount);
+          } else {
+            addTotal(repayTotals, bankKey, amount);
+          }
+        }
       }
     }
 
@@ -223,7 +360,7 @@ async function main() {
 
   console.log(
     paint(
-      `Matched ${matches.length} liquidation txs in the last 30d (wallet signer only).`,
+      `Matched ${matches.length} liquidation txs in the last ${maxWindowLabel} (wallet signer only).`,
       "cyan",
     ),
   );
@@ -294,26 +431,50 @@ async function main() {
     ],
   );
 
-  const activityDir = path.join("logs", "activity");
-  fs.mkdirSync(activityDir, { recursive: true });
-  const safeTimestamp = new Date().toISOString().replace(/[:.]/g, "-");
-  const activityPath = path.join(
-    activityDir,
-    `${config.WALLET.toBase58()}_${safeTimestamp}.json`,
-  );
-  const activityPayload = {
-    wallet: config.WALLET.toBase58(),
-    generatedAt: new Date().toISOString(),
-    events: activityEvents,
-  };
-  fs.writeFileSync(activityPath, JSON.stringify(activityPayload, null, 2));
+  const formatTotals = (totals: Map<string, bigint>) =>
+    Array.from(totals.entries())
+      .sort((a, b) => (a[1] > b[1] ? -1 : a[1] < b[1] ? 1 : 0))
+      .map(([bank, amount]) => [bank, amount.toString()]);
+  const totalsToObject = (totals: Map<string, bigint>) =>
+    Array.from(totals.entries()).reduce<Record<string, string>>(
+      (acc, [bank, amount]) => {
+        acc[bank] = amount.toString();
+        return acc;
+      },
+      {},
+    );
+
   console.log("");
-  console.log(
-    paint(
-      `Wrote ${activityEvents.length} activity rows to ${activityPath}`,
-      "cyan",
-    ),
-  );
+  console.log(paint("Withdraw totals (token amount, raw):", "yellow"));
+  printTable(["bank", "amount"], formatTotals(withdrawTotals));
+  console.log("");
+  console.log(paint("Repay totals (token amount, raw):", "yellow"));
+  printTable(["bank", "amount"], formatTotals(repayTotals));
+
+  if (LOG_ACTIVITY_TO_FILE) {
+    const activityDir = path.join("logs", "activity");
+    fs.mkdirSync(activityDir, { recursive: true });
+    const safeTimestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const activityPath = path.join(
+      activityDir,
+      `${config.WALLET.toBase58()}_${safeTimestamp}.json`,
+    );
+    const activityPayload = {
+      wallet: config.WALLET.toBase58(),
+      generatedAt: new Date().toISOString(),
+      events: activityEvents,
+      withdraw: totalsToObject(withdrawTotals),
+      repay: totalsToObject(repayTotals),
+    };
+    fs.writeFileSync(activityPath, JSON.stringify(activityPayload, null, 2));
+    console.log("");
+    console.log(
+      paint(
+        `Wrote ${activityEvents.length} activity rows to ${activityPath}`,
+        "cyan",
+      ),
+    );
+  }
 }
 
 main().catch((err) => {
