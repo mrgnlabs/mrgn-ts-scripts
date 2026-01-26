@@ -34,8 +34,8 @@ type BankOracleConfig = {
 /** One entry per bank to update */
 const configs: BankOracleConfig[] = [
   {
-    bank: new PublicKey("FWZbU8TSPyjyrWQASzujo7FjgF9f3GEkjaFAtbKWqjMH"),
-    price: 1.1,
+    bank: new PublicKey("2ZScBCNKfE6X6fGcBtB2uBuvZqUE3cjKQmRv8wVXTN5B"),
+    price: 0.0001,
   },
   // ...More entries here as needed. The limit even without using LUTs is fairly high (at least 6)
 ];
@@ -46,7 +46,7 @@ async function main() {
     configCommon.PROGRAM_ID,
     "/keys/zerotrade_admin.json",
     configCommon.MULTISIG,
-    "current"
+    "current",
   );
   const program = user.program;
   const connection = user.connection;
@@ -71,7 +71,7 @@ async function main() {
       const signature = await sendAndConfirmTransaction(
         connection,
         transaction,
-        [user.wallet.payer]
+        [user.wallet.payer],
       );
       console.log("Transaction signature:", signature);
     } catch (error) {

@@ -14,10 +14,11 @@ const config: Config = {
   WALLET: new PublicKey("HPeLmNJgQdZ2yzxqiDY5v1EBW8ADF1Fx5Mt4xArjPbuX"),
 };
 
-const LOG_ACTIVITY_TO_FILE = true;
+const LOG_ACTIVITY_TO_FILE = false;
 const WINDOW_DEFS = {
   "1h": 1 * 60 * 60,
   "24h": 24 * 60 * 60,
+  "3d": 3 * 24 * 60 * 60,
   // !! WARN also restore `WINDOW_ORDER`. Note: 24h+ uses a lot of time + rpc resources
 
   //  "7d": 7 * 24 * 60 * 60,
@@ -26,6 +27,7 @@ const WINDOW_DEFS = {
 const WINDOW_ORDER = [
   "1h",
   "24h",
+  "3d",
   // "7d", "30d"
 ] as const;
 

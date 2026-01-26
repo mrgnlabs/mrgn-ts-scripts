@@ -13,7 +13,7 @@ import { commonSetup } from "../lib/common-setup";
 /**
  * If true, send the txs. If false, output the unsigned b58 v0 txs to console.
  */
-const sendTx = true;
+const sendTx = false;
 
 export type BankConfigPair = {
   bank: PublicKey;
@@ -37,19 +37,20 @@ export type Config = {
 };
 
 const config: Config = {
-  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-  ADMIN: new PublicKey("6DdJqQYD8AizuXiCkbn19LiyWRwUsRMzy2Sgyoyasyj7"),
+  PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
+  ADMIN: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
   //MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 
   LUT: new PublicKey("CQ8omkUwDtsszuJLo9grtXCeEyDU4QqBLRv9AjRDaUZ3"),
+  MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 
   // One tx per entry in this array:
   BANKS: [
     {
-      bank: new PublicKey("2oEWxmFg8572sHeVaQY2uL81T3ujv29gHdxVeNQbXpPV"),
+      bank: new PublicKey("2ZScBCNKfE6X6fGcBtB2uBuvZqUE3cjKQmRv8wVXTN5B"),
       config: {
-        assetWeightInit: bigNumberToWrappedI80F48(0.1),
-        assetWeightMaint: bigNumberToWrappedI80F48(0.1),
+        assetWeightInit: null, // bigNumberToWrappedI80F48(0.1)
+        assetWeightMaint: null,
         liabilityWeightInit: null,
         liabilityWeightMaint: null,
         depositLimit: null,
@@ -67,7 +68,7 @@ const config: Config = {
           hundredUtilRate: null,
           points: null,
         },
-        operationalState: { operational: {} },
+        operationalState: { reduceOnly: {} },
         oracleMaxAge: null,
         oracleMaxConfidence: null,
         permissionlessBadDebtSettlement: null,
