@@ -15,11 +15,12 @@ import { commonSetup } from "../lib/common-setup";
 import { OperationalStateRaw, RiskTierRaw } from "@mrgnlabs/marginfi-client-v2";
 import { aprToU32, utilToU32 } from "../lib/utils";
 import { deriveBankWithSeed } from "./common/pdas";
+import { I80F48_ONE } from "./utils";
 
 /**
  * If true, send the tx. If false, output the unsigned b58 tx to console.
  */
-const sendTx = false;
+const sendTx = true;
 
 const ASSET_TAG_DEFAULT = 0;
 
@@ -49,14 +50,14 @@ type Config = {
 };
 
 const config: Config = {
-  PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  GROUP_KEY: new PublicKey("4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8"),
-  ORACLE: new PublicKey("AEq1mcpesN4u9CSd8uUQbQar6qLghNQx7rnhdQhAnUyn"),
-  ORACLE_TYPE: ORACLE_TYPE_SWB,
-  ADMIN: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
-  BANK_MINT: new PublicKey("Dso1bDeDjCQxTrWHqUUi63oBvV7Mdm6WaobLbQ7gnPQ"),
+  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
+  GROUP_KEY: new PublicKey("FCPfpHA69EbS8f9KKSreTRkXbzFpunsKuYf5qNmnJjpo"),
+  ORACLE: new PublicKey("DyYBBWEi9xZvgNAeMDCiFnmC1U9gqgVsJDXkL5WETpoX"),
+  ORACLE_TYPE: ORACLE_TYPE_PYTH,
+  ADMIN: new PublicKey("mfC1LoEk4mpM5yx1LjwR9QLZQ49AitxxWkK5Aciw7ZC"),
+  BANK_MINT: new PublicKey("USDSwr9ApdHk5bvJKMjzff41FfuX8bSxdKcR81vTwcA"),
   SEED: 0,
-  MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
+  //MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 };
 
 const rate: InterestRateConfig1_7 = {
@@ -79,16 +80,16 @@ const rate: InterestRateConfig1_7 = {
 };
 
 const bankConfig: BankConfig = {
-  assetWeightInit: bigNumberToWrappedI80F48(0.65),
-  assetWeightMaint: bigNumberToWrappedI80F48(0.8),
+  assetWeightInit: I80F48_ONE,
+  assetWeightMaint: I80F48_ONE,
   liabilityWeightInit: bigNumberToWrappedI80F48(1.3),
   liabilityWeightMaint: bigNumberToWrappedI80F48(1.2),
-  depositLimit: new BN(20_000 * 10 ** 9),
+  depositLimit: new BN(10 ** 13),
   interestRateConfig: rate,
   operationalState: { operational: {} },
-  borrowLimit: new BN(2_500 * 10 ** 9),
+  borrowLimit: new BN(10 ** 13),
   riskTier: { collateral: {} },
-  totalAssetValueInitLimit: new BN(5_000_000),
+  totalAssetValueInitLimit: new BN(10 ** 13),
   oracleMaxAge: 30,
   assetTag: 0,
   oracleMaxConfidence: 0,

@@ -3,6 +3,11 @@ import {
   Transaction,
   sendAndConfirmTransaction,
   AccountMeta,
+  TransactionInstruction,
+  ComputeBudgetProgram,
+  AddressLookupTableAccount,
+  TransactionMessage,
+  VersionedTransaction,
 } from "@solana/web3.js";
 import { BN } from "@coral-xyz/anchor";
 import {
@@ -17,8 +22,10 @@ import {
   deriveDriftSignerPDA,
 } from "./lib/utils";
 import { BankAndOracles } from "../../lib/utils";
-import { commonSetup } from "../../lib/common-setup";
+import { commonSetup, registerKaminoProgram } from "../../lib/common-setup";
 import { bs58 } from "@switchboard-xyz/common";
+import { simpleRefreshReserve } from "../kamino/ixes-common";
+import { KLEND_PROGRAM_ID } from "../kamino/kamino-types";
 
 /**
  * If true, send the tx. If false, output the unsigned b58 tx to console.
@@ -41,6 +48,11 @@ type Config = {
   MULTISIG_PAYER?: PublicKey; // May be omitted if not using squads
   NEW_REMAINING: BankAndOracles;
   ADD_COMPUTE_UNITS: boolean;
+
+  // Necessary if the user has Kamino positions and the health would not be good without accounting for them
+  KAMINO_RESERVE?: PublicKey;
+  KAMINO_MARKET?: PublicKey;
+  KAMINO_ORACLE?: PublicKey;
 };
 
 const config: Config = {
@@ -79,6 +91,7 @@ export async function withdrawDrift(
     config.MULTISIG_PAYER,
     version,
   );
+  registerKaminoProgram(user, KLEND_PROGRAM_ID.toString());
 
   const connection = user.connection;
   const wallet = user.wallet;
@@ -86,6 +99,17 @@ export async function withdrawDrift(
 
   const bank = await program.account.bank.fetch(config.BANK);
   const mint = bank.mint;
+
+  let luts: AddressLookupTableAccount[] = [];
+  const lutLookup = await connection.getAddressLookupTable(config.LUT);
+  if (!lutLookup || !lutLookup.value) {
+    console.warn(
+      `Warning: LUT ${config.LUT.toBase58()} not found on-chain. Proceeding without it.`,
+    );
+    luts = [];
+  } else {
+    luts = [lutLookup.value];
+  }
 
   console.log("=== Drift Withdraw ===\n");
   console.log("Bank mint:", mint);
@@ -132,6 +156,8 @@ export async function withdrawDrift(
   );
   console.log();
 
+  let instructions: TransactionInstruction[] = [];
+
   const ix = await program.methods
     .driftWithdraw(config.AMOUNT, config.WITHDRAW_ALL)
     .accounts({
@@ -153,50 +179,60 @@ export async function withdrawDrift(
     .remainingAccounts(oracleMeta)
     .instruction();
 
-  const transaction = new Transaction().add(ix);
-
-  // Simulate
-  transaction.feePayer = wallet.publicKey;
-  const { blockhash } = await connection.getLatestBlockhash();
-  transaction.recentBlockhash = blockhash;
-
-  console.log("Simulating driftWithdraw...");
-  const simulation = await connection.simulateTransaction(transaction);
-
-  console.log("\nProgram Logs:");
-  simulation.value.logs?.forEach((log) => console.log("  " + log));
-
-  if (simulation.value.err) {
-    console.log("\nSimulation failed:");
-    console.log(JSON.stringify(simulation.value.err, null, 2));
-    process.exit(1);
+  if (config.ADD_COMPUTE_UNITS) {
+    instructions.push(
+      ComputeBudgetProgram.setComputeUnitLimit({ units: 1_400_000 }),
+    );
   }
 
-  console.log("\nSimulation successful!");
-  console.log("Compute units:", simulation.value.unitsConsumed);
-  console.log();
+  if (config.KAMINO_RESERVE) {
+    instructions.push(
+      await simpleRefreshReserve(
+        user.kaminoProgram,
+        config.KAMINO_RESERVE,
+        config.KAMINO_MARKET,
+        config.KAMINO_ORACLE,
+      ),
+    );
+  }
+  instructions.push(ix);
+
+  const { blockhash, lastValidBlockHeight } =
+    await connection.getLatestBlockhash();
 
   if (sendTx) {
     try {
       console.log("Executing transaction...");
-      const signature = await sendAndConfirmTransaction(
-        connection,
-        transaction,
-        [wallet.payer],
+      const v0Message = new TransactionMessage({
+        payerKey: user.wallet.publicKey,
+        recentBlockhash: blockhash,
+        instructions,
+      }).compileToV0Message(luts);
+      const v0Tx = new VersionedTransaction(v0Message);
+
+      v0Tx.sign([user.wallet.payer]);
+      const signature = await connection.sendTransaction(v0Tx, {
+        maxRetries: 2,
+      });
+      await connection.confirmTransaction(
+        { signature, blockhash, lastValidBlockHeight },
+        "confirmed",
       );
+
       console.log("Signature:", signature);
       console.log("✓ Withdrawal successful!");
     } catch (error) {
       console.error("Transaction failed:", error);
     }
   } else {
-    transaction.feePayer = config.MULTISIG_PAYER; // Set the fee payer to Squads wallet
-    const { blockhash } = await connection.getLatestBlockhash();
-    transaction.recentBlockhash = blockhash;
-    const serializedTransaction = transaction.serialize({
-      requireAllSignatures: false,
-      verifySignatures: false,
-    });
+    const v0Message = new TransactionMessage({
+      payerKey: config.MULTISIG_PAYER,
+      recentBlockhash: blockhash,
+      instructions,
+    }).compileToV0Message(luts);
+    const v0Tx = new VersionedTransaction(v0Message);
+
+    const serializedTransaction = v0Tx.serialize();
     const base58Transaction = bs58.encode(serializedTransaction);
     console.log("deposit to: " + config.BANK);
     console.log("by account: " + config.ACCOUNT);

@@ -38,8 +38,8 @@ export type Config = {
 };
 
 const config: Config = {
-  PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  ADMIN: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
+  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
+  ADMIN: new PublicKey("mfC1LoEk4mpM5yx1LjwR9QLZQ49AitxxWkK5Aciw7ZC"),
   //MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 
   LUT: new PublicKey("CQ8omkUwDtsszuJLo9grtXCeEyDU4QqBLRv9AjRDaUZ3"),
@@ -48,10 +48,10 @@ const config: Config = {
   // One tx per entry in this array:
   BANKS: [
     {
-      bank: new PublicKey("2ZScBCNKfE6X6fGcBtB2uBuvZqUE3cjKQmRv8wVXTN5B"),
+      bank: new PublicKey("8kVdNTKro2eaFvM1JTfo5d3WFbf98Xz9SNxWbgZadgvK"),
       config: {
-        assetWeightInit: null, // bigNumberToWrappedI80F48(0.1)
-        assetWeightMaint: null,
+        assetWeightInit: bigNumberToWrappedI80F48(0.8),
+        assetWeightMaint: bigNumberToWrappedI80F48(0.9),
         liabilityWeightInit: null,
         liabilityWeightMaint: null,
         depositLimit: null,
@@ -113,7 +113,7 @@ export function bankConfigOptDefault(): BankConfigOptRaw {
 }
 
 async function main() {
-  await configBank(sendTx, config, "/.config/stage/id.json");
+  await configBank(sendTx, config, "/keys/staging-deploy.json");
 }
 
 export async function configBank(
