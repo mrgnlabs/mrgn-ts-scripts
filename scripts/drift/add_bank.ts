@@ -133,8 +133,8 @@ export async function addDriftBank(
   // Build drift bank config
   const driftConfig: DriftConfigCompact = {
     oracle: config.ORACLE,
-    assetWeightInit: bigNumberToWrappedI80F48(0.9), // 90%
-    assetWeightMaint: bigNumberToWrappedI80F48(0.95), // 95%
+    assetWeightInit: bigNumberToWrappedI80F48(0.65), // 65%
+    assetWeightMaint: bigNumberToWrappedI80F48(0.8), // 80%
     depositLimit: new BN(config.DEPOSIT_LIMIT ?? 10_000_000_000),
     oracleSetup: config.ORACLE_SETUP,
     operationalState: {
@@ -143,11 +143,11 @@ export async function addDriftBank(
     riskTier: {
       collateral: {},
     },
-    configFlags: 1, // (PYTH_PUSH_MIGRATED_DEPRECATED)
+    configFlags: 0,
     totalAssetValueInitLimit: new BN(
       config.TOTAL_ASSET_VALUE_INIT_LIMIT ?? 10_000_000_000,
     ),
-    oracleMaxAge: 300,
+    oracleMaxAge: 30,
     oracleMaxConfidence: 0, // Default: 10% confidence
   };
 
@@ -253,7 +253,7 @@ export async function addDriftBank(
     })
     .instruction();
 
-  const transaction = new Transaction().add(addBankIx, initUserIx);
+  const transaction = new Transaction().add(addBankIx);
 
   // Simulate
   transaction.feePayer = feePayer;
