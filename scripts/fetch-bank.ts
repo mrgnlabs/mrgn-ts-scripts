@@ -24,7 +24,7 @@ const config: Config = {
     // new PublicKey("HmpMfL8942u22htC4EMiWgLX931g3sacXFR6KjuLgKLV"), // usdt
     // new PublicKey("8UEiPmgZHXXEDrqLS3oiTxQxTbeYTtPbeMBxAd2XGbpu"), // py
     // new PublicKey("FDsf8sj6SoV313qrA91yms3u5b3P4hBxEPvanVs8LtJV"), // usds
-    new PublicKey("2ZScBCNKfE6X6fGcBtB2uBuvZqUE3cjKQmRv8wVXTN5B"),
+    new PublicKey("8W3GgWFFnHdd98GKGzvNNi9Wzjoq2CU4wW6cHz6cKxk1"),
   ],
 };
 
