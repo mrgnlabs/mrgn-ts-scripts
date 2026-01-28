@@ -34,7 +34,7 @@ import { bigNumberToWrappedI80F48 } from "@mrgnlabs/mrgn-common";
 /**
  * If true, send the tx. If false, output the unsigned b58 tx to console.
  */
-const sendTx = false;
+const sendTx = true;
 
 type Config = {
   PROGRAM_ID: string;
@@ -81,11 +81,11 @@ async function main() {
   console.log("Bank mint:", config.BANK_MINT);
   console.log("Drift market index:", config.DRIFT_MARKET_INDEX);
   console.log();
-  config.ADMIN = new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw");
-  config.FEE_PAYER = new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw");
+  config.ADMIN = new PublicKey("mfC1LoEk4mpM5yx1LjwR9QLZQ49AitxxWkK5Aciw7ZC");
+  config.FEE_PAYER = new PublicKey("mfC1LoEk4mpM5yx1LjwR9QLZQ49AitxxWkK5Aciw7ZC");
   config.MULTISIG_PAYER = new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw");
 
-  await addDriftBank(sendTx, config, "/keys/staging-deploy.json");
+  await addDriftBank(sendTx, config, "/.keys/staging-deploy.json");
 }
 
 // (SOL, USDC, USDS, PYUSD, dSOL)
@@ -189,8 +189,8 @@ export async function addDriftBank(
     isWritable: false,
   };
 
-  const admin = config.ADMIN ?? wallet.publicKey;
-  const feePayer = config.FEE_PAYER ?? admin;
+  const admin = wallet.publicKey;
+  const feePayer = config.FEE_PAYER;
 
   const addBankIx = await program.methods
     .lendingPoolAddBankDrift(driftConfig, config.SEED)
@@ -253,7 +253,7 @@ export async function addDriftBank(
     })
     .instruction();
 
-  const transaction = new Transaction().add(addBankIx);
+  const transaction = new Transaction().add(initUserIx);
 
   // Simulate
   transaction.feePayer = feePayer;
