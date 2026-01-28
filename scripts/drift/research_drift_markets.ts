@@ -1,5 +1,5 @@
 import { Connection, PublicKey, Keypair } from "@solana/web3.js";
-import { Program, AnchorProvider, Wallet, BN, utils } from "@coral-xyz/anchor";
+import { Program, AnchorProvider, Wallet } from "@coral-xyz/anchor";
 import { TOKEN_PROGRAM_ID, TOKEN_2022_PROGRAM_ID } from "@solana/spl-token";
 import { readFileSync } from "fs";
 import { join } from "path";
@@ -9,7 +9,9 @@ const bs58 = require("bs58");
 // Load environment variables
 dotenv.config({ path: join(__dirname, "../../.env.api") });
 
-const DRIFT_PROGRAM_ID = new PublicKey("dRiftyHA39MWEi3m9aunc5MzRF1JYuBsbn6VPcn33UH");
+const DRIFT_PROGRAM_ID = new PublicKey(
+  "dRiftyHA39MWEi3m9aunc5MzRF1JYuBsbn6VPcn33UH",
+);
 
 interface SpotMarketInfo {
   marketIndex: number;
@@ -49,7 +51,9 @@ async function main() {
   console.log("Fetching all Drift spot markets...\n");
 
   // The discriminator for SpotMarket accounts
-  const spotMarketDiscriminator = Buffer.from([100, 177, 8, 107, 168, 65, 65, 39]);
+  const spotMarketDiscriminator = Buffer.from([
+    100, 177, 8, 107, 168, 65, 65, 39,
+  ]);
 
   // Get all program accounts with SpotMarket discriminator
   const accounts = await connection.getProgramAccounts(DRIFT_PROGRAM_ID, {
@@ -72,7 +76,7 @@ async function main() {
       // Decode the account data
       const decoded = program.coder.accounts.decode(
         "SpotMarket",
-        account.account.data
+        account.account.data,
       );
 
       // Decode the name (it's a 32-byte array)
@@ -98,7 +102,7 @@ async function main() {
       let tokenProgram = "Unknown";
       try {
         const mintAccount = await connection.getAccountInfo(
-          new PublicKey(decoded.mint)
+          new PublicKey(decoded.mint),
         );
         if (mintAccount) {
           if (mintAccount.owner.equals(TOKEN_2022_PROGRAM_ID)) {
@@ -149,14 +153,14 @@ async function main() {
   // Print summary table
   console.log("=== ALL DRIFT SPOT MARKETS ===\n");
   console.log(
-    "Index | Name                  | Oracle Type        | Token Program | Decimals | Mint"
+    "Index | Name                  | Oracle Type        | Token Program | Decimals | Mint",
   );
   console.log(
-    "------|-----------------------|--------------------|--------------|---------|---------"
+    "------|-----------------------|--------------------|--------------|---------|---------",
   );
   markets.forEach((m) => {
     console.log(
-      `${m.marketIndex.toString().padEnd(5)} | ${m.name.padEnd(21)} | ${m.oracleSource.padEnd(18)} | ${m.tokenProgram.padEnd(12)} | ${m.decimals.toString().padEnd(8)} | ${m.mint}`
+      `${m.marketIndex.toString().padEnd(5)} | ${m.name.padEnd(21)} | ${m.oracleSource.padEnd(18)} | ${m.tokenProgram.padEnd(12)} | ${m.decimals.toString().padEnd(8)} | ${m.mint}`,
     );
   });
 
@@ -184,19 +188,26 @@ async function main() {
   console.log("\n\n=== RECOMMENDED CANDIDATES FOR MARGINFI INTEGRATION ===\n");
 
   // Filter for Pyth Pull oracles (preferred)
-  const pythPullMarkets = markets.filter(
-    (m) => m.oracleSource === "PythPull"
-  );
+  const pythPullMarkets = markets.filter((m) => m.oracleSource === "PythPull");
 
   // Filter for Token-2022 assets
   const token2022Markets = markets.filter(
-    (m) => m.tokenProgram === "Token-2022"
+    (m) => m.tokenProgram === "Token-2022",
   );
 
   // Popular assets
-  const popularAssets = ["USDC", "SOL", "USDT", "JitoSOL", "mSOL", "bSOL", "JLP", "PYUSD"];
+  const popularAssets = [
+    "USDC",
+    "SOL",
+    "USDT",
+    "JitoSOL",
+    "mSOL",
+    "bSOL",
+    "JLP",
+    "PYUSD",
+  ];
   const popularMarkets = markets.filter((m) =>
-    popularAssets.some((asset) => m.name.includes(asset))
+    popularAssets.some((asset) => m.name.includes(asset)),
   );
 
   console.log("Pyth Pull Oracle Markets (Preferred):");
@@ -212,7 +223,7 @@ async function main() {
   console.log("\n\nPopular Assets:");
   popularMarkets.forEach((m) => {
     console.log(
-      `  - ${m.name} (Index: ${m.marketIndex}, Oracle: ${m.oracleSource}, Mint: ${m.mint})`
+      `  - ${m.name} (Index: ${m.marketIndex}, Oracle: ${m.oracleSource}, Mint: ${m.mint})`,
     );
   });
 
@@ -234,7 +245,9 @@ async function main() {
   if (pyusd) candidates.push(pyusd);
 
   // Add a few LSTs
-  const jitoSol = markets.find((m) => m.name === "jitoSOL" || m.name === "JitoSOL");
+  const jitoSol = markets.find(
+    (m) => m.name === "jitoSOL" || m.name === "JitoSOL",
+  );
   if (jitoSol) candidates.push(jitoSol);
 
   const mSol = markets.find((m) => m.name === "mSOL");
@@ -256,7 +269,7 @@ async function main() {
     (m) =>
       !candidates.includes(m) &&
       m.oracleSource === "PythPull" &&
-      m.marketIndex < 50
+      m.marketIndex < 50,
   );
   candidates.push(...additional.slice(0, 10 - candidates.length));
 

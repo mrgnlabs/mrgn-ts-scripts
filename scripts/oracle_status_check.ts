@@ -22,7 +22,7 @@ async function main() {
     config.PROGRAM_ID,
     "/keys/staging-deploy.json",
     undefined,
-    "current"
+    "current",
   );
   const program = user.program;
   const connection = user.connection;
@@ -78,10 +78,10 @@ async function main() {
         "pythPushOracle" in os
           ? "Pyth"
           : "switchboardPull" in os
-          ? "Swb"
-          : "???";
+            ? "Swb"
+            : "???";
       console.log(
-        ` oracle type: ${oracleType} key: ${firstOracleKey.toBase58()}`
+        ` oracle type: ${oracleType} key: ${firstOracleKey.toBase58()}`,
       );
     });
   }
@@ -100,7 +100,7 @@ async function main() {
     if ("pythPushOracle" in os) {
       const sponsored = await loadSponsoredOracle(
         b.bankAcc.config.oracleKeys[0],
-        connection
+        connection,
       );
       feedsWithMeta.push({ meta: b, feedPubkey: sponsored.address });
     }
@@ -117,7 +117,7 @@ async function main() {
   for (const batch of feedBatches) {
     // getMultipleAccountsInfo takes PublicKey[]
     const infos = await connection.getMultipleAccountsInfo(
-      batch.map((f) => f.feedPubkey)
+      batch.map((f) => f.feedPubkey),
     );
 
     infos.forEach((info, idx) => {
@@ -125,7 +125,7 @@ async function main() {
       console.log(
         `\n${
           meta.tokenName
-        }, Bank ${meta.bankPubkey.toBase58()}, Mint ${meta.mintPubkey.toBase58()}`
+        }, Bank ${meta.bankPubkey.toBase58()}, Mint ${meta.mintPubkey.toBase58()}`,
       );
 
       if (!info) {
@@ -152,12 +152,12 @@ async function main() {
       console.log(
         `  • Price:      ${price.toLocaleString(undefined, {
           maximumFractionDigits: 8,
-        })}`
+        })}`,
       );
       console.log(
         `  • Confidence: ±${conf.toLocaleString(undefined, {
           maximumFractionDigits: 8,
-        })}`
+        })}`,
       );
       console.log(`  • Published:  ${isoTs}`);
       console.log(`  • Posted Slot:${update.posted_slot.toString()}`);
@@ -172,7 +172,7 @@ async function main() {
 
       console.log(
         `  • Age:        ${ageSec.toFixed(2)}s, ${slotsOld} slots  ` +
-          `${bar} ${pct.toFixed(1)}% of ${maxAge}s`
+          `${bar} ${pct.toFixed(1)}% of ${maxAge}s`,
       );
     });
   }

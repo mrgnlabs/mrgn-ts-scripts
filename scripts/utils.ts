@@ -54,7 +54,7 @@ export function loadKeypairFromTxtFile(filePath: string): Keypair {
 }
 
 export const SINGLE_POOL_PROGRAM_ID = new PublicKey(
-  "SVSPxpvHdN29nkVg9rPapPNDddN5DipNLRUFhyjFThE"
+  "SVSPxpvHdN29nkVg9rPapPNDddN5DipNLRUFhyjFThE",
 );
 
 /**

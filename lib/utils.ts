@@ -58,7 +58,7 @@ export function getCachedAccounts(): PublicKey[] {
 
   if (!fs.existsSync(CACHE_FILE)) {
     throw new Error(
-      "Account cache not found. Please run 'pnpm accounts:cache' first."
+      "Account cache not found. Please run 'pnpm accounts:cache' first.",
     );
   }
 
@@ -72,7 +72,7 @@ export function getCachedActivity(): Record<string, any[]> {
 
   if (!fs.existsSync(CACHE_FILE)) {
     throw new Error(
-      "Activity cache not found. Please run 'pnpm activity:cache' first."
+      "Activity cache not found. Please run 'pnpm activity:cache' first.",
     );
   }
 
@@ -94,7 +94,7 @@ function u16ToArrayBufferLE(value: number): Uint8Array {
 function findPythPushOracleAddress(
   feedId: Buffer,
   programId: PublicKey,
-  shardId: number
+  shardId: number,
 ): PublicKey {
   const shardBytes = u16ToArrayBufferLE(shardId);
   return PublicKey.findProgramAddressSync([shardBytes, feedId], programId)[0];
@@ -105,18 +105,18 @@ export function getPythPushOracleAddresses(feedId: Buffer): PublicKey[] {
     findPythPushOracleAddress(
       feedId,
       PYTH_PUSH_ORACLE_ID,
-      PYTH_SPONSORED_SHARD_ID
+      PYTH_SPONSORED_SHARD_ID,
     ),
     findPythPushOracleAddress(
       feedId,
       PYTH_PUSH_ORACLE_ID,
-      MARGINFI_SPONSORED_SHARD_ID
+      MARGINFI_SPONSORED_SHARD_ID,
     ),
   ];
 }
 
 export async function getBankMetadata(
-  env: Environment
+  env: Environment,
 ): Promise<BankMetadata[]> {
   let bankMetadataUrl =
     "https://storage.googleapis.com/mrgn-public/mrgn-bank-metadata-cache.json";
@@ -141,7 +141,7 @@ export async function getBankMetadata(
 
 export async function getBankMetadataFromBirdeye(
   bank: PublicKey,
-  mint: PublicKey
+  mint: PublicKey,
 ) {
   const birdeyeApiResponse = await fetch(
     `https://public-api.birdeye.so/defi/v3/token/meta-data/single?address=${mint.toBase58()}`,
@@ -150,7 +150,7 @@ export async function getBankMetadataFromBirdeye(
         "x-api-key": process.env.BIRDEYE_API_KEY,
         "x-chain": "solana",
       },
-    }
+    },
   );
   const birdeyeApiJson: BirdeyeTokenMetadataResponse =
     await birdeyeApiResponse.json();
@@ -178,13 +178,13 @@ export class ReadOnlyWallet implements Wallet {
   }
 
   async signTransaction<T extends Transaction | VersionedTransaction>(
-    tx: T
+    tx: T,
   ): Promise<T> {
     return tx;
   }
 
   async signAllTransactions<T extends Transaction | VersionedTransaction>(
-    txs: T[]
+    txs: T[],
   ): Promise<T[]> {
     return txs;
   }
@@ -208,7 +208,7 @@ export type BankAndOracles = PublicKey[]; // [bank, oracle, oracle_2...]
  *          composition
  */
 export const composeRemainingAccounts = (
-  banksAndOracles: PublicKey[][]
+  banksAndOracles: PublicKey[][],
 ): PublicKey[] => {
   banksAndOracles.sort((a, b) => {
     const A = a[0].toBytes();
@@ -250,10 +250,10 @@ export function dumpAccBalances(account: MarginfiAccountRaw) {
       "Bank PK": balances[i].bankPk.toString(),
       // Tag: balances[i].bankAssetTag,
       "Liab Shares ": formatNumber(
-        wrappedI80F48toBigNumber(balances[i].liabilityShares)
+        wrappedI80F48toBigNumber(balances[i].liabilityShares),
       ),
       "Asset Shares": formatNumber(
-        wrappedI80F48toBigNumber(balances[i].assetShares)
+        wrappedI80F48toBigNumber(balances[i].assetShares),
       ),
       // Emissions: formatNumber(
       //   wrappedI80F48toBigNumber(balances[i].emissionsOutstanding)
@@ -293,7 +293,7 @@ export function bytesToF64(bytes: Uint8Array | number[]): number {
  * @returns A map of token addresses to their prices
  */
 export async function getBankPrices(
-  banks: any[]
+  banks: any[],
 ): Promise<Map<string, number>> {
   // Extract token addresses from banks
   const tokenAddresses = banks.map((bank) => bank.mint.toBase58());
@@ -314,7 +314,7 @@ export async function getBankPrices(
         "Content-Type": "application/json",
       },
       body: JSON.stringify(payload),
-    }
+    },
   );
 
   // Parse response
@@ -337,7 +337,7 @@ export async function getOraclesAndCrankSwb(
   kaminoProgram: Program<KaminoLending>,
   account: PublicKey,
   connection: Connection,
-  payer: Keypair
+  payer: Keypair,
 ): Promise<[BankAndOracles[], TransactionInstruction[]]> {
   let swbPullFeeds: PublicKey[] = [];
   const ixs: TransactionInstruction[] = [];
@@ -365,15 +365,14 @@ export async function getOraclesAndCrankSwb(
         swbPullFeeds.push(oracle); // still a switchboard feed
         activeBalances.push([bal.bankPk, oracle, keys[1]]);
 
-        const kaminoReservePk: PublicKey = bankAcc.kaminoReserve;
-        let reserve = await kaminoProgram.account.reserve.fetch(
-          kaminoReservePk
-        );
+        const kaminoReservePk: PublicKey = bankAcc.integrationAcc1;
+        let reserve =
+          await kaminoProgram.account.reserve.fetch(kaminoReservePk);
         const ix = await simpleRefreshReserve(
           kaminoProgram,
           kaminoReservePk,
           reserve.lendingMarket,
-          reserve.config.tokenInfo.scopeConfiguration.priceFeed
+          reserve.config.tokenInfo.scopeConfiguration.priceFeed,
         );
         ixs.push(ix);
       } else if ("pythPushOracle" in setup) {
@@ -386,15 +385,14 @@ export async function getOraclesAndCrankSwb(
         console.log(`  extra key: ${keys[1]}`);
         activeBalances.push([bal.bankPk, oracle, keys[1]]);
 
-        const kaminoReservePk: PublicKey = bankAcc.kaminoReserve;
-        let reserve = await kaminoProgram.account.reserve.fetch(
-          kaminoReservePk
-        );
+        const kaminoReservePk: PublicKey = bankAcc.integrationAcc1;
+        let reserve =
+          await kaminoProgram.account.reserve.fetch(kaminoReservePk);
         const ix = await simpleRefreshReserve(
           kaminoProgram,
           kaminoReservePk,
           reserve.lendingMarket,
-          reserve.config.tokenInfo.scopeConfiguration.priceFeed
+          reserve.config.tokenInfo.scopeConfiguration.priceFeed,
         );
         ixs.push(ix);
       } else if ("stakedWithPythPush" in setup) {
@@ -417,16 +415,16 @@ export async function getOraclesAndCrankSwb(
       const swbProgram = await sb.AnchorUtils.loadProgramFromConnection(
         // TODO fix when web3 is bumped in swb?
         // @ts-ignore
-        connection
+        connection,
       );
 
       const pullFeedInstances: sb.PullFeed[] = swbPullFeeds.map(
-        (pubkey) => new sb.PullFeed(swbProgram, pubkey)
+        (pubkey) => new sb.PullFeed(swbProgram, pubkey),
       );
 
       const gateway = await (process.env.CROSSBAR_API_URL
         ? pullFeedInstances[0].fetchGatewayUrl(
-            new CrossbarClient(process.env.CROSSBAR_API_URL)
+            new CrossbarClient(process.env.CROSSBAR_API_URL),
           )
         : pullFeedInstances[0].fetchGatewayUrl());
 
@@ -454,7 +452,7 @@ export async function getOraclesAndCrankSwb(
       });
       await connection.confirmTransaction(
         { signature, blockhash, lastValidBlockHeight },
-        "confirmed"
+        "confirmed",
       );
 
       console.log("Swb crank (v0) tx signature:", signature);
@@ -469,7 +467,7 @@ export async function getOraclesAndCrankSwb(
 
 export const getTokenBalance = async (
   provider: Provider,
-  account: PublicKey
+  account: PublicKey,
 ) => {
   const accountInfo = await provider.connection.getAccountInfo(account);
   if (!accountInfo) {

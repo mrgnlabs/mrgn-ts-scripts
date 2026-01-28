@@ -8,19 +8,14 @@ import {
 } from "@solana/web3.js";
 import { BN } from "@coral-xyz/anchor";
 import {
-  createAssociatedTokenAccountIdempotentInstruction,
   getAssociatedTokenAddressSync,
   TOKEN_PROGRAM_ID,
 } from "@mrgnlabs/mrgn-common";
 import { commonSetup, registerKaminoProgram } from "../lib/common-setup";
-import {
-  BankAndOracles,
-} from "../lib/utils";
+import { BankAndOracles } from "../lib/utils";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 import { KLEND_PROGRAM_ID } from "./kamino/kamino-types";
-import {
-  simpleRefreshReserve,
-} from "./kamino/ixes-common";
+import { simpleRefreshReserve } from "./kamino/ixes-common";
 
 const sendTx = true;
 
@@ -119,13 +114,18 @@ async function main() {
   await borrow(sendTx, config, "/.config/stage/id.json");
 }
 
-export async function borrow(sendTx: boolean, config: Config, walletPath: string, version?: "current") {
+export async function borrow(
+  sendTx: boolean,
+  config: Config,
+  walletPath: string,
+  version?: "current",
+) {
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
     walletPath,
     config.MULTISIG,
-    version
+    version,
   );
   registerKaminoProgram(user, KLEND_PROGRAM_ID.toString());
   const program = user.program;
@@ -134,7 +134,7 @@ export async function borrow(sendTx: boolean, config: Config, walletPath: string
   const oracleMeta: AccountMeta[] = config.NEW_REMAINING.flat().map(
     (pubkey) => {
       return { pubkey, isSigner: false, isWritable: false };
-    }
+    },
   );
 
   const ata = getAssociatedTokenAddressSync(config.MINT, user.wallet.publicKey);
@@ -142,10 +142,10 @@ export async function borrow(sendTx: boolean, config: Config, walletPath: string
 
   if (config.ADD_COMPUTE_UNITS) {
     transaction.add(
-      ComputeBudgetProgram.setComputeUnitPrice({ microLamports: 100_000 })
+      ComputeBudgetProgram.setComputeUnitPrice({ microLamports: 100_000 }),
     );
     transaction.add(
-      ComputeBudgetProgram.setComputeUnitLimit({ units: 1_400_000 })
+      ComputeBudgetProgram.setComputeUnitLimit({ units: 1_400_000 }),
     );
   }
 
@@ -160,7 +160,7 @@ export async function borrow(sendTx: boolean, config: Config, walletPath: string
       user.kaminoProgram,
       config.KAMINO_RESERVE,
       config.KAMINO_MARKET,
-      config.RESERVE_ORACLE
+      config.RESERVE_ORACLE,
     ),
     // await simpleRefreshObligation(
     //   user.kaminoProgram,
@@ -181,11 +181,11 @@ export async function borrow(sendTx: boolean, config: Config, walletPath: string
         tokenProgram: TOKEN_PROGRAM_ID,
       })
       .remainingAccounts(oracleMeta)
-      .instruction()
+      .instruction(),
   );
 
   console.log(
-    "borrowing : " + config.AMOUNT.toString() + " from " + config.BANK
+    "borrowing : " + config.AMOUNT.toString() + " from " + config.BANK,
   );
 
   if (sendTx) {
@@ -193,7 +193,7 @@ export async function borrow(sendTx: boolean, config: Config, walletPath: string
       const signature = await sendAndConfirmTransaction(
         connection,
         transaction,
-        [user.wallet.payer]
+        [user.wallet.payer],
       );
       console.log("Transaction signature:", signature);
     } catch (error) {

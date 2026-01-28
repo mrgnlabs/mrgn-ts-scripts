@@ -1,4 +1,3 @@
-import { PublicKey } from "@solana/web3.js";
 import dotenv from "dotenv";
 import fs from "fs";
 import path from "path";

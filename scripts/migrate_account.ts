@@ -1,5 +1,4 @@
 import {
-  Keypair,
   PublicKey,
   Transaction,
   sendAndConfirmTransaction,
@@ -28,7 +27,7 @@ const config: Config = {
   // OLD_AUTHORITY: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
   NEW_AUTHORITY: new PublicKey("BSQX5SNk8dTMsP6MBkyrH3ET2WdWvWVVpE3wKYPQqaTH"),
   GLOBAL_FEE_WALLET: new PublicKey(
-    "CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"
+    "CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw",
   ),
   ACCOUNT_INDEX: 0,
   THIRD_PARTY_SEED: 615,
@@ -42,14 +41,14 @@ async function main() {
     config.PROGRAM_ID,
     "/keys/phantom-wallet.json",
     config.MULTISIG,
-    "current"
+    "current",
   );
   const program = user.program;
   const connection = user.connection;
 
   const acc = await program.account.marginfiAccount.fetch(config.ACCOUNT);
   console.log(
-    "Old account on group: " + acc.group + " migrated from " + acc.migratedFrom
+    "Old account on group: " + acc.group + " migrated from " + acc.migratedFrom,
   );
 
   const [newAcc] = deriveMarginfiAccountPda(
@@ -57,7 +56,7 @@ async function main() {
     acc.group,
     config.NEW_AUTHORITY,
     config.ACCOUNT_INDEX,
-    config.THIRD_PARTY_SEED
+    config.THIRD_PARTY_SEED,
   );
 
   let tx = new Transaction().add(
@@ -73,7 +72,7 @@ async function main() {
       .accountsPartial({
         newMarginfiAccount: newAcc,
       })
-      .instruction()
+      .instruction(),
   );
   console.log("Moving account: " + config.ACCOUNT + " to " + newAcc);
 
@@ -105,7 +104,7 @@ const deriveMarginfiAccountPda = (
   group: PublicKey,
   authority: PublicKey,
   accountIndex: number,
-  thirdPartyId?: number
+  thirdPartyId?: number,
 ) => {
   const accountIndexBuffer = Buffer.allocUnsafe(2);
   accountIndexBuffer.writeUInt16LE(accountIndex, 0);
@@ -121,7 +120,7 @@ const deriveMarginfiAccountPda = (
       accountIndexBuffer,
       thirdPartyIdBuffer,
     ],
-    programId
+    programId,
   );
 };
 

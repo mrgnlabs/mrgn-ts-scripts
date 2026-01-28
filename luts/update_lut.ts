@@ -2,7 +2,6 @@ import {
   AddressLookupTableProgram,
   Connection,
   PublicKey,
-  SYSVAR_RENT_PUBKEY,
   Transaction,
   sendAndConfirmTransaction,
 } from "@solana/web3.js";
@@ -13,7 +12,6 @@ import {
   loadKeypairFromFile,
 } from "../scripts/utils";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
-import { TOKEN_2022_PROGRAM_ID, TOKEN_PROGRAM_ID } from "@solana/spl-token";
 
 /**
  * If true, send the tx. If false, output the unsigned b58 tx to console.

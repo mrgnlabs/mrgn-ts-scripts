@@ -1,11 +1,8 @@
 import {
-  Connection,
   PublicKey,
   Transaction,
   sendAndConfirmTransaction,
 } from "@solana/web3.js";
-import { Program, AnchorProvider } from "@coral-xyz/anchor";
-import { DEFAULT_API_URL, loadEnvFile, loadKeypairFromFile } from "./utils";
 import { assertI80F48Approx, assertKeysEqual } from "./softTests";
 import { commonSetup } from "../lib/common-setup";
 
@@ -27,7 +24,7 @@ const config: Config = {
 const deriveGlobalFeeState = (programId: PublicKey) => {
   return PublicKey.findProgramAddressSync(
     [Buffer.from("feestate", "utf-8")],
-    programId
+    programId,
   );
 };
 
@@ -37,7 +34,7 @@ async function main() {
     config.PROGRAM_ID,
     "/keys/staging-deploy.json",
     undefined,
-    "kamino"
+    "current",
   );
   const program = user.program;
 
@@ -58,7 +55,7 @@ async function main() {
     const signature = await sendAndConfirmTransaction(
       user.connection,
       transaction,
-      [user.wallet.payer]
+      [user.wallet.payer],
     );
     console.log("Transaction signature:", signature);
   } catch (error) {
@@ -68,7 +65,7 @@ async function main() {
   const [feeStateKey] = deriveGlobalFeeState(program.programId);
   const feeState = await program.account.feeState.fetch(feeStateKey);
   const groups = await program.account.marginfiGroup.fetchMultiple(
-    config.GROUP_KEYS
+    config.GROUP_KEYS,
   );
 
   if (verbose) {

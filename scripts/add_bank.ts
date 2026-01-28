@@ -12,8 +12,9 @@ import {
 } from "@mrgnlabs/mrgn-common";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 import { commonSetup } from "../lib/common-setup";
-import { RiskTierRaw } from "@mrgnlabs/marginfi-client-v2";
+import { OperationalStateRaw, RiskTierRaw } from "@mrgnlabs/marginfi-client-v2";
 import { aprToU32, utilToU32 } from "../lib/utils";
+import { deriveBankWithSeed } from "./common/pdas";
 
 /**
  * If true, send the tx. If false, output the unsigned b58 tx to console.
@@ -196,18 +197,6 @@ export async function addBank(
   return bankKey;
 }
 
-const deriveBankWithSeed = (
-  programId: PublicKey,
-  group: PublicKey,
-  bankMint: PublicKey,
-  seed: BN,
-) => {
-  return PublicKey.findProgramAddressSync(
-    [group.toBuffer(), bankMint.toBuffer(), seed.toArrayLike(Buffer, "le", 8)],
-    programId,
-  );
-};
-
 if (require.main === module) {
   main().catch((err) => {
     console.error(err);
@@ -233,11 +222,6 @@ type InterestRateConfig1_7 = {
   points: RatePoint[];
   curveType: number;
 };
-
-type OperationalStateRaw =
-  | { paused: {} }
-  | { operational: {} }
-  | { reduceOnly: {} };
 
 type BankConfig = {
   assetWeightInit: WrappedI80F48;

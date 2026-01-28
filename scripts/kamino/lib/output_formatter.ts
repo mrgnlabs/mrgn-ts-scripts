@@ -1,6 +1,6 @@
 import { PublicKey } from "@solana/web3.js";
 import { KaminoBankConfig } from "./config_types";
-import { SeedSelectionResult, KaminoBankInfo } from "./seed_manager";
+import { SeedSelectionResult } from "./seed_manager";
 import { OracleValidationReport, SWITCHBOARD_EXPECTED_AUTHORITY } from "./validate_oracle";
 import { ReserveData } from "./reserve_utils";
 import { SimulationValidationResult } from "./simulation_validator";

@@ -1,6 +1,7 @@
-import { Connection, PublicKey, Transaction, sendAndConfirmTransaction } from "@solana/web3.js";
-import { Program, AnchorProvider, BN } from "@coral-xyz/anchor";
-import { loadKeypairFromFile } from "./utils";
+import {
+  Connection,
+  PublicKey,
+} from "@solana/web3.js";
 import { decodePriceUpdateV2, PriceUpdateV2 } from "./utils_oracle";
 
 type Config = {
@@ -12,7 +13,10 @@ const config: Config = {
 };
 
 async function main() {
-  const connection = new Connection("https://api.mainnet-beta.solana.com", "confirmed");
+  const connection = new Connection(
+    "https://api.mainnet-beta.solana.com",
+    "confirmed",
+  );
 
   const pyth_oracle = await connection.getAccountInfo(config.ORACLE);
   let data = pyth_oracle.data;
@@ -39,19 +43,27 @@ function prettyPrintPriceUpdate(update: PriceUpdateV2) {
 
   // Format publish times
   const publishTs = new Date(msg.publish_time.toNumber() * 1_000).toISOString();
-  const prevPublishTs = new Date(msg.prev_publish_time.toNumber() * 1_000).toISOString();
+  const prevPublishTs = new Date(
+    msg.prev_publish_time.toNumber() * 1_000,
+  ).toISOString();
 
   console.log("🔔 Price Update:");
   console.log("  • Feed ID:            ", msg.feed_id.toBase58());
   console.log("  • Write Authority:    ", update.write_authority.toBase58());
   console.log(
     "  • Verification Level: ",
-    update.verification_level.kind === "Full" ? "Full" : `Partial (${update.verification_level.num_signatures} sigs)`
+    update.verification_level.kind === "Full"
+      ? "Full"
+      : `Partial (${update.verification_level.num_signatures} sigs)`,
   );
   console.log("");
   console.log("  ─── Price Info ───");
-  console.log(`  » Price:  ${price.toLocaleString(undefined, { maximumFractionDigits: 8 })}`);
-  console.log(`  » Confidence: ±${conf.toLocaleString(undefined, { maximumFractionDigits: 8 })}`);
+  console.log(
+    `  » Price:  ${price.toLocaleString(undefined, { maximumFractionDigits: 8 })}`,
+  );
+  console.log(
+    `  » Confidence: ±${conf.toLocaleString(undefined, { maximumFractionDigits: 8 })}`,
+  );
   console.log(`  » Exponent: ${msg.exponent}`);
   console.log("");
   console.log("  ─── Timing ───");

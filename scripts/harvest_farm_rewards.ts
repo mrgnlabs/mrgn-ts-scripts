@@ -348,7 +348,7 @@ async function main() {
         config.PROGRAM_ID,
         walletPath,
         config.MULTISIG,
-        "kamino" // Use the kamino IDL version
+        "current" // Use the kamino IDL version
     );
     const program = user.program;
     const connection = user.connection;

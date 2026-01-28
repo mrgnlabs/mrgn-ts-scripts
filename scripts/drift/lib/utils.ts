@@ -1,6 +1,7 @@
 import { PublicKey, AccountMeta } from "@solana/web3.js";
 import { BN } from "@coral-xyz/anchor";
 import { bigNumberToWrappedI80F48, WrappedI80F48 } from "@mrgnlabs/mrgn-common";
+import { OperationalStateRaw, RiskTierRaw } from "@mrgnlabs/marginfi-client-v2";
 
 // Constants
 export const DRIFT_PROGRAM_ID = new PublicKey("dRiftyHA39MWEi3m9aunc5MzRF1JYuBsbn6VPcn33UH");
@@ -13,44 +14,13 @@ export interface DriftConfigCompact {
   assetWeightInit: WrappedI80F48;
   assetWeightMaint: WrappedI80F48;
   depositLimit: BN;
-  totalAssetValueInitLimit: BN;
   oracleSetup: { driftPythPull: {} } | { driftSwitchboardPull: {} };
+  operationalState: OperationalStateRaw;
+  riskTier: RiskTierRaw;
+  configFlags: number;
+  totalAssetValueInitLimit: BN;
   oracleMaxAge: number;
-}
-
-// PDA derivations
-export function deriveBankWithSeed(
-  programId: PublicKey,
-  group: PublicKey,
-  mint: PublicKey,
-  seed: BN
-): [PublicKey, number] {
-  return PublicKey.findProgramAddressSync(
-    [
-      Buffer.from("bank"),
-      group.toBuffer(),
-      mint.toBuffer(),
-      seed.toArrayLike(Buffer, "le", 8),
-    ],
-    programId
-  );
-}
-
-export function deriveMarginfiAccount(
-  programId: PublicKey,
-  group: PublicKey,
-  authority: PublicKey,
-  seed: number
-): [PublicKey, number] {
-  return PublicKey.findProgramAddressSync(
-    [
-      Buffer.from("marginfi_account"),
-      group.toBuffer(),
-      authority.toBuffer(),
-      new BN(seed).toArrayLike(Buffer, "le", 8),
-    ],
-    programId
-  );
+  oracleMaxConfidence: number;
 }
 
 export function deriveSpotMarketPDA(marketIndex: number): [PublicKey, number] {
@@ -105,15 +75,5 @@ export function deriveDriftUserStatsPDA(authority: PublicKey): [PublicKey, numbe
   return PublicKey.findProgramAddressSync(
     [Buffer.from("user_stats"), authority.toBuffer()],
     DRIFT_PROGRAM_ID
-  );
-}
-
-export function deriveLiquidityVaultAuthority(
-  programId: PublicKey,
-  bank: PublicKey
-): [PublicKey, number] {
-  return PublicKey.findProgramAddressSync(
-    [Buffer.from("liquidity_vault_auth"), bank.toBuffer()],
-    programId
   );
 }

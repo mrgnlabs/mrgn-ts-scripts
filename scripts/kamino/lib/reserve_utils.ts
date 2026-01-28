@@ -1,4 +1,4 @@
-import { Connection, PublicKey } from "@solana/web3.js";
+import { PublicKey } from "@solana/web3.js";
 import { Program } from "@coral-xyz/anchor";
 import { KaminoLending } from "../../../idl/kamino_lending";
 

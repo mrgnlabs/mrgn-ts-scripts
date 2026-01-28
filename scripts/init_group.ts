@@ -27,7 +27,7 @@ const config: Config = {
 const deriveGlobalFeeState = (programId: PublicKey) => {
   return PublicKey.findProgramAddressSync(
     [Buffer.from("feestate", "utf-8")],
-    programId
+    programId,
   );
 };
 
@@ -39,14 +39,14 @@ export async function initGroup(
   sendTx: boolean,
   config: Config,
   walletPath: string,
-  version?: "current"
+  version?: "current",
 ): Promise<PublicKey> {
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
     walletPath,
     config.MULTISIG_PAYER,
-    version
+    version,
   );
   const program = user.program;
   const connection = user.connection;
@@ -56,14 +56,14 @@ export async function initGroup(
   const transaction = new Transaction();
   transaction.add(
     await program.methods
-      .marginfiGroupInitialize(false)
+      .marginfiGroupInitialize()
       .accountsPartial({
         marginfiGroup: marginfiGroup.publicKey,
         feeState: deriveGlobalFeeState(new PublicKey(config.PROGRAM_ID))[0],
         admin: config.ADMIN_KEY,
         // systemProgram: SystemProgram.programId,
       })
-      .instruction()
+      .instruction(),
   );
 
   if (sendTx) {
@@ -71,7 +71,7 @@ export async function initGroup(
       const signature = await sendAndConfirmTransaction(
         connection,
         transaction,
-        [user.wallet.payer, marginfiGroup]
+        [user.wallet.payer, marginfiGroup],
       );
       console.log("Transaction signature:", signature);
     } catch (error) {

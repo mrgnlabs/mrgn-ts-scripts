@@ -24,7 +24,7 @@ async function main() {
       LUT: config.LUT,
       KEYS: state.kaminoBanks,
     },
-    config.LIQUIDATOR_WALLET_PATH
+    config.LIQUIDATOR_WALLET_PATH,
   );
   await sleep(1000);
   await updateLut(
@@ -33,7 +33,7 @@ async function main() {
       LUT: config.LUT,
       KEYS: state.paddingBanks.concat(state.debtBank),
     },
-    config.LIQUIDATOR_WALLET_PATH
+    config.LIQUIDATOR_WALLET_PATH,
   );
   await sleep(1000);
 
@@ -75,7 +75,7 @@ async function main() {
   for (let i = 0; i < 8; i++) {
     // Deep clone
     let fullRemainingAccounts = remainingAccounts.map((inner) =>
-      inner.map((pk) => new PublicKey(pk.toBytes()))
+      inner.map((pk) => new PublicKey(pk.toBytes())),
     );
     // Add all active kamino banks except the one to withdraw from
     for (let j = i + 1; j < 8; j++) {
@@ -88,12 +88,12 @@ async function main() {
 
     withdrawKaminoConfig.BANK = state.kaminoBanks[i];
     withdrawKaminoConfig.NEW_REMAINING = composeRemainingAccounts(
-      fullRemainingAccounts
+      fullRemainingAccounts,
     );
     await withdrawKamino(
       true,
       withdrawKaminoConfig,
-      config.LIQUIDATEE_WALLET_PATH
+      config.LIQUIDATEE_WALLET_PATH,
     );
     await sleep(1000);
   }
@@ -139,13 +139,13 @@ async function main() {
   await closeAccount(
     true,
     { PROGRAM_ID: config.PROGRAM_ID, ACCOUNT: state.liquidator },
-    config.LIQUIDATOR_WALLET_PATH
+    config.LIQUIDATOR_WALLET_PATH,
   );
   await sleep(1000);
   await closeAccount(
     true,
     { PROGRAM_ID: config.PROGRAM_ID, ACCOUNT: state.liquidatee },
-    config.LIQUIDATEE_WALLET_PATH
+    config.LIQUIDATEE_WALLET_PATH,
   );
   await sleep(1000);
 
@@ -154,7 +154,7 @@ async function main() {
     await closeBank(
       true,
       { PROGRAM_ID: config.PROGRAM_ID, BANK: state.kaminoBanks[i] },
-      config.LIQUIDATOR_WALLET_PATH
+      config.LIQUIDATOR_WALLET_PATH,
     );
     await sleep(1000);
   }
@@ -162,14 +162,14 @@ async function main() {
     await closeBank(
       true,
       { PROGRAM_ID: config.PROGRAM_ID, BANK: state.paddingBanks[i] },
-      config.LIQUIDATOR_WALLET_PATH
+      config.LIQUIDATOR_WALLET_PATH,
     );
     await sleep(1000);
   }
   await closeBank(
     true,
     { PROGRAM_ID: config.PROGRAM_ID, BANK: state.debtBank },
-    config.LIQUIDATOR_WALLET_PATH
+    config.LIQUIDATOR_WALLET_PATH,
   );
   await sleep(1000);
 

@@ -1,5 +1,11 @@
-import { AccountMeta, PublicKey, Transaction, sendAndConfirmTransaction } from "@solana/web3.js";
+import {
+  AccountMeta,
+  PublicKey,
+  Transaction,
+  sendAndConfirmTransaction,
+} from "@solana/web3.js";
 import { commonSetup } from "../lib/common-setup";
+import { deriveStakedSettings } from "../scripts/common/pdas";
 
 type Config = {
   PROGRAM_ID: string;
@@ -21,12 +27,17 @@ const config: Config = {
 };
 
 async function main() {
-  const user = commonSetup(true, config.PROGRAM_ID, "/keys/staging-deploy.json", undefined);
+  const user = commonSetup(
+    true,
+    config.PROGRAM_ID,
+    "/keys/staging-deploy.json",
+    undefined,
+  );
   const program = user.program;
   const connection = user.connection;
 
   const transaction = new Transaction();
-  let [stakedSettingsKey] = deriveStakedSettings(program.programId, config.GROUP);
+  let [stakedSettings] = deriveStakedSettings(program.programId, config.GROUP);
   let remainingAccounts: AccountMeta[] = [];
   if (config.ORACLE) {
     console.log("updating oracle to: " + config.ORACLE);
@@ -41,8 +52,7 @@ async function main() {
     const ix = await program.methods
       .propagateStakedSettings()
       .accounts({
-        // feeState: derived automatically from static PDA
-        stakedSettings: stakedSettingsKey,
+        stakedSettings,
         bank: bankKey,
       })
       .remainingAccounts(remainingAccounts)
@@ -52,17 +62,14 @@ async function main() {
   }
 
   try {
-    const signature = await sendAndConfirmTransaction(connection, transaction, [user.wallet.payer]);
+    const signature = await sendAndConfirmTransaction(connection, transaction, [
+      user.wallet.payer,
+    ]);
     console.log("Transaction signature:", signature);
   } catch (error) {
     console.error("Transaction failed:", error);
   }
 }
-
-// TODO remove after package updates
-const deriveStakedSettings = (programId: PublicKey, group: PublicKey) => {
-  return PublicKey.findProgramAddressSync([Buffer.from("staked_settings", "utf-8"), group.toBuffer()], programId);
-};
 
 main().catch((err) => {
   console.error(err);

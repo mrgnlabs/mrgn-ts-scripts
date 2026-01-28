@@ -1,13 +1,11 @@
 // Run deposit_single_pool first to convert to LST. In production, these will likely be atomic.
 import {
-  Connection,
-  Keypair,
   PublicKey,
   Transaction,
   sendAndConfirmTransaction,
 } from "@solana/web3.js";
-import { Program, AnchorProvider, BN } from "@coral-xyz/anchor";
-import { loadKeypairFromFile, SINGLE_POOL_PROGRAM_ID } from "./utils";
+import { BN } from "@coral-xyz/anchor";
+import { SINGLE_POOL_PROGRAM_ID } from "./utils";
 import {
   getAssociatedTokenAddressSync,
   TOKEN_PROGRAM_ID,
@@ -47,19 +45,19 @@ async function main() {
     config.PROGRAM_ID,
     "/keys/phantom-wallet.json",
     config.MULTISIG,
-    "current"
+    "current",
   );
   const program = user.program;
   const connection = user.connection;
 
   const [lstMint] = PublicKey.findProgramAddressSync(
     [Buffer.from("mint"), config.STAKE_POOL.toBuffer()],
-    SINGLE_POOL_PROGRAM_ID
+    SINGLE_POOL_PROGRAM_ID,
   );
   const lstAta = getAssociatedTokenAddressSync(
     lstMint,
     user.wallet.publicKey,
-    true
+    true,
   );
 
   const transaction = new Transaction();
@@ -72,7 +70,7 @@ async function main() {
         signerTokenAccount: lstAta,
         tokenProgram: TOKEN_PROGRAM_ID,
       })
-      .instruction()
+      .instruction(),
   );
 
   if (sendTx) {
@@ -80,7 +78,7 @@ async function main() {
       const signature = await sendAndConfirmTransaction(
         connection,
         transaction,
-        [user.wallet.payer]
+        [user.wallet.payer],
       );
       console.log("Transaction signature:", signature);
     } catch (error) {

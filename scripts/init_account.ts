@@ -34,14 +34,14 @@ export async function initAccount(
   sendTx: boolean,
   config: Config,
   walletPath: string,
-  version?: "current"
+  version?: "current",
 ): Promise<PublicKey> {
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
     walletPath,
     config.MULTISIG,
-    version
+    version,
   );
   const program = user.program;
   const connection = user.connection;
@@ -58,7 +58,7 @@ export async function initAccount(
         authority: config.AUTHORITY,
         feePayer: user.wallet.publicKey,
       })
-      .instruction()
+      .instruction(),
   );
 
   if (sendTx) {
@@ -66,7 +66,7 @@ export async function initAccount(
       const signature = await sendAndConfirmTransaction(
         connection,
         transaction,
-        [user.wallet.payer, accountKeypair]
+        [user.wallet.payer, accountKeypair],
       );
       console.log("Transaction signature:", signature);
     } catch (error) {

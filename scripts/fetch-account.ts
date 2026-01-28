@@ -1,7 +1,6 @@
 import { PublicKey } from "@solana/web3.js";
 import { wrappedI80F48toBigNumber } from "@mrgnlabs/mrgn-common";
 import { commonSetup } from "../lib/common-setup";
-import { dumpAccBalances } from "../lib/utils";
 
 type Config = {
   PROGRAM_ID: string;

@@ -4,7 +4,6 @@ import { PYTH_PUSH_ORACLE_ID } from "./constants";
 import * as borsh from "borsh";
 
 const PYTH_SPONSORED_SHARD_ID = 0;
-const MARGINFI_SPONSORED_SHARD_ID = 3301;
 
 export function feedIdToString(feedId: PublicKey): string {
   return feedId.toBuffer().toString("hex");

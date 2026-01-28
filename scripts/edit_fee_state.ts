@@ -1,21 +1,9 @@
 import {
-  Connection,
   PublicKey,
   Transaction,
   sendAndConfirmTransaction,
 } from "@solana/web3.js";
-import {
-  bigNumberToWrappedI80F48,
-  WrappedI80F48,
-  wrappedI80F48toBigNumber,
-} from "@mrgnlabs/mrgn-common";
-import { AnchorProvider, BN, Program } from "@coral-xyz/anchor";
-import { loadKeypairFromTxtFile } from "./utils";
-import {
-  assertBNEqual,
-  assertI80F48Approx,
-  assertKeysEqual,
-} from "./softTests";
+import { bigNumberToWrappedI80F48 } from "@mrgnlabs/mrgn-common";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 import { commonSetup } from "../lib/common-setup";
 
@@ -62,7 +50,7 @@ async function main() {
     config.PROGRAM_ID,
     "/keys/phantom-wallet.json",
     config.MULTISIG,
-    "kamino"
+    "current",
   );
   const program = user.program;
   const connection = user.connection;
@@ -76,13 +64,13 @@ async function main() {
         config.LIQUIDATION_FLAT_SOL_FEE,
         bigNumberToWrappedI80F48(config.FIXED_FEE),
         bigNumberToWrappedI80F48(config.RATE_FEE),
-        bigNumberToWrappedI80F48(config.LIQUIDATION_MAX_PREMIUM)
+        bigNumberToWrappedI80F48(config.LIQUIDATION_MAX_PREMIUM),
       )
       .accounts({})
       .accountsPartial({
         globalFeeAdmin: config.ADMIN,
       })
-      .instruction()
+      .instruction(),
   );
 
   if (sendTx) {
@@ -90,7 +78,7 @@ async function main() {
       const signature = await sendAndConfirmTransaction(
         connection,
         transaction,
-        [user.wallet.payer]
+        [user.wallet.payer],
       );
       console.log("Transaction signature:", signature);
     } catch (error) {
@@ -113,7 +101,7 @@ async function main() {
 const deriveGlobalFeeState = (programId: PublicKey) => {
   return PublicKey.findProgramAddressSync(
     [Buffer.from("feestate", "utf-8")],
-    programId
+    programId,
   );
 };
 

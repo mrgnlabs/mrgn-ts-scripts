@@ -61,7 +61,7 @@ export type Config = {
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
   DESTINATION_WALLET: new PublicKey(
-    "J3oBkTkDXU3TcAggJEa3YeBZE5om5yNAdTtLVNXFD47"
+    "J3oBkTkDXU3TcAggJEa3YeBZE5om5yNAdTtLVNXFD47",
   ),
 
   MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
@@ -72,7 +72,7 @@ async function main() {
     sendTx,
     config.PROGRAM_ID,
     "/keys/staging-deploy.json",
-    config.MULTISIG_PAYER
+    config.MULTISIG_PAYER,
   );
   const program = user.program;
   const connection = user.connection;
@@ -119,7 +119,7 @@ async function main() {
     for (const { bankPubkey, mintPubkey } of chunk) {
       const bankAcc = await program.account.bank.fetch(bankPubkey);
       const collectedFees = wrappedI80F48toBigNumber(
-        bankAcc.collectedGroupFeesOutstanding
+        bankAcc.collectedGroupFeesOutstanding,
       ).toNumber();
 
       const [feeVault] = deriveFeeVault(program.programId, bankPubkey);
@@ -133,25 +133,25 @@ async function main() {
         connection,
         feeVault,
         undefined,
-        tokenProgram
+        tokenProgram,
       );
       const feesAvailable = Number(feesVaultAcc.amount);
       console.log(
-        `    · Bank ${bankPubkey.toString()}: collectedFees=${collectedFees}, feesAvailable=${feesAvailable}, isT22=${isT22}`
+        `    · Bank ${bankPubkey.toString()}: collectedFees=${collectedFees}, feesAvailable=${feesAvailable}, isT22=${isT22}`,
       );
 
       const dstAta = getAssociatedTokenAddressSync(
         mintPubkey,
         config.DESTINATION_WALLET,
         true,
-        tokenProgram
+        tokenProgram,
       );
       const createAtaIx = createAssociatedTokenAccountIdempotentInstruction(
         config.MULTISIG_PAYER,
         dstAta,
         config.DESTINATION_WALLET,
         mintPubkey,
-        tokenProgram
+        tokenProgram,
       );
 
       if (setDestination) {
@@ -176,7 +176,7 @@ async function main() {
 
       const withdrawIx = await program.methods
         .lendingPoolWithdrawFeesPermissionless(
-          new BN(Math.max(feesAvailable - 1, 0))
+          new BN(Math.max(feesAvailable - 1, 0)),
         )
         .accounts({
           bank: bankPubkey,
@@ -228,7 +228,7 @@ type PoolEntry = {
 const deriveFeeVault = (programId: PublicKey, bank: PublicKey) => {
   return PublicKey.findProgramAddressSync(
     [Buffer.from("fee_vault", "utf-8"), bank.toBuffer()],
-    programId
+    programId,
   );
 };
 

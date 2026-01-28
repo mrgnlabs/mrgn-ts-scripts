@@ -61,7 +61,7 @@ async function main() {
     config.PROGRAM_ID,
     "/keys/staging-deploy.json",
     config.MULTISIG_PAYER,
-    "current"
+    "current",
   );
   const connection = user.connection;
 
@@ -81,20 +81,20 @@ async function main() {
       mintPk,
       config.SOURCE_WALLET,
       true,
-      tokenProgram
+      tokenProgram,
     );
 
     const srcTokenAcc = await getAccount(
       connection,
       srcAta,
       undefined, // default commitment
-      tokenProgram
+      tokenProgram,
     );
 
     const amount = srcTokenAcc.amount;
     if (amount === 0n) {
       console.log(
-        `[${mintPk.toBase58()}] source ATA ${srcAta.toBase58()} has 0 balance, skipping transfer`
+        `[${mintPk.toBase58()}] source ATA ${srcAta.toBase58()} has 0 balance, skipping transfer`,
       );
       continue;
     }
@@ -104,11 +104,11 @@ async function main() {
       mintPk,
       config.DEST_WALLET,
       true,
-      tokenProgram
+      tokenProgram,
     );
 
     console.log(
-      `[${mintPk.toBase58()}] transferring ${amount.toString()} from ${srcAta.toBase58()} to ${dstAta.toBase58()}`
+      `[${mintPk.toBase58()}] transferring ${amount.toString()} from ${srcAta.toBase58()} to ${dstAta.toBase58()}`,
     );
 
     // Create the ATA if needed (idempotent).
@@ -118,8 +118,8 @@ async function main() {
         dstAta,
         config.DEST_WALLET,
         mintPk,
-        tokenProgram
-      )
+        tokenProgram,
+      ),
     );
 
     ixes.push(
@@ -129,8 +129,8 @@ async function main() {
         config.SOURCE_WALLET, // authority (must sign)
         amount,
         [],
-        tokenProgram
-      )
+        tokenProgram,
+      ),
     );
 
     // TODO invoke transfer
@@ -138,7 +138,7 @@ async function main() {
 
   if (ixes.length === 0) {
     console.log(
-      "No instructions to send (nothing to set or withdraw). Exiting."
+      "No instructions to send (nothing to set or withdraw). Exiting.",
     );
     return;
   }
@@ -159,7 +159,7 @@ async function main() {
     });
     await connection.confirmTransaction(
       { signature, blockhash, lastValidBlockHeight },
-      "confirmed"
+      "confirmed",
     );
 
     console.log("tx signature:", signature);

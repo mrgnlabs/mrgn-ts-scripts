@@ -1,27 +1,21 @@
-// Call this once after each bank is made.
 import {
   AccountMeta,
   AddressLookupTableAccount,
   ComputeBudgetProgram,
   PublicKey,
-  Transaction,
   TransactionInstruction,
   TransactionMessage,
   VersionedTransaction,
-  sendAndConfirmTransaction,
 } from "@solana/web3.js";
 import { BN } from "@coral-xyz/anchor";
-import { TOKEN_PROGRAM_ID, WrappedI80F48 } from "@mrgnlabs/mrgn-common";
+import { TOKEN_PROGRAM_ID } from "@mrgnlabs/mrgn-common";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 import {
   FARMS_PROGRAM_ID,
   KLEND_PROGRAM_ID,
-  OracleSetupRawWithKamino,
 } from "./kamino-types";
 import { commonSetup, registerKaminoProgram } from "../../lib/common-setup";
 import {
-  makeInitObligationIx,
-  makeKaminoDepositIx,
   makeKaminoWithdrawIx,
   simpleRefreshObligation,
   simpleRefreshReserve,

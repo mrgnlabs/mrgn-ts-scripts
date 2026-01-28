@@ -1,18 +1,15 @@
-// Runs once per group, before any staked banks can be init.
-import { AccountMeta, Connection, PublicKey, Transaction, sendAndConfirmTransaction } from "@solana/web3.js";
-import { Program, AnchorProvider, Wallet, BN } from "@coral-xyz/anchor";
-import { Marginfi } from "../../marginfi-client-v2/src/idl/marginfi-types_0.1.2";
-import marginfiIdl from "../../marginfi-client-v2/src/idl/marginfi_0.1.2.json";
-import { I80F48_ONE, loadKeypairFromFile, SINGLE_POOL_PROGRAM_ID } from "./utils";
 import {
-  bigNumberToWrappedI80F48,
-  TOKEN_PROGRAM_ID,
-  WrappedI80F48,
-  wrappedI80F48toBigNumber,
-} from "@mrgnlabs/mrgn-common";
-import { RiskTierRaw } from "@mrgnlabs/marginfi-client-v2";
-import { assertBNEqual, assertI80F48Approx, assertKeysEqual } from "./softTests";
+  AccountMeta,
+  PublicKey,
+  Transaction,
+  sendAndConfirmTransaction,
+} from "@solana/web3.js";
+import { BN } from "@coral-xyz/anchor";
+import { SINGLE_POOL_PROGRAM_ID } from "./utils";
+import { TOKEN_PROGRAM_ID } from "@mrgnlabs/mrgn-common";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
+import { commonSetup } from "../lib/common-setup";
+import { deriveBankWithSeed, deriveStakedSettings } from "./common/pdas";
 
 /**
  * If true, send the tx. If false, output the unsigned b58 tx to console.
@@ -34,32 +31,46 @@ const config: Config = {
   PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
   GROUP_KEY: new PublicKey("FCPfpHA69EbS8f9KKSreTRkXbzFpunsKuYf5qNmnJjpo"),
   STAKE_POOL: new PublicKey("AvS4oXtxWdrJGCJwDbcZ7DqpSqNQtKjyXnbkDbrSk6Fq"),
-  SOL_ORACLE_FEED: new PublicKey("7UVimffxr9ow1uXYxsr4LHAcV58mLzhmwaeKvJ1pjLiE"),
+  SOL_ORACLE_FEED: new PublicKey(
+    "7UVimffxr9ow1uXYxsr4LHAcV58mLzhmwaeKvJ1pjLiE",
+  ),
   SEED: 0,
   MULTISIG_PAYER: new PublicKey("AZtUUe9GvTFq9kfseu9jxTioSgdSfjgmZfGQBmhVpTj1"),
 };
 
 async function main() {
-  marginfiIdl.address = config.PROGRAM_ID;
-  const connection = new Connection("https://api.mainnet-beta.solana.com", "confirmed");
-  const wallet = loadKeypairFromFile(process.env.HOME + "/keys/staging-deploy.json");
+  await addStakedBank(sendTx, config, "/keys/staging-deploy.json");
+}
 
-  // @ts-ignore
-  const provider = new AnchorProvider(connection, wallet, {
-    preflightCommitment: "confirmed",
-  });
+async function addStakedBank(
+  sendTx: boolean,
+  config: Config,
+  walletPath: string,
+  version?: "current",
+) {
+  const user = commonSetup(
+    sendTx,
+    config.PROGRAM_ID,
+    walletPath,
+    config.MULTISIG_PAYER,
+    version,
+  );
+  const connection = user.connection;
+  const wallet = user.wallet;
+  const program = user.program;
 
-  const program = new Program<Marginfi>(marginfiIdl as Marginfi, provider);
-
-  let [stakedSettingsKey] = deriveStakedSettings(program.programId, config.GROUP_KEY);
+  let [stakedSettingsKey] = deriveStakedSettings(
+    program.programId,
+    config.GROUP_KEY,
+  );
 
   const [lstMint] = PublicKey.findProgramAddressSync(
     [Buffer.from("mint"), config.STAKE_POOL.toBuffer()],
-    SINGLE_POOL_PROGRAM_ID
+    SINGLE_POOL_PROGRAM_ID,
   );
   const [solPool] = PublicKey.findProgramAddressSync(
     [Buffer.from("stake"), config.STAKE_POOL.toBuffer()],
-    SINGLE_POOL_PROGRAM_ID
+    SINGLE_POOL_PROGRAM_ID,
   );
 
   // Note: oracle and lst mint/pool are also passed in meta for validation
@@ -79,7 +90,12 @@ async function main() {
     isWritable: false,
   };
 
-  const [bankKey] = deriveBankWithSeed(program.programId, config.GROUP_KEY, lstMint, new BN(config.SEED));
+  const [bankKey] = deriveBankWithSeed(
+    program.programId,
+    config.GROUP_KEY,
+    lstMint,
+    new BN(config.SEED),
+  );
 
   const transaction = new Transaction();
 
@@ -107,12 +123,16 @@ async function main() {
         // systemProgram: SystemProgram.programId,
       })
       .remainingAccounts([oracleMeta, lstMeta, solPoolMeta])
-      .instruction()
+      .instruction(),
   );
 
   if (sendTx) {
     try {
-      const signature = await sendAndConfirmTransaction(connection, transaction, [wallet]);
+      const signature = await sendAndConfirmTransaction(
+        connection,
+        transaction,
+        [wallet.payer],
+      );
       console.log("Transaction signature:", signature);
     } catch (error) {
       console.error("Transaction failed:", error);
@@ -134,19 +154,8 @@ async function main() {
   }
 }
 
-// TODO remove when package updates
-const deriveBankWithSeed = (programId: PublicKey, group: PublicKey, bankMint: PublicKey, seed: BN) => {
-  return PublicKey.findProgramAddressSync(
-    [group.toBuffer(), bankMint.toBuffer(), seed.toArrayLike(Buffer, "le", 8)],
-    programId
-  );
-};
-
-// TODO remove when package updates
-const deriveStakedSettings = (programId: PublicKey, group: PublicKey) => {
-  return PublicKey.findProgramAddressSync([Buffer.from("staked_settings", "utf-8"), group.toBuffer()], programId);
-};
-
-main().catch((err) => {
-  console.error(err);
-});
+if (require.main === module) {
+  main().catch((err) => {
+    console.error(err);
+  });
+}

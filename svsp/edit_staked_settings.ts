@@ -2,12 +2,11 @@
 // these settings, propagate them to the banks (presumably there's an API for this by the time
 // you're reading this)
 import {
-  Connection,
   PublicKey,
   Transaction,
   sendAndConfirmTransaction,
 } from "@solana/web3.js";
-import { Program, AnchorProvider, BN } from "@coral-xyz/anchor";
+import { BN } from "@coral-xyz/anchor";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 import {
   WrappedI80F48,
@@ -20,6 +19,7 @@ import {
   assertI80F48Approx,
   assertBNEqual,
 } from "../scripts/softTests";
+import { deriveStakedSettings } from "../scripts/common/pdas";
 
 /**
  * If true, send the tx. If false, output the unsigned b58 tx to console.
@@ -64,14 +64,14 @@ async function main() {
     config.PROGRAM_ID,
     "/keys/staging-deploy.json",
     config.MULTISIG,
-    "current"
+    "current",
   );
   const program = user.program;
   const connection = user.connection;
 
   let [stakedSettingsKey] = deriveStakedSettings(
     program.programId,
-    config.GROUP_KEY
+    config.GROUP_KEY,
   );
 
   const editSettings: StakedSettingsEdit = {
@@ -95,9 +95,8 @@ async function main() {
     riskTier: config.RISK_TIER !== undefined ? config.RISK_TIER : null,
   };
 
-  let stakedSettingsAccBefore = await program.account.stakedSettings.fetch(
-    stakedSettingsKey
-  );
+  let stakedSettingsAccBefore =
+    await program.account.stakedSettings.fetch(stakedSettingsKey);
 
   const tx = new Transaction();
   tx.add(
@@ -108,7 +107,7 @@ async function main() {
         admin: config.ADMIN,
         stakedSettings: stakedSettingsKey,
       })
-      .instruction()
+      .instruction(),
   );
 
   if (sendTx) {
@@ -122,9 +121,8 @@ async function main() {
     }
 
     if (verbose) {
-      let stakedSettingsAcc = await program.account.stakedSettings.fetch(
-        stakedSettingsKey
-      );
+      let stakedSettingsAcc =
+        await program.account.stakedSettings.fetch(stakedSettingsKey);
 
       if (config.SOL_ORACLE !== undefined) {
         assertKeysEqual(stakedSettingsAcc.oracle, config.SOL_ORACLE);
@@ -135,45 +133,45 @@ async function main() {
       if (config.ASSET_WEIGHT_INIT !== undefined) {
         assertI80F48Approx(
           stakedSettingsAcc.assetWeightInit,
-          bigNumberToWrappedI80F48(config.ASSET_WEIGHT_INIT)
+          bigNumberToWrappedI80F48(config.ASSET_WEIGHT_INIT),
         );
         console.log(
           "assetWeightInit: " +
             wrappedI80F48toBigNumber(
-              stakedSettingsAcc.assetWeightInit
-            ).toString()
+              stakedSettingsAcc.assetWeightInit,
+            ).toString(),
         );
         console.log(
           "was: " +
             wrappedI80F48toBigNumber(
-              stakedSettingsAccBefore.assetWeightInit
-            ).toString()
+              stakedSettingsAccBefore.assetWeightInit,
+            ).toString(),
         );
       }
 
       if (config.ASSET_WEIGHT_MAINT !== undefined) {
         assertI80F48Approx(
           stakedSettingsAcc.assetWeightMaint,
-          bigNumberToWrappedI80F48(config.ASSET_WEIGHT_MAINT)
+          bigNumberToWrappedI80F48(config.ASSET_WEIGHT_MAINT),
         );
         console.log(
           "assetWeightMaint: " +
             wrappedI80F48toBigNumber(
-              stakedSettingsAcc.assetWeightMaint
-            ).toString()
+              stakedSettingsAcc.assetWeightMaint,
+            ).toString(),
         );
         console.log(
           "was: " +
             wrappedI80F48toBigNumber(
-              stakedSettingsAccBefore.assetWeightMaint
-            ).toString()
+              stakedSettingsAccBefore.assetWeightMaint,
+            ).toString(),
         );
       }
 
       if (config.DEPOSIT_LIMIT !== undefined) {
         assertBNEqual(stakedSettingsAcc.depositLimit, config.DEPOSIT_LIMIT);
         console.log(
-          "depositLimit: " + stakedSettingsAcc.depositLimit.toString()
+          "depositLimit: " + stakedSettingsAcc.depositLimit.toString(),
         );
         console.log("was: " + stakedSettingsAccBefore.depositLimit.toString());
       }
@@ -181,21 +179,21 @@ async function main() {
       if (config.TOTAL_ASSET_VALUE_INIT_LIMIT !== undefined) {
         assertBNEqual(
           stakedSettingsAcc.totalAssetValueInitLimit,
-          config.TOTAL_ASSET_VALUE_INIT_LIMIT
+          config.TOTAL_ASSET_VALUE_INIT_LIMIT,
         );
         console.log(
           "totalAssetValueInitLimit: " +
-            stakedSettingsAcc.totalAssetValueInitLimit.toString()
+            stakedSettingsAcc.totalAssetValueInitLimit.toString(),
         );
         console.log(
-          "was: " + stakedSettingsAccBefore.totalAssetValueInitLimit.toString()
+          "was: " + stakedSettingsAccBefore.totalAssetValueInitLimit.toString(),
         );
       }
 
       if (config.ORACLE_MAX_AGE !== undefined) {
         assertBNEqual(
           new BN(stakedSettingsAcc.oracleMaxAge),
-          new BN(config.ORACLE_MAX_AGE)
+          new BN(config.ORACLE_MAX_AGE),
         );
         console.log("oracleMaxAge: " + stakedSettingsAcc.oracleMaxAge);
         console.log("was: " + stakedSettingsAccBefore.oracleMaxAge);
@@ -231,13 +229,6 @@ interface StakedSettingsEdit {
   oracleMaxAge: number | null;
   riskTier: { collateral: {} } | { isolated: {} } | null;
 }
-
-const deriveStakedSettings = (programId: PublicKey, group: PublicKey) => {
-  return PublicKey.findProgramAddressSync(
-    [Buffer.from("staked_settings", "utf-8"), group.toBuffer()],
-    programId
-  );
-};
 
 main().catch((err) => {
   console.error(err);

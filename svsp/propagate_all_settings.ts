@@ -3,18 +3,12 @@
 // TODO add a LUT and send these all in one tx to avoid burning so many tx fees.
 import {
   AccountMeta,
-  Connection,
   PublicKey,
   sendAndConfirmTransaction,
   Transaction,
 } from "@solana/web3.js";
-import {
-  DEFAULT_API_URL,
-  loadEnvFile,
-  loadKeypairFromFile,
-} from "../scripts/utils";
-import { Program, AnchorProvider } from "@coral-xyz/anchor";
 import { commonSetup } from "../lib/common-setup";
+import { deriveStakedSettings } from "../scripts/common/pdas";
 
 type Config = {
   PROGRAM_ID: string;
@@ -101,14 +95,6 @@ async function main() {
 main().catch((err) => {
   console.error(err);
 });
-
-// TODO remove after package updates
-const deriveStakedSettings = (programId: PublicKey, group: PublicKey) => {
-  return PublicKey.findProgramAddressSync(
-    [Buffer.from("staked_settings", "utf-8"), group.toBuffer()],
-    programId
-  );
-};
 
 /**
  * JSON file format of our staked banks endpoint

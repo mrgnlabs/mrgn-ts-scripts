@@ -9,6 +9,7 @@ import { BN } from "@coral-xyz/anchor";
 import { bigNumberToWrappedI80F48, WrappedI80F48 } from "@mrgnlabs/mrgn-common";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 import { commonSetup } from "../lib/common-setup";
+import { InterestRateConfigOpt1_6 } from "./common/types";
 
 /**
  * If true, send the txs. If false, output the unsigned b58 v0 txs to console.
@@ -215,25 +216,6 @@ if (require.main === module) {
     console.error(err);
   });
 }
-
-export type RatePoint = {
-  util: number;
-  rate: number;
-};
-
-type InterestRateConfigOpt1_6 = {
-  // Fees
-  insuranceFeeFixedApr: WrappedI80F48 | null;
-  insuranceIrFee: WrappedI80F48 | null;
-  protocolFixedFeeApr: WrappedI80F48 | null;
-  protocolIrFee: WrappedI80F48 | null;
-
-  protocolOriginationFee: WrappedI80F48 | null;
-
-  zeroUtilRate: number | null;
-  hundredUtilRate: number | null;
-  points: RatePoint[] | null;
-};
 
 type BankConfigOptRaw = {
   assetWeightInit: WrappedI80F48 | null;
