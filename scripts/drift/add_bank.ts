@@ -24,10 +24,12 @@ import {
 } from "./lib/utils";
 import {
   deriveBankWithSeed,
+  deriveLiquidityVault,
   deriveLiquidityVaultAuthority,
 } from "../common/pdas";
 import { commonSetup } from "../../lib/common-setup";
 import { bs58 } from "@switchboard-xyz/common";
+import { bigNumberToWrappedI80F48 } from "@mrgnlabs/mrgn-common";
 
 /**
  * If true, send the tx. If false, output the unsigned b58 tx to console.
@@ -79,10 +81,14 @@ async function main() {
   console.log("Bank mint:", config.BANK_MINT);
   console.log("Drift market index:", config.DRIFT_MARKET_INDEX);
   console.log();
+  config.ADMIN = new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw");
+  config.FEE_PAYER = new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw");
+  config.MULTISIG_PAYER = new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw");
 
   await addDriftBank(sendTx, config, "/keys/staging-deploy.json");
 }
 
+// (SOL, USDC, USDS, PYUSD, dSOL)
 export async function addDriftBank(
   sendTx: boolean,
   config: Config,
@@ -127,8 +133,8 @@ export async function addDriftBank(
   // Build drift bank config
   const driftConfig: DriftConfigCompact = {
     oracle: config.ORACLE,
-    assetWeightInit: I80F48_ONE, // 100%
-    assetWeightMaint: I80F48_ONE, // 100%
+    assetWeightInit: bigNumberToWrappedI80F48(0.65), // 65%
+    assetWeightMaint: bigNumberToWrappedI80F48(0.8), // 80%
     depositLimit: new BN(config.DEPOSIT_LIMIT ?? 10_000_000_000),
     oracleSetup: config.ORACLE_SETUP,
     operationalState: {
@@ -137,11 +143,11 @@ export async function addDriftBank(
     riskTier: {
       collateral: {},
     },
-    configFlags: 1, // (PYTH_PUSH_MIGRATED_DEPRECATED)
+    configFlags: 0,
     totalAssetValueInitLimit: new BN(
       config.TOTAL_ASSET_VALUE_INIT_LIMIT ?? 10_000_000_000,
     ),
-    oracleMaxAge: 100,
+    oracleMaxAge: 30,
     oracleMaxConfidence: 0, // Default: 10% confidence
   };
 
@@ -207,6 +213,10 @@ export async function addDriftBank(
     true,
     tokenProgram,
   );
+  const [liquidityVault] = deriveLiquidityVault(
+    program.programId,
+    bank,
+  );
   const [liquidityVaultAuthority] = deriveLiquidityVaultAuthority(
     program.programId,
     bank,
@@ -233,30 +243,38 @@ export async function addDriftBank(
       driftOracle: config.DRIFT_ORACLE,
       tokenProgram,
     })
+    .accountsPartial({
+      liquidityVault,
+      liquidityVaultAuthority,
+      mint: config.BANK_MINT,
+      integrationAcc1: driftSpotMarket,
+      integrationAcc2: driftUser,
+      integrationAcc3: driftUserStats,
+    })
     .instruction();
 
-  const transaction = new Transaction().add(addBankIx, initUserIx);
+  const transaction = new Transaction().add(addBankIx);
 
   // Simulate
   transaction.feePayer = feePayer;
   const { blockhash } = await connection.getLatestBlockhash();
   transaction.recentBlockhash = blockhash;
 
-  console.log("Simulating lendingPoolAddBankDrift & driftInitUser...");
-  const simulation = await connection.simulateTransaction(transaction);
+  // console.log("Simulating lendingPoolAddBankDrift & driftInitUser...");
+  //const simulation = await connection.simulateTransaction(transaction);
 
-  console.log("\nProgram Logs:");
-  simulation.value.logs?.forEach((log) => console.log("  " + log));
+  // console.log("\nProgram Logs:");
+  // simulation.value.logs?.forEach((log) => console.log("  " + log));
 
-  if (simulation.value.err) {
-    console.log("\nSimulation failed:");
-    console.log(JSON.stringify(simulation.value.err, null, 2));
-    process.exit(1);
-  }
+  // if (simulation.value.err) {
+  //   console.log("\nSimulation failed:");
+  //   console.log(JSON.stringify(simulation.value.err, null, 2));
+  //   process.exit(1);
+  // }
 
-  console.log("\nSimulation successful!");
-  console.log("Compute units:", simulation.value.unitsConsumed);
-  console.log();
+  // console.log("\nSimulation successful!");
+  // console.log("Compute units:", simulation.value.unitsConsumed);
+  // console.log();
 
   if (sendTx) {
     try {
@@ -297,9 +315,8 @@ if (require.main === module) {
   });
 }
 
-const pkFromString = (s: any) => new PublicKey(s);
-
 function parseConfig(rawConfig: string): Config {
+  const pkFromString = (s: any) => new PublicKey(s);
   const json = JSON.parse(rawConfig);
 
   let ORACLE_SETUP;
@@ -316,7 +333,7 @@ function parseConfig(rawConfig: string): Config {
   return {
     PROGRAM_ID: json.programId,
     GROUP_KEY: pkFromString(json.group),
-    BANK_MINT: pkFromString(json.COLLATERAL_MINT),
+    BANK_MINT: pkFromString(json.bankMint),
     DRIFT_MARKET_INDEX: json.driftMarketIndex,
     ORACLE: pkFromString(json.oracle),
     ORACLE_SETUP,
