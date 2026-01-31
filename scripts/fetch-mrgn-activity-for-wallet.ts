@@ -11,7 +11,7 @@ type Config = {
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  WALLET: new PublicKey("evoxxcAvFrt8Xg6cXKV2Q5SPpnxqEv14VdmAnHmQS13"),
+  WALLET: new PublicKey("7QRQpcLVFd46Kegg1C2fGZvTPBL5ck2fS8viXbGwaMaU"),
   // top liquidator
   // * evoxxcAvFrt8Xg6cXKV2Q5SPpnxqEv14VdmAnHmQS13
   // second place
