@@ -1,6 +1,8 @@
 import { PublicKey } from "@solana/web3.js";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
+import { wrappedI80F48toBigNumber } from "@mrgnlabs/mrgn-common";
 import { commonSetup } from "../lib/common-setup";
+import BigNumber from "bignumber.js";
 import fs from "fs";
 import path from "path";
 
@@ -11,7 +13,7 @@ type Config = {
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  WALLET: new PublicKey("7QRQpcLVFd46Kegg1C2fGZvTPBL5ck2fS8viXbGwaMaU"),
+  WALLET: new PublicKey("HPeLmNJgQdZ2yzxqiDY5v1EBW8ADF1Fx5Mt4xArjPbuX"),
   // top liquidator
   // * evoxxcAvFrt8Xg6cXKV2Q5SPpnxqEv14VdmAnHmQS13
   // second place
@@ -22,7 +24,7 @@ const config: Config = {
   // * HPeLmNJgQdZ2yzxqiDY5v1EBW8ADF1Fx5Mt4xArjPbuX
 };
 
-const LOG_ACTIVITY_TO_FILE = true;
+const LOG_ACTIVITY_TO_FILE = false;
 const WINDOW_DEFS = {
   "1h": 1 * 60 * 60,
   "24h": 24 * 60 * 60,
@@ -42,6 +44,7 @@ const WINDOW_ORDER = [
 async function main() {
   const user = commonSetup(true, config.PROGRAM_ID, "/.config/solana/id.json");
   const connection = user.connection;
+  const program = user.program;
   const programId = new PublicKey(config.PROGRAM_ID);
   const JUPITER_PROGRAM_ID = new PublicKey(
     "JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4",
@@ -500,10 +503,58 @@ async function main() {
     ],
   );
 
+  const bankKeys = new Map<string, PublicKey>();
+  for (const totals of [
+    withdrawTotals,
+    repayTotals,
+    liquidationClassicProfitTotals,
+    liquidationClassicAssetSeizedTotals,
+  ]) {
+    for (const bank of totals.keys()) {
+      if (!bankKeys.has(bank)) {
+        bankKeys.set(bank, new PublicKey(bank));
+      }
+    }
+  }
+  const bankInfoByKey = new Map<
+    string,
+    { mintDecimals: number; price: BigNumber }
+  >();
+  if (bankKeys.size > 0) {
+    const bankKeyList = Array.from(bankKeys.values());
+    const bankAccounts = await program.account.bank.fetchMultiple(bankKeyList);
+    bankAccounts.forEach((bankAcc, idx) => {
+      if (!bankAcc) {
+        return;
+      }
+      const bankKey = bankKeyList[idx].toBase58();
+      bankInfoByKey.set(bankKey, {
+        mintDecimals: bankAcc.mintDecimals,
+        price: wrappedI80F48toBigNumber(bankAcc.cache.lastOraclePrice),
+      });
+    });
+  }
+
+  const formatUsd = (bank: string, amount: bigint) => {
+    const info = bankInfoByKey.get(bank);
+    if (!info) {
+      return "n/a";
+    }
+    const amountBn = new BigNumber(amount.toString());
+    const dollars = amountBn
+      .times(info.price)
+      .div(new BigNumber(10).pow(info.mintDecimals));
+    return dollars.toFixed(2);
+  };
+
   const formatTotals = (totals: Map<string, bigint>) =>
     Array.from(totals.entries())
       .sort((a, b) => (a[1] > b[1] ? -1 : a[1] < b[1] ? 1 : 0))
-      .map(([bank, amount]) => [bank, amount.toString()]);
+      .map(([bank, amount]) => [
+        bank,
+        amount.toString(),
+        formatUsd(bank, amount),
+      ]);
   const totalsToObject = (totals: Map<string, bigint>) =>
     Array.from(totals.entries()).reduce<Record<string, string>>(
       (acc, [bank, amount]) => {
@@ -515,16 +566,16 @@ async function main() {
 
   console.log("");
   console.log(paint("Withdraw totals (token amount, raw):", "yellow"));
-  printTable(["bank", "amount"], formatTotals(withdrawTotals));
+  printTable(["bank", "amount", "amount ($)"], formatTotals(withdrawTotals));
   console.log("");
   console.log(paint("Repay totals (token amount, raw):", "yellow"));
-  printTable(["bank", "amount"], formatTotals(repayTotals));
+  printTable(["bank", "amount", "amount ($)"], formatTotals(repayTotals));
   console.log("");
   console.log(
     paint("Liquidation classic profit totals (token amount, raw):", "yellow"),
   );
   printTable(
-    ["bank", "amount"],
+    ["bank", "amount", "amount ($)"],
     formatTotals(liquidationClassicProfitTotals),
   );
   console.log("");
@@ -532,7 +583,7 @@ async function main() {
     paint("Liquidation classic assets seized (token amount, raw):", "yellow"),
   );
   printTable(
-    ["bank", "amount"],
+    ["bank", "amount", "amount ($)"],
     formatTotals(liquidationClassicAssetSeizedTotals),
   );
 
