@@ -11,18 +11,18 @@ import { WrappedI80F48 } from "@mrgnlabs/mrgn-common";
 /**
  * If true, send the tx. If false, output the unsigned b58 tx to console.
  */
-const sendTx = true;
+const sendTx = false;
 
 type Config = {
   PROGRAM_ID: string;
   GROUP: PublicKey;
-  ADMIN_GENERAL: PublicKey;
-  EMODE_ADMIN: PublicKey;
-  CURVE_ADMIN: PublicKey;
-  LIMIT_ADMIN: PublicKey;
-  EMISS_ADMIN: PublicKey;
-  META_ADMIN: PublicKey;
-  RISK_ADMIN: PublicKey;
+  ADMIN_GENERAL?: PublicKey;
+  EMODE_ADMIN?: PublicKey;
+  CURVE_ADMIN?: PublicKey;
+  LIMIT_ADMIN?: PublicKey;
+  EMISS_ADMIN?: PublicKey;
+  META_ADMIN?: PublicKey;
+  RISK_ADMIN?: PublicKey;
   EMODE_MAX_INIT_LEVERAGE?: WrappedI80F48;
   EMODE_MAX_MAINT_LEVERAGE?: WrappedI80F48;
 
@@ -44,15 +44,15 @@ type Config = {
 // };
 
 const config: Config = {
-  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-  GROUP: new PublicKey("Diu1q9gniR1qR4Daaej3rcHd6949HMmxLGsnQ94Z3rLz"),
-  ADMIN_GENERAL: new PublicKey("725Z4QQUVhRiXcCdf4cQTrxXYmQXyW9zgVkW5PDVSJz4"),
-  EMODE_ADMIN: new PublicKey("11111111111111111111111111111111"),
-  CURVE_ADMIN: new PublicKey("11111111111111111111111111111111"),
-  LIMIT_ADMIN: new PublicKey("11111111111111111111111111111111"),
-  EMISS_ADMIN: new PublicKey("11111111111111111111111111111111"),
-  META_ADMIN: new PublicKey("EokNERAAaWorYsqMqgNhVHbyNmQoGDzEuVpbbEsCtK3a"),
-  RISK_ADMIN: new PublicKey("11111111111111111111111111111111"),
+  PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
+  GROUP: new PublicKey("4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8"),
+  // ADMIN_GENERAL: new PublicKey("725Z4QQUVhRiXcCdf4cQTrxXYmQXyW9zgVkW5PDVSJz4"),
+  // EMODE_ADMIN: new PublicKey("11111111111111111111111111111111"),
+  // CURVE_ADMIN: new PublicKey("11111111111111111111111111111111"),
+  // LIMIT_ADMIN: new PublicKey("11111111111111111111111111111111"),
+  // EMISS_ADMIN: new PublicKey("11111111111111111111111111111111"),
+  // META_ADMIN: new PublicKey("EokNERAAaWorYsqMqgNhVHbyNmQoGDzEuVpbbEsCtK3a"),
+  RISK_ADMIN: new PublicKey("6DdJqQYD8AizuXiCkbn19LiyWRwUsRMzy2Sgyoyasyj7"),
 
   MULTISIG: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 };
@@ -67,25 +67,42 @@ async function main() {
   );
   const program = user.program;
   const connection = user.connection;
-  console.log("setting emode admin to: " + config.EMODE_ADMIN.toString());
-  console.log("setting curve admin to: " + config.CURVE_ADMIN.toString());
-  console.log("setting limit admin to: " + config.LIMIT_ADMIN.toString());
-  console.log("setting emiss admin to: " + config.EMISS_ADMIN.toString());
-  console.log("setting meta admin to: " + config.META_ADMIN.toString());
-  console.log("setting risk admin to: " + config.RISK_ADMIN.toString());
+  if (config.ADMIN_GENERAL) {
+    console.log("setting admin to: " + config.ADMIN_GENERAL.toString());
+  }
+  if (config.EMODE_ADMIN) {
+    console.log("setting emode admin to: " + config.EMODE_ADMIN.toString());
+  }
+  if (config.CURVE_ADMIN) {
+    console.log("setting curve admin to: " + config.CURVE_ADMIN.toString());
+  }
+  if (config.LIMIT_ADMIN) {
+    console.log("setting limit admin to: " + config.LIMIT_ADMIN.toString());
+  }
+  if (config.EMISS_ADMIN) {
+    console.log("setting emiss admin to: " + config.EMISS_ADMIN.toString());
+  }
+  if (config.META_ADMIN) {
+    console.log("setting meta admin to: " + config.META_ADMIN.toString());
+  }
+  if (config.RISK_ADMIN) {
+    console.log("setting risk admin to: " + config.RISK_ADMIN.toString());
+  }
 
   let groupBefore = await program.account.marginfiGroup.fetch(config.GROUP);
+  console.log("Current risk admin:", groupBefore.riskAdmin.toString());
+
   const transaction = new Transaction();
   transaction.add(
     await program.methods
       .marginfiGroupConfigure(
-        config.ADMIN_GENERAL,
-        config.EMODE_ADMIN,
-        config.CURVE_ADMIN,
-        config.LIMIT_ADMIN,
-        config.EMISS_ADMIN,
-        config.META_ADMIN,
-        config.RISK_ADMIN,
+        config.ADMIN_GENERAL ?? groupBefore.admin,
+        config.EMODE_ADMIN ?? groupBefore.emodeAdmin,
+        config.CURVE_ADMIN ?? groupBefore.delegateCurveAdmin,
+        config.LIMIT_ADMIN ?? groupBefore.delegateLimitAdmin,
+        config.EMISS_ADMIN ?? groupBefore.delegateEmissionsAdmin,
+        config.META_ADMIN ?? groupBefore.metadataAdmin,
+        config.RISK_ADMIN ?? groupBefore.riskAdmin,
         config.EMODE_MAX_INIT_LEVERAGE ?? null,
         config.EMODE_MAX_MAINT_LEVERAGE ?? null,
       )
