@@ -38,7 +38,7 @@ export type Config = {
 };
 
 const config: Config = {
-  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
+  PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
   ADMIN: new PublicKey("mfC1LoEk4mpM5yx1LjwR9QLZQ49AitxxWkK5Aciw7ZC"),
   //MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 
@@ -48,10 +48,10 @@ const config: Config = {
   // One tx per entry in this array:
   BANKS: [
     {
-      bank: new PublicKey("8kVdNTKro2eaFvM1JTfo5d3WFbf98Xz9SNxWbgZadgvK"),
+      bank: new PublicKey("BeNBJrAh1tZg5sqgt8D6AWKJLD5KkBrfZvtcgd7EuiAR"),
       config: {
-        assetWeightInit: bigNumberToWrappedI80F48(0.8),
-        assetWeightMaint: bigNumberToWrappedI80F48(0.9),
+        assetWeightInit: null,
+        assetWeightMaint: null,
         liabilityWeightInit: null,
         liabilityWeightMaint: null,
         depositLimit: null,
@@ -69,12 +69,12 @@ const config: Config = {
           hundredUtilRate: null,
           points: null,
         },
-        operationalState: { reduceOnly: {} },
+        operationalState: null,
         oracleMaxAge: null,
         oracleMaxConfidence: null,
         permissionlessBadDebtSettlement: null,
         freezeSettings: null,
-        tokenlessRepaymentsAllowed: null,
+        tokenlessRepaymentsAllowed: true,
       },
     },
     // Add more { bank, config: bankConfigOptForThatBank() } as needed
