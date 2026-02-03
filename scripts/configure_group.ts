@@ -52,7 +52,7 @@ const config: Config = {
   // LIMIT_ADMIN: new PublicKey("11111111111111111111111111111111"),
   // EMISS_ADMIN: new PublicKey("11111111111111111111111111111111"),
   // META_ADMIN: new PublicKey("EokNERAAaWorYsqMqgNhVHbyNmQoGDzEuVpbbEsCtK3a"),
-  RISK_ADMIN: new PublicKey("6DdJqQYD8AizuXiCkbn19LiyWRwUsRMzy2Sgyoyasyj7"),
+  RISK_ADMIN: new PublicKey("11111111111111111111111111111111"),
 
   MULTISIG: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 };
