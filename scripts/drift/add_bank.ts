@@ -143,7 +143,7 @@ export async function addDriftBank(
     riskTier: {
       collateral: {},
     },
-    configFlags: 1, // (PYTH_PUSH_MIGRATED_DEPRECATED)
+    configFlags: 0,
     totalAssetValueInitLimit: new BN(
       config.TOTAL_ASSET_VALUE_INIT_LIMIT ?? 10_000_000_000,
     ),
@@ -253,7 +253,7 @@ export async function addDriftBank(
     })
     .instruction();
 
-  const transaction = new Transaction().add(addBankIx, initUserIx);
+  const transaction = new Transaction().add(addBankIx);
 
   // Simulate
   transaction.feePayer = feePayer;

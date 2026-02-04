@@ -34,11 +34,10 @@ const config: Config = {
 
   MULTISIG: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 
-  // TODO emissions...
-  NEW_WALLET: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
+  NEW_WALLET: new PublicKey("CYcWgRxSCLXJKB6c8xGBddgZdFxPoksBL5DrJVqAtsQj"),
   NEW_ADMIN: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
   NEW_POOL_FLAT_SOL_FEE: 0,
-  LIQUIDATION_FLAT_SOL_FEE: 0.001 * 10 ** 9,
+  LIQUIDATION_FLAT_SOL_FEE: 0.002 * 10 ** 9,
   FIXED_FEE: 0,
   RATE_FEE: 0.075,
   LIQUIDATION_MAX_PREMIUM: 0.1,
@@ -97,17 +96,20 @@ async function main() {
   }
 }
 
-// TODO remove after package updates
-const deriveGlobalFeeState = (programId: PublicKey) => {
-  return PublicKey.findProgramAddressSync(
-    [Buffer.from("feestate", "utf-8")],
-    programId,
-  );
-};
-
 main().catch((err) => {
   console.error(err);
 });
+
+/*
+ * Status 1/30/2026
+ admin:        CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw
+ wallet:       CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw
+ flat (banks): 0
+ flat (liq)):  1000000
+ fixed:        0
+ rate          0.074999999999999289457
+ liq max       0.10000000000000142109
+ */
 
 /*
  * Status 2/28/2025

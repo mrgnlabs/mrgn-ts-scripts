@@ -7,6 +7,7 @@ import { OperationalStateRaw, RiskTierRaw } from "@mrgnlabs/marginfi-client-v2";
 export const DRIFT_PROGRAM_ID = new PublicKey("dRiftyHA39MWEi3m9aunc5MzRF1JYuBsbn6VPcn33UH");
 export const I80F48_ONE = bigNumberToWrappedI80F48(1);
 export const DRIFT_SCALED_BALANCE_DECIMALS = 9;
+export const DRIFT_PRECISION_DECIMALS = 10;
 
 // Drift config interface
 export interface DriftConfigCompact {

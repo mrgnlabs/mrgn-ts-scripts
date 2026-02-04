@@ -6,8 +6,13 @@ import {
 } from "@mrgnlabs/mrgn-common";
 import type { WrappedI80F48 } from "@mrgnlabs/mrgn-common";
 import BigNumber from "bignumber.js";
-import { commonSetup } from "../lib/common-setup";
+import { commonSetup, registerDriftProgram } from "../lib/common-setup";
 import { getTokenBalance, u32ToApr, u32ToUtil } from "../lib/utils";
+import {
+  DRIFT_PRECISION_DECIMALS,
+  DRIFT_PROGRAM_ID,
+  DRIFT_SCALED_BALANCE_DECIMALS,
+} from "./drift/lib/utils";
 
 // If true, prints this bank's settings in a format to be copy-pasted into add_bank
 const printForCopy = false;
@@ -24,7 +29,7 @@ const config: Config = {
     // new PublicKey("HmpMfL8942u22htC4EMiWgLX931g3sacXFR6KjuLgKLV"), // usdt
     // new PublicKey("8UEiPmgZHXXEDrqLS3oiTxQxTbeYTtPbeMBxAd2XGbpu"), // py
     // new PublicKey("FDsf8sj6SoV313qrA91yms3u5b3P4hBxEPvanVs8LtJV"), // usds
-    new PublicKey("8W3GgWFFnHdd98GKGzvNNi9Wzjoq2CU4wW6cHz6cKxk1"),
+    new PublicKey("FWZbU8TSPyjyrWQASzujo7FjgF9f3GEkjaFAtbKWqjMH"),
   ],
 };
 
@@ -83,6 +88,8 @@ async function printBankInfo(bankKey: PublicKey) {
     console.log("*****SOLEND BANK*****");
   }
 
+  let exchangeRate = 1;
+
   // Metrics
   console.log("Metrics:");
   console.table([
@@ -110,11 +117,24 @@ async function printBankInfo(bankKey: PublicKey) {
   }
 
   if (bank.config.assetTag === 4) {
+    registerDriftProgram(user, DRIFT_PROGRAM_ID.toString());
+    // Avoid TS2589 (deep instantiation) errors rom Anchor's massive generated account types.
+    const driftProgram = user.driftProgram as any;
+    const market = await driftProgram.account.spotMarket.fetch(
+      bank.integrationAcc1,
+    );
+    exchangeRate =
+      market.cumulativeDepositInterest.toNumber() /
+      10 ** DRIFT_PRECISION_DECIMALS;
     console.log("Drift Info:");
     console.table([
       { Property: "Spot Market", Value: bank.integrationAcc1.toString() },
       { Property: "User", Value: bank.integrationAcc2.toString() },
       { Property: "User Stats", Value: bank.integrationAcc3.toString() },
+      {
+        Property: "Exchange Rate",
+        Value: market.cumulativeDepositInterest.toString(),
+      },
     ]);
   }
 
@@ -197,7 +217,10 @@ async function printBankInfo(bankKey: PublicKey) {
       Label: "Liabilities per Share",
       Value: toStr(bank.liabilityShareValue),
     },
-    { Label: "Total Deposits (token)", Value: formatBN(totalAssets) },
+    {
+      Label: "Total Deposits (token)",
+      Value: formatBN(totalAssets.multipliedBy(exchangeRate)),
+    },
     { Label: "Total Liabilities (token)", Value: formatBN(totalLiabs) },
     { Label: "Deposit Limit (token)", Value: formatBN(depositLimitToken) },
     { Label: "Borrow Limit (token)", Value: formatBN(borrowLimitToken) },

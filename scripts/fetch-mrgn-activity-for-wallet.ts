@@ -1,6 +1,8 @@
 import { PublicKey } from "@solana/web3.js";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
+import { wrappedI80F48toBigNumber } from "@mrgnlabs/mrgn-common";
 import { commonSetup } from "../lib/common-setup";
+import BigNumber from "bignumber.js";
 import fs from "fs";
 import path from "path";
 
@@ -12,6 +14,14 @@ type Config = {
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
   WALLET: new PublicKey("HPeLmNJgQdZ2yzxqiDY5v1EBW8ADF1Fx5Mt4xArjPbuX"),
+  // top liquidator
+  // * evoxxcAvFrt8Xg6cXKV2Q5SPpnxqEv14VdmAnHmQS13
+  // second place
+  // * 7QRQpcLVFd46Kegg1C2fGZvTPBL5ck2fS8viXbGwaMaU
+  // top receivership liquidation
+  // * amebFu142uR4RrDMRRWwwhB6mdueFB58ppSEzfQZcft
+  // our liquidator
+  // * HPeLmNJgQdZ2yzxqiDY5v1EBW8ADF1Fx5Mt4xArjPbuX
 };
 
 const LOG_ACTIVITY_TO_FILE = false;
@@ -34,6 +44,7 @@ const WINDOW_ORDER = [
 async function main() {
   const user = commonSetup(true, config.PROGRAM_ID, "/.config/solana/id.json");
   const connection = user.connection;
+  const program = user.program;
   const programId = new PublicKey(config.PROGRAM_ID);
   const JUPITER_PROGRAM_ID = new PublicKey(
     "JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4",
@@ -86,6 +97,8 @@ async function main() {
     "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb",
   );
   const BANK_ACCOUNT_INDEX = 3;
+  const LIQUIDATION_ASSET_BANK_ACCOUNT_INDEX = 1;
+  const LIQUIDATION_LIABILITY_BANK_ACCOUNT_INDEX = 2;
 
   const nowSec = Math.floor(Date.now() / 1000);
   const windows = WINDOW_DEFS;
@@ -147,6 +160,8 @@ async function main() {
     [];
   const withdrawTotals = new Map<string, bigint>();
   const repayTotals = new Map<string, bigint>();
+  const liquidationClassicProfitTotals = new Map<string, bigint>();
+  const liquidationClassicAssetSeizedTotals = new Map<string, bigint>();
 
   const matchesDiscriminator = (data: Uint8Array, discriminator: number[]) => {
     if (data.length < discriminator.length) {
@@ -178,6 +193,18 @@ async function main() {
       return readU64LE(data, 1);
     }
     return null;
+  };
+  const parseLiquidationAssetAmount = (data: Uint8Array) => {
+    if (
+      !matchesDiscriminator(data, LENDING_ACCOUNT_LIQUIDATE_DISCRIMINATOR)
+    ) {
+      return null;
+    }
+    const offset = LENDING_ACCOUNT_LIQUIDATE_DISCRIMINATOR.length;
+    if (data.length < offset + 8) {
+      return null;
+    }
+    return readU64LE(data, offset);
   };
   const addTotal = (
     totals: Map<string, bigint>,
@@ -214,6 +241,7 @@ async function main() {
       number,
       { type: "withdraw" | "repay"; bank: PublicKey }
     >();
+    const liquidationByIndex = new Map<number, PublicKey>();
     let hasStartLiquidation = false;
     let hasJupiter = false;
     let hasTitan = false;
@@ -239,6 +267,36 @@ async function main() {
         matchesDiscriminator(data, LENDING_ACCOUNT_LIQUIDATE_DISCRIMINATOR)
       ) {
         instructionNames.push("lendingAccountLiquidate");
+        const accountIndexes =
+          (ix as { accountKeyIndexes?: number[]; accounts?: number[] })
+            .accountKeyIndexes ?? (ix as { accounts?: number[] }).accounts;
+        const liabilityBankIndex =
+          accountIndexes &&
+          accountIndexes.length > LIQUIDATION_LIABILITY_BANK_ACCOUNT_INDEX
+            ? accountIndexes[LIQUIDATION_LIABILITY_BANK_ACCOUNT_INDEX]
+            : undefined;
+        const liabilityBankKey =
+          liabilityBankIndex === undefined
+            ? undefined
+            : accountKeys[liabilityBankIndex];
+        if (liabilityBankKey) {
+          liquidationByIndex.set(ixIndex, liabilityBankKey);
+        }
+        const assetBankIndex =
+          accountIndexes &&
+          accountIndexes.length > LIQUIDATION_ASSET_BANK_ACCOUNT_INDEX
+            ? accountIndexes[LIQUIDATION_ASSET_BANK_ACCOUNT_INDEX]
+            : undefined;
+        const assetBankKey =
+          assetBankIndex === undefined ? undefined : accountKeys[assetBankIndex];
+        const assetAmount = parseLiquidationAssetAmount(data);
+        if (assetBankKey && assetAmount !== null) {
+          addTotal(
+            liquidationClassicAssetSeizedTotals,
+            assetBankKey.toBase58(),
+            assetAmount,
+          );
+        }
       } else if (
         matchesDiscriminator(data, LENDING_ACCOUNT_WITHDRAW_DISCRIMINATOR)
       ) {
@@ -275,10 +333,13 @@ async function main() {
       }
     }
 
-    if (hasStartLiquidation && tx.meta?.innerInstructions?.length) {
+    if (tx.meta?.innerInstructions?.length) {
       for (const inner of tx.meta.innerInstructions) {
-        const parent = withdrawRepayByIndex.get(inner.index);
-        if (!parent) {
+        const parent = hasStartLiquidation
+          ? withdrawRepayByIndex.get(inner.index)
+          : undefined;
+        const liquidationBank = liquidationByIndex.get(inner.index);
+        if (!parent && !liquidationBank) {
           continue;
         }
         for (const innerIx of inner.instructions) {
@@ -301,11 +362,20 @@ async function main() {
           if (amount === null) {
             continue;
           }
-          const bankKey = parent.bank.toBase58();
-          if (parent.type === "withdraw") {
-            addTotal(withdrawTotals, bankKey, amount);
-          } else {
-            addTotal(repayTotals, bankKey, amount);
+          if (parent) {
+            const bankKey = parent.bank.toBase58();
+            if (parent.type === "withdraw") {
+              addTotal(withdrawTotals, bankKey, amount);
+            } else {
+              addTotal(repayTotals, bankKey, amount);
+            }
+          }
+          if (liquidationBank) {
+            addTotal(
+              liquidationClassicProfitTotals,
+              liquidationBank.toBase58(),
+              amount,
+            );
           }
         }
       }
@@ -433,10 +503,58 @@ async function main() {
     ],
   );
 
+  const bankKeys = new Map<string, PublicKey>();
+  for (const totals of [
+    withdrawTotals,
+    repayTotals,
+    liquidationClassicProfitTotals,
+    liquidationClassicAssetSeizedTotals,
+  ]) {
+    for (const bank of totals.keys()) {
+      if (!bankKeys.has(bank)) {
+        bankKeys.set(bank, new PublicKey(bank));
+      }
+    }
+  }
+  const bankInfoByKey = new Map<
+    string,
+    { mintDecimals: number; price: BigNumber }
+  >();
+  if (bankKeys.size > 0) {
+    const bankKeyList = Array.from(bankKeys.values());
+    const bankAccounts = await program.account.bank.fetchMultiple(bankKeyList);
+    bankAccounts.forEach((bankAcc, idx) => {
+      if (!bankAcc) {
+        return;
+      }
+      const bankKey = bankKeyList[idx].toBase58();
+      bankInfoByKey.set(bankKey, {
+        mintDecimals: bankAcc.mintDecimals,
+        price: wrappedI80F48toBigNumber(bankAcc.cache.lastOraclePrice),
+      });
+    });
+  }
+
+  const formatUsd = (bank: string, amount: bigint) => {
+    const info = bankInfoByKey.get(bank);
+    if (!info) {
+      return "n/a";
+    }
+    const amountBn = new BigNumber(amount.toString());
+    const dollars = amountBn
+      .times(info.price)
+      .div(new BigNumber(10).pow(info.mintDecimals));
+    return dollars.toFixed(2);
+  };
+
   const formatTotals = (totals: Map<string, bigint>) =>
     Array.from(totals.entries())
       .sort((a, b) => (a[1] > b[1] ? -1 : a[1] < b[1] ? 1 : 0))
-      .map(([bank, amount]) => [bank, amount.toString()]);
+      .map(([bank, amount]) => [
+        bank,
+        amount.toString(),
+        formatUsd(bank, amount),
+      ]);
   const totalsToObject = (totals: Map<string, bigint>) =>
     Array.from(totals.entries()).reduce<Record<string, string>>(
       (acc, [bank, amount]) => {
@@ -448,10 +566,26 @@ async function main() {
 
   console.log("");
   console.log(paint("Withdraw totals (token amount, raw):", "yellow"));
-  printTable(["bank", "amount"], formatTotals(withdrawTotals));
+  printTable(["bank", "amount", "amount ($)"], formatTotals(withdrawTotals));
   console.log("");
   console.log(paint("Repay totals (token amount, raw):", "yellow"));
-  printTable(["bank", "amount"], formatTotals(repayTotals));
+  printTable(["bank", "amount", "amount ($)"], formatTotals(repayTotals));
+  console.log("");
+  console.log(
+    paint("Liquidation classic profit totals (token amount, raw):", "yellow"),
+  );
+  printTable(
+    ["bank", "amount", "amount ($)"],
+    formatTotals(liquidationClassicProfitTotals),
+  );
+  console.log("");
+  console.log(
+    paint("Liquidation classic assets seized (token amount, raw):", "yellow"),
+  );
+  printTable(
+    ["bank", "amount", "amount ($)"],
+    formatTotals(liquidationClassicAssetSeizedTotals),
+  );
 
   if (LOG_ACTIVITY_TO_FILE) {
     const activityDir = path.join("logs", "activity");
@@ -467,6 +601,10 @@ async function main() {
       events: activityEvents,
       withdraw: totalsToObject(withdrawTotals),
       repay: totalsToObject(repayTotals),
+      liquidationClassicProfit: totalsToObject(liquidationClassicProfitTotals),
+      liquidationClassicAssetsSeized: totalsToObject(
+        liquidationClassicAssetSeizedTotals,
+      ),
     };
     fs.writeFileSync(activityPath, JSON.stringify(activityPayload, null, 2));
     console.log("");
