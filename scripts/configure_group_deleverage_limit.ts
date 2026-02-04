@@ -37,7 +37,7 @@ async function main() {
   const connection = user.connection;
 
   let groupBefore = await program.account.marginfiGroup.fetch(config.GROUP);
-  console.log("Current limit admin:", groupBefore.deleverageWithdrawWindowCache.dailyLimit.toString());
+  console.log("Current limit:", groupBefore.deleverageWithdrawWindowCache.dailyLimit.toString());
 
   const transaction = new Transaction();
   transaction.add(
