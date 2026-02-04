@@ -65,35 +65,40 @@ const config: Config = {
   SEED: 41,
 };
 
-const bankConfig: KaminoConfigCompact = {
-  assetWeightInit: bigNumberToWrappedI80F48(0.8),
-  assetWeightMaint: bigNumberToWrappedI80F48(0.9),
-  depositLimit: new BN(100 * 10 ** 6),
-  operationalState: { operational: {} },
-  riskTier: { collateral: {} },
-  totalAssetValueInitLimit: new BN(2000000000),
-  oracleMaxAge: 30,
-  oracleMaxConfidence: 0,
-  oracle: config.ORACLE,
-  oracleSetup: config.ORACLE_TYPE,
-  configFlags: 0,
-};
-
 async function main() {
   await addKaminoBank(sendTx, config, "/keys/staging-deploy.json");
 }
 
-export async function addKaminoBank(sendTx: boolean, config: Config, walletPath: string, version?: "current"): Promise<PublicKey> {
+export async function addKaminoBank(
+  sendTx: boolean,
+  config: Config,
+  walletPath: string,
+  version?: "current",
+): Promise<PublicKey> {
   console.log("adding bank to group: " + config.GROUP_KEY);
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
     walletPath,
     config.MULTISIG_PAYER,
-    version
+    version,
   );
   const program = user.program;
   const connection = user.connection;
+
+  const bankConfig: KaminoConfigCompact = {
+    assetWeightInit: bigNumberToWrappedI80F48(0.8),
+    assetWeightMaint: bigNumberToWrappedI80F48(0.9),
+    depositLimit: new BN(100 * 10 ** 6),
+    operationalState: { operational: {} },
+    riskTier: { collateral: {} },
+    totalAssetValueInitLimit: new BN(2000000000),
+    oracleMaxAge: 30,
+    oracleMaxConfidence: 0,
+    oracle: config.ORACLE,
+    oracleSetup: config.ORACLE_TYPE,
+    configFlags: 0,
+  };
 
   console.log("Detecting token program for mint...");
   let tokenProgram = TOKEN_PROGRAM_ID;
@@ -116,7 +121,7 @@ export async function addKaminoBank(sendTx: boolean, config: Config, walletPath:
     program.programId,
     config.GROUP_KEY,
     config.BANK_MINT,
-    new BN(config.SEED)
+    new BN(config.SEED),
   );
 
   const initBankTx = new Transaction().add(
@@ -135,8 +140,8 @@ export async function addKaminoBank(sendTx: boolean, config: Config, walletPath:
       {
         seed: new BN(config.SEED),
         config: bankConfig,
-      }
-    )
+      },
+    ),
   );
 
   if (sendTx) {

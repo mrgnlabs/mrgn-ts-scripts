@@ -14,19 +14,26 @@ import { bankConfigOptDefault, configBank } from "./config_bank";
 import { bigNumberToWrappedI80F48, sleep } from "@mrgnlabs/mrgn-common";
 import { pulseHealth } from "./health_pulse";
 import { writeFileSync } from "fs";
+import { addDriftBank } from "./drift/add_bank";
+import { depositDrift } from "./drift/deposit";
 
 export type Config = {
   PROGRAM_ID: string;
   LIQUIDATOR_WALLET_PATH: string;
   LIQUIDATEE_WALLET_PATH: string;
-  COLLATERAL_MINT: PublicKey;
-  COLLATERAL_ORACLE: PublicKey;
+  KAMINO_COLLATERAL_MINT: PublicKey;
+  KAMINO_COLLATERAL_ORACLE: PublicKey;
+  DRIFT_COLLATERAL_MINT: PublicKey;
+  DRIFT_COLLATERAL_ORACLE: PublicKey;
   DEBT_MINT: PublicKey;
   DEBT_ORACLE: PublicKey;
   KAMINO_RESERVE: PublicKey;
   KAMINO_MARKET: PublicKey;
   KAMINO_RESERVE_ORACLE: PublicKey;
   KAMINO_FARM_STATE: PublicKey;
+  DRIFT_SPOT_MARKET: PublicKey;
+  DRIFT_MARKET_INDEX: number;
+  DRIFT_ORACLE: PublicKey; // The oracle Drift uses, which is different from DRIFT_COLLATERAL_ORACLE (which WE use).
   LUT: PublicKey;
 };
 
@@ -37,10 +44,10 @@ export type State = {
   debtBank: PublicKey;
   kaminoBanks: PublicKey[];
   kaminoObligations: PublicKey[];
-  paddingBanks: PublicKey[];
+  driftBanks: PublicKey[];
 };
 
-// Note: current setup assumes you have at least 1.5 USDC on your liquidatee's balances
+// Note: current setup assumes you have ~1 USDC and ~1 USDS on your liquidatee's balances,
 // and at least 50'000 BONK on your liquidator's balances. Plus significant amount of SOL
 // for transactions and for rent (>1 SOL in liquidator's case).
 
@@ -48,12 +55,18 @@ const config: Config = {
   PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
   LIQUIDATOR_WALLET_PATH: "/.config/stage/id.json",
   LIQUIDATEE_WALLET_PATH: "/.config/arena/id.json",
-  COLLATERAL_MINT: new PublicKey(
+  KAMINO_COLLATERAL_MINT: new PublicKey(
     "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
   ), // usdc
-  COLLATERAL_ORACLE: new PublicKey(
+  KAMINO_COLLATERAL_ORACLE: new PublicKey(
     "Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX",
   ), // usdc PythPull
+  DRIFT_COLLATERAL_MINT: new PublicKey(
+    "USDSwr9ApdHk5bvJKMjzff41FfuX8bSxdKcR81vTwcA",
+  ), // usds
+  DRIFT_COLLATERAL_ORACLE: new PublicKey(
+    "DyYBBWEi9xZvgNAeMDCiFnmC1U9gqgVsJDXkL5WETpoX",
+  ), // usds PythPull
   DEBT_MINT: new PublicKey("DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263"), // bonk
   DEBT_ORACLE: new PublicKey("DBE3N8uNjhKPRHfANdwGvCZghWXyLPdqdSbEW2XFwBiX"), // bonk PythPull
   KAMINO_RESERVE: new PublicKey("D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59"), // usdc
@@ -64,6 +77,11 @@ const config: Config = {
   KAMINO_FARM_STATE: new PublicKey(
     "JAvnB9AKtgPsTEoKmn24Bq64UMoYcrtWtq42HHBdsPkh",
   ),
+  DRIFT_SPOT_MARKET: new PublicKey(
+    "hX9tXtcFomQ38TvtbpzdsNGwoGRBqkNg4J4hNDcET2t",
+  ),
+  DRIFT_MARKET_INDEX: 28, // usds
+  DRIFT_ORACLE: new PublicKey("5Km85n3s9Zs5wEoXYWuHbpoDzst4EBkS5f1XuQJGG1DL"), // usds
   LUT: new PublicKey("FtQ5uKQvFoKQ27SWY15tgBeJQnGKmKGzWqDz7kGUbeiq"),
 };
 
@@ -82,6 +100,9 @@ async function main() {
     { PROGRAM_ID: config.PROGRAM_ID, ADMIN_KEY: liquidatorWallet.publicKey },
     config.LIQUIDATOR_WALLET_PATH,
   );
+  // const marginfiGroup = new PublicKey(
+  //   "AWJ21dKoR4srQKBmmVXfZbaBfa7zqi7v7M3fzhyAQ4pH",
+  // );
   await sleep(1000);
   let state = {
     marginfiGroup: pkToString(marginfiGroup),
@@ -98,6 +119,9 @@ async function main() {
     },
     config.LIQUIDATOR_WALLET_PATH,
   );
+  // const liquidator = new PublicKey(
+  //   "442gdrt1xvBMb5bVhoSbEVFiNAJrdyBkETRxfjMGeRav",
+  // );
   console.log("liquidator: " + liquidator);
   await sleep(1000);
   state["liquidator"] = pkToString(liquidator);
@@ -112,6 +136,9 @@ async function main() {
     },
     config.LIQUIDATEE_WALLET_PATH,
   );
+  // const liquidatee = new PublicKey(
+  //   "DeCbfDxCGc6gJetJNozNTL51u6JHGRp6HSKgxP8fhEd5",
+  // );
   console.log("liquidatee: " + liquidatee);
   await sleep(1000);
   state["liquidatee"] = pkToString(liquidatee);
@@ -121,10 +148,10 @@ async function main() {
   let kaminoBankConfig = {
     PROGRAM_ID: config.PROGRAM_ID,
     GROUP_KEY: marginfiGroup,
-    ORACLE: config.COLLATERAL_ORACLE,
+    ORACLE: config.KAMINO_COLLATERAL_ORACLE,
     ORACLE_TYPE: { kaminoPythPush: {} },
     ADMIN: liquidatorWallet.publicKey,
-    BANK_MINT: config.COLLATERAL_MINT,
+    BANK_MINT: config.KAMINO_COLLATERAL_MINT,
     KAMINO_RESERVE: config.KAMINO_RESERVE,
     KAMINO_MARKET: config.KAMINO_MARKET,
     SEED: 0,
@@ -141,6 +168,16 @@ async function main() {
     );
     await sleep(1000);
   }
+  // let kaminoBanks = [
+  //   new PublicKey("AzAxeU7KzUGKr82TFJdpvpLBKRTpTtuWWfBLuxm7FtFo"),
+  //   new PublicKey("6bpK1b8s8uvCVanWNk7A6Vat96XwmogY7AXdu6jszyga"),
+  //   new PublicKey("GdLaHAtwPEgZCeV4PpmTKNy3zVpHKw2ypsfTjhrC3n6q"),
+  //   new PublicKey("54SAMAUXrSh3caguJP6nCDDJuYUG4ULqnJno2SMwQAEq"),
+  //   new PublicKey("AWLAK7doiEasUZ1STQhMCRTcU3ycobMH3Jg5cmAVTqKr"),
+  //   new PublicKey("4pAwYDeqDgrj3qDfEbqDcBcWFqkkA8qC12tHuHwNpEc5"),
+  //   new PublicKey("7UYEmWNno9MHGwwM8oiWTYnYRxpaoWdaToEJej1WhnkN"),
+  //   new PublicKey("ExLuU8gDjr7Vqq3gvavFAdHqSABMDDWZp69iUnJ9uN2W"),
+  // ];
   state["kaminoBanks"] = kaminoBanks.map(pkToString);
   writeJsonFile("liquidation_e2e_state.json", state);
 
@@ -149,16 +186,14 @@ async function main() {
     PROGRAM_ID: config.PROGRAM_ID,
     GROUP_KEY: marginfiGroup,
     ADMIN: liquidatorWallet.publicKey,
-    BANK_MINT: config.COLLATERAL_MINT,
-    KAMINO_RESERVE: config.KAMINO_RESERVE,
+    BANK: kaminoBanks[0],
     KAMINO_MARKET: config.KAMINO_MARKET,
     RESERVE_ORACLE: config.KAMINO_RESERVE_ORACLE,
     FARM_STATE: config.KAMINO_FARM_STATE,
-    SEED: 0,
   };
   let kaminoObligations = [];
   for (let i = 0; i < 8; i++) {
-    kaminoObligationConfig.SEED = i;
+    kaminoObligationConfig.BANK = kaminoBanks[i];
     kaminoObligations.push(
       await initKaminoObligation(
         true,
@@ -168,6 +203,16 @@ async function main() {
     );
     await sleep(1000);
   }
+  // let kaminoObligations = [
+  //   new PublicKey("78137qAL8GrFJYC8DURpQ2gmaVWqiJ4tDygqJ9NjwWQF"),
+  //   new PublicKey("B6XfY8ZCPYuJcHaZrSRgKEEUVi4gsZBio7mwdW4D6niZ"),
+  //   new PublicKey("D7gLYosUviPq9FH4WnzENasSEAe2yQbi16f16qCFiBVU"),
+  //   new PublicKey("4HoY6Ye9ebBEJN67xz7cgM1vqadak9ExFuETHVdXUqve"),
+  //   new PublicKey("6mSA1JaUUftyiAx5PVE5k4GPVLocC6Dfk42A278oDpr6"),
+  //   new PublicKey("8Ro1rfEnjseLkfuX43ZqtXdwz8AFBwKmXcmonjr2ujJf"),
+  //   new PublicKey("5azW5bT7WEJigAR9vPEGhh8jghox88QXpJKK4zEp5UW3"),
+  //   new PublicKey("Di9aa7UZLtd2p1Vc2AwzkRrWCLFFn4GgEyAiFD5uPZDv"),
+  // ];
   state["kaminoObligations"] = kaminoObligations.map(pkToString);
   writeJsonFile("liquidation_e2e_state.json", state);
 
@@ -177,13 +222,19 @@ async function main() {
     BANK: kaminoBanks[0],
     ACCOUNT: liquidatee,
     AMOUNT: new BN(1 * 10 ** 5), // 0.1 USDC
-    BANK_MINT: config.COLLATERAL_MINT,
+    BANK_MINT: config.KAMINO_COLLATERAL_MINT,
     KAMINO_RESERVE: config.KAMINO_RESERVE,
     KAMINO_MARKET: config.KAMINO_MARKET,
     RESERVE_ORACLE: config.KAMINO_RESERVE_ORACLE,
     FARM_STATE: config.KAMINO_FARM_STATE,
   };
+
+  // The last bank gets slightly more. This is needed to test that the profit-oriented liquidator
+  // will choose exactly it for as the liquidation "target".
   for (let i = 0; i < 8; i++) {
+    if (i == 7) {
+      kaminoDepositConfig.AMOUNT = new BN(2 * 10 ** 5); // 0.2 USDC
+    }
     kaminoDepositConfig.BANK = kaminoBanks[i];
     await depositKamino(
       true,
@@ -193,7 +244,60 @@ async function main() {
     await sleep(1000);
   }
 
-  console.log("\n\n\n 6. ADD 1 DEBT BANK AND 7 MORE COLLATERAL BANKS"); // padding up to a maximum of 16 open positions
+  console.log("\n\n\n 6. ADD DRIFT (USDS) BANKS");
+  let driftBankConfig = {
+    PROGRAM_ID: config.PROGRAM_ID,
+    GROUP_KEY: marginfiGroup,
+    BANK_MINT: config.DRIFT_COLLATERAL_MINT,
+    DRIFT_MARKET_INDEX: config.DRIFT_MARKET_INDEX,
+    ORACLE: config.DRIFT_COLLATERAL_ORACLE,
+    ORACLE_SETUP: { driftPythPull: {} },
+    DRIFT_ORACLE: config.DRIFT_ORACLE,
+    ADMIN: liquidatorWallet.publicKey,
+    SEED: new BN(0),
+  };
+  let driftBanks = [];
+  for (let i = 0; i < 7; i++) {
+    driftBankConfig.SEED = new BN(i);
+    driftBanks.push(
+      await addDriftBank(true, driftBankConfig, config.LIQUIDATOR_WALLET_PATH),
+    );
+    await sleep(1000);
+  }
+  // let driftBanks = [
+  //   new PublicKey("B1d2FRxJP2VEGpucPAbZyPjWMb7uWUPMqMzZdut1pxSs"),
+  //   new PublicKey("2ea7us3NXJY9MoQY4JYe16GDBUJFATAe3QhVNhSrBqav"),
+  //   new PublicKey("6xMUaXJfXmV459u8mZ1s7ByLTFX4bUnV48AktXayMCkk"),
+  //   new PublicKey("FJH34mtkipNM5LMyVKFCJRfyTCY4dEChVDMDDXdhmnRj"),
+  //   new PublicKey("FvhBNVz4vY2SQRkHMBPGWFwC8twuCmiW8iwbQNE5akiP"),
+  //   new PublicKey("xy1Dyj14rvsaasuZT6bBrW2NpmC548C1NNuExKY8amb"),
+  //   new PublicKey("3QEtWuH7Erzhnej8HhWF3rf8xmH3kLUbtbX2aiTQZvMg"),
+  // ];
+  state["driftBanks"] = driftBanks.map(pkToString);
+  writeJsonFile("liquidation_e2e_state.json", state);
+
+  console.log("\n\n\n 7. DEPOSIT TO ALL DRIFT BANKS BY LIQUIDATEE");
+  let driftDepositConfig = {
+    PROGRAM_ID: config.PROGRAM_ID,
+    BANK: kaminoBanks[0],
+    ACCOUNT: liquidatee,
+    AMOUNT: new BN(1 * 10 ** 5), // 0.1 USDS
+    DRIFT_MARKET_INDEX: config.DRIFT_MARKET_INDEX,
+    DRIFT_ORACLE: config.DRIFT_ORACLE,
+  };
+
+  // The last bank gets slightly more. This is needed to test that the profit-oriented liquidator
+  // will choose exactly it for as the liquidation "target".
+  for (let i = 0; i < 7; i++) {
+    if (i == 6) {
+      driftDepositConfig.AMOUNT = new BN(2 * 10 ** 5); // 0.2 USDS
+    }
+    driftDepositConfig.BANK = driftBanks[i];
+    await depositDrift(true, driftDepositConfig, config.LIQUIDATEE_WALLET_PATH);
+    await sleep(1000);
+  }
+
+  console.log("\n\n\n 8. ADD 1 (REGULAR) DEBT BANK");
   let bankConfig = {
     PROGRAM_ID: config.PROGRAM_ID,
     GROUP_KEY: marginfiGroup,
@@ -209,25 +313,13 @@ async function main() {
     config.LIQUIDATOR_WALLET_PATH,
   );
   await sleep(1000);
+  // const debtBank = new PublicKey(
+  //   "EQHmVmqqHhWjnbqxgLxhHsKEjfRoA5beioUx71p92k8U",
+  // );
   state["debtBank"] = pkToString(debtBank);
   writeJsonFile("liquidation_e2e_state.json", state);
 
-  let paddingBanks = [];
-  bankConfig.BANK_MINT = config.COLLATERAL_MINT;
-  bankConfig.ORACLE = config.COLLATERAL_ORACLE;
-  for (let i = 8; i < 15; i++) {
-    bankConfig.SEED = i;
-    paddingBanks.push(
-      await addBank(true, bankConfig, config.LIQUIDATOR_WALLET_PATH),
-    );
-    await sleep(1000);
-  }
-  state["paddingBanks"] = paddingBanks.map(pkToString);
-  writeJsonFile("liquidation_e2e_state.json", state);
-
-  console.log(
-    "\n\n\n 7. DEPOSIT TO DEBT BANK BY LIQUIDATOR AND TO PADDING BANKS - BY LIQUIDATEE",
-  );
+  console.log("\n\n\n 9. DEPOSIT TO DEBT BANK BY LIQUIDATOR");
   let regularDepositConfig = {
     PROGRAM_ID: config.PROGRAM_ID,
     BANK: debtBank,
@@ -242,30 +334,21 @@ async function main() {
   );
   await sleep(1000);
 
-  regularDepositConfig.ACCOUNT = liquidatee;
-  regularDepositConfig.MINT = config.COLLATERAL_MINT;
-  regularDepositConfig.AMOUNT = new BN(1 * 10 ** 5); // 0.1 USDC
-  for (let i = 0; i < 7; i++) {
-    regularDepositConfig.BANK = paddingBanks[i];
-    await depositRegular(
-      true,
-      regularDepositConfig,
-      config.LIQUIDATEE_WALLET_PATH,
-    );
-    await sleep(1000);
-  }
-
-  console.log("\n\n\n 8. BORROW FROM DEBT BANK BY LIQUIDATEE");
+  console.log("\n\n\n 10. BORROW FROM DEBT BANK BY LIQUIDATEE");
   let remainingAccounts: PublicKey[][] = [];
   for (let i = 0; i < 8; i++) {
     remainingAccounts.push([
       kaminoBanks[i],
-      config.COLLATERAL_ORACLE,
+      config.KAMINO_COLLATERAL_ORACLE,
       config.KAMINO_RESERVE,
     ]);
   }
   for (let i = 0; i < 7; i++) {
-    remainingAccounts.push([paddingBanks[i], config.COLLATERAL_ORACLE]);
+    remainingAccounts.push([
+      driftBanks[i],
+      config.DRIFT_COLLATERAL_ORACLE,
+      config.DRIFT_SPOT_MARKET,
+    ]);
   }
   remainingAccounts.push([debtBank, config.DEBT_ORACLE]);
 
@@ -287,9 +370,10 @@ async function main() {
   await sleep(1000);
 
   console.log(
-    "\n\n\n 9. SET ALL COLLATERAL BANKS' ASSET WEIGHT TO 0.1 TO RENDER LIQUIDATEE UNHEALTHY",
+    "\n\n\n 11. SET ALL COLLATERAL BANKS' ASSET WEIGHT TO 0.1 TO RENDER LIQUIDATEE UNHEALTHY",
   );
   let updatedBankConfig = bankConfigOptDefault();
+  // updatedBankConfig.oracleMaxAge = 300;
   updatedBankConfig.assetWeightInit = bigNumberToWrappedI80F48(0.1);
   updatedBankConfig.assetWeightMaint = bigNumberToWrappedI80F48(0.1);
 
@@ -301,7 +385,12 @@ async function main() {
   };
 
   // config all banks in bulk
-  let bankEntries = [];
+  let bankEntries = [
+    // {
+    //   bank: debtBank,
+    //   config: updatedBankConfig,
+    // },
+  ];
   for (let i = 0; i < 8; i++) {
     bankEntries.push({
       bank: kaminoBanks[i],
@@ -310,7 +399,7 @@ async function main() {
   }
   for (let i = 0; i < 7; i++) {
     bankEntries.push({
-      bank: paddingBanks[i],
+      bank: driftBanks[i],
       config: updatedBankConfig,
     });
   }
@@ -318,7 +407,7 @@ async function main() {
   await configBank(true, configBankConfig, config.LIQUIDATOR_WALLET_PATH);
   await sleep(1000);
 
-  console.log("\n\n\n 10. CONFIRM LIQUIDATEE IS LIQUIDATABLE NOW");
+  console.log("\n\n\n 12. CONFIRM LIQUIDATEE IS LIQUIDATABLE NOW");
   const pulseHealthConfig = {
     PROGRAM_ID: config.PROGRAM_ID,
     ACCOUNT: liquidatee,
@@ -338,14 +427,19 @@ function serializeConfig(config: Config): any {
     PROGRAM_ID: config.PROGRAM_ID,
     LIQUIDATOR_WALLET_PATH: config.LIQUIDATOR_WALLET_PATH,
     LIQUIDATEE_WALLET_PATH: config.LIQUIDATEE_WALLET_PATH,
-    COLLATERAL_MINT: pkToString(config.COLLATERAL_MINT),
-    COLLATERAL_ORACLE: pkToString(config.COLLATERAL_ORACLE),
+    KAMINO_COLLATERAL_MINT: pkToString(config.KAMINO_COLLATERAL_MINT),
+    KAMINO_COLLATERAL_ORACLE: pkToString(config.KAMINO_COLLATERAL_ORACLE),
+    DRIFT_COLLATERAL_MINT: pkToString(config.DRIFT_COLLATERAL_MINT),
+    DRIFT_COLLATERAL_ORACLE: pkToString(config.DRIFT_COLLATERAL_ORACLE),
     DEBT_MINT: pkToString(config.DEBT_MINT),
     DEBT_ORACLE: pkToString(config.DEBT_ORACLE),
     KAMINO_RESERVE: pkToString(config.KAMINO_RESERVE),
     KAMINO_MARKET: pkToString(config.KAMINO_MARKET),
     KAMINO_RESERVE_ORACLE: pkToString(config.KAMINO_RESERVE_ORACLE),
     KAMINO_FARM_STATE: pkToString(config.KAMINO_FARM_STATE),
+    DRIFT_SPOT_MARKET: pkToString(config.DRIFT_SPOT_MARKET),
+    DRIFT_MARKET_INDEX: config.DRIFT_MARKET_INDEX,
+    DRIFT_ORACLE: pkToString(config.DRIFT_ORACLE),
     LUT: pkToString(config.LUT),
   };
 }

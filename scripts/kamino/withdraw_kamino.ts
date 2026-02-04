@@ -54,8 +54,8 @@ type Config = {
 
 const prodKaminoTestconfig: Config = {
   PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-  BANK: new PublicKey("Ay8kyX7q2G9Yp3T6Nt8Z3p8xcMeaC19xLQjmGjTX2niq"),
-  ACCOUNT: new PublicKey("FvRj5WiHZh6mU9TSsgAeJinDeSAkBmPvbJHJCqXAxCsH"),
+  BANK: new PublicKey("AzAxeU7KzUGKr82TFJdpvpLBKRTpTtuWWfBLuxm7FtFo"),
+  ACCOUNT: new PublicKey("DeCbfDxCGc6gJetJNozNTL51u6JHGRp6HSKgxP8fhEd5"),
   AMOUNT: new BN(40 * 10 ** 6), // 40 USDC
   WITHDRAW_ALL: true,
 
