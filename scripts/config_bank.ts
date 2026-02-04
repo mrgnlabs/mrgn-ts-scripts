@@ -48,17 +48,17 @@ const config: Config = {
   // One tx per entry in this array:
   BANKS: [
     {
-      bank: new PublicKey("BeNBJrAh1tZg5sqgt8D6AWKJLD5KkBrfZvtcgd7EuiAR"),
+      bank: new PublicKey("4YPGUhxmAXgoGDRkg68zGnbGrV2xCgaoqQSfcZCjFhon"),
       config: {
         assetWeightInit: null,
         assetWeightMaint: null,
         liabilityWeightInit: null,
         liabilityWeightMaint: null,
-        depositLimit: null,
+        depositLimit: new BN(3750000000000),
         borrowLimit: null,
         riskTier: null,
         assetTag: null,
-        totalAssetValueInitLimit: null,
+        totalAssetValueInitLimit: new BN(3750000),
         interestRateConfig: {
           protocolOriginationFee: null,
           protocolIrFee: null,
@@ -74,7 +74,7 @@ const config: Config = {
         oracleMaxConfidence: null,
         permissionlessBadDebtSettlement: null,
         freezeSettings: null,
-        tokenlessRepaymentsAllowed: true,
+        tokenlessRepaymentsAllowed: null,
       },
     },
     // Add more { bank, config: bankConfigOptForThatBank() } as needed
