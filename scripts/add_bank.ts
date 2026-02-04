@@ -52,19 +52,19 @@ type Config = {
 const config: Config = {
   PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
   GROUP_KEY: new PublicKey("FCPfpHA69EbS8f9KKSreTRkXbzFpunsKuYf5qNmnJjpo"),
-  ORACLE: new PublicKey("DyYBBWEi9xZvgNAeMDCiFnmC1U9gqgVsJDXkL5WETpoX"),
-  ORACLE_TYPE: ORACLE_TYPE_PYTH,
+  ORACLE: new PublicKey("7neNQ7tobjJFT6AJrNmrAY4TwgTWzJdQNdg6h6spdMBg"),
+  ORACLE_TYPE: ORACLE_TYPE_SWB,
   ADMIN: new PublicKey("mfC1LoEk4mpM5yx1LjwR9QLZQ49AitxxWkK5Aciw7ZC"),
-  BANK_MINT: new PublicKey("USDSwr9ApdHk5bvJKMjzff41FfuX8bSxdKcR81vTwcA"),
+  BANK_MINT: new PublicKey("Bw6zsBWadivcKo1n2wEyF79pSrKDGyggif4a7wv3dtVi"),
   SEED: 0,
-  //MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
+  // MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 };
 
 const rate: InterestRateConfig1_7 = {
   insuranceFeeFixedApr: bigNumberToWrappedI80F48(0),
   insuranceIrFee: bigNumberToWrappedI80F48(0),
-  protocolFixedFeeApr: bigNumberToWrappedI80F48(0.00001),
-  protocolIrFee: bigNumberToWrappedI80F48(0.05),
+  protocolFixedFeeApr: bigNumberToWrappedI80F48(0.0),
+  protocolIrFee: bigNumberToWrappedI80F48(0.0),
   protocolOriginationFee: bigNumberToWrappedI80F48(0),
 
   zeroUtilRate: 0,
@@ -80,17 +80,17 @@ const rate: InterestRateConfig1_7 = {
 };
 
 const bankConfig: BankConfig = {
-  assetWeightInit: I80F48_ONE,
-  assetWeightMaint: I80F48_ONE,
+  assetWeightInit: bigNumberToWrappedI80F48(0.2),
+  assetWeightMaint: bigNumberToWrappedI80F48(0.3),
   liabilityWeightInit: bigNumberToWrappedI80F48(1.3),
   liabilityWeightMaint: bigNumberToWrappedI80F48(1.2),
-  depositLimit: new BN(10 ** 13),
+  depositLimit: new BN(10_000 * 10 ** 9),
   interestRateConfig: rate,
   operationalState: { operational: {} },
-  borrowLimit: new BN(10 ** 13),
+  borrowLimit: new BN(0),
   riskTier: { collateral: {} },
-  totalAssetValueInitLimit: new BN(10 ** 13),
-  oracleMaxAge: 30,
+  totalAssetValueInitLimit: new BN(3_000_000),
+  oracleMaxAge: 70,
   assetTag: 0,
   oracleMaxConfidence: 0,
   configFlags: 0,
