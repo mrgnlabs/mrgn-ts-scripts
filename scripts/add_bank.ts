@@ -52,10 +52,10 @@ type Config = {
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
   GROUP_KEY: new PublicKey("4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8"),
-  ORACLE: new PublicKey("CEyicmAQXJKvXuRrFpfjHUs5du5g8JcZDRE5UbGcprN2"),
+  ORACLE: new PublicKey("4svXjRbiJ9Rw3fJykiTm2NH5JLRza5K768q6LBmCt7Cv"),
   ORACLE_TYPE: ORACLE_TYPE_SWB,
   ADMIN: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
-  BANK_MINT: new PublicKey("Bw6zsBWadivcKo1n2wEyF79pSrKDGyggif4a7wv3dtVi"),
+  BANK_MINT: new PublicKey("CZCg4Euwif2h2LpctMpRaR2wU2eKaLGRueVfR8oyq28G"),
   SEED: 0,
   TOKEN_PROGRAM: TOKEN_PROGRAM_ID,
   MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
