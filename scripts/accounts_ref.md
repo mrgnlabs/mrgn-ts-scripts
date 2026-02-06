@@ -63,6 +63,7 @@
 - BONK - Ds4ZD4M1rLjo4anQnkhCRU9tkmjzx9AsmMkPdPCo4U1t
 - PUMP - B72N46iVnhfX8b3oAPGZL6mrfJj5V684cStXv7XTMw9Q
 - USDS - 7LnunEHq8sETRjeqftMsAUQZ9xsCENbfV8RegNH758Rr
+- ptBulkSOL - GFMZQWGdfvcXQd6PM3ZTtMjYhEFh9gBEogfKsZKBsKjs
 - Kamino USDS - 44WmBHm3bKvrwy1jnf9EkgX8hBT61Dz7Z9yfLCSmdEyy
 - Kamino USDC - 8u7NuUBxckF2ouC3XKFkuxurinBYQTQiTcXVyqqoyRgM
 - Kamino SOL - 98sBXvVx6rHLuTWWBJG1hw1RjEEssUWwnrjfXoGmBgYk

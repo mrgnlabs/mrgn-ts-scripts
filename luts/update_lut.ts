@@ -28,26 +28,20 @@ type Config = {
 const config: Config = {
   LUT: new PublicKey("FtQ5uKQvFoKQ27SWY15tgBeJQnGKmKGzWqDz7kGUbeiq"),
   KEYS: [
-    // new PublicKey("Dso1bDeDjCQxTrWHqUUi63oBvV7Mdm6WaobLbQ7gnPQ"),
-    // new PublicKey("AEq1mcpesN4u9CSd8uUQbQar6qLghNQx7rnhdQhAnUyn"),
-
-    new PublicKey("4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8"),
-    new PublicKey("CwbdVVmGfR4H9bQ39vmeKjt9Gd128iFGrc9Jvht2oPx6"),
-    new PublicKey("3x85u7SWkmmr7YQGYhtjARgxwegTLJgkSLRprfXod6rh"),
-    new PublicKey("5kLrcBhm66VLvGKT4my82uSKG5vQyAcyQADgnQ4rinLi"),
-    new PublicKey("7RiMUsA8KaSkq2KzZPSKAsSyXZ38PCXbVrWgh468dcsd"),
-    new PublicKey("CtFbocisXmWnTvCUEqZHGwW4MwyAsZxLZGrhLhn9BpK2"),
-    new PublicKey("Fx2zxMQsL3Dck7j8GAG4397Rc7woRezJPAhHumphP1e"),
-    new PublicKey("W1Hja1hhpzFy16WUCcQcnCZxuo5xThNex9c41vXM2DF"),
-    new PublicKey("EADW8iFEsyfuXuBjETVE27kK5yrpfJNqJ5usgm3ehinH"),
-    new PublicKey("5pBHde9B7n8dZoLTGB4N9WWBawJ8BeQdj17QkrqXXtrr"),
-    new PublicKey("GZ8GGS89K6XUDTRESNjWvgRkvsMui6TZn689c6E28Fe4"),
-    new PublicKey("4Hmd6PdjVA9auCoScE12iaBogfwS4ZXQ6VZoBeqanwWW"),
+    new PublicKey("5zpq7DvB6UdFFvpmBPspGPNfUGoBRRCE2HHg5u3gxcsN"),
+    new PublicKey("6gMq3mRCKf8aP3ttTyYhuijVZ2LGi14oDsBbkgubfLB3"),
+    new PublicKey("GXWqPpjQpdz7KZw9p7f5PX2eGxHAhvpNXiviFkAB8zXg"),
+    new PublicKey("9VCioxmni2gDLv11qufWzT3RDERhQE4iY5Gf7NTfYyAV"),
+    new PublicKey("dRiftyHA39MWEi3m9aunc5MzRF1JYuBsbn6VPcn33UH"),
+    new PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"),
+    // new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
+    // new PublicKey("6gMq3mRCKf8aP3ttTyYhuijVZ2LGi14oDsBbkgubfLB3"),
+    // new PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"),
   ],
 };
 
 async function main() {
-  await updateLut(sendTx, config, "/.keys/staging-lut-admin.json");
+  await updateLut(sendTx, config, "/.config/stage/id.json");
 }
 
 export async function updateLut(

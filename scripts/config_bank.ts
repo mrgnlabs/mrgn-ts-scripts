@@ -48,9 +48,9 @@ const config: Config = {
   // One tx per entry in this array:
   BANKS: [
     {
-      bank: new PublicKey("D1vPUa8JhMpxi5qjZeYLCJvHHQbAZ8pdfXum3AwWAk5H"),
+      bank: new PublicKey("BeNBJrAh1tZg5sqgt8D6AWKJLD5KkBrfZvtcgd7EuiAR"),
       config: {
-        assetWeightInit: null, // bigNumberToWrappedI80F48(0.1)
+        assetWeightInit: null,
         assetWeightMaint: null,
         liabilityWeightInit: null,
         liabilityWeightMaint: null,
@@ -69,12 +69,12 @@ const config: Config = {
           hundredUtilRate: null,
           points: null,
         },
-        operationalState: { reduceOnly: {} },
+        operationalState: null,
         oracleMaxAge: null,
         oracleMaxConfidence: null,
         permissionlessBadDebtSettlement: null,
         freezeSettings: null,
-        tokenlessRepaymentsAllowed: null,
+        tokenlessRepaymentsAllowed: true,
       },
     },
     // Add more { bank, config: bankConfigOptForThatBank() } as needed
@@ -113,7 +113,7 @@ export function bankConfigOptDefault(): BankConfigOptRaw {
 }
 
 async function main() {
-  await configBank(sendTx, config, "/.config/stage/id.json");
+  await configBank(sendTx, config, "/keys/staging-deploy.json");
 }
 
 export async function configBank(
