@@ -13,6 +13,7 @@ import {
   DRIFT_PROGRAM_ID,
   DRIFT_SCALED_BALANCE_DECIMALS,
 } from "./drift/lib/utils";
+import { ORACLE_TYPE_FIXED } from "../lib/constants";
 
 // If true, prints this bank's settings in a format to be copy-pasted into add_bank
 const printForCopy = false;
@@ -29,7 +30,7 @@ const config: Config = {
     // new PublicKey("HmpMfL8942u22htC4EMiWgLX931g3sacXFR6KjuLgKLV"), // usdt
     // new PublicKey("8UEiPmgZHXXEDrqLS3oiTxQxTbeYTtPbeMBxAd2XGbpu"), // py
     // new PublicKey("FDsf8sj6SoV313qrA91yms3u5b3P4hBxEPvanVs8LtJV"), // usds
-    new PublicKey("FWZbU8TSPyjyrWQASzujo7FjgF9f3GEkjaFAtbKWqjMH"),
+    new PublicKey("CCKtUs6Cgwo4aaQUmBPmyoApH2gUDErxNZCAntD6LYGh"),
   ],
 };
 
@@ -47,6 +48,7 @@ async function printBankInfo(bankKey: PublicKey) {
   const mintInfo = await program.provider.connection.getAccountInfo(bank.mint);
   const isT22 = mintInfo.owner.toString() === TOKEN_2022_PROGRAM_ID.toString();
   const decimals = bank.mintDecimals;
+  const scale = new BigNumber(10).pow(decimals);
 
   // Typed helpers for fixed-point conversion
   const toBN = (x: WrappedI80F48): BigNumber => wrappedI80F48toBigNumber(x);
@@ -89,6 +91,17 @@ async function printBankInfo(bankKey: PublicKey) {
   }
 
   let exchangeRate = 1;
+
+  const os = (bank.config as any).oracleSetup;
+  let priceBN: BigNumber;
+  if ("fixed" in os) {
+    priceBN = wrappedI80F48toBigNumber(bank.config.fixedPrice);
+  } else {
+    priceBN = wrappedI80F48toBigNumber(bank.cache.lastOraclePrice);
+  }
+  const price = priceBN.toNumber();
+  const tokenToUsd = (tokenAmount: BigNumber): BigNumber =>
+    tokenAmount.multipliedBy(priceBN);
 
   // Metrics
   console.log("Metrics:");
@@ -164,17 +177,33 @@ async function printBankInfo(bankKey: PublicKey) {
     },
   ]);
 
+  const liquidityToken = new BigNumber(liquidityBal).dividedBy(scale);
+  const insuranceToken = new BigNumber(insuranceBal).dividedBy(scale);
+  const feeToken = new BigNumber(feeBal).dividedBy(scale);
+
   console.log("Vaults:");
   console.table([
     {
-      Balance: "Liquidity Vault",
-      Value: (liquidityBal / 10 ** decimals).toLocaleString(),
+      Balance: "Liquidity Vault (token)",
+      Value: formatBN(liquidityToken),
     },
     {
-      Balance: "Insurance Vault",
-      Value: (insuranceBal / 10 ** decimals).toLocaleString(),
+      Balance: "Liquidity Vault ($)",
+      Value: formatBN(tokenToUsd(liquidityToken)),
     },
-    { Balance: "Fee Vault", Value: (feeBal / 10 ** decimals).toLocaleString() },
+    {
+      Balance: "Insurance Vault (token)",
+      Value: formatBN(insuranceToken),
+    },
+    {
+      Balance: "Insurance Vault ($)",
+      Value: formatBN(tokenToUsd(insuranceToken)),
+    },
+    { Balance: "Fee Vault (token)", Value: formatBN(feeToken) },
+    {
+      Balance: "Fee Vault ($)",
+      Value: formatBN(tokenToUsd(feeToken)),
+    },
   ]);
 
   // Oracle
@@ -187,7 +216,6 @@ async function printBankInfo(bankKey: PublicKey) {
   }
 
   // Calculate totals and limits in human-readable tokens
-  const scale = new BigNumber(10).pow(decimals);
   const totalAssets = toBN(bank.totalAssetShares)
     .multipliedBy(toBN(bank.assetShareValue))
     .dividedBy(scale);
@@ -200,6 +228,12 @@ async function printBankInfo(bankKey: PublicKey) {
   const borrowLimitToken = new BigNumber(
     bank.config.borrowLimit.toString(),
   ).dividedBy(scale);
+  const totalAssetsToken = totalAssets.multipliedBy(exchangeRate);
+  const totalLiabsToken = totalLiabs;
+  const totalAssetsUsd = tokenToUsd(totalAssetsToken);
+  const totalLiabsUsd = tokenToUsd(totalLiabsToken);
+  const depositLimitUsd = tokenToUsd(depositLimitToken);
+  const borrowLimitUsd = tokenToUsd(borrowLimitToken);
 
   // Deposit information
   console.log("Deposit information:");
@@ -219,14 +253,22 @@ async function printBankInfo(bankKey: PublicKey) {
     },
     {
       Label: "Total Deposits (token)",
-      Value: formatBN(totalAssets.multipliedBy(exchangeRate)),
+      Value: formatBN(totalAssetsToken),
     },
-    { Label: "Total Liabilities (token)", Value: formatBN(totalLiabs) },
+    { Label: "Total Deposits ($)", Value: formatBN(totalAssetsUsd) },
+    { Label: "Total Liabilities (token)", Value: formatBN(totalLiabsToken) },
+    { Label: "Total Liabilities ($)", Value: formatBN(totalLiabsUsd) },
     { Label: "Deposit Limit (token)", Value: formatBN(depositLimitToken) },
+    { Label: "Deposit Limit ($)", Value: formatBN(depositLimitUsd) },
     { Label: "Borrow Limit (token)", Value: formatBN(borrowLimitToken) },
+    { Label: "Borrow Limit ($)", Value: formatBN(borrowLimitUsd) },
     {
       Label: "UI Limit ($)",
       Value: bank.config.totalAssetValueInitLimit.toNumber().toLocaleString(),
+    },
+    {
+      Label: "Price ($)",
+      Value: price,
     },
   ]);
 

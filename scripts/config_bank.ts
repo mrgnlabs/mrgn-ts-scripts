@@ -48,7 +48,7 @@ const config: Config = {
   // One tx per entry in this array:
   BANKS: [
     {
-      bank: new PublicKey("FWZbU8TSPyjyrWQASzujo7FjgF9f3GEkjaFAtbKWqjMH"),
+      bank: new PublicKey("D1vPUa8JhMpxi5qjZeYLCJvHHQbAZ8pdfXum3AwWAk5H"),
       config: {
         assetWeightInit: null, // bigNumberToWrappedI80F48(0.1)
         assetWeightMaint: null,
