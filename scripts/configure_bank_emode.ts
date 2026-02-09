@@ -57,6 +57,7 @@ const BANK_KEYS: Record<EmodeTag, PublicKey[]> = {
     new PublicKey("DMoqjmsuoru986HgfjqrKEvPv8YBufvBGADHUonkadC5"), // lst (our own)
     new PublicKey("8LaUZadNqtzuCG7iCvZd7d5cbquuYfv19KjAg6GPuuCb"), // jupsol
     new PublicKey("Bohoc1ikHLD7xKJuzTyiTyCwzaL5N7ggJQu75A8mKYM8"), // jitosol
+    new PublicKey("6zN8tRxMpuqruDF4ChjeNGCVggqWBMQQ9KmiNhYeiqXb"), // hylosol
   ],
   // Liquid staking tokens with a smaller market cap
   // Base asset weight: 0.65, base maint weight: 0.80
@@ -70,7 +71,16 @@ const BANK_KEYS: Record<EmodeTag, PublicKey[]> = {
     new PublicKey("GR9GNdjWf8kSf3b4REribKKSeVvkzjbAQJ1A8CDnFxLF"), // rkSOL
     new PublicKey("5wZz2MV3dFJVq3Wp4tBoqrgrSGZqeLCdLE1L4w6okm9g"), // JSOL
     new PublicKey("FvrTUfd3kimMfXvGrvcS1XC8NrtmSSurX8yP6XeUFt2s"), // LanternSOL
-    new PublicKey("E7LfHgmiWT6TxAcWq18yDBXWxHw4VasjD98aZaoXCp8T")  // DZSOL
+    new PublicKey("E7LfHgmiWT6TxAcWq18yDBXWxHw4VasjD98aZaoXCp8T"),  // DZSOL
+    new PublicKey("8W3GgWFFnHdd98GKGzvNNi9Wzjoq2CU4wW6cHz6cKxk1"),  // dsol
+    new PublicKey("9p1TiAeTc6FSiNHhnR6BgmwRq49zywczAY4m77BbKGer"),  // bulksol
+    new PublicKey("8iKgNvkQH9bBXyMbV5vor25gQRFM3tfyA7si68eKrLoa"),  // fwdsol
+  ],
+  // NEW
+  // Base asset weight: 0, base maint weight: 0 
+  [EmodeTag.LST_PT]: [
+    new PublicKey("2VmE6PMRWLRxjMkoK2sWu3WyNGGdXFK1G38ZAaQu3r5Y"), // hysol
+    new PublicKey("4PtX5fLM5JwujjHmSyzbh5XLasKx9kiPxPfygi57jAov"), // bulksol
   ],
   // Base asset weight: 0.5, base maint weight: 0.65
   [EmodeTag.JLP]: [
@@ -101,21 +111,25 @@ const PAIR_TABLE: PairConfig[] = [
   // In plain English, when lending X and borrowing Y, offer rate A/B
   { lend: EmodeTag.SOL, borrow: EmodeTag.LST_T1, appIso: true, init: 0.9, maint: 0.95 },
   { lend: EmodeTag.SOL, borrow: EmodeTag.LST_T2, appIso: true, init: 0.85, maint: 0.95 },
-  { lend: EmodeTag.SOL, borrow: EmodeTag.SOL, appIso: true, init: 0.95, maint: 0.99 }, // New
+  { lend: EmodeTag.SOL, borrow: EmodeTag.SOL, appIso: true, init: 0.95, maint: 0.99 }, 
 
   { lend: EmodeTag.LST_T1, borrow: EmodeTag.SOL, appIso: true, init: 1.046, maint: 1.051 }, // UPDATE
   { lend: EmodeTag.LST_T1, borrow: EmodeTag.LST_T1, appIso: true, init: 0.88, maint: 0.93 },
   { lend: EmodeTag.LST_T1, borrow: EmodeTag.LST_T2, appIso: true, init: 0.85, maint: 0.9 },
 
-  { lend: EmodeTag.LST_T2, borrow: EmodeTag.SOL, appIso: true, init: 0.992, maint: 0.999 }, // UPDATE
+  { lend: EmodeTag.LST_T2, borrow: EmodeTag.SOL, appIso: true, init: 0.992, maint: 0.999 },
   { lend: EmodeTag.LST_T2, borrow: EmodeTag.LST_T1, appIso: true, init: 0.8, maint: 0.85 },
   { lend: EmodeTag.LST_T2, borrow: EmodeTag.LST_T2, appIso: true, init: 0.75, maint: 0.85 },
 
-  // NEW EMODE PAIRS
   { lend: EmodeTag.JLP, borrow: EmodeTag.STABLE_T1, appIso: true, init: 0.94, maint: .99 },
   { lend: EmodeTag.JLP, borrow: EmodeTag.SOL, appIso: true, init: 0.85, maint: 0.92 },
 
   { lend: EmodeTag.BTC_T1, borrow: EmodeTag.STABLE_T1, appIso: true, init: 0.87, maint: 0.92 },
+
+    // NEW EMODE PAIRS
+  { lend: EmodeTag.LST_PT, borrow: EmodeTag.SOL, appIso: true, init: 0.85, maint: 0.95 },
+  { lend: EmodeTag.LST_PT, borrow: EmodeTag.LST_T1, appIso: true, init: 0.8, maint: 0.85 },
+  { lend: EmodeTag.LST_PT, borrow: EmodeTag.LST_T2, appIso: true, init: 0.75, maint: 0.85 },
 ];
 
 async function main() {
@@ -124,7 +138,7 @@ async function main() {
     config.PROGRAM_ID,
     "/keys/emode-admin.json",
     config.MULTISIG,
-    "current"
+    "current",
   );
   const program = user.program;
   const connection = user.connection;
@@ -132,7 +146,7 @@ async function main() {
   const setups: ConfigureBankEmodeArgs[] = [];
 
   for (const [borrowTagStr, pairs] of Object.entries(
-    groupBy(PAIR_TABLE, (p) => p.borrow)
+    groupBy(PAIR_TABLE, (p) => p.borrow),
   )) {
     const borrowTag = Number(borrowTagStr) as EmodeTag;
     const entries: EmodeEntry[] = (pairs as PairConfig[]).map((p) => ({
@@ -146,7 +160,7 @@ async function main() {
     // One setup per bank key under this borrow tag
     for (const bankPubkey of BANK_KEYS[borrowTag] || []) {
       console.log(
-        "preparing to add tag " + borrowTag + " to bank " + bankPubkey
+        "preparing to add tag " + borrowTag + " to bank " + bankPubkey,
       );
       setups.push({
         bank: bankPubkey,
@@ -163,7 +177,7 @@ async function main() {
     if (!setups.some((s) => s.tag === borrowTag)) {
       for (const bankPubkey of BANK_KEYS[borrowTag]) {
         console.log(
-          `preparing to add tag ${borrowTag} to bank ${bankPubkey} with EMPTY entries`
+          `preparing to add tag ${borrowTag} to bank ${bankPubkey} with EMPTY entries`,
         );
         setups.push({
           bank: bankPubkey,
@@ -180,14 +194,14 @@ async function main() {
       console.log(
         `Configuring ${setup.bank.toString()} with tag (${setup.tag}) using ${
           setup.entries.length
-        } entries`
+        } entries`,
       );
       tx.add(
         await configBankEmode(program, {
           bank: setup.bank,
           tag: setup.tag,
           entries: setup.entries,
-        })
+        }),
       );
 
       try {
@@ -226,7 +240,7 @@ type ConfigureBankEmodeArgs = {
 
 function configBankEmode(
   program: Program<Marginfi>,
-  args: ConfigureBankEmodeArgs
+  args: ConfigureBankEmodeArgs,
 ) {
   const paddedEntries = padEmodeEntries(args.entries);
 
@@ -245,7 +259,7 @@ function configBankEmode(
 function padEmodeEntries(entries: EmodeEntry[]): EmodeEntry[] {
   if (entries.length > MAX_EMODE_ENTRIES) {
     throw new Error(
-      `Too many entries provided. Maximum allowed is ${MAX_EMODE_ENTRIES}`
+      `Too many entries provided. Maximum allowed is ${MAX_EMODE_ENTRIES}`,
     );
   }
   const padded = [...entries];
@@ -273,7 +287,7 @@ function newEmodeEntry(
   collateralBankEmodeTag: number,
   flags: number,
   assetWeightInit: WrappedI80F48,
-  assetWeightMaint: WrappedI80F48
+  assetWeightMaint: WrappedI80F48,
 ): EmodeEntry {
   return {
     collateralBankEmodeTag,
