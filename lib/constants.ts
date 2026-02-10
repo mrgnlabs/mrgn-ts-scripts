@@ -35,3 +35,20 @@ export const INTEREST_CURVE_LEGACY = 0;
 export const INTEREST_CURVE_SEVEN_POINT = 1;
 
 export const ORACLE_TYPE_FIXED = 8;
+
+export const ASSET_TAG_DEFAULT = 0;
+/// Accounts with a SOL position can comingle with **either** `ASSET_TAG_DEFAULT` or
+/// `ASSET_TAG_STAKED` positions, but not both
+export const ASSET_TAG_SOL = 1;
+/// Staked SOL assets. Accounts with a STAKED position can only deposit other STAKED assets or SOL
+/// (`ASSET_TAG_SOL`) and can only borrow SOL (`ASSET_TAG_SOL`)
+export const ASSET_TAG_STAKED = 2;
+/// Kamino assets. Accounts with a KAMINO position can only deposit other KAMINO assets or regular
+/// assets (`ASSET_TAG_DEFAULT`).
+export const ASSET_TAG_KAMINO = 3;
+/// Drift assets. Accounts with a DRIFT position can only deposit other DRIFT assets or regular
+/// assets (`ASSET_TAG_DEFAULT`).
+export const ASSET_TAG_DRIFT = 4;
+/// Solend assets. Accounts with a SOLEND position can only deposit other SOLEND assets or regular
+/// assets (`ASSET_TAG_DEFAULT`).
+export const ASSET_TAG_SOLEND = 5;
