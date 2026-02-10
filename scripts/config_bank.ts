@@ -48,13 +48,13 @@ const config: Config = {
   // One tx per entry in this array:
   BANKS: [
     {
-      bank: new PublicKey("7aoit6hVmaqWn2VjhmDo5qev6QXjsJJf4q5RTd7yczZj"),
+      bank: new PublicKey("4YPGUhxmAXgoGDRkg68zGnbGrV2xCgaoqQSfcZCjFhon"),
       config: {
         assetWeightInit: null,
         assetWeightMaint: null,
         liabilityWeightInit: null,
         liabilityWeightMaint: null,
-        depositLimit: null,
+        depositLimit: new BN(3750000000000),
         borrowLimit: null,
         riskTier: null,
         assetTag: null,

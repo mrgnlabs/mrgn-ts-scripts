@@ -41,7 +41,7 @@ type Config = {
 
   DRIFT_MARKET_INDEX: number;
 
-  /** Oracle address the Drift User uses. Can be read from bank.integrationAcc1 */
+  /** Oracle address the Drift User uses. Can be read from bank.integrationAcc1 (spot market) */
   DRIFT_ORACLE: PublicKey;
 
   LUT: PublicKey;
