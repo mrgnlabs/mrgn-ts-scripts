@@ -136,7 +136,7 @@ async function main() {
   const user = commonSetup(
     sendTx,
     config.PROGRAM_ID,
-    "/keys/emode-admin.json",
+    "/.keys/emode-burner.json",
     config.MULTISIG,
     "current",
   );

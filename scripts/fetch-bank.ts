@@ -16,7 +16,7 @@ import {
 import { ORACLE_TYPE_FIXED } from "../lib/constants";
 
 // If true, prints this bank's settings in a format to be copy-pasted into add_bank
-const printForCopy = true;
+const printForCopy = false;
 
 type Config = {
   PROGRAM_ID: string;
@@ -30,7 +30,7 @@ const config: Config = {
     // new PublicKey("HmpMfL8942u22htC4EMiWgLX931g3sacXFR6KjuLgKLV"), // usdt
     // new PublicKey("8UEiPmgZHXXEDrqLS3oiTxQxTbeYTtPbeMBxAd2XGbpu"), // py
     // new PublicKey("FDsf8sj6SoV313qrA91yms3u5b3P4hBxEPvanVs8LtJV"), // usds
-    new PublicKey("GH7ZQbAP8G4xDXaYb7PcGXnqBDBCMKF7d9XhZCk1w1pG"),
+    new PublicKey("CCKtUs6Cgwo4aaQUmBPmyoApH2gUDErxNZCAntD6LYGh"),
   ],
 };
 

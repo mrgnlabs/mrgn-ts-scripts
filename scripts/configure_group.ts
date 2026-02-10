@@ -6,7 +6,8 @@ import {
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 import { commonSetup } from "../lib/common-setup";
 import BN from "bn.js";
-import { WrappedI80F48 } from "@mrgnlabs/mrgn-common";
+import { bigNumberToWrappedI80F48, WrappedI80F48 } from "@mrgnlabs/mrgn-common";
+import { utilToU32 } from "../lib/utils";
 
 /**
  * If true, send the tx. If false, output the unsigned b58 tx to console.
@@ -47,12 +48,14 @@ const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
   GROUP: new PublicKey("4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8"),
   // ADMIN_GENERAL: new PublicKey("725Z4QQUVhRiXcCdf4cQTrxXYmQXyW9zgVkW5PDVSJz4"),
-  EMODE_ADMIN: new PublicKey("7B2nWBoNUzwM2iBAHZxVaa7tFK7Dj95L3UavJTL1HuaM"),
+  // EMODE_ADMIN: new PublicKey("7B2nWBoNUzwM2iBAHZxVaa7tFK7Dj95L3UavJTL1HuaM"),
   // CURVE_ADMIN: new PublicKey("11111111111111111111111111111111"),
   // LIMIT_ADMIN: new PublicKey("11111111111111111111111111111111"),
   // EMISS_ADMIN: new PublicKey("11111111111111111111111111111111"),
-  META_ADMIN: new PublicKey("B2QBNiT857wyU56jffuy5i7YPpLC9eUwJ99CzJt52RN9"),
+  // META_ADMIN: new PublicKey("B2QBNiT857wyU56jffuy5i7YPpLC9eUwJ99CzJt52RN9"),
   // RISK_ADMIN: new PublicKey("11111111111111111111111111111111"),
+  EMODE_MAX_INIT_LEVERAGE: bigNumberToWrappedI80F48(20),
+  EMODE_MAX_MAINT_LEVERAGE: bigNumberToWrappedI80F48(40),
 
   MULTISIG: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 };

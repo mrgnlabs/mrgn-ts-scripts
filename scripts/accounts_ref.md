@@ -179,14 +179,3 @@ Banks(s) Borrowed: 3evdJSa25nsUiZzEUzd92UNa13TPRJrje1dRyiQP5Lhp (SOL with asset 
 ## Banks currently not being indexed by get-all
 RkSOL - GR9GNdjWf8kSf3b4REribKKSeVvkzjbAQJ1A8CDnFxLF
 LanternSOL - FvrTUfd3kimMfXvGrvcS1XC8NrtmSSurX8yP6XeUFt2s
-
-/*
-WEN -> $6.72 total borrows
-MDNE -> $16.53
-laineSOL -> $3.22
-STEP -> $5.25
-jucySOL -> $0.74
-MOTHER -> $0
-ezSOL -> $0 
-HONEY
-*/

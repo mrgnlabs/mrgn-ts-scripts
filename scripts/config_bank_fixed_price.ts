@@ -33,7 +33,35 @@ type BankOracleConfig = {
 /** One entry per bank to update */
 const configs: BankOracleConfig[] = [
   {
-    bank: new PublicKey("6Fk3bzhqmUqupk6sN5CbfYMdafvyzDdqDNHW5CsJzq8K"),
+    bank: new PublicKey("7aoit6hVmaqWn2VjhmDo5qev6QXjsJJf4q5RTd7yczZj"),
+    price: 0.0001,
+  },
+  {
+    bank: new PublicKey("5oNLkC42jSSrLER4tYjax99zkaGJegV1FjAtEbw81Xs6"),
+    price: 0.02,
+  },
+  {
+    bank: new PublicKey("2GDC61nu79ZHQBiwMx2BjarEEDZop81Ym9598a5WcCXJ"),
+    price: 80,
+  },
+  {
+    bank: new PublicKey("3UwWCseMeKfoVtesjJycA7AYSE65MeKh1wK98FfeG8kM"),
+    price: 0.001,
+  },
+  {
+    bank: new PublicKey("GH7ZQbAP8G4xDXaYb7PcGXnqBDBCMKF7d9XhZCk1w1pG"),
+    price: 80,
+  },
+  {
+    bank: new PublicKey("2z8C1CCoJBKMLCNbaMWXuTYKHjcdHQBVth5CHsSQq611"),
+    price: 0.0001,
+  },
+  {
+    bank: new PublicKey("5tMcLP49P7CHKEM4KWAiSDNpEh5UFcCLsMVXi74YRg5C"),
+    price: 80,
+  },
+  {
+    bank: new PublicKey("HWA59PLUXJmgrjGPWE2eH1381Wnz512qocV4PtyqhKqs"),
     price: 0.0001,
   },
   // ...More entries here as needed. The limit even without using LUTs is fairly high (at least 6)
@@ -43,7 +71,7 @@ async function main() {
   const user = commonSetup(
     sendTx,
     configCommon.PROGRAM_ID,
-    "/keys/zerotrade_admin.json",
+    "./keys/zerotrade_admin.json",
     configCommon.MULTISIG,
     "current",
   );
