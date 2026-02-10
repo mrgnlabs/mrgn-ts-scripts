@@ -9,11 +9,14 @@ import { commonSetup } from "../lib/common-setup";
 type Config = {
   PROGRAM_ID: string;
   BANK: PublicKey;
+  // Whether to only include the accounts with active liability positions in the bank
+  ONLY_LIABS: boolean;
 };
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  BANK: new PublicKey("FDsf8sj6SoV313qrA91yms3u5b3P4hBxEPvanVs8LtJV"),
+  BANK: new PublicKey("BeNBJrAh1tZg5sqgt8D6AWKJLD5KkBrfZvtcgd7EuiAR"),
+  ONLY_LIABS: false,
 };
 
 // ---- Layout constants ----
@@ -43,7 +46,7 @@ async function main() {
   const user = commonSetup(
     true,
     config.PROGRAM_ID,
-    "/keys/phantom-wallet.json",
+    "/.config/stage/id.json",
     undefined,
     "current",
   );
@@ -103,6 +106,9 @@ async function main() {
 
       const asset = wrappedI80F48toBigNumber(b.assetShares).toNumber();
       const liab = wrappedI80F48toBigNumber(b.liabilityShares).toNumber();
+      const hasEmissions = !wrappedI80F48toBigNumber(
+        b.emissionsOutstanding,
+      ).isZero();
 
       if (liab > 0) {
         hasAnyLiabilities = true;
@@ -114,6 +120,7 @@ async function main() {
         tag: b.bankAssetTag,
         assetShares: formatNumber(asset),
         liabilityShares: formatNumber(liab),
+        hasEmissions,
       };
 
       accountEntry.balances.push(balInfo);
@@ -133,7 +140,9 @@ async function main() {
 
     // Account must contain a position in this BANK to be included in main output / file
     if (hasThisBank) {
-      jsonOutput.push(accountEntry);
+      if (config.ONLY_LIABS && hasTargetBankLiability) {
+        jsonOutput.push(accountEntry);
+      }
       if (targetBankAssetShares > MIN_SHARES) {
         countAboveMinShares += 1;
       } else if (targetBankAssetShares < MIN_SHARES) {
