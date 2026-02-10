@@ -1,0 +1,4670 @@
+{
+  "wallet": "HPeLmNJgQdZ2yzxqiDY5v1EBW8ADF1Fx5Mt4xArjPbuX",
+  "generatedAt": "2026-02-05T06:31:55.611Z",
+  "events": [
+    {
+      "signature": "MA4HpigRpCmfMd3ikcaQgEM4hjZhzhRNpSvSJnxfNTp8QrHSvhe7EY4kTFVVtwGiHtTdpWMZJa4q52zvUYC7cuE",
+      "time": "2026-02-05T01:16:01.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "dLPXruZ5X7RTZRu4u5WMeHLPb96Zztx9tz2WRkyAa7st4UHZBa1GMTK8tKV5D1MgwFBKwQFAwYbzfuMVJ3M9Fzh",
+      "time": "2026-02-04T22:49:47.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2yGWJLCThyfn6u3t271PNnGyqPX8toWziZBpaqT97TmnTQUbwjtAix9yp9jvEyTZbaQHjt3eJzGstXeVmjDF8hVR",
+      "time": "2026-02-04T22:49:23.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "25iADo9ZCWTbwuhks1WHdbz4KHd6Zyv2di3rRJSDDYXwXr4CQjqa9RL9UyVhL5yHuvW19oW7yHjDgz76Ye99vQFP",
+      "time": "2026-02-04T22:47:02.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3HHa64X5L1dyFp9DqJpYDYNBBPUYmF6vHtwpSaAmXedcyELDkbLr3TeLbigh3N7GwVzAasTvpzhH4n2PmmXq1AT",
+      "time": "2026-02-04T22:46:38.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "qUjzdwe3ggz8z22NqYDzd3QRD3x41DfX9zGo4Yh82xDLePZo7NJwzhJ3gybJTsRinmZYVY94Wou9K2Mu5XC2mQG",
+      "time": "2026-02-04T22:46:15.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2UfCu19maMd4SkA73advRTHvuANSjvEDRU8sPT3qUKEkiheE2HEtPtn6tyA22G79wy9LJUYbAXpfYyAVTj93XB6s",
+      "time": "2026-02-04T22:45:57.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2uRZNDoG14fAzLQWohWNWasidCr2WJnx7v4w1kHXXeEFmbFFHuozpVkoDgnxXsou8Mm3LLmzKPsSjCf4JuUUPVxd",
+      "time": "2026-02-04T22:45:53.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4himLhKDth8kvsgRUAYcUcUSYQ6rmB1c5FJZaLMR8MvRf7uQvp35GVgquEuvJjPtr538M1xH3Xs14Tg225ojANkL",
+      "time": "2026-02-04T22:45:37.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "aj6GzKUQYVhtpTTe7BxFGam1x5MZnHVTFMhBtuaMojpTNfK9SGbXyNPGWYT5hnjnaLW3mvftonmssKSC4pVoKuj",
+      "time": "2026-02-04T22:44:49.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2Dd6bR7H2H3iPyviy1AbaEvCJxWPUWCTAQESKmyuksRLugzUCKZTeeRyS7zTWByxv85ZJLYeojV82cKgHu6kYHr1",
+      "time": "2026-02-04T22:43:57.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "yezASTdPm9zEEtdevg5oYymEzpGoDE3PaJDw9RWiyCUSedXLm8MbCFEPVEEmcuznnHG7n1995fexvwcwES1dpz6",
+      "time": "2026-02-04T22:43:14.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2t49HDjtzBEJAErhFgM4bhCBkeQSBDdzvii4f42t8JDuaVcV36pUVsVa44TKAtLwdRK6QVP2N92gEGTmdJi3sVi4",
+      "time": "2026-02-04T22:43:14.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2xn1q9sMihYmSgV3nYo6voQ4JFtw3ursfdiefkEXcosS6YQaKU5fkrnsYERACQ1FqmXNogzN47tw2GZRKYEyZmVY",
+      "time": "2026-02-04T22:43:11.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2H9hUd7KCwwA1hD54gy882EsmJVNkSi7k8DSLTrf99wqqoeEw586arMYpfRbNBtLyqZruWvDMWyW8wysQJsesX44",
+      "time": "2026-02-04T22:42:36.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3LBgHp4mZB9H87G1v351u7jjg7smjB3Qqh6HZWhy96KLC1bpYD9yLuNLeW3WpnbeVyGVCTJzcCvjTXHNqgkChBY4",
+      "time": "2026-02-04T22:42:34.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3scvYT2uTgxCFG6F95QXATfNqbLWRSuUwDFVYmKdUf2NDP6h7vwbZiAztQn7FgR8ZZ3LyJREHmwPnmYZQSMcsrq4",
+      "time": "2026-02-04T22:42:31.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2Xg71qbtvMboe2nGQsBCEJt7S37wEzhxjPR96zapUc8qZhXNhwByE1Si7jHLbe4kR135NfKUPpbBsHmu7kPjobNm",
+      "time": "2026-02-04T22:41:57.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3rRKSyx3atey2wupsqkcfQivosY9NhZVqzRCoGfDL7UnYMPmLdMTjoTuYWR9D7iZ1cSi62opisaDjpG7kLGfwS5k",
+      "time": "2026-02-04T22:41:51.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "54uvnT2PAqhz8uBhzEkc7v7rA7qHkkHfpN6NUqGcL7Z5aKX1UuryQrs91yBg52VaQmLD2PFJf7hKLf1SE93ZFAuA",
+      "time": "2026-02-04T22:41:34.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "rmqK2ZhcNw4tRnfoGwu2ZiXWr6Hae9yRNRo3YUM8Qe6LUb9koZ9ZouJYL641yLH7mgXzgEfqqYdCfVsQxmJjqbt",
+      "time": "2026-02-04T22:41:27.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3pLD6i4WhbrWkHVnx12xULJjC7qYk71A4myCSbFmNuDeKpACattDvsw2NNAsgZHN2M8BxnJ13UvggJqFNQ5UCSFn",
+      "time": "2026-02-04T22:41:02.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2mzbM9iPeHEYGqnAu74R2zP3HDB7vGZSqSkuxwDyxwQEYtFjLYD2nkjA8JNC7DBhbUwq8MyGeTxvGQoF8FkYRfvX",
+      "time": "2026-02-04T22:40:46.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4Me4pgPW1tPe63gLx7W6nerVaYdmJpjNPCm5KPTziSSbpTYP4pWd1P4BHQ6ceuzKCjSucyDy4U6Aq3gDdMoR534q",
+      "time": "2026-02-04T22:40:15.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2bA4p7uzZuXZWQ9KU2NJ79ctP5N9M78XQ9VR6EP9aHMP572gjGwnjfJCpuh8P76KMmHAU7HnmBGk7yeT2KW4pN2k",
+      "time": "2026-02-04T22:40:09.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4g3JEQqHKfamuuBVgHrrF4dU9mCsbnjQkqggThoic9b5vrcgm1yPmC5Xv8qUJYcT9Q7HTTMvczhpZhP5iFazioXp",
+      "time": "2026-02-04T22:39:46.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "62pgdNvbzZz5q6r7gVc1L8m4h2dvW3kbCv9uj4sj34AdxLm5rk6VXFjyS1YX16vP92ueMqHgengYuk5u2kCtNsLa",
+      "time": "2026-02-04T22:39:32.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2AKUDJYY3RRMjERYd2cBA22Q6G2aZgX4AsjN96rDa5tZwSj2ZRmE5fZf3AJSWxnLfLoWztvVqpXq32MvhTPSAmtL",
+      "time": "2026-02-04T22:39:29.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2PajvxovHxK6go4yLcVpkEftheoodxwMwrxKyFL4ngMFkYdw8MVEPJKs6AjGdty7CqNgP695yjLgYYJT6mcZS93e",
+      "time": "2026-02-04T22:39:03.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "57vDhEhyhaihXtcuUTaE7GFZAqk5YeGpwGSMAEVZmYNv7EQ19sMSpr8gpoAQ5arTFjLWjrFdLCkHwQjubvN7MYWt",
+      "time": "2026-02-04T22:37:53.000Z",
+      "status": "failed",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3Y13eTJEKUH3hwLF6BFRUTzqzJzDtnMGTY3jkkV1VqwTSrATdRv563Gaw7VP7CLzY82QqUoN5j86sspGiJ4uoCR3",
+      "time": "2026-02-04T22:37:25.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "48rE2GgDfNjYGAUNTMtj9fe3ypw7VqedXeHZThf3yT3GFtXmxJQ5LzJSqtzeuvn2DvuvR5i6BgkeWC5YDvmgsEF7",
+      "time": "2026-02-04T22:37:11.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "56bcBmNPhHcgTytTuekb5v69BqagCnTHchErpCK6GKxCPiqY9hhBXXNZxPQcN941Jdq3NbP74FpscXbjqJioauSX",
+      "time": "2026-02-04T22:36:50.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4rM3uEk14hKke9dxrT42nWP7FEGM83WgZj5toyUwjfu9GKWJ6QRugXGMhefBamqvm1JW8i8CMnBwNbK4akfMSEJo",
+      "time": "2026-02-04T22:36:46.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5JiWDxL7cChzJYq6t7d9cadoDnoN2b8vZnn9Jr95Q82eTpAHeGdGUXFTn5DEn4h4BTqcjshaSAqUvd4LWU1CSR95",
+      "time": "2026-02-04T22:36:16.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2ph8s5CVQYV9CaMVeockGUFaxL32T2b2GY7V1FZm7XYwHoucSzeS7Hz35wcv7g551mXqJhTh3JiLebx9FngzALSN",
+      "time": "2026-02-04T22:36:04.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5XmimbXViZwJzY1Uk8vMyvTQFAcTbxVCmjasExazKxYgttBApUJAPu8YiQ7YKNprJzhGG4isWStcDqs39me1VKgc",
+      "time": "2026-02-04T22:35:45.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5N6EQ82evnQyrz1ZdgdJaf1f1oPfUrVaz1eaWw2LSSqLUqLd1vaQgT2wNNQuvZrfHXYRxDUGBnyCfHLXsuQxT2vA",
+      "time": "2026-02-04T22:35:38.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3W4EXqFnrucqwmqKD6bMovMfScso1ps6axnVcZgtYguJ41bpSG2cWtFRexXAtXuC8PV3TrVh611SeDRYfG27iPDM",
+      "time": "2026-02-04T22:35:17.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4tV9NyjnDk4pu1bxY1k6Ds9n6qzFxydJd7SQYT6UVrToNRSLftK9s32fKPyS3tTzsWYMsD8cnPxUwua1ghTFkNbF",
+      "time": "2026-02-04T22:34:42.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3n1UM7j6oaizazsQvPBG2s3hgkrzEpgFpfx9h9eKn8TeSquyq87DLebDRSafXNdpBpJ5NQo8nAPdhMiY3rtuB3bY",
+      "time": "2026-02-04T22:34:28.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4kFPE7GcnTc7U7ubMqPEg121ge3Co4jRqUr2vEFiynpe3ce3ezNPToZufNJLN1ys6cGe79kGdEcziihbQmYyoGZR",
+      "time": "2026-02-04T22:34:19.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "XzGhmiRLvKAwvhJWbeAGFeeJdshA1qgUtzE1PyMLKT7Z1dxPW419ypioCtJQvgnGTopD3JXE5G5XTWfud8FXYyG",
+      "time": "2026-02-04T22:34:15.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2iq7dpcAgJETLCLya77kokaUXvdznYY3rHKRyeuMhsLBspmqNv3pLsrNDtLuWSqbBSfdFDFkTXhDA6qAY4QWrgGC",
+      "time": "2026-02-04T22:32:53.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5DLyiR14nnX1f4pTPZyokUUKRQEBBkbWuZxP5Cab3TQzGozDJSh5nHrmXN42rBrPNMrwM7ZYwneBVU56AoEzbiAs",
+      "time": "2026-02-04T22:32:50.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4J2XpwfEhMFuippsd2yiLWnDsLdRTUnrobvhCBVuk5BDSZ8AxEzMQAm8gc6wqN3Yu3NjyFKAzLdvtT9GbfySEd4w",
+      "time": "2026-02-04T22:32:28.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2VbeknAce7LqpoqGPrzh5MnXLJu91JVYsQnoBVii7rrUzu3M58KMCUGpQQZNXMjebC2Siphcm8JkS3a2oSDUhPdS",
+      "time": "2026-02-04T22:32:25.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3mYadxsRqWM668Sn5NwJtfHzR9WrwGSQyTka1obNVfKjgN1WUtaGJuZZKA6Dn85sZ86hqYhK5tdMSy8XbL9Fz5gY",
+      "time": "2026-02-04T22:32:10.000Z",
+      "status": "success",
+      "instruction": "Titan"
+    },
+    {
+      "signature": "HB6CrMLfcvbV9jgLPgbzoEfKSgozCQ9oMhAhgyd6EaAGsugSqpkGq6r2He5b9xnMcMUghceZ9T28HHTmqgdC2Vq",
+      "time": "2026-02-04T22:32:05.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5qhvfXGGLYVDs2MwDB7bX8KdsqLUqfLKLKiqEy7J4PgqpNzkJyScdA8DmhyCsWpbTaVWeTZWmNPLWbBoRaZyRQnY",
+      "time": "2026-02-04T22:31:50.000Z",
+      "status": "success",
+      "instruction": "Titan"
+    },
+    {
+      "signature": "4m7cnZUe1U9yEvRHanqjWZBmmy6f3JDHFvBo2uroVReNLeXJPjQvAgYtM1bPQ9LSAhb4LAPWSG6VgNMcoBXiVCFU",
+      "time": "2026-02-04T22:31:36.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2ncEtfBWQMrj9ymuhqJ2k7LguWBMPriBNDJkvjpFQXb8qM4Ap8bZGGfe8uxmeZdjkgT9Y4bdt4QRhQsnSoN8VQbZ",
+      "time": "2026-02-04T22:30:50.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2MN6jYLHXeMqRXBrV1rqfQ3TadTfaNdkW4QLB81Ga7xSnnermkvbiohcaXdJ2gJ5qjkFUVsFm7gQhcne1D6AivLg",
+      "time": "2026-02-04T22:30:28.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2g9Q77fUV6Xt8AUDEcqG9adJSNpBq1zYxmAbGyqSQKtuaQjVWzPgVMB7bBapeWfCfNJHAc26DD46pBakFYGduxDS",
+      "time": "2026-02-04T22:30:20.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3XJQnTvdGi91G97rtmVb3NQEYYELsaJ9ijA8KJPDdsdCBM6P1yAkip2yBSUMaz5KrvosXb5zK1jpytbBF7mHdeS",
+      "time": "2026-02-04T22:29:50.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "S432uU94mCpqHhA4faEqAMYmcnU1pLhmRDQ95Lb7Q4CX8sEJVYiRdMPHR8FoUcoCgzMZ3GdpxkfuYpV17ToXBKw",
+      "time": "2026-02-04T22:29:45.000Z",
+      "status": "success",
+      "instruction": "Titan"
+    },
+    {
+      "signature": "2UL2Yzcg1haEBeWFthSUdhgE2HJBMS4potK3JdBWg8s8zMyhDJsYRePdC55zBxweCwNXtcYr3tsmuCpYvGoYdWLH",
+      "time": "2026-02-04T22:29:39.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "27o49ZAHxdiFxVW1uLBELuwSLrQaxiUhRZzDx2pWQaYq5ifudUo85yncLdVnNsEKFQzgkuw7ud1kdsnDBG1XHfer",
+      "time": "2026-02-04T22:29:26.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2DffRhG55rEvF2E7VQL9RaLhb4qm7UEeQ3Rpcw5ZotA12BcfhMzHuVDJqvVLq9YVRZwJETXRn8Lshi6mNXCHi4Qa",
+      "time": "2026-02-04T22:29:24.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2LHuiYN96ScFYmnPdXFzduxxwkG4755GVYwtd34iJNmZtJENbXHsk87FFvTr7oniT4o5QdmhBtF2PoR8Mi1Dv2MS",
+      "time": "2026-02-04T22:29:23.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "41dgtEdtZmMRM1qrEBdyXy2t3Rn4uvar5ep8jTMqdmcLG6YbPHjnc6t7QadfViqNf6habP8BvuiCAHi7wAU5F2wH",
+      "time": "2026-02-04T22:29:09.000Z",
+      "status": "success",
+      "instruction": "Titan"
+    },
+    {
+      "signature": "Tr8YLSmPuuFEyaABKkmPmuJisvXZByPxWxDcS7bs4PDBpyduKF5Vr8RUzYvfdVCnoPR2Ncp4YTwEtoJyLRH2dze",
+      "time": "2026-02-04T22:28:22.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4UXGVzdBgA9MFPTNdYUdsem94KtrBAYkSkLA1ZY8sUUWw1yuXUFCJ4pFqu3hKKfDhENbWBAc3cP2Ga51ejia7m23",
+      "time": "2026-02-04T22:28:09.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5xUTGc1BA7oja9dqvvtCfBx8CXfufnzZuELrUVkZPmPiKsmpxBuRaEFSCUgbFYhGgosiPMYEDHbWDvvxonAxiMsh",
+      "time": "2026-02-04T22:28:04.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "fuvg8ECNxF1m3kScghJsN4xb9bVvfgjDy65NcAj3Uz7Z1XFHU7hgxCioo99GtBKkvs7DpmoZrz1RiGWmKdYrHvn",
+      "time": "2026-02-04T22:28:01.000Z",
+      "status": "success",
+      "instruction": "Titan"
+    },
+    {
+      "signature": "4bWZ9pQ3RwfBqstNqBekv1rVzMXWBi9qkfNZZRdsTYUFb17ENzZovhT2s6yyntUPRZe5kmxJJ44NMeBwJzCaLfJm",
+      "time": "2026-02-04T22:27:52.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5sSrXR39TfNg5Z1VRXVrVwPFtT3SLqCmcbLwbjUr5e1FVdNp38o3Ly44pfeqXK98tZSujPyeeiwVfAGUNkVCrQb1",
+      "time": "2026-02-04T22:27:31.000Z",
+      "status": "success",
+      "instruction": "Titan"
+    },
+    {
+      "signature": "3MEANbg3vdHThF1haLhd1xTJ4UwBtZC4GqbSizUVyD8B9roVSGm8Ae4qkLYwPKFYyHvFhyooNmxP3gm85mhsoYu",
+      "time": "2026-02-04T22:27:25.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2UwWwDzGEWhYCENUP2dFiV2So2vySDYq6gYQENXK7NxuQio9jAKP6QhjFLzQDfeapQUwDayH3dF3fQLKvrcDYmRp",
+      "time": "2026-02-04T22:26:53.000Z",
+      "status": "success",
+      "instruction": "Titan"
+    },
+    {
+      "signature": "sWYwzxx9eCMK94MZLiFECmnQ5294Aw99r4jJQmWC2hLDERsUESxhRjewDA62ecmrTVE6RfY643ARw78RR4LtBGy",
+      "time": "2026-02-04T22:26:23.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5Q5Y1sGCTUeavRhhSpj4BgDmHJ6PsxosH5d3J1UnZsNCeo7FHbqnnrrWWzQY4WntVqAjz6qZP9Hw2dmzUWxU6hbM",
+      "time": "2026-02-04T22:25:53.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5H18hb2SmcWyqDiBywFxm4yKGx5LPZWAnDF8CfRPwbviqHEeQPeWtrFANtcJtkQsmGyvW8Jn9BLvFq5bRKihiJaT",
+      "time": "2026-02-04T17:04:17.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2qTiiYdYX3ms9hc5xJwLzEUYE3MZhLYGSN6JXvpyLGA5HkkRRA5b2edRNxM1MkV1dBE1CXgeHjJC7mXqt5ffTYqY",
+      "time": "2026-02-04T17:03:32.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3RCwzLbQViY4yeL1meUxEKhUdS1Ea1j8fB6GyH456tBSZUJBM6WGtUYpy7871jw1QvaTJ6qpGX291DasM9NTr6JF",
+      "time": "2026-02-04T17:02:32.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "33AcpGPV9qyNbnGLc6YHFPC53bpGR769YaohmezDCzVipTUTJXTLfjFVUL1gH6h6eYZJEPLBJm5ebz7hsNRLnRUE",
+      "time": "2026-02-04T17:02:19.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5XdYz4heopCEWkgEeMr8T14JsfWyY418tLK2vVPXLrGvdwRSXhaUSkbtHizBVni1MiK7qz5ChB8Uvb378JxZLuRj",
+      "time": "2026-02-04T17:02:09.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5QBahTT9AVfYLEceoLMiKLkU9MUgQ6tPu71o6ztNCWMA3aWioBW1QQFLwj2XeCZSiucimVUcYZz27CzHzUCBEsKi",
+      "time": "2026-02-04T17:02:06.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3Gw2bbgWTTjVhhPvyDZnGLxSDwKepKaSnWap9frUx2gsmLv6GbiSurXWwJjukbwv2pjDXkNQ2DqqE7LLSRqzukNA",
+      "time": "2026-02-04T17:01:49.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3hGXX3RJ5ctyR3923sJSbcSJHFdqmA1hCmaVLcEYbqFUFTyckSgQ1MSMchvig1izM1CMw6uXwixsPp5GnosuR8kG",
+      "time": "2026-02-04T17:01:46.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "43oERbvogb7SDuPoBYpBLSCvom2osV91kBMxGYQaFVdaNoGPcUg1geextcvVEKhwrHbNtum9v2VSaiAdhNzPLPHY",
+      "time": "2026-02-04T17:01:35.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "59h1JmvsnssBmYoQDMRi5RES2XfWySiJEFJFJGP4opcrvYVb5gGXPF2ViS1j3wGNhm4KJ1uzyPcDoGPMPjJzJ1Mj",
+      "time": "2026-02-04T17:01:11.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "55rzZWRnG56F5ZWR9j49BjcRYB9U2PkStHBiiwiHaRnsGA3mV86PpSnfZwRCTwGveFuvKdu4qTqEkR13tHvinSde",
+      "time": "2026-02-04T17:01:06.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4sQQS9Gd3Ds3y4gDVoLDE6hepWoE4omoZMRzuQnmz5srGRz7tfMfVX3RwKHwgrsXBuWvnm6VKfMdamvsaMXoerdJ",
+      "time": "2026-02-04T17:00:52.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "RNMNfU7sh33oZGhm6xVgKdGz7BjTrVoQN1h47Q5N15kq7VojsfTHVtHjdGUCHPpdhaFhCy7oUKYzCHk7HRbaiXm",
+      "time": "2026-02-04T17:00:29.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4t2xDDCFBb1z1M7V4jzZRo9ahQcWCsuZEM8JGYtvxSTQxGn9qybiYFaDGYwEdMT54mXT9KUPhRpDgHRBZn4npjNT",
+      "time": "2026-02-04T17:00:26.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2f9aBuoenPPoxxiYcSjTBdZAHmALbx6YA93gB4FG6dUdAHmiMmAMMWykFZnsVeD3sAPd1jWcrcuQ7weRfPbD2THN",
+      "time": "2026-02-04T17:00:13.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "czwtCQHtGLs1oiHUze1NF4QT1sJq7WYqSMuFTe6yTE8nGEANuGaV6gohS3bPUMdNA4oDwxBVqaBpm2AkCZJk1gh",
+      "time": "2026-02-04T16:59:54.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4jsnHiJY9syr1romCvcWGGg32rhL22NpS4Yr3cwoevSMH1kYzZyyVVfjHQPr3wgA9KSwHg6v18VsHKSXBHj6GpoR",
+      "time": "2026-02-04T16:59:42.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3EDJUmSMcwWA9MuJvdm1fGQfj59dy1w1dZhHZeA745TqWA8yMBjPzaKaReKQDEA5i4fPdEUjnhLtxZyF8cSm41kj",
+      "time": "2026-02-04T16:59:26.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "24ER6CDrbMsJUSLJuaVfkqv9iFQhNjG1YjWcu1Bj315LA7vH3VFKhTF2azvJgRAvYLpuzxMeEKgsZwrhTLVnG8MP",
+      "time": "2026-02-04T16:59:24.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4m9dhZwuRCX9hiHufEpEbK1z6rdx7CAXM2ji4s5iCgn3hZT78gNgJmZW66edtoDbtCJE8b1D779LSvdStoCtXAcH",
+      "time": "2026-02-04T16:58:54.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4xP2bPzZJvq2ZxQTqE5AtzzckXE8tdQqPJbY7fk4BoGaANX8N52sdnt3fE1Lww9LqVL9oG553cUJdgVJwff2Ub4H",
+      "time": "2026-02-04T16:58:51.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5usYDA2B4EtN6wGtLm54UqWejYzs7PBQwGVdYTTGg9K4pXYXk3DHAgtEdwtQx42UAhRUpXY9KwbPqfeKN5r33wq1",
+      "time": "2026-02-04T16:58:21.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5Zbw8aH42D4aoVzeWGcDVBSb9ncsgsb9CfSAf1f7fevdezypn7nf7GU7Ruu1mNrWhs5aoZnpgqKgG5xcbA8RmhVJ",
+      "time": "2026-02-04T16:57:48.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "24Gs1YpKqNFViupYHiukTpiHgDfzkLpbREkPUvcymYDZckSrNdi5REqRs9VsinpZEHwdkhb4HvMGaxJX2U6wZZyR",
+      "time": "2026-02-04T16:57:46.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3Jk3ugndbGnXApLgU527cZDLGBMNn4MDYuybP8JV7Qwn7rPYR3FJ48oFKXWM1DQLtwrnQvCvfbavSb9ML4bZ2rxB",
+      "time": "2026-02-04T16:57:42.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3jFaR78Lk56prL4b9BnokVhWwzQrfMRbHPxmyaQAsHYqBQWVUVfWXrhiJTNoSp3xr372WZUnDbBfaiksnG55Q8eE",
+      "time": "2026-02-04T16:57:31.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4R9nsX65z1wR2MH2ScF1eYCMv5tJSoyJopwz5TbAzPnXfVAWCJc1vYm82pGYftK2tHCNFfWCtzRQ6wRVa5n47isk",
+      "time": "2026-02-04T16:57:16.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "oSDDsSUo6hgMRvAC9AYqmGTcLoqe5R2BnAQ3U6PvDUkv7LVTmyq8AeVhrPohHnd6nWcQAjwNtmVDiwbkVA7Pd5S",
+      "time": "2026-02-04T16:56:56.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3T4ZqPEc7YK69QVjESTgHigrPLu3mZM5nEUgpwGmBPQaSbVA8H9ZtsXysc48wLVvFyuSAJrwyrCVC4Zg4RTLuFJn",
+      "time": "2026-02-04T16:56:54.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3Jn7KzoQAcc3wg4R6Mq77F42Vif3WS8CtxnLHYVkjNKwk4ueFSp55UghnEZyrfVKtDjeXDWiLMRnpvs1gSc6ci4g",
+      "time": "2026-02-04T16:56:53.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4Nmx2bDecohnM45TLFZcwgMCr33XnjY5igzE4V12YMd2jg1nAGx3QCEGu8ftmic1YV6of1C2mCkxB1mmSZrRLJcP",
+      "time": "2026-02-04T16:56:44.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4vhUtshF14b7v8E5D1ZNao4JvfWXSsPLfXVUThwVnvDb9hehsbgPKtgJDvjPEmFBXbsuuydnicaixvHNqne2aMtB",
+      "time": "2026-02-04T16:56:30.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4oVsqgMbbTUEnSbgAnHPSy5Fkz256DEaiFZmwrSG7Mx3umi8oYkwFp7sdLJZdVUoBYKs8vCXY6x3rzNYgcKwqSmg",
+      "time": "2026-02-04T16:56:27.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2HetrQEjaEEx3DD4dqscvwEmgppk9JyhPRENPeJHSQPKm1yh4KP8J792obVAnp2Vspoz21x8xdxrxJ8PumQBmv8W",
+      "time": "2026-02-04T16:56:17.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5rekQ4oA8Rf3PFYrUJZkQk4rgwwKUD2NULMuCypH2gv6Ua5pK4mqEq1Rrt1ZpQv7RfB3muweFrcFnnJnSaLunADX",
+      "time": "2026-02-04T16:55:53.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3WGzu6NPZooJqxU7AN1XDhqxjid665DA9bH5G6q5q9niNPnBBMSztXRAa5ao8gXP7mRQD36hnaCwSg4eKRhXzBNK",
+      "time": "2026-02-04T16:55:50.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3J73GcyBhNYQ9XbB2NcZABi5q3JyXvAZp1YUGwGmxNCZTibq6zjjS7VPCSTBAu4RTCFQyzVVvxyUwboyj31o6zDb",
+      "time": "2026-02-04T16:55:33.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3LtzhdJC3P3JafYdyfnjnAWgGDRaTRhkh4LMCTqgVkwEf4URjZmnhmUyN1KwxbaekhBTrcB7AGNtDbivipzKySN5",
+      "time": "2026-02-04T16:55:19.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5WFCsaPUg7z9x4E9KTkX3JdhFaHxVCc7fJziSg6VZveWcmUCDEStFoAEuFzbcFf8mfmmpUBy8QZwteao7dZoCcsj",
+      "time": "2026-02-04T16:55:08.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3sEV2ADx4dB9g1uUoJNLNXteVhkBSVifQgxv7Dp1E8tjK6X1myFQFuzD4WvcMJm8faNGRGJD5ufuHupDnofHmYYD",
+      "time": "2026-02-04T16:55:04.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5pTfL7UaicZuoH2MUnmQnGrzGtyRTPwaDXbHzrWKs1e1J8KocPthm2FW9rF3vgwD92t7zaSurP1RAPCwVwGHcZrH",
+      "time": "2026-02-04T16:54:28.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3Bjhqhz2sRQq8sWhEhHEGv8u4XY7z7KJxpLnbH4fhsJMfbquadduNv7m7Yj45tCMy7KLtL6poNV3kT8jUkPebjoL",
+      "time": "2026-02-04T16:54:14.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2FLeYf5JcKr2bdmi7897ynsTyoWXzpM99Z1fCEb3LtGmd9A8QihefdH9kbbcrzMrNyZ9yoCqRxUkmNdAQRfbx81N",
+      "time": "2026-02-04T16:54:04.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4FMFKvmHKEUSVAUoro953jjPkBYtVFNugp8ESV2XbRuwdA1qDWXEXyM8N1a3dPpiL9gnTuxf8jrLWuXq3qoas82x",
+      "time": "2026-02-04T16:53:25.000Z",
+      "status": "failed",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5myVAmCo8RC5YN64MHAEHPSFYwLdGnwacYkGzJXQS1VYu56Hp87CTmqSjdtkdY5Aqe7YAZuwYxQrfPT5P9Nk1rwU",
+      "time": "2026-02-04T16:52:37.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3tV5j4oEWS2B16oErGf7PCE2mgRbG7ztZu3nENcjjfFvW2gRY1CYpPd3W7HH6RMXk7y5GFrHe2GvAixMQJpPiYpe",
+      "time": "2026-02-04T16:51:13.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2anWhZUAicqjEvTPCHnWZncFvb9jwK5DTWdy92BMgXwXCPAMrq7znaVbnUgAThVYg7CKV8qEokMdyMuuzVg8HcnR",
+      "time": "2026-02-04T16:51:08.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "48SEYVsf7ZBUMPsH5UNUoaqksw7WZ3MyhyAGQdwxAfb5Ve8QE7Xadxino4F6DoF85vjhq2e6Z1zKZqHSPKoTPXse",
+      "time": "2026-02-04T16:51:06.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "66fB7sRpWQ5s5yodyPpvETpZYaDwJUzkrfE4hMFWcWoCtjNZUzB2bjAWoau8PGMyPRprk9eWuxLJKDV1hgy91kWf",
+      "time": "2026-02-04T16:50:50.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3Gj3A8WYiFPQgoiurGM9RQbsUSeVwQuAJg2BsfyMqyY5DVue1PMGRVVM91MsdwEooJnDYTpwbPB6V8Qc52WNCqbt",
+      "time": "2026-02-04T16:50:38.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2oAoh45582yamNDDjJNQrEPeKJyZ4QtMZpzLCbBBXbBQTm3vhW2TqxKkec6H7xGihTK4qwg5Gi8omu1PRU1VBJ3S",
+      "time": "2026-02-04T16:50:35.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5kUAA1HdQ3uddSNdSdczhyas2b6rFLrg6SCJxFs9DGyAhGgft5beMGSoKoHH8zQpMR14RZTkP6rfF7mQoJrHPBwM",
+      "time": "2026-02-04T16:50:30.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4XLZ3dMvEsSCVrbJQqP4984sbH2ebu4HTco8wCfz3HXGAGAGgsfQ6GZz7Z2RQJifKrT2vzcETaPBFHVGMojSQhRF",
+      "time": "2026-02-04T16:49:26.000Z",
+      "status": "failed",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3HxBHkHnXvg6GZJHWWUBEagrbTYqWG7B9BqPYaG1at5Lcxy2Joyi8KpzWU4JQuJyzXPEp61vv5dox2oATdwU5k53",
+      "time": "2026-02-04T16:49:10.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2yEqwyZt9bMiANJ6R1w9eRXEjJR8MjDHAnRb5pReSmyDFPBSwKsjEMoCPaKGCfaypLr3SJmgfjEoHK4FLAHcprg9",
+      "time": "2026-02-04T16:48:56.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5DZypMmuD3sCMtpdWD4DHqLK19LF5ZzbzrtQ4khaWJyf4a12eidtbo1iKKReyvYh9THfDN3UzUfsNhPV87F69VbF",
+      "time": "2026-02-04T16:48:54.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2SVVTNEDfVojNHDtHUiiKgj3CWW1nPfhDHwEbUw4ByJ5BC7ZJEQMnXG3u5JajpekzTDbN1Rc1y2k8ivrP95ikhRi",
+      "time": "2026-02-04T16:48:39.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2rvCtrawQCWdhhdqweabR7YHiFvKhvjjwiXb5y6WVa32hW4rsL75LWCKUUdAYRbx6vBiguXdseugCqbuCHS6SQGJ",
+      "time": "2026-02-04T16:48:12.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3inLKzQh4jEdsthoUwrJiE4q2ajVtxvETXXoAvue1LfPiU3Jqi3K4SkC4FFd8Y42tpoDph6KpSXa5ZfWC51pQC7V",
+      "time": "2026-02-04T16:47:42.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2wEBCwUAWHCbPvgABaVHfe45yrbdxoBWECBnhDLEunngdM2dDEzc6UXp45ganTTLZrhG8bM1Smwa5e7GFeYczokL",
+      "time": "2026-02-04T16:45:56.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "49Hc7bWY2JbnxK5S55cQ6zDCVJdQPEGRuqcnyk8zWsLvubQSPE7YsTGLqjVHgKzPkiszAw26BLkBNvmHkrMaGznh",
+      "time": "2026-02-04T16:45:49.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2CwgfNuB5NxXT8f4wpbrKgjvQcDEkJX2Q7QyVwTRJyDnmRerQRnuGkNMRVuGghLTZXab734XwoF8kGZEt2pA5kHG",
+      "time": "2026-02-04T16:45:38.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4QEYuNTPh33cgeXTFxNmBnKu5sZiAwgm5hSmm1HCszBevk7ktUhTWR8BbgvyZ6tMks9sg39P9mtn4BHvjPyjWEMA",
+      "time": "2026-02-04T16:45:36.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2PPXHbURwCHSvosJeXShkDsb4zr8snEsjjAUBsDsBo2Nc2ZX9UdEdPc1uQP9gNY39tycakcJuqabUyYJ2G1tKhrD",
+      "time": "2026-02-04T16:45:35.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2pHWDg7iHjv7GFr7oWyWipJ7BqvFqHFPMAgTrk2gTSZFJwd8MzFcJTv3vYYtsYD5xEYv69giQQiczRpJqKVNGziP",
+      "time": "2026-02-04T16:45:34.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "eq4Aazt2wEHxYeWeNEiCGwLtD4okWnW7wTy8fiqt7oqo67Yyocdc3xnkCzdKpfnrTxnuKW5Pf4BSnfiaUwSvg3z",
+      "time": "2026-02-04T16:45:33.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "CjseHZrPe7b9cjtbnyzEunxZfgLcvNjbVnBCxmZBPEwgnK3BicSUmvzvbr3gMb93qcGFYrhVNa2B7Zy3Ze4uq93",
+      "time": "2026-02-04T16:45:19.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5ewAMN39uSV7L2WkKNpUzuMVAW9bLXW34LFA17gBTDyhw5KQN1BLoMEDphq7YPgSVP2X3fxTYXbBMg64XumsZtnH",
+      "time": "2026-02-04T16:45:15.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4qN9Ai3TpqRt8BZBTw4C4vxXBarZDKdZnDvM8USTxtfmzSu2GpGVMNZneD2WnETtjKCXxXmKueYSFbLP4oz9UAwm",
+      "time": "2026-02-04T16:45:12.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "47qmyZNDq1zqoHLVg2u5g8nhkwnYGeE4CUMiXVdqCc5WoYEFwBSc9Wd3PSpSccE5Gep6pkFmH3s24upJJkXKjE7m",
+      "time": "2026-02-04T16:44:41.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2cgvTv1bGABFq2FBUgrAii28osTvjXsYqU3N39KNUGVzSCLp8bXxLp3yW3EBTBwkLWBc5XSZjiTM7RKnWgSnqBQu",
+      "time": "2026-02-04T16:44:23.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2mGooEHhfQAqGLU3CfsfbQrUx5ARr52vzHwuZqLsgbQ8dXqF8pVjXet9tGUTs6NhXnripfQhvNkUWTGArV6st5Wp",
+      "time": "2026-02-04T16:44:07.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2eRcZorBzU4JAiquihGvoZh4mqGZMyQQpYBAZdje9Wdu9uWqG8jw9LUmULjDxP6nnv2Hu4B1E5vb7HgMj3qjdEBi",
+      "time": "2026-02-04T16:44:03.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2Cvi3H4FTCZdvTv6iE74Bq9XpCBuhDyWDUntZy3syCFhUG5UYjTaC7QKLMV1p18GmodY14qX81x6RgHumvkW6nmA",
+      "time": "2026-02-04T16:43:59.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3t5vHcoe7Nfa7u1rJS3iEbDQaZBba1EwPsQhsVmKLquhXAodk5VxreXv1PB92eZ24DKZbqDB19vcqiA7xZjrfxM1",
+      "time": "2026-02-04T16:43:57.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "59ievBsi8ivWWK9TTTVHBQE3gj1nCeojHd27PVUMbTPbUjUHfoEHaP7kC9Z199JSYTr23EQWZZkCnxQ7bcnH3p28",
+      "time": "2026-02-04T16:43:54.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3qVrksxxSQiBuvx77YYL2vyqGJug9mBzpXQXPummgeLBw4zDj48dQYCoczXKSNY7R9yNmpwwEcPJfkPZaEZqMTxB",
+      "time": "2026-02-04T16:42:09.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3m9JbTkbordmv5cXNx1doJFskcScSjBiKGPMuF4hXCLGkngNwUoSvTFTENu25Ug7L1XE5U5CMe3MEsu8MCimvPVi",
+      "time": "2026-02-04T16:41:58.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3CuiYgyZSvYoHoR5Yzb23o3x3jTfrNUknS9nrwa6HF1c95huGbVFxcBUz3NjA5qCvXj4r9ZnM5Hh7hR2vzeGZAc8",
+      "time": "2026-02-04T16:41:30.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2cupTDcyXbWgwUqSGudDeSWxTSXb1qBLNKFxpGNHrfojjPbZebkNEmN77DddVXXGmDSVXWqQZjWNe45GEDioUKB5",
+      "time": "2026-02-04T16:40:40.000Z",
+      "status": "failed",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2GFXQBrbdxcMebCL3Z25XyJkgYtVVuDKJQcPVwCRE1DV3DDEq4F2Qw24sU9kifDiQmx3iAmNE1wxkSqpsUG21CUt",
+      "time": "2026-02-04T16:38:49.000Z",
+      "status": "failed",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "62M1AA4xS3Gs7FMGgfMmjr4xupnCUTThvCUis249Mv3P5UpU5hwcrUSgg3FgThhyGvkmnfDKFxjzHsHV9iZ63zrC",
+      "time": "2026-02-04T16:37:44.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4ErfJRLogX4swNDkr2pu4fK1gvv5Wy8jTieywY1WA7zFFwwzmLiLW88dsUeNbj6Up5c57aG51ynu49zvnLhwZNo7",
+      "time": "2026-02-04T16:37:24.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "fKsDC5jXwDyqXmXwgJscZsdeBR478HSNnz5LEfVNFyurZJ2AKV8JXcFj1MNXc5PGtQ5JCd7GRMaeQzCNBDP4yDY",
+      "time": "2026-02-04T16:36:59.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4NiGd5Qbt6d3BW2NPB3M66j2BBxavg59TPA5AGkGzikehSWU2yLouKvAg8uLPwkznxykxeAWBS6eBYQaccWUPQ6c",
+      "time": "2026-02-04T16:36:22.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5G1U1H2S6P59bhHTif5qySL8dWPCn1stBxvbRQjnM9ym14hCv4gZMCpkiVzjj6XCQWoguvGgPtxS4utYK7e2R8Rm",
+      "time": "2026-02-04T16:36:16.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3r5fay7N3KGrPui4TTB8CwsDyxrNFh4Aot3jMqPj2qX5Pis4pjvdAgh8pSiZWX7PZNKjnq7YtKsbefuZgiBKs6Ft",
+      "time": "2026-02-04T16:35:17.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3BvC86xD2S64G4s2CVmQowbco2mivdg21eKbdMGtnRysbBh3mXC7J2DsUnowThEpcXA3NyGzXGpBgPuxy6r2zA9N",
+      "time": "2026-02-04T16:34:49.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3yKJnYRykubNX7HfyQWTvy1v1L8EcfE8RsMZHsTrfvPZPANpbamz5ZxARTZmTrVD2Ngkwm3PXXZ4crgPwkRc6uNz",
+      "time": "2026-02-04T16:34:48.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "aPLbcxWT6TGaAJQwgT1b5WMzy6dxZe9VjnKKSBfP6x7H7yvqF4zwYEfdwsqfHfCUX3aWcJuEWgKh5tE2wBajbBN",
+      "time": "2026-02-04T16:34:45.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5mvLPREugnmRYimrhriaCRCeRegeoP3DnawVHKP9TDRNfKvU1X2fxWvKUqAvH2VehWXoUMNBMygaAXcz4q6oPHSq",
+      "time": "2026-02-04T16:34:32.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2JFajJBxSec3w9snzkGov6Hvh9rTXcZ9KHZ8FzePp1mvFt7KZbwC3sQtCQwPHc9XSNS1hrae38BfcpeDx1sWcYxm",
+      "time": "2026-02-04T16:34:16.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "pqUukYq1Y1HzGbAWfqvigLeV88cw7J4RLqcaYrg8ns4fCv4SU82EfomBqwYAueLruKiC1JFTX6YkeQ5LW3PvK4d",
+      "time": "2026-02-04T16:34:03.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "ejBWXHUaQhXJv68jaVQTtuNnwNLoKCxLiBfQzfLZNsHCWLrm5Y35vh2VBZkfzDrXJhiZDJ42DTK4jwF8j1k3Ehh",
+      "time": "2026-02-04T16:34:01.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3uX6vifyEccnb1P9pre9qAaHyRReA2D3f2numEcLNRCeinqcfDrHj8xJA1yAwfsoyrMK8tgiuLKJ6U1NK5BPr5KV",
+      "time": "2026-02-04T16:33:37.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5tmt9PjqYTcYmmyu736hUdr1vSz8XPRYjxD53xE42EkYUSWuFqTWTwkXLhDQ3rKedJGenMDN75KponQggYAfNKNq",
+      "time": "2026-02-04T16:33:16.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3b7tPLVzE9ZzYL9Xm74f92jDJGRuMvrQdAfkN2pLPdZdthtXsTCNK5dPGNsVAHzK7jivYkZjmNBjdH9ByzK5SyGX",
+      "time": "2026-02-04T16:33:03.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4ou6MWjpoApabfZXEvm7isnmJcbAqBLxwdnwLm4RPi6gj81wtJueYN7d7SECXWfAASgpQ6oo8iwCDaSLduP7NjSK",
+      "time": "2026-02-04T16:32:44.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "Uj5D1BiNN8DaEJCo11WBGwFEdXh6xdfsfD7k1ufyHyrei5q6Mg7gBpuiaFZXk1MFLY8HvDrT5rmGz1AHKH4z7xX",
+      "time": "2026-02-04T16:32:31.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4ecWA4B7UiCNvNuXrZ4f1Rpn7wRSTFDZanQwEzx6HHoGNc9M1HZqaGXRUJwEz1EgmZdLEMHw5cCGw8AV82yYzru",
+      "time": "2026-02-04T16:32:13.000Z",
+      "status": "failed",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3DWoJnvhCE7WQSMqKnrdgQo63zZmWmcNREkTK6jtcNCjGXiE2gd2DcsarNFoWu4PgdABRvM7P6mF8KS4pSEo315H",
+      "time": "2026-02-04T16:32:12.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "66KGV4ANBi8mBnXnRFbCdZpJu5pQRpn6qEk5YSgn4GTy1LyJMKsi4kMRM7VKiJKxX7KuvcEysoy8JjC4jgeRVSyN",
+      "time": "2026-02-04T16:31:58.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "SNm65Pi6Hf3vXBEUop5k7fSWvuak4VLt3BhuzXu5ZkqxmLdKXQ6GQB9VunmCRTBCF42RZVAXKfNVC39aK1vEPW2",
+      "time": "2026-02-04T16:31:38.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5bFZSqAofNRLASgKoJ8LHPMm4XV5TwHuVMndhHXAiq6w3WDfBSqDECntrLVv4U1nwRXx7pJkoTLXFSefCWaSAxui",
+      "time": "2026-02-04T16:30:20.000Z",
+      "status": "failed",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3bXWuTj9VrcCwNmmdp2kcnoJAUc4UnHoVesDaYHFuXbsf5zAqn9rhkVSoiFMmkvNstxSRCRbQjPgvmQDQ55kbtkd",
+      "time": "2026-02-04T16:29:48.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3gZazsBPrjxkYCGS9RArgB2PxSQPfpugytE9YuW88ENi92ZWahrh6ePtmVdxkdEJRnqj7qzSj2oCPY2MEdmgLpzR",
+      "time": "2026-02-04T16:29:46.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3pVUsMdBfH9pgcNCWHNZp3V8m2NFvzeWhuoEx95eaqVhi2JgtEhtqNNg7GU7RXWLDeGWayDMVjQZitSo9zRiFXyZ",
+      "time": "2026-02-04T16:29:27.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4RekdSLuobBcDUHNn3qepQd4a1gRm1KdvFp57DJyUd3oPjDrY4gnAQgCJssFyzUwBATR7qzGpQwT75hvzWu7sTqD",
+      "time": "2026-02-04T16:29:07.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2yosJZAWQSFTTn54aVoZka2ysWvsu2k7Q4pDsK3sLaioumK4AtJkR85CTnthceQwdbyhXNxZ4J8TK7cEzRDBvTLq",
+      "time": "2026-02-04T16:29:05.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5yR9JgLtJ9JyRH9xioPuq45KZYzg1PswkDC5BJXNAiMu4oCLB86jVoNysokZNLZat9v4J2C1yWcBT8z48AsNPx3J",
+      "time": "2026-02-04T16:28:52.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3T1nrC4J4McsvVCaodsRezreAXjYEyeH2DH6nQfJno1SeGbbRuNqHbGZi2iaQLg25eBmhJCfYsH56WtnFVR86P4F",
+      "time": "2026-02-04T16:28:34.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "PcQNcR3YHKsJ44vKQpGsK7wde2mauokuATuKuLCNnPPMgZRoPyHBG7RCC1ae1yV9PRiEZQ3bbuHx6SR78SzSGvD",
+      "time": "2026-02-04T16:27:47.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "ck98sgJ5YtGWrK8fTug4nSvVNvLjc3vQqp9vcGXj5rTvCdDrrmtmmXnRT3WD9cY2cigPDRqfh9mLCNuPMsrBfXA",
+      "time": "2026-02-04T16:27:36.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2se1sBXBQntc6kfLoJnmw2p4PLztrdj2ofdkpDvAFuUFmMnDMMtJCq6idg6YtmNsuZT6wtJ2chpGgBiAbxCkCTV7",
+      "time": "2026-02-04T16:27:15.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4s8UyQohi15fZrAT5eR1vHDzGJdRUvN6mEEwHrUWnD3Xk1YPUGwWEXgmXoXDBciX1McN7C3KiTt9ZiZLfrAASgAo",
+      "time": "2026-02-04T16:26:53.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5DeRgozsQr3Egy7CcMcC9Tk8VsPPHgKNLngc39ty6xNiMqk7My4ZJwrPTEcU1aozbNqGn9HxxJU9BfL2f9hWCMCv",
+      "time": "2026-02-04T16:26:50.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4NGUBmzDB7qPbtzXM9bLmK1Ah48z9MMNFXs57NmZWD4NRt7WgnWExjTXcgrYiUFPSiTwf9GamuJpZdw6iW4373h3",
+      "time": "2026-02-04T16:26:33.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3fRuR8qjTbGzs4jWRdvPZj81y3cjNt8BeoLTMjiSdhXH8CYfYjAoCu8j6oYgKzo3az6LbH5RK6FDezVUwwH65UWx",
+      "time": "2026-02-04T16:26:30.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "23UYsFS72rEFijQKJDXJ2UeJSPznqpiQJ6hvGTPrf64sovxR9iRnJguYKaSSF5uRXUVeHVU4Ae9W6a3TqyYwwz4f",
+      "time": "2026-02-04T16:25:59.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2WCDUTUHAyM2wSjcPhwQ4wg7obD4pwJVsoozwLe2smSLchr3C3eWXnWkEZbjzVVnxVcHpash1vSsbxGCb5uv7b7e",
+      "time": "2026-02-04T16:25:43.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "YroZQNaxD44PNuJ7A9rZnXnSLiF89xEL488AUPQYK2eAENpxqLnMVR8xHuSHLgbx8YCwXAyqYXADZpRQKeMofzo",
+      "time": "2026-02-04T16:25:26.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3E237rfBXjeDQCRcxKKhfKcApDjQMYDGUGuDYkWDq4M58LSRo3YETpHpMCGvp9WKZgfbsyKtsKiLJTWc2zFHf8xk",
+      "time": "2026-02-04T16:25:08.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "55Tvy66G1SREGkLZpaGvii7GzUMxkFJgRX3zuPVJBq93Rfz33f5RDpqFYn9f1LrmvfYLY3LWud4L4rkJasPbNsuA",
+      "time": "2026-02-04T16:25:05.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "zT7LKouAokf1eb4s6yXupQSCAdxnPUVkeUsFA1j79mpRXTMauaAX94SG1wKHTEAvNKsVoHLNRd9y1tuGLme3TqV",
+      "time": "2026-02-04T16:24:44.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3Lj3LnowZDCi7N5dm3RFhVYJXmWLaUb1TLum55wzSATJyaD2nBRbiqLHKfr1TrzNGE3FSiMSJqmNPVeNcN6yBT7K",
+      "time": "2026-02-04T16:24:26.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4fJ36zALVNgvcwffmtwDg7QzHTbHftwwoG6VsPK2NhTLsgQNoPLFG2yNoWMJdPbCzpucPTXfixaboouHLFVqMxfB",
+      "time": "2026-02-04T16:23:42.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "dgw5rCpNb2oJEsRCE9iaKTP6egnJTbsEhfxp7wKxaGGqhxtkKpaQwnoEFG5GmGBwhaGAmMi6tuVa4k4bjXXzk9X",
+      "time": "2026-02-04T16:23:38.000Z",
+      "status": "failed",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "66v8NGZqjkxQA9BgAgXEtxesHHwpXd9vtNJC4qHoqceApoPtCwuew1Js2GezuLhMj967TtBiFEjhnfqkXxBkgz1y",
+      "time": "2026-02-04T16:23:03.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2yn96GdRmcEH38VURaPQ41TEYiYm6sudegpmWJf95jvHZWRhRKGyMDcqgDc6WJ9kS1QZ5XUn9zY2fXtFXZXQUmeH",
+      "time": "2026-02-04T16:22:58.000Z",
+      "status": "failed",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4yJJWdz7hqPnZwvK9E7UARrks1eHfRjW1cgNPFkYvLjJx76MaSFDXETWGXidQVeTxxbeM7ZH5WxGDkBvA8REyMnr",
+      "time": "2026-02-04T16:22:55.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "VQUDWfqNYUuy3URLtmm4TknyWYrvZvbueeSTsmBDH3xok3kFrf6vthLXmbxTSwYmcY18M8xi54GmVtZkLDiXEn4",
+      "time": "2026-02-04T16:22:25.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2LDBdLjHKjSRR6Vk8i1eLJCTMa9i8ee67JAgBk2eunDSCSCARyQ4jjieQrKAjpCfcKf1uCaQFsd4qQfLrejSp3yn",
+      "time": "2026-02-04T16:22:22.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2mHQPAUmpkJVDsipt59LF9xbbrdHGDJH8vxqMA1wrGZjG8S26TPu1Bag6CEtQtAc39DbthJYtaMK6jFAdv3Sze96",
+      "time": "2026-02-04T16:22:09.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "Gy4uukXawPzN2KXnJAYEg7pLoWWX3itdfghJaKAjQkJGTHLCdsUi6QiNUFXqoaqtPSnL4raqgS9W1k2LjRt1amv",
+      "time": "2026-02-04T16:21:40.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3yeQuw7KzCCnn12PXXrPJ2zqHaRSNTSgxPrRjHmtUcbFiEFXru5qpCj1DEuRYiEEDpUM6nhHT6o87PV6jdXx6mSy",
+      "time": "2026-02-04T16:21:36.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3AiKJkh4YSGQt359fEZBYHSeMeUniivm2q7YP1QN1LEUv2dxFdWauf97xCb7BRrRZdxo5syeFxV9UJaJCukndUnw",
+      "time": "2026-02-04T16:20:32.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4wVqfDUbJmGAriY1NTqstumaiGufSV5EufJBr6feoS79FZ1WcCSsfjLJ7aREUDF5iVHXUnLBeWwLo62Kmi2y1Eyj",
+      "time": "2026-02-04T16:20:30.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4BbCNvgNByiBcBSumFUmGddaxAouo8Ggu2w9wG3whK4yMJnTYFCjKhQ3Sv9yaEjq7FtV6YCy22zc64zSQL2Z39SE",
+      "time": "2026-02-04T16:20:17.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "47erHyRgUmyRV4h46sLyoV2CRmV229TUGkYq8KLyfY6FQLCtSTykkADSLwema4uUz8NhZAY2nPdDhpNoHGjcMZn3",
+      "time": "2026-02-04T16:20:07.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "47X6aqZPyRc8F1rcF7sXuG2zCE3N1b33mpFXsHZ3YFjkw646rM2sPaTghNiLHo5MJTJUTXu2VuNzEX6fmCTTUsvi",
+      "time": "2026-02-04T16:20:02.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3kayPT9aiQ5sLNutmBER3z9Rug6XbgKzDE7wnt56xL35hHrVwCP68S1YGLXB1EaKdSsaHDsqoAxdDMBFHvvzYX17",
+      "time": "2026-02-04T16:19:58.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "65M9DrvbCZqcSPEhYVyX634yMZhiQDGudBhd434i7Ej2N3AZ65aMfp5M5b54ar6kdXh2tjzjKF8HUHmcUj397cQp",
+      "time": "2026-02-04T16:19:52.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4nJYjqTjLLJY4qT2Liysz5aYagXcgEmyorCARMnA1TKwirmWriCHYFFYtt4ejCFVYFXqR7VwCNkov6emLsB8R9GJ",
+      "time": "2026-02-04T16:19:47.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5UteiwqHpVMsjk5vrNVW4dyvki5829qUr3Q2bpeGYi1KLQ61uReyS1ETLS44MUiqj3ck9JfEhrsHkKvj5EAhzF8z",
+      "time": "2026-02-04T16:19:34.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5LALBvMzZYA1fWefLJye3QasBGQxCAsgv8e832aBPsvFjCF8H7JY2JaHgh7b6MWV8K3WVyBDYVJdYP4CcrLLn2Y2",
+      "time": "2026-02-04T16:19:23.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "nnYfZi9pq3TTmv6d8censnswzeSxWr7tVXS21b9ChHUfuZf7wGjXrhavtnPqbNYZunom3oCrmcnJB91tKQxHTTr",
+      "time": "2026-02-04T16:19:08.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "55HMMNyDkpGQ2wB7G2ACjTaWL3NdYRN791axg7NkFzU88SZSYgRA4KmmvLguKp4eiWVZzAPAx6MuMHoCGxoPRzgL",
+      "time": "2026-02-04T16:19:05.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2gPvxnACiYduWXYziEjL4oAQ241esGrJeHp5TMb2GsTAeDNU1dNq7hzBgcTu6av7pktFj6wzEjtSUfozH8etNhTk",
+      "time": "2026-02-04T16:19:01.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "46Q9LLYJzHprvjwaF2rNUZ9MLiajJN3gXgWCYrPJkt6ickxmpFF7uAEa9HSxvAyqt1VyLbcTrD2gtKzBGWqg3jjV",
+      "time": "2026-02-04T16:18:51.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4g3JXihWGkfahpiR5rBgKcvRem3bEZZ96XvMxGYJACGyHTYTuvJTHf1uAfwDq5W4ctfpHsX98wR28SpNhKEZveDs",
+      "time": "2026-02-04T16:18:22.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3t8fdHyzqWGE68amgeGU96F7nhoKF5Tgm65BRSVZzHDC2BLxk5nZQ65cGGsmmNrjsEWL4hwxP9FzGvgE2FPyL7zM",
+      "time": "2026-02-04T16:17:55.000Z",
+      "status": "failed",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3qemXurv2HQaYoK9rQxb2bnFHY7NRuMmxv5BjrtZuaXytNPPsAoTzPvviPtzuS5g7Ywv8zapjBErdLu5cZnXdCu",
+      "time": "2026-02-04T16:17:19.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2JJsSupBPDx2EEDuACKw6nsAVLQnRTkx8p3t5bowzhumdjWT5jhTgLJHrD2ZubiQz8uhdrJUMZmoq5aATQwy5sFz",
+      "time": "2026-02-04T16:17:18.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "9kiqzjy8HNgk4VepBSVBfy6eqAw8S9stg8pJrX4KNLRGUAhwLwHadx3g8KMe8Xh1jPVhD7vqBXhvNPFdgr2xjPW",
+      "time": "2026-02-04T16:16:57.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5MrbFBXRJFY4XHoLoSASkRzHwyEtSgUEoXMVteFxHgWKh9diCMzVQQcZTSbX2uPBgZSMk4VUzFtWbQsEXZcvWYud",
+      "time": "2026-02-04T16:16:03.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "CAGXXmycx2NpsqHrtMWyyrp1X7ApN71RnuytVPbW9xtuqqGwkhZzG4UqgU1n2cTpfgYFPUhpNvq54QJACnnD7AN",
+      "time": "2026-02-04T16:15:48.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4pwxChjDv1tmfnSZcJPAY4tupLZGcWVNm1R6TsyuHPnb2G4f4GSScyJDYmr9jCtvUvds9QvtS6RbHYE1ofHvDS92",
+      "time": "2026-02-04T16:15:32.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "38XcoYnibFNFzE39qTqXk7aKsigZfJfdmLArVoYfBvLJSH5jHTDg6WrLUWGhsyfPC59qQRKfACWKuhj2Nxgk1jyg",
+      "time": "2026-02-04T16:15:30.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2BEWC9gw65CqxEgziJPmSPiJQ7k6Q6W2CPy9Cx5DaV4THxCKs4QHoMgSgCGgkdAUV8asoLq2P9e5Vpb7yZCu9CU3",
+      "time": "2026-02-04T16:15:15.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3ZH45C1D6UxGoa8G7EawQ24aTa9qh8FPqLd885C3AgAnB4qjVhTpJS1d7dCAjz5dSg4sTvvpnCc4ffc66aRt4bpm",
+      "time": "2026-02-04T16:15:00.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4jJ8qwNsKyFmXEHtHqydRLN32jqnQiwwnqk5TpAq28LM59a4uVAwLigsfoJ1EM2FjRvvUg8iuR2VN93XgrEYfVUz",
+      "time": "2026-02-04T16:14:45.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4ciBQ73Nvjmya1q3BKTYLJdofbQE29LMkE63dfgabVwrSbmMipGRfkt9boT36sBTod5ubqJP5QYVbKCV6uUK5qAV",
+      "time": "2026-02-04T16:13:26.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4i4TnbECMWPMwBmBZT2xZzTH8sukaiixxkx4t9b1UJ5ZLbLmqGE1iNrYevPX25XxWFSfuPUop4BCLcn54Dax8HPf",
+      "time": "2026-02-04T16:12:56.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "59LYjohTaTFDwiRkEHmSerY8gKnLNJNpcBv48kLPyH6fCtYP5idyCKsUjuRUvSFcnCeBoUBTJSTaRv6URhxV7UU7",
+      "time": "2026-02-04T16:12:04.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "QfE1RYd4Xq22YcNCKXigqNheyJN7M44J9Fh9TM7GT1tbCqmesTmjt8rXJ5xQzrdnXXuZquAWGEKjoTrcFxsg7oh",
+      "time": "2026-02-04T16:11:54.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4V1VCXS1oz3t8wRqHpNab97VxpjiGr26DM2yyJ9Gtvjk2nPNEdEYac5tnPxADfYXK8K4sGU3eHiAjiixaA7jBMCJ",
+      "time": "2026-02-04T16:11:49.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "57ZXWu6d3h9BRBrkQb71b65MS3R6yZHF6uxDd4kVQoANC66DAgJpCk1nF6iHkoH3Xd2oaBV9zsbRT1MQ11BmXAcm",
+      "time": "2026-02-04T16:10:11.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5YKzASkZTgAEvbTmHA5oAZryvpzDXdkLMBLmNsBFFVj6Q6oWL3hEJyxQsxedAHFA2kySMt5zrafCjN28ZJNuKUNG",
+      "time": "2026-02-04T16:09:58.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "46kmX45fshy1V9hNkt9K8sxtRLsjUZsjj76h1pvuheF6w5G1W77a9kjPHMzQ51NWyeNidtrA64nwzJLWTw7LYMJP",
+      "time": "2026-02-04T16:09:57.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4h38npVZZZ8kUJwXgMuJ4Mo7w9ywyqxbGN7Q7MKVCKUPhzH4Xj9z3drpYpcW8Je77izTJsmMhvT572aWGdW4XWsg",
+      "time": "2026-02-04T16:08:31.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "57ia8T3DaDS3vtkDrUCWbv8dxiQjvE4LUnRdAEUFV6FRZRdddLCFfeVgW48Uq7EnBSkfntvkZ7mR3bzFXNf6DLha",
+      "time": "2026-02-04T16:08:17.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3QkNtdgt8S6on7uwEDp2kVYxGjTCttJ6D6n6jv9WeGCEbiEVR53b42gjWuUrvtFf3MiaNBrmWMogHKnvooDfrpVG",
+      "time": "2026-02-04T16:07:29.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3dtvpWgXuWRFTndTokmEmUMEJkyXfvcbQCcD6Kpu9SUJKKmm7CTL39LKKHPjxWe48QDbU1ZQ6Q7bWvAT86VKsUgo",
+      "time": "2026-02-04T16:06:58.000Z",
+      "status": "failed",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5XUEdppCrVKGTBdB5TAc95GTFsuqikQTFfMAbmZKXLi5CF3ZzwVVDEUUHMrD6AjXHeuBdUHeK8qD2KJSHx9dkrQo",
+      "time": "2026-02-04T16:06:37.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5S3sXpADpcUcs9tzi3ZeiRufvm8GZVzJV4L9o5MjE8sd1AWhifXNJXWEqZeJubDiidt9FAfBTZxxwwmM1Ci8USC3",
+      "time": "2026-02-04T16:06:10.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4vbzCq7MEPpHttaa8ygxqpHywAiKyLMXR9QkyCciVTUeU3K4cG31VGDMLq2fgiDfQVU3XujbBAiU8YMRG8p5a85S",
+      "time": "2026-02-04T16:05:28.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5hqn45YWRf5mm2gxc35BrsbqwjVYfFXwfXGjvrWKJDcH4zqU6ihbrpWkuRMioD572oR8c5wMrrmoJ4grd6Xn8EFU",
+      "time": "2026-02-04T16:05:22.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2BZ3UbK8ufX2dmgNg3VXRG4dQExJpRJPpQHz4cPykLCFuiJLxkLgwsH3sTfrnfdt3KMGxPuywRdcvxPCzBd5nwan",
+      "time": "2026-02-04T16:04:42.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3rjPqqyFBMUvoYeYD2UpJ3XkNbPaRUnsLSxSssPpZphXcGh4FMJynh3uMTg7PnaNXaG7d9Nm6yCLFAYnRJFknjiQ",
+      "time": "2026-02-04T16:04:17.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4hX1twPEzyNoFt6DfYBYrDY287X1YCV13t5mV8wF1iTFKRxHcJu582PSdNhbcWLoTZUqEjAzJqQ64MrcJYPQccdJ",
+      "time": "2026-02-04T16:03:37.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3VYe4wJb2cSSYycmMpPLXw7Xz3QdweF3JCdWCt6512iZMDoYoovsKUtWpEovUw1CEe5VGMMwDVCQ51xbrskNQ3Xo",
+      "time": "2026-02-04T16:03:34.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "67K626LSsGpLe7wQa3DLWa6U6mckyxnkm8BnNC9QzpNNdLprUR84S5z985feNoijHY9EacEoVenjXChznP7eUqmG",
+      "time": "2026-02-04T16:02:37.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3coxeMvqStmtoe8czmMBtdx3oALAYWLmfAFpCHfU51gxYfSSKgGcfEtfU3ScsxnQ5UXEBi7wr2xup1NPVPhDk1Jr",
+      "time": "2026-02-04T16:02:22.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "qb5qssesgG6o81EuAyskDhbWZYEHmmTojNGzL3rTxSw62C4wpug2sqZKfnWuHHxJHENMcze3dEYgu2WwBB9BxRG",
+      "time": "2026-02-04T16:02:05.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5Nhp1cZCFMc3LPEujBQdNGeFyzt8aWJSsqa46hrczXDDKwAccEbUDJUwdJWiCuCseifSoa2gC2R1Cj5agQx1mUWg",
+      "time": "2026-02-04T16:01:28.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4TS8JfEhuFCcMqRWcEViSX4TaTmcnGTF4uj8yoqbh3rDb3qA23oCSdp1WgboQY6BQ8nj2osJnsuxpX3tmdb1USPE",
+      "time": "2026-02-04T16:01:24.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "MizznrAw4LefUGtfGR5YB84gPkhfFZKXo3uP79t5ZBS4GRCG8VVJHWC49R1WmRSrE4Z7kct7sntsfSfpXeGbmZy",
+      "time": "2026-02-04T16:01:20.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2ejJaWkmdHHKWQhCDDRTmFJvS6r1AmofzujPVarxmFpEGTxMQhjhWAo8YKmo1pBTCLMi76vv1Qv7dGMyRPbuqmUs",
+      "time": "2026-02-04T16:00:45.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5uP5jr2TC887TctaaJznc2LRaDcpTx7Q8QVJAqhcNwQFpgS541jzKcGZBKrtqv5Yh31aLTZP7qpRrL26VJQ8vHLg",
+      "time": "2026-02-04T16:00:17.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2V8DrgPuq32E7y8PArmeaG59qQsbsoY61S49z45Jm35hVfnRLX1ja8Tgb7XJajCwZB4VMPjCZVkL6RCHfmqKkB8s",
+      "time": "2026-02-04T15:59:43.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3T1d8Y9Z69b4zq7XQaNuTdz8PVHZhLxx1VYPsogdqYWateeoKPtz6NdmoxtFFQsYsavdF2nbELta4gUGjWEnA36A",
+      "time": "2026-02-04T15:59:38.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "yb842uSL5ot96jWa2Qs8nzHRigA6Rriux9LhKvDDhWhY9SgE1L7JqotrBaipxG55QJ6BuBfJ5rpAgxfrnzUUPWN",
+      "time": "2026-02-04T15:59:35.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5RfB2Sw8EH41K1GVHWffaU86afNyWwTepf9G9f7tHJhQwUsYZVknU3XHYw3uYoiJ8bZnrAtBcQJEV2HqXqbi7Bbm",
+      "time": "2026-02-04T15:59:33.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "vkXq8tGSCiYwQ17fvPdhTvbwYysxcdx5UzBZBSMJ8NsyZGEHGykDtgfAVAJmCbBXsg57nM2BcNYEYr2w4Exed9N",
+      "time": "2026-02-04T15:59:32.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4DGkhLGv8N7hLoRR9xQb5RV13ikrRdZTPT7thVUaYRRsAjD6sQECdMtZxYFcz55AGSAJUooaB2GDWoh6tN1bGZiB",
+      "time": "2026-02-04T15:59:27.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2M7beqShPEpwn7JxpBu4KeHePEDmSbRK4aoJstLjNQRHC41MvG5NSyq5pbBwYtVFCL7PejFh6sKfWjiSAQyiJ9LZ",
+      "time": "2026-02-04T15:59:26.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "449zUFBTBfKeHsP8wNevh46wZPMdQ66q8UaaHCZQbzDXid26xjEpW93shFz5nxTJ9Z1i3ChkajGoh6NL38RPEoQy",
+      "time": "2026-02-04T15:59:24.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3GQhoytSZABhDjreQ9vjYMAYxV7ZpZzpu7U1YtfuvQR8fTFNWmnUJUtphnmgEo4g5uxiDKCtRhbTVeKfcDJGGZvR",
+      "time": "2026-02-04T15:58:50.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2t2Yv3PTtm4wQ88M3g3CYcS5ceuvo7EtQUe8UZCijgQZdqZAeYrvQvVM56uAPnxTtFzHMNBAmUFdoK7hkY35YoEA",
+      "time": "2026-02-04T15:58:34.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3i2ss5ZMAMYRbnYnZafMnijrq1z3LKMoVxhDTzqc38qH9LoDJzsEJVht3RdNebYGr7eYit4RNA9bpDEGbeYKk9G7",
+      "time": "2026-02-04T15:58:31.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "hf9HzZf4rfWaRJg4haVQh3CKJV7Cecs45kQyZ9hr6Ydqtf6PePuad8RSuqhbQtau95Uuwugbb9xMV6QMqptWRsu",
+      "time": "2026-02-04T15:58:05.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "RaKRPqH1HY7TpZKkk3TWym7xmHAEVmkbc2WMYjC8jWtkCeoFbG6iU9JNGHN17SV5meETPmvdyUtRuKqT7M2NbqG",
+      "time": "2026-02-04T15:57:18.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4JKTsjizfQ3Pem5JSq1mchXwUTEt3hw5Qo88WRQHkstw5BQkrDokgqoUEsHSiWL3Z7cpHqF9gBrabumWqCeyMHwJ",
+      "time": "2026-02-04T15:57:09.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5M6kStKZdJfiVWoP1v6CkJQE4BMXvF6UBPyxUd1WY582rPyNLYDdMKg1QsBhXFcSCbwJBrYypBhD6jextY34YSc8",
+      "time": "2026-02-04T15:57:06.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5icpwViJksdeEkum5UJze23CAsS7nnN1QN6n3CAJ4yXcMJspneyPykpnidgPmgP2pmwyDLFrCwHVEmcMwVxHNbRk",
+      "time": "2026-02-04T15:56:28.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "45NbTYh8PzPDhGmJtmvZZMkMWSG4YQNjNGtYu98UUW2Pd2Qy217kYpAGw8XSXPk4s2SuKQHj5k5YW5r21sC4RJV1",
+      "time": "2026-02-04T15:56:24.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "46DEetbw6XYGkEAXbqtSG6GpcGetKsJTeehkCB2LrAggCPvw3EjbnWiq7f1Bg64bFy2XMZwQCDD2oakbxJx7X6hF",
+      "time": "2026-02-04T15:56:03.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4GXypon3iivjtQwHgHAgJS4UAc17GrtzvkQRNvBkTKqupdZgUW2tSek91QBqX7LXxphTeVAs5QXGNUamUWUWpStr",
+      "time": "2026-02-04T15:55:50.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4UL2kpRaHctPcNy1U2Tp5FtzYwnHFSJjDe9mgy2svisQN3MTTn5LCmxLY6VcNUj1wwCUQ5PYd6nAWfUR6bmCPzQj",
+      "time": "2026-02-04T15:55:47.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4xpm42owdtc1aWGM7PZhuwQ3Bt89ib74TFji2QYSXuzfRSyYTKyHTJe8a7sLRBmCWZUEW4uvTLjxy4s65WbFwY4h",
+      "time": "2026-02-04T15:55:08.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4SdhvULPBwpyRrGw2F1drAALPZnqi6nXKZSMLBtCTHCWvs2awv9T5D26KqCdSZzicbk4Y7E2q2YFw31uHQLQJeh7",
+      "time": "2026-02-04T15:54:47.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5aSaChPtypikqLgG8hQCdmfuQacSpkMe2SCCFqCL3iPVZnD4sB2tXuPWgLUubTrog4ALat56K4Y414WVqJAEvcd3",
+      "time": "2026-02-04T15:54:38.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "EN2BF51tkYeQcB26Nb1XxPYrv9MHS5RVhPCe1xzos3yosa2vLuot3EjYR3KFqiLZ1SCkgDtqZ6drB3BydBqFWRN",
+      "time": "2026-02-04T15:54:19.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3DTBZnYiebUVJAXBA6rVQcgoQnfbx8YnoTM5bmDsw7NkzqUrmaj2xyuKDj47Y1ZfpfSpqikVwzYPMzwuLAbkwVXg",
+      "time": "2026-02-04T15:53:08.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2concsNwy6n8WMwAqA9eN1vqx5cndjSh3VZtyPAH75YZ75ttuPZ3LAKfX7uGqMqDa3d4WM8Km9Bo9cczXBGgScpx",
+      "time": "2026-02-04T15:52:58.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "52QUjdUqndoD2Ba7q6RhwoEpvJDHrU6qLePjVnknuFMx1a5tKfQx7M6qWs4FxUZvJFzY2azBBCiKEH7UQgpFg4PG",
+      "time": "2026-02-04T15:52:40.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3hNZUWpkrNFBNRwxxTs4TG9J8KF9MpZbkhnKyUDBjhwJPvzXtnmLSP8n8ucetBXfakmPsE9sPydKjgfAn1aKvqSP",
+      "time": "2026-02-04T15:51:42.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "31crVdrQsr5SxMkkynrMJ8gwiDQjwcsb6dwWKXYyY288Q1hmUSWNpUHo4p2EKR55yme9TawCLrHY4nS1DXMF3SnU",
+      "time": "2026-02-04T15:51:37.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "qRT31vPZXiWVuUJkz5XZeBXQXAjZRcVoLLtQjiqihzEAwyL8HneacAjhDB6WGiatuaKpv4zgmAqZS1mLXG2ymCm",
+      "time": "2026-02-04T15:50:59.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3B6UyoQ7WYeuZJnkNkkVuCEYaWFdiDPWJBQcD4Pe8hshpkYu6BTSHTauFKcXUpc3x5PxB3uYCtcGn48qT32wcrEu",
+      "time": "2026-02-04T15:50:57.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5YY6JmhgoLeENfMyCqQ2xhHqXsY31J9AcmdY7bPqHmsGfoXDaEV3s7Gkrsj6ioRup795TKBT6KKrLjS1xzdUBDgA",
+      "time": "2026-02-04T15:50:44.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5i13k8NPyTLP68EPAVkYqj3h3Fck4tH7WJaHUMW2ypQaRhMbbYkvmag5z5h1NGVbViFh1KLpCDd39BWP6h3Uz1fS",
+      "time": "2026-02-04T15:50:30.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2MogdTSB2u34rr4LwryAq11knxjUV2q5kKTZqZp93Xeo1gVGcYbmEpXx13cok7rFWfPYec5hHT1dVAV3pi9b67C5",
+      "time": "2026-02-04T15:50:22.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2CkazqeAht8eSBqeTUkRKLeUnr2XDhwgTYwG2qoxVfvP6oYa15ywpjVkiP5usQjuMMMWvNrcyLN3A7tKjycoY1Lg",
+      "time": "2026-02-04T15:50:08.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "46ZakLVSPZPsTy9z8kyaLenedge53JhB9rBqk2Twn2ienqydmTJgfHnFyuHyrxtuhTEHqcvPyx56Wv5SUu9diiTz",
+      "time": "2026-02-04T15:49:39.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2z4mnPpoXKtFJRxy586kQi3XPhzvAMACwo6rQwJaRsL27UMMRdYfGQeo9sw61p9MpFJ74hzZQkVmEt3PBLSu4NTL",
+      "time": "2026-02-04T15:49:14.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2TnY93ddKM2Lw79d8o9FToGiTnY1ZYHHR1FsDPesWuBPD4iYfM1njvkLFqxPp5fCVDf4Ucs5uZajzTxd8jdZK5F4",
+      "time": "2026-02-04T15:49:12.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4bu7Y6fLAuUmjqNMmVA5L1PBEqm4tswBEY8txwnQFoYLiEoJLtC7yPkmLVTsWRNHjLZzizyTvBvATJyiVgLHBfVo",
+      "time": "2026-02-04T15:49:10.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4ZkSXRWktfhamjdQyNBcTJ1M85RsGNULN3G67xvB1XH2UnWQfqkwoBa4XiFk3zWYTyBpfkmmeDfJCW73wEYMexCi",
+      "time": "2026-02-04T15:49:06.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "JnZaLf4YBxpxJPsZnhYLHe1mD8XCuFnGSVV6MJwNBtb54UbFmgszMVLSEg8HQ8qhqaNmj1om8xDcfKwHDhN4PPh",
+      "time": "2026-02-04T15:48:23.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "35pzzukudfjJeY9YSX3f1c5BnHUCTxMPfdx4vRceRvEKQXn6qzS8yLbVrUCCxzzmAsnit8mnK7qykMr6LtVQMpvU",
+      "time": "2026-02-04T15:48:18.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5dfeRzx2U8stx2bZx3ftq9Q17YMmRGAfw2GtqZmvvcGRHFyUqDn2UQJZDGhPyqGtD4W2X5ZQjFuPbYRRHE619gTB",
+      "time": "2026-02-04T15:48:13.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2sFSHeySsUsKrtMdYRvoc9en2hVNbj4DsAUfdfQXHR8EELDmZSaqsBgUieVGRZqYG9HsXgmGfE4kera1pjWEXvXi",
+      "time": "2026-02-04T15:47:54.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "APNbp1jxuoCtynJJggov4BV9FbWvrQkgWxfhGDU39dsvgmVFcBNERwSSKuhgBRANTsnLdJyDSQbC2RMniF1P7At",
+      "time": "2026-02-04T15:47:29.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3FwdJdj18sn5UPLN5iJx6oTUjPcSXRH6KqWJaaG62gewXhoTzzCppRzJsPXCBxK3FT2WbSunXpDhqPzhDKcfZfDr",
+      "time": "2026-02-04T15:47:26.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "25gKZqPKrV9LhUTQA7VcvJTkyYdpQU1oBAJFd6PtT8rQgdGHMYHU2k3TdH6AHTnaAGwX25EPJacv6hLDSRQAUe6D",
+      "time": "2026-02-04T15:47:24.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "jq7VW4pq4SDSLEBWxk3gyW4a3z3DxVuFxtychEcPRhxFoBRs1gs46xDwXPZv4z95D8KSLvYCtYevmkS7SBHyu7W",
+      "time": "2026-02-04T15:47:19.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4LKojj44JEGSPP8uxBzgMBT86aYy4ku9uPBGK18fEr9R164aDfuMDB6zSqTBqNaeBKG9mzviRVHvtGbRcr3E692M",
+      "time": "2026-02-04T15:47:10.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2Tmam7G5wpesDUmdhJZwx3tp3ZeNG8LFSdW8YZYKVMUphPygHcFKXcJL424hSpLDg6PmWep868oD14bx6ZH5J9GT",
+      "time": "2026-02-04T15:46:29.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "EUsDvLw7QmLR3tNFNvaxdVSbpS4rJgW83mz4fW6rFsnnvgUiA4W3scFX3amYDGfcudgxQn8848CXga1ewy3hykD",
+      "time": "2026-02-04T15:46:21.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3NxJt94fSm4MBeaeDyPhPGZMbbVc2nPT5z9816GqDo47TQeAzjf9E2XjxdA36sk2DLFbTE5FrNAak2R2n5yPjg1c",
+      "time": "2026-02-04T15:45:09.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5KmCdjfAts6eremvXJVMhy1Uoed5ixHz9pfwxr59EtiJbJsgu9C9BenjsiUSxGhC6CBSknZoHsaBKKLHF4VkWsj9",
+      "time": "2026-02-04T15:44:59.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "amYuopdEuAPPQZvZwfq6kr2c5JvxJj3ht9Nuy8KuyEqtp1P3ZAfHJMKD5dAe4rY8wMsnhffUfmiCPsfqunzXTqY",
+      "time": "2026-02-04T15:44:44.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2NHrAfXGWB6HpPWFFMDwWc8yV3RxcQJeCAfRECkqNqGYCrAREUEr3A3Zg9BsvUN9Rxjo8gtw5S2DM3wKWgfapvAW",
+      "time": "2026-02-04T15:44:27.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "31A5UJ6qeYiTaG2C7ZFgGBF3tw9bweFS3FLbf79MpZLFkZqV3rU2D12RH1Wa9LbGGPTL3jejrYCvjubtrYRHYnGp",
+      "time": "2026-02-04T15:44:00.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "8uiFsiNHnLFMBXGeej2aHDRooxzZrasojHVghgnRxss2STnhVgrnPUQEw3AjCmrUmGqjecuiVSSh5oPMjHmPQEd",
+      "time": "2026-02-04T15:43:43.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3irfheAmQ2GpLSfi1f1D2h4fNPLn7FhkbZgQ1xJYbmJ9BWwKRG72mZeXrxEEBGBnQYhjrnPFASFyGSqnfqkpN2SU",
+      "time": "2026-02-04T15:43:24.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3vRi1meaVpoEKB3H2S8bZQRTi6oKQmvNJs2AkKD2CFfJnhTDf1SECT31qQsgHnZcNoK4s8UpvNXZTpXFCKdWxMrw",
+      "time": "2026-02-04T15:42:54.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3WwWJ3q8MiVGJNrLaGaKoMeB24K6baEpkGoW4QDrtyq4ggtYQM2WK4AFmDDrsJTdtnLBg3f99QnfPztWamdD97UH",
+      "time": "2026-02-04T15:42:50.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5M8q1M9NUvKJnfSGMkTJrYFTY89QyciEJ7z2P86n5ymZkWB3ob4eU16JdsCkBkuffgahugzygXr9ACfrVjxTYSd7",
+      "time": "2026-02-04T15:42:50.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "53iygrk6S2Ax3SR3beMvs1LnW7TnckX1BrNAU6KQEjF6EecNJz8nYJSUfSbnJ8ZyX7YpBrqkWDHg34EGW1pYwn36",
+      "time": "2026-02-04T15:42:16.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4uXJryyiuBSQ43YJuXJzzwf4H7r2TyPojbABsMLdFu4dsbekRtPt3enqgPWkSyjReBRFAjhGYNRGHPTd15kMgwFH",
+      "time": "2026-02-04T15:42:02.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "38xHs78Jw6fiwWUw4wWrY1uEuMYmL1m6E5y8xAa2W3TYdPMtDHmm3pzN45Ymd8zLJwk7z47kXqQGw1xcCmH8w4An",
+      "time": "2026-02-04T15:41:39.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3sKgtiMgp4FJ2poQFmzuMhvxjUYAjvj7kvi3ddZ7JJavrep4u1gXfFPnRKm5dqhFcx5rbUwHV9VXw44ppMubRE2a",
+      "time": "2026-02-04T15:40:55.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "vV9c9aozxv2xJCqzvUSGCHvFuz9XqSmFqo22dGzZELPwnitXbxJ8rU4cR2Spok6rsGGHhVx7wmRtQsmwvbPdcon",
+      "time": "2026-02-04T15:40:53.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "HFatFQZ2BWmKuBQ7vXRW6uczCGhMgWE2pCUsjMB2EBhH7KVLLB57TJWU97k2bQk3v1VEULCeRTtfujwBa36H7XG",
+      "time": "2026-02-04T15:40:47.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4GPTVTqPeS8bXiyHToLxzqG9b2pu9rHGctSHunWpzEXYy8GRXJg3ayqSZomgmtT83CgmFbjeBWwFXFPZ1KQocvFt",
+      "time": "2026-02-04T15:40:36.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3rnxrhVYA32Zaj4BdX5tAKRHyyMYqLuRnkVCfYRxLaC9apn5ndPAw7jSwDinB4vpedF3hjrRKJZ6tusPm3VYFnaN",
+      "time": "2026-02-04T15:40:22.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5bBcPPxBh2o4AquTQsFuSsfwtjkssrJLDL4dGU8BhbcqW9WiPJRotCbvH4q628rCmfWCiWK4bWq8mWyANkKTWzwe",
+      "time": "2026-02-04T15:39:58.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5CFyY79zMJZu6Wt9pVjaUCyRCSwaDabLvES4qnwpgbCE1tmkBMAVW2gw6c8p5XkNS4UH9kyad8FH15a1j5ZvmuGi",
+      "time": "2026-02-04T15:39:49.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "Gim7gNiqErpq36Aw3m418pQbPAhPT3T41oQNBMcwnjsPMh3ucUaGsPbwU1phrKwHs2RdruaAXpLznPCzqK9rwCJ",
+      "time": "2026-02-04T15:39:47.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4yswecNYbQcFqvzLDjCWgecLumnHXUNvmbDXazB1jScxLBzfme2QebbD5GtbFEczi2Ty1DpPcDNaK1dQETjHobSm",
+      "time": "2026-02-04T15:38:05.000Z",
+      "status": "failed",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "61DEMnbxZRM4MdvzPqs5F2peK9ZWdauzv5c9DeRsAGLBFhVRqm32tRthy9mnrczpm8qEdfpmw9U8C31jT1BGFzak",
+      "time": "2026-02-04T15:34:54.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3Mdvh4WqhSL34yJ3bhu7wbC9nrwJECpqF1Ep9VkLMkiHxft4pDDezA5GvHjm7KkCi1YBDstDiyMUtLRj2E55TYzr",
+      "time": "2026-02-04T15:34:27.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2wqL35UUqgRPJxSodPPBqmUH8BPJpMfjiaXKodSKeSe64d95k1wkBSWZG8fKjtMQPYnBBNaZo4uGRXgaRSudMuCN",
+      "time": "2026-02-04T15:34:18.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "nHKaGPu1e5aCkx7gbdaMATSRnNonDXBN8uEiovSsZXyqGiupLprw5auGy8yhS7z6AyiAA9GFLKNz3paFWHqwePj",
+      "time": "2026-02-04T15:33:27.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2U5vNAStqRnTAPbzj6hpd1KqsxhoE17i32XRFNNgs3YDZPytCvgTq8d6KW97kMc8CpY3uTFvmcJH7vJqexiRjASd",
+      "time": "2026-02-04T15:32:42.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "PtpfqHczUNG6mEQtDC65jsT8NyEVeF4JioGpraCa31tAirvz5Tf9A6XJL2GXBLmsmN7bp9HFUTC3wyjUxxSiNea",
+      "time": "2026-02-04T15:32:41.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5h1a5UNangEDCPXzt1Jkq5YnhHBUD6omncbwUfSgQqJC2uDU2ZC4CHuaWhSuYuc6PZh61kFXhRewnMsL3w6HUEdm",
+      "time": "2026-02-04T15:32:40.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "mdX5pC4NqrXoWmR3GMQ668vJQtHVAqjzGhaxRfyPNvM9KrnhzXSr9QRzA1DJYQLvMgurDZaDegJp9oNATn4biMV",
+      "time": "2026-02-04T15:32:05.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "358AjCvKD9f3oVDhpnseXTQ6rKJeacwvfM5PmXQLEyubCRPy2qDZvKPDbmSmPQNSkT3Q3g6BvrTL1xoVjkbAEHF6",
+      "time": "2026-02-04T15:31:57.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4Ex2qYWLHXNvQZRuxXR6hPswnWGsRiqJHUSZD2JjCCn3BpyAEzSAWtx2yG84BLbTyLUfx7wK4tBzjpBvAQYoQGye",
+      "time": "2026-02-04T15:31:48.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5hkbiyA6kkqYXL84ZDnfabSkL4uGgFoDgHgrYnr7H1t5Yf1bUKE8RGiBJXqN9j2ww4nGFdmSNeFy3DyMYNVg2Nn7",
+      "time": "2026-02-04T15:31:24.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3G3jyJYMdCagCfEXojkcFHdFk87SCrZdtrz7CQ5c8jypgfZUHn1xPUYNMQMtgPA4UiVsPkXqEt3yiskxNNoszT96",
+      "time": "2026-02-04T15:31:22.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5K4VFc39duVmiiYgHhH17tPcHsqNkga3E2smpxPLBEJkdymC31Zsss68MMApqC8kUTpxH7bgAS7Ee3HQUBvD1kzu",
+      "time": "2026-02-04T15:30:57.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3V7UYmQUae8VhVc6wd4nCQvJqrtts1SJ3P8HhRkWzjeTftKX4k2P5oANiUrijSUTb5wWX4wVV9j63AxkwA6SPVHJ",
+      "time": "2026-02-04T15:30:41.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3RkN29oc2dFnLgaBWJ71RCcidkKk8ZrD6fitCMXnUKGK62jkvtffqfV1nrdkgH4SLLPuGv6rcAsppiWL3HsHA1Qr",
+      "time": "2026-02-04T15:30:27.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3Bz81N4x2zoyReDSYF8wcwmsdaZfiU88wDt9ZfLkhVs2kggF7UKTXHxqybeqkPVEjSNuSU6YsKFbZK1yMtSL5DKF",
+      "time": "2026-02-04T15:30:01.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5gnQVg7bvJHgHaac5sfY1Bu6Xnj9iPmry2raEsD7LiJFb92hGzJc8fjZy1ywSMjBG866L412HEHR6KhpvswpkPLz",
+      "time": "2026-02-04T15:29:12.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5GtLYdqud7AnUhXAjDvednxVrgeW43Do6K2Cy6Y9STM1B7U5SAzpd9EDBdLDB8t9mmxmDvF8fFDtCCyxB3AutxE9",
+      "time": "2026-02-04T15:29:09.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3Sh2Ceifbbr1F6tXBLqd8uPSL7u5ayyFDJoaVeU5BDUXu1MWPjTPL6E3dfhvhWmLCNiVUob5j7BjSdeu4BQdGp36",
+      "time": "2026-02-04T15:28:57.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3QRSTsjeHhhEp2SJd6DDovry5UTKs5tUrWZsz1kSZnoQZzP7nJ7JPyt8nD6EMRLBN8CF8nATFCkxyhVBZS4w2iWF",
+      "time": "2026-02-04T15:28:55.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2EFVbCzZkAkVS6bu4nD6uhfyzY5ZDeXDidVAzmWwqgCGfHmsqUhxx3N6peuLCnBLUWbTJZ4KQ37cdyzoUGhXrXmM",
+      "time": "2026-02-04T15:28:54.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3u7KYg67yww4U2qWK3UwiW8pxZkaF1H5g52RcHAWPkJs6pF1PCdTMUwbyJf5LK4ef1SDE7aq2yMkrDXNjAyCPMg9",
+      "time": "2026-02-04T15:28:37.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4iTwHxoajRm93knZD7UkV4kR2pmRAcGBfc3xS9KFfWjaytf4bt2wSaeq1W34oLDPKJybuFqjG9RNgr6Fq4XdUHkQ",
+      "time": "2026-02-04T15:27:50.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5NERWFx9BTfo5s3EUd2iJRmmYKW2bRith64UgUQott29s3t1ggGqTq8gnjjnH4G3gBFbEajqxqdoWyBZWayyLM9i",
+      "time": "2026-02-04T15:27:38.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4PEAQtYiuX1UETwACNYNfdJwYWYUED4dgteRTyq1umWT2k2XARiqFxM23BBagye9Cv85ddzQwSoM3SD9E3QiUNNn",
+      "time": "2026-02-04T15:27:37.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4JGpwVEd6QiXz8E8yyDkoBeL4PFVbCmJcLCY9ephnqEFCnwZrXS5dANwSvrCDjg5Qx2MyFE8Jyz6qNEi6jczpYNW",
+      "time": "2026-02-04T15:27:33.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "56hcmiLhWUiy5KL8S3qLfWtuRZjmByWPAogxSu5hbiVDqKkR6VgECggH9sM9K41SmrxrPfx2r41Y3idJw2LZsvCc",
+      "time": "2026-02-04T15:27:03.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "35AHCtgNrwoMkdS8EZemeBKY2yxV3qbph3FDgbVykjeT86yumG7KQdmck6zhatfFSZd2JSBegaXgvDpULs5VKvxA",
+      "time": "2026-02-04T15:26:47.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4YBJpk6ubHhKFmed1BLmeG7VVV5ZoAuA3Y7PagjqHgfHmDqhvn54AA81pkEJ5x8vtjighe6eof3V37dckTT5MSDg",
+      "time": "2026-02-04T15:25:52.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5jW9uVvS7UruzFLnjiWcFaSwJT9Lmph1FZ39M5R5jgsnApSszjhvxS38EeqevM6or7ZKCab9854rxWGeeJJLEP6o",
+      "time": "2026-02-04T15:25:02.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2VS6HSWx3FjrjekbC8A3NLEVLzKGQM76w6SjaAFg7XDxzUADDDAczEHZLKyeDMDseaqjW19okMJRR6hhdSfyfXwj",
+      "time": "2026-02-04T15:25:00.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5stJVK12SSqtD7SyQLDH8HhsuBAbfG24J2jmAks53Y3TJhrocGzhDQ3tbkdjy49ZuRNrVVhX76Gg66hFnxdenJxV",
+      "time": "2026-02-04T15:24:48.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5tRMeeDcnULGwudShRNbxt3jvidwvNMhVaFbjX6ZiMswbrHiXwLwndxWGUtwzQEcqQAHNNKDu4m8tdifPkASuC2j",
+      "time": "2026-02-04T15:24:45.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3ndzmnrLBuLsV3zsHaaZqpSsQPwZBy2DGbWdgnXUwiCgnuGiJUVsSd7th5nGR7BanEYdmxrV3cbsubdKdNSVg91o",
+      "time": "2026-02-04T15:24:35.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2MNB6veRYVmRGKLAisPrVhLnKigQaAQig3VgVujfNEuYygC6tawEn1J7F1vdeJ7KPXe2yx39vhMi2yacx1sdobA5",
+      "time": "2026-02-04T15:22:53.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2JFDYp8UcSFVHVLLbAxKbwKJTDm646E4SsZtkzjth6WHnKa7jACHtzKbrPZpYXGAhyTDazazyTTrK23vCatcdaqR",
+      "time": "2026-02-04T15:22:40.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3PUV7YvBeAcKo9qoaSj8XVhdFznHZdEYdfu1kD6XyDcEj4YeamjxaxoZy48aEtjqKK6HWZS4vsJcYAKFBBf11qTe",
+      "time": "2026-02-04T15:22:39.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2MnoUNfjFK5GiGAnZxtsTronqk3TXL5ty6U4PVMLGbJGVYNVasJafMPjeXHVNXzqgtQZWanw4ZYT3V3YS1chwjXB",
+      "time": "2026-02-04T15:22:08.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "636xsvc8qLnbUAQhXRaHAgpH3XzkBWrenoA2Xxw9Vf2GBV672XSuLw1MNQWiCnhtScE4Sa9FyTyq4KKnWFRpukTE",
+      "time": "2026-02-04T15:21:43.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3Uk9Acik6gqojFrZe2YtRvN5kgDJ94DoucCkvooKnZxahqfLZ59iAAFXKCW5UPMs9ZvfNsD6hbtp3rpqDE6g9Fqd",
+      "time": "2026-02-04T15:21:40.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5Fp8T7NPoQSDwXY48bsK65gPtqiBPo1h6hS9w8MigfBeGr9RDes6hX4BNQmnao3Tygo5UeBZSHs6MhSnD6NZ4eP4",
+      "time": "2026-02-04T15:21:12.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "Ccfcmw4TNWpyMW2cPyRZTjbxTQF7boFt74HnrJSR1Ha7R9CrxDGfazA6X3LkrcJDJE4YfKtoci6Ly91JJVDGtCB",
+      "time": "2026-02-04T15:19:55.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3Exb4eSfpeE3w7QsvwzM7nkGBWtVcz4mS7RsHe3QNBD9EZ4Adz9XjcwWpeXBCXeT7TVBJrHko6UEg4xsD1m1qrrH",
+      "time": "2026-02-04T15:19:49.000Z",
+      "status": "failed",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "mC6ZgJFUw9QkfcoK9p6NPTgkMX7SFPnsDpxZjNQDt55RdBcEFAMP7KfLNFpHfAHaE8LFaAcANfEnYTe3pS4VyPy",
+      "time": "2026-02-04T15:18:54.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2sKsJ5EmkirwTYRFq9YToEkXWCKZVUCpmSM6BExuLiVkMzSZoLEGXVDhpmu2Ac64ALvHEpu3J2qiKRhH1bELiZUz",
+      "time": "2026-02-04T15:18:52.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3h1LyN67cqFxjzJQp4Qz8CsDxjFAoBtaGC3dzsLTDBikRkhJNucfLZSCkKfsniwedTbmZA35hJfp61ZV2cUA8ugT",
+      "time": "2026-02-04T15:18:43.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5PKWYxy28agmFZy9gi5RqS3o94B2XqEpRTqosNgxHpwXKPDb7g43uKSSfYzX8qS25e1UeU8FtXck6C9yTJvJMAUN",
+      "time": "2026-02-04T15:18:41.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5x2i6RkHMaKuxQFr5R7AVNeVxzRRzP3Mo88rbzbA8eZjPAikehu6kmqpxAAuXJt9Rc1r1hwmk7FgLVvuTBTbawQp",
+      "time": "2026-02-04T15:18:39.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2VToRS2k431cMcYfnffFoJepa4JL969fcRF4NccJorauUcUSeijJbGyAYJJX1giXEE5yLZ7C3YYayvv3F5ZEa4Rx",
+      "time": "2026-02-04T15:18:05.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "9ps6yiw3g4Po33E4fJvTWDk2sRe82XXsR6SChsCmN5asJavx18fnnaZA3rS9d3GQ5GxgAqi9em52wb3XDXASLmk",
+      "time": "2026-02-04T15:17:35.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "pverDrBu1oUcD8gNzsgndpWfzkWM6TxqmmskxRJQLXPNjx4zTMqH2cQNUt5MEd2i81MEbD2JSa8o89HTCv1Tz1R",
+      "time": "2026-02-04T15:17:14.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4ZGRFjCw3BoHUCxGX3zjL4P7sYjo33eyJNvkY5r8QLUaVsoj3BGzyj81izvToBrz3QCQ4UTeiJXY9bJU2YhLe5FF",
+      "time": "2026-02-04T15:15:32.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "63rr7BQf4xA1tLD9NHyspwBN27GoRyiPLvdyNjLwed9tRwWUPpNvDzQMkmntjANTd3Gw2Wv15pAhWYFZkRwsZxub",
+      "time": "2026-02-04T15:15:30.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "R2bS4GniBxDcMfy9L1AkzabHLVqEZHkFi3VY56Um8myFYARVzzHgGpgh7kXRXrzAyRaiSQ7vbog2Cabr6YFin2N",
+      "time": "2026-02-04T15:14:41.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3xni5Gy5AyNPYc6KLqxsjvFy9M3ztaDPRGtmy5D7UjMPzU6qDs8JVjWRWneMDW8aDtxW3MLmMFXrqPHMqrt1ugKx",
+      "time": "2026-02-04T15:14:39.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3KRnheBx4hjV9b89hnn3dWCh29oL4MhZsyAHV9RMfA7qJrmJipWB2uof9qJzuK6Et3aEYEffeNKUC9w9Dnzq9Nur",
+      "time": "2026-02-04T15:14:18.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5Eaiv1RkuiFbBF4w34p72Lx3QGMn341GAWZ4bA9Hj1UiNR4ovbYNjyLQi8s7DxuTsXp6zafBBBM3anR29jznMy5o",
+      "time": "2026-02-04T15:14:12.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2dtMe633usGNBhbkcrGouP6L1pvpxCRzhBgvQBN1JhHqGMafhx88yPfoyP46r1gVEfFxM8CrvEKPWhEH8YVKB3BH",
+      "time": "2026-02-04T15:13:57.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2anBMVzkrHhub2yaF4H7AN6zRAAbeLdpnbh78nxZNUnJruqVGe7iP6AofVHMqp3VkBLiC8aDUDX297HJxJa74L1f",
+      "time": "2026-02-04T15:13:55.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2Z2RpJpP7ZXPwhe9LtHw6VTX1W4p9w1Lwnd7uUvyAyC7dniRPsaZTRky56QCzjm8VWnFKeHvzruXouh4AsK1kQNS",
+      "time": "2026-02-04T15:12:39.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "rgANscsVpYZ9VW8rkEe5Gxd2nNRkXFUP6b1xWJVCRdgTR9PoFbx3VTqk8NNLfYkmddhh8VZ6cPSje8qPBhF5U23",
+      "time": "2026-02-04T15:12:20.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "32jZ8tSsR9wHULhwNxJKqpbbqTFbxCCNEmdoGiSDFRze6gWg7Zbg5PEP4igdCHSVUwTkcezL6jSyzpDUYkYU2Etp",
+      "time": "2026-02-04T15:11:40.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4ncRA3XDGhnD8wfCcAW1nAqzbzb1LtLmhMHQB3JgY5yQZivFsDLYmtoSKzXcCYFdgyPacFvDRmsLcij94NTBChv9",
+      "time": "2026-02-04T15:10:42.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "58W3PoCWVf7oLUiZVEYi1R1RCgUmiWGfafjeFGoLQrDfn4e5BSepoDdztTE3PWrEGQDacUYDe6gj2BXXrwQqSrgA",
+      "time": "2026-02-04T15:09:56.000Z",
+      "status": "success",
+      "instruction": "Titan"
+    },
+    {
+      "signature": "3YgB4oydJhBehigvqEPxXYuveTpW56XX5niXcTArAoEgVvuQ5x6KrWDRFGHrpVjwjdZgqfZ2m3pr32bAjukVtmFJ",
+      "time": "2026-02-04T15:09:46.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "TxVpSXaUu47rsGdQxvbvM6zkdFeG5wjRbeEQEEKzcmrL8DiiXVvnZC8r3XoH9fJuRv2EMHoogRzo8TPwEvQB2a8",
+      "time": "2026-02-04T15:09:08.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3RCZ82VC58ju3vkSQEmrgLQzEPBo1QSPh2NC7PvGd1kCeYiiVMw6mWCr45f8NVzyPZmSMLh9qJkHweWyaXTQykRc",
+      "time": "2026-02-04T15:08:57.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3S9dEi7eetHHjvSzTx8v2sFjUuECsTXLLLgQ699L6xv8UPAKPJSLyP3oBNpBwabZnECwESRAiCnzxV8HZJouGfU1",
+      "time": "2026-02-04T15:08:42.000Z",
+      "status": "success",
+      "instruction": "Titan"
+    },
+    {
+      "signature": "48y1x86KWLpgqHoHxkg5jq1dDCg7Jkm8Mc8HHWegdjs6Xd89jYkBc2vBN6FcVc1TgeJRByDG4tp9TFkD843gc7yT",
+      "time": "2026-02-04T15:05:30.000Z",
+      "status": "failed",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2P6VYGiEdWRPY7sYYeNApcYXp4t5gQFTcAUEbLrC3GYiXpWhuy32Z3U9CDibt68ZYsPA3y82VoxHCxNQJimuH15e",
+      "time": "2026-02-04T15:04:39.000Z",
+      "status": "failed",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3EAiGBVS1Z6UHhBb2jamaYwFCaY6BS8uxoFKnM5KTqhTbY3EdyvVKoZkmjnN3JgP6D1TLHqGRJ8Nkpu95VWZK8Pf",
+      "time": "2026-02-04T14:59:40.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "38Lsz66EnXZhfjzLoc7KddsbVbSgYsXPD7gUqXnw1uNJfaJdc5PEPd6BP1HwnJS8gXiMiKwA3oD3qkumjdPuGCEm",
+      "time": "2026-02-04T14:59:22.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5tTDYsbwg3JEZdbVqyn7MBo2DmnAAmdo3JHiCdpf8SpN4bNjWvMskLV8exB8ye4MHkSm6vUwBgjbafAwAg95T3n3",
+      "time": "2026-02-04T14:58:04.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2ndri8vSHRawsvGZJ1ggoyzTiREFwMjDMhHTGVondFnkUSFP9sPUt6z2XmRgmwXSvDWMopjFgfAkARXWcXaMRPZQ",
+      "time": "2026-02-04T14:57:18.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2Ck5QbC8u2NQWqeaY5hBHrQ18aUfbdWKKzApQeFzVdYqFqLNPSQiYwYDjFY9QKqZHDBwnBugQbgy2YgmB2qw4Cnj",
+      "time": "2026-02-04T14:57:16.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5Btjt1quvcC6CEU7KdACnzQodnREXhqY6roWUyMpeGcocNcb2NhFgt86S2q8mPgehrRZFzeESioUQVsmJH6KkXs1",
+      "time": "2026-02-04T14:57:13.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3bGynDLZAkF15PVrfJ4MB4EUpft9G4ujgVB9JDoUQZ4RsiWUNwdkMCts17KJ1R5M1vfTfjhSPiYmPpGAUEpY7CGF",
+      "time": "2026-02-04T14:57:12.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2WWBjsW76h4v1K67ChakxBD3XBRTiFNKpKULCimGTnsfRBnjFJs65AyYNDjp4F1PyoNNSMBcDqJ3ARrtchAWqvmi",
+      "time": "2026-02-04T14:56:08.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5ws48oLtnSY2ZUqxEkoXXTMYJPsxhrUL7Fr1hVaVYGGpcirGgJvSfsA856EKLfiTsZK7qtU3MdS2MZPb6bzT4cwn",
+      "time": "2026-02-04T14:55:58.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5uUKjNvdfpCxfiJDjQ29u57ZuXGbLGrRKofcBkaVgeEPfV94Py5rWH7ZR4atKGujCggnpnBhVY8m9cVCWakAd3zC",
+      "time": "2026-02-04T14:55:47.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "28WDyua1Uc3f3LQ9xjq8gvtoWFbFgMVtk7nUUrWtxX5cdCj458jeCEKmqgFHjue4rGEdauvtgxVE3BJzuhm9WWQy",
+      "time": "2026-02-04T14:55:32.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4qXaU5ZSCpDuwQV6UvGwpBRUidCGzSMtCCaYTG45jg2uFywWGUtr3Y4diGscUhQ9aYx6ApWquRAGCkb1Q14K4p2u",
+      "time": "2026-02-04T14:55:17.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2bvV4b92YUij3Xsc7Ju2DyFfkSrSXXzqLn726ySNHjcuRm1sWuigb1737tqK3ZYFRCp6Zs2rhfvDVWXwuymWJnd",
+      "time": "2026-02-04T14:55:02.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5L6adPvVUjZgHLWCjeR7dGANhFTkxgrTqEhLdTLoGGvo13FWa5cyFCwrCVsLhvUydVYp2whM277uoxHLwgCGVtc6",
+      "time": "2026-02-04T14:54:40.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2RiM7DV7WZJLJssPJM99mpTgYTpsE7HqPEYVLdCZFrmkH9GADsCwtt5wj3Gu9dByGVWE5jdvB9SaVCuSoYvenhF6",
+      "time": "2026-02-04T14:54:23.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "6JVr8aeD4BDg3YAtZ6nqzVCmDagrNFbh2gPncLEThJhHuJrzA3muSn4R2V9zcHcntMi1E1x2wySx5GVKbYQiznQ",
+      "time": "2026-02-04T14:54:14.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4ZkjopSdsvmavphGwGtPqefuDwzJumaxALKFL3eY2tJ4FwiBZxhon8Hmih51Bsf9S38uPCRmvmzSRpFDRwuLeuty",
+      "time": "2026-02-04T14:54:09.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "Kd7DmnnwzUmdk7V8HkVWy8taTE7pbuS9RbdoAkine9vv8rKuNNbTi58afwePM4WrVK5SWHTVHrDC28qrnY6ByEt",
+      "time": "2026-02-04T14:53:42.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5xN2Zsuj7u9tmHkAzEmyVcs3Ptm737VCvZUtpg1nU8nnxgVwHaDxHWFvunYe82My6ikw2K9GALGHLPF4xWZP875C",
+      "time": "2026-02-04T14:53:41.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3nng9d2tZkkgequSrmWsb7XwXH8v2PNeYQjRew8ZdkCk28hjXoixur4ztogrHteUHFJf9KCsa88DZ6JKAELD8vzo",
+      "time": "2026-02-04T14:53:39.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5G75msjar1KH3sLrQGTMyJvG1PLhsMupyxNGWeyBMte7o3gYCke6xCSCVnugJimA7m5wYFWgnX5XnzvhcrWzuBAE",
+      "time": "2026-02-04T14:53:38.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3duETU4itNDLLy2qaJiwUmuEpvynFcmeLzoXN713U2A5F8pKmX9PoCGm3QyB6E9nnrDxzX6nVUDVYgzv4NAK84TU",
+      "time": "2026-02-04T14:53:15.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "YXhNnBeECYwhe1zfNy2up8eJHU4VQMfmPJT25Bt4PmnD4Cy4v7KurvSE3ETX5nXy5FpPw98HcYw9epND9Afwzoh",
+      "time": "2026-02-04T14:53:01.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5Fjnar8vnmKc8BvHSiFgU3HoMH6DqpJee5H8cGTi1QVZGE56Gi3zEe9SgQbKhUporooMzQbccxUgZf3KsSzsshMB",
+      "time": "2026-02-04T14:47:09.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "LxhMdZxRsCugzarKBvjeAxUMEvvv3s71QzpovAd2M7RVTRaFpCtvsFQshcaGBu4v9SH4Ys3RhkPcHu853dozCCz",
+      "time": "2026-02-04T14:46:57.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4S1VtuUCDmkQe6Mq8uZZThDtx9RLSRKHszJepfJr66RFg9mbbXfwkRqBwTHbiptAQ4GEofWNi6GHGU7tbmsMT5JN",
+      "time": "2026-02-04T14:42:59.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5bAkWJifRKbACpiYyUUq6N1sHUHiLQr37gF912H8npYMiJcPzaKfdEgAP3wztjDh5pv6HrjzYWXfbNcdBXKfLs58",
+      "time": "2026-02-04T14:42:54.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4Wtnt5aXfYrdwdNDENAfgFUNYoQjcWrRN8N6eSK41FQRrd1rYdMxy5mNgfCtvKQkCuCagsQP4vxEy9UpHG69oAdA",
+      "time": "2026-02-04T14:42:53.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3vhcxBPHL5BXSQLxaErKqJm67R4yJvPUhaqnbUF3QitPjoEfxCEDUYX2aYgKQxSwz8uqfaxAsEHxtBmWnWPCf3xc",
+      "time": "2026-02-04T14:42:38.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "66ia9EFLzcMgdzhZu4bsgEGjkGHQjA8MwS6NyaLzphcQ7aYt2MVodc17BSX6nUBVQYreMkLbwASjvhmhEGyDSy1y",
+      "time": "2026-02-04T14:42:35.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4cASqBBmucRiMNiprmbLjNAQBZrru35ZwyuTE7qBHQ8mPf3v8AizVMcZkHVwXoVhT8FWbtUp3kq8bQLBoCvtEUr7",
+      "time": "2026-02-04T14:42:14.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3Msuj5gwGovbAKgfEM5UGSnbcBWkzpYdLn6mqcN7qmK532GmCnkZhgshZt717EmFp9cUJYkPCVWCJbdbTK2X45gn",
+      "time": "2026-02-04T14:42:10.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "JuBLhEtQvhUZA8deSyEXWXy42yyVMEHWLKZP3bwoRJyWW4r3T4J4GKBVaBWPRXPGTvmWfpmhJZZ6tPbLHsFvcKW",
+      "time": "2026-02-04T14:41:56.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3er8KqT7G3wmoHK83c4o7sTVUktL82TqD1k2zZbdpKCKg7mjJC6Sm3Va5WrGhWcGTskv9S2fsXg8KGf2rJrghPNc",
+      "time": "2026-02-04T14:41:46.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3JRepT9R3DkLB1JUK1wBBTkKeJN6dtKeCxqgNZDSLzS9FdD7mnBuuRVB7DhcLB6Z9B8ka8hSUkExnfW5HcVNApeP",
+      "time": "2026-02-04T14:41:44.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2Jy1nQbyYzdKjkNTWMcoy75HEvyC3pEqJbJH2anmVwDfUwws19QgX69shVWyk8jCAkYDFLms1jDxBA2bnAKbNfZ8",
+      "time": "2026-02-04T14:41:41.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3ido1Vpr4aCYbTycr41Fuqustv5zxoFDaNGBKpBjxpK7rS3KpNEirmChVguVqeuF2UsuYxrHfT3g43R4DinyHvmx",
+      "time": "2026-02-04T14:41:37.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4A8ypSpMSuzZn9mdtxCwTHifXLMByiw1MRqAXPhXy2uEM97Geinmu4P5qMc1oCgzDy62zYQ2ghwawubiZo99KMBc",
+      "time": "2026-02-04T14:41:26.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2DdaUqpyS6UFdUCVVg9w81wfPceZEvVW5NeGpq2u9aFbsNktjrioGoAkgRehCtLkqb27RCvXQd8B8APkATxWqfux",
+      "time": "2026-02-04T14:41:19.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3MbNmniSjXYcB1vGFZga8HbVz1o39xnKq3A3UBdHrcXYKRCF9sBsjLtKqwdpSg5ioBcmXDeX5yvMrEAcxCzmu1Kn",
+      "time": "2026-02-04T14:38:42.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3HW24Ba325gSgQnPMUVtC3gNi5fuSweHmUmsP3j6eGWjUF83ddRMZRgsRoq5uVsBf4RC7Q9PfESyXvF5AWnnP3Rh",
+      "time": "2026-02-04T14:37:57.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3fxez88t9YFcgRyz3ifDmNTF278bTYQHQVSoBe1FxucTeQFzu3dxFEqduXBqgM4XzkjNHb7HiTcodAUqGY8MBR6V",
+      "time": "2026-02-04T14:37:32.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3SBZrtf9c6EXPiGrZNfTESqXA11V7VNfY4TxM1KToFmw2CdcTJSuHmTKkM6WiJ3dn3XzsxirzS2jUqYRpwsKY5Z3",
+      "time": "2026-02-04T14:35:33.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "nEswqKxMKFXYJWsG9UDL9et89zYK195YMNkj9H1MBK4WUUsJHsruuSYRuguhRwYEkKQ1DSx7TqZpbUHVkKh7ZYC",
+      "time": "2026-02-04T14:35:07.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "8qrEdQTrp4Lm29zf1JARXLDRFVVx8BzcEXtQkSt8LRQm7S3WH8o1Aiuz1K6p2g8msSeTxbqkAaYZHz1dxJV8PyB",
+      "time": "2026-02-04T14:34:42.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2Q7SnSHvMxThXyDWMjRLZ19NwZvei8m8rF8HD4bpscJQXXs9yVdxwLraPu2zkXehLmrGej2x2oVQdiKW6soztY2f",
+      "time": "2026-02-04T14:34:13.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3YFD4Qz1XFem6o4jAMNVkbrPV1bop8x2C4aPgvXDEkNVAon8SHrqxF6mSMd6BpmRTW5rK3QQQ7h9ZJKxTiAbZYan",
+      "time": "2026-02-04T14:33:42.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3ZVUgntt11eQa42exHEXWsTXmjisHsxfBc4SPdX529eaAifVtTTWLLQ5KG1qMyXveGRz7MXqQ8kLSHCHmx4kDL1q",
+      "time": "2026-02-04T14:31:37.000Z",
+      "status": "failed",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4hQsRM4xmXsMPc95eKxyxXxRkJFWEaeX2A7MpUoRuFFiq2mZUFYsB8tsg9JGc1jV95XioJ3F8XDuqfgqQqUfET83",
+      "time": "2026-02-04T14:25:32.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "45ukvxykS6DGLYJjTDb91Z9YA6dxwCnpFbgneat7eFGWjzqGRCbQ7thRiteYrcXkuVX3DgvaQQoAyCqVxxyqExcJ",
+      "time": "2026-02-04T14:19:37.000Z",
+      "status": "failed",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4zZcA4S1jNFZUMRBcqYe9CqDaKd64FTx9QfmeHFCceJLKv4YyZVLwXLsMwS9LrReT6zrK7hWpXVYEerMSxemRT7c",
+      "time": "2026-02-04T14:19:25.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "ZVrJkepTcSMp9hhSnVKawWd5JDZQFi6zoCxXSE3m9spPf8TNGtjHabzMzsh31rJMvcyY97Jok8UPpmrBDVtSA1k",
+      "time": "2026-02-04T14:19:22.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "NHBwPGiHD9nCxmnN1SkxkAGy77bZjcyE3eqE4P5DfZDXkN7QiHntD7gubqV1HHrLuVMDjrmazkx2N28GYBNUJW7",
+      "time": "2026-02-04T14:19:11.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4bg77qjuxFhV1my3ECW4vWB7gF1BwLmXD8ktaJGmpZAiBR4jpyaYWWdSZVAeykauogeMS79FN3rvLPrtLzGjiLYk",
+      "time": "2026-02-04T14:19:09.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5dRYBWoTTyShbWeaNGYRjMf2GNc9KzK9xM8jxk7n3Z5ec8dXZX26dUmW42HKpixLQbfdeikQ3ScvFi2nB8zyvNgJ",
+      "time": "2026-02-04T14:18:54.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3MuJuK2kChUUjHFXTG1Fvad7LHofvw6swx6Bcvs66di3abqmxmLWaxsztsZekeTXEjmyPGz3DjUaWDzd6T4hcVvx",
+      "time": "2026-02-04T14:18:51.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "tnZxyXDNdGSeqe5xqRXtDCq2XHByMEXifG5JBav7ma2AwdMP3xmusetGe2hcuBXuSM9VuNCw6uZA3jH8Cgfn9Nc",
+      "time": "2026-02-04T14:18:42.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5pUDxTdYDeMB3WtiVnssPxhxBsv5gKELMXSyiMZoPajWXgXUK8bBqxKbTKp9TiMnZbVba8Y79CM5kKHbycVixWeh",
+      "time": "2026-02-04T14:18:13.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2vi6huiYf58MwQ5sNxb8sRwTrkbC26wbfk1cWixxFZqyqF5KrVyZJ5b82kMVwVGnC8J3JKAKr3GbrCqHCsHuY1z4",
+      "time": "2026-02-04T14:14:22.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "62snaCXd4CHhh8jdgTSbEGaqzWi2KVihta3agyXb2sugYr91ZJyW2KeZt4uCB9sA2yEiWdV8vgNDibuEHQQQdZ6v",
+      "time": "2026-02-04T14:14:18.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2firjXbsr6b9TeKmEtf6hcLqfuv5KjbqWpBxgALuj8kzjYsb84vPd1d5bU4mk2J2vpiPEjsfiyuqpccZPAWEnpUL",
+      "time": "2026-02-04T14:14:16.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "jwbnaS3Dfxb8GLopGi6TggXhmTRxyCgdRAq1XKZrg6QgXsba9pJQRh6Nb4n48MLcxAkx3CehbhxjuWRjAZ4LnnZ",
+      "time": "2026-02-04T14:13:51.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3pdsLDjQhPHrTGKNuxqAHTaXgt59JZ2J2wY79XQft9HMocFdyuZYVX6PwaBpornkRLMddCrMau75nijF3L68eC7B",
+      "time": "2026-02-04T14:13:49.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3WSUpcvwoXnNaNAdHyxYRcL9graLAapxTX4JzUtvhVYn9iJxsW9AY5YKKi5yLAihx4RnkV17kzbhCD95s7AAHUzg",
+      "time": "2026-02-04T14:13:42.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "64G1C1vtpao47jHM2L7yGLRAjXZkN3gHegriVfEkWK7ThLgD1QttfjznsKY2ubaY1uHkUPZAB5ugoVL6xADTgrrM",
+      "time": "2026-02-04T14:13:41.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3hy2nsVmAHMW7TcJRFAZKdfGjh81skPyEGjgStZKU4oPXmzE5S3SXTAQtm7Y5edJi8csaBEhSKCJpbkgDuu7RLWo",
+      "time": "2026-02-04T14:13:26.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "41bVdXVPTPa2mhisqrXy2jKwtUWnsxYTLK1W6A5gjNYTjguBbnijN9bVXjYzrc4rjxJXYchDYx75T11zGAt6PuZJ",
+      "time": "2026-02-04T14:12:56.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3D24AHfxMoV1BoTaiqZbt1jN7Acts1KnHZQTGsg8hVKm6HbvT2bYpt64s4MA7WajHNCdKd5ykimGcpD6JoN2wkwb",
+      "time": "2026-02-04T14:12:16.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2bCC2N2h8WmVDKmHLWC4imVACKRNkKoi7roroQFWeK1yoD9bUc6GTPQxV9w87QPWYntbgxYhowW4dfJvuYj4Bx3K",
+      "time": "2026-02-04T14:11:59.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3g9YacHfnNAujQhXfmkW5Ajv2NX4dstW3tExmZP1b5m5poTUbpgNRF7XL4fWP1uoLFN72N8nmKGPZDXNirH13yPa",
+      "time": "2026-02-04T14:11:57.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "zyykNEUeJW1w681ggL2kpc7SrXa43ga4z6Wb7VuZZ8A2ADNwuwZjVLwxPMDc8BA45Q7xEwkf9zGYxEkoysFM5my",
+      "time": "2026-02-04T14:11:27.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2z8yNSncdT7KZ8ykFmxPT24PKyX9mfFJjYSWPbSaYdNdF5j42nFmmhFruX7ezfLpMSLpFTmGuscz3S1krCDimzXD",
+      "time": "2026-02-04T14:11:23.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5JMeQ1NtQNCTKA9sjsuH9eGv3V6Y3vjSMQYfJKU9fabR78syFqMk8aUssaYdysezhBLygAZX5mqTM46qwBvkZGCV",
+      "time": "2026-02-04T14:11:14.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4YTxzbfrRapVTd7b754UXuNHGu3aNAJp4A6jVVS3yfiSRbdBCxNS7vHVp6Y32CNfQUcFcTMmuxD6MhtMzEZE4Y8D",
+      "time": "2026-02-04T14:10:30.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4RkT5HSCVWoJqwMQpKhk8tDQuauMpmkmVaFshpGFe4dYFZxgUj73ZE6WMXWUy6XhdLGENhq6j9jsat5TeLi9dL2b",
+      "time": "2026-02-04T14:05:34.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "JgJ18fLtkWiZ6jqwyCMa3krRT3XK9ovBeCyN7DNUfkB5Lf94Av8J9pe5fQYSbWHabHtB1UKiBifsiDCQCsZ5S73",
+      "time": "2026-02-04T14:05:01.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3EPLc4AWb8ZP2UmAQC8v6RqsTYa4RmGmpVG3mf2P9mugQNHATY8ZqqobBkcCY5j6sp9a3wboQuKffYZa1sUcm4mq",
+      "time": "2026-02-04T14:04:59.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "578DUvzvFWkYhHYXFkUGiEurtMVt41BpXJ6aYZUy2kJSFyvQ2pBcBgZ8vruFrDAqxsTsooZeLGJFBxus2VjsEh7k",
+      "time": "2026-02-04T14:04:58.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4Y9oSZUXBeq9NcK37j3TiMPJjSzAEuucbL9xFy4LdZSUiyG1o5J57jTMTpgcJ8gG9WzyDQN5GYrghMyC5B1aGmC",
+      "time": "2026-02-04T14:04:55.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4bqNSbqasa1PCacV7RUV8JuKu4iXgECEBoL7DHnZvxofZR39QjWEw8GFvGHcDdn1aXHs3dLeqYRBTxfEmxAhg4i",
+      "time": "2026-02-04T14:04:54.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4k41FNCihQ9RU7c4utm3nKaYMK8mGHvUGTVC9mtRnRYGkeCjyUQmmu6yPecwWvmTxrmkLTyCfZS5487MAf4wwLxt",
+      "time": "2026-02-04T14:04:46.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4puhNGtgZvwwS7NQyWcbesPXFxUpXeZqz2oaXpU2dd7QSDgF9fmzBb6LouuUWCYuF6DptuVgrfx2q9sUis8WEd4G",
+      "time": "2026-02-04T14:04:43.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2r1GNoFivAyEvvKf73kCEjxMDQ121aCEafiLNjqo19K1vejSPSdEHXTogMxeAG8Z8VYvZRRXRch1BVPjERmbmAMz",
+      "time": "2026-02-04T14:04:07.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2vrNFBQ2NJW9UHsdXWAE9FzU4yc3oESPVUYjNtuQQ42UaVxe4nEK7Y2sGggn7Z2pgq1UU3CSLYciTjc18rFwwi9i",
+      "time": "2026-02-04T14:03:50.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "34qxTx2ikk4JPimjER4aT5aK7gW61DFDA5GigsDmQHZGC8wk4849EuWdu6ArRdQ5kUpkMZy7BNo7Ue58Bwwv7z3G",
+      "time": "2026-02-04T14:03:48.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "xausyY68pd5Dq96mZdWKN6j2MCu7szTV1HLfrWoJueu1xrQEd8c3LYYHokm218ZmWLSFoSDB6sMfHjPdd51nwDx",
+      "time": "2026-02-04T14:03:46.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2GxPYpANYFY2y8uV4oym2x11YmsnK2QPXBMiZ1SF5DXKNmVriAyArEiqu7B16Fxp9zUHTUa5Pyj8RkNJsJYfPWxK",
+      "time": "2026-02-04T14:03:45.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "22e7g4795GJ9zQMCjDAxrvN66T3aUM7ZLi1ZXwyzQyoYym1Guu57QXCUBAYb1WifxMACc6sRxfL8e6kUt6NQ9BEZ",
+      "time": "2026-02-04T14:02:54.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4eMnykntVixLntuj2wA3S2JExMUYYLEgUAJQ9wT7aHLJjJYkhbdRSqRhBFAhYTV27VoEuYHExck4TdFyNoX91ENj",
+      "time": "2026-02-04T14:02:51.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3n536rKe8YojMDqZbk7FirVe46KquAWsjRjH6ZG3aT4FEDjrt4orw4FPTsWj1ZdiWqj9fxF4uhaXsRyKgFKuGRuA",
+      "time": "2026-02-04T14:02:37.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2b2CjqKsirNh1oD3jAUhG4j3PkSxBb8K9B6aG1UTrEqvc7BVeH9vSaNixuSYGgUMhaLwQyJWsKUKtcFtqF8JcRnK",
+      "time": "2026-02-04T14:02:36.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "9U7GamdjRLnkYmtzeJDRpHVqBrotuSJBYkRgp9ANnrrJjU6Kt3avcHWugZKTbiHv4sJvt62tEDv1sRBRxFPE25K",
+      "time": "2026-02-04T14:02:20.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3tLHnbuewm3HfGLJSSqxoVosmTAqRPzs54VPiy6M91QnKLiBHpuS2niu5z4LH6ufJzixxaMYoADrstYdJ36cT18G",
+      "time": "2026-02-04T14:01:24.000Z",
+      "status": "failed",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "53byy19FMb2uBkcFSCNToRMXzX39x32z8HrNu2eehtsCWTqv9bEmfTHqTSoQ5BahPMQxgpwj3x2QscpG7unTv99J",
+      "time": "2026-02-04T14:01:05.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4bWijG3T6rqrGiBgeqD9i9uoT6yMF16gwiVpbriXT1ajJR5odibTjfGs358oN93h8mBNtv1E3bwZye5PhFAnRX1f",
+      "time": "2026-02-04T14:00:49.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3ihyp8GeJVQKH4WErusGqouTja94ohXtbwcW7MxTTQBzAktUsNv2SCZraLhWTwQqz96HTG2KMusK2DzAVPUKtKv2",
+      "time": "2026-02-04T14:00:33.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4uo7TPJbZYgU3q5sPYVxRBEnLBMy5YdLjbg7acP9goTmEgYi9DkdU7jBFPgybt3GWEhXei3BdWwzC5DTpQFzpBWj",
+      "time": "2026-02-04T14:00:24.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2hoXXvZRCh9DgcfULtcLsRL9ZBwP2LchiHX2jzinDFkDDusq2PUi5nLQYSpNRFgykbcVMbRQBcmgDAtdzyH7X6yL",
+      "time": "2026-02-04T14:00:21.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4NoFDHUftb3MCjNxZGURfpxpsSeHuy4YA88NvVCgC42un3jg7uJV4Hes7BtVnwiLxfrnRQSMRCqA6mAZpYJa3Aa7",
+      "time": "2026-02-04T14:00:19.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "swUghHVEkFX7WeWocVy4HTAXPyoyhiYtPUMey71mDHJSp7MYwH5dTTwWV8yFogP1HZrKN4kBHCSAg1b8JAJMHho",
+      "time": "2026-02-04T13:59:47.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "39frFrZVw4qSTCHL8VPfaWGQ41SHHJ1iPGMwfooFXVqQAqRQLgKhAMDvTbr3urpgkw64bzxGonXiE9QdgfiQKzEj",
+      "time": "2026-02-04T13:59:44.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "w2413EU6wvqdE9ojoudhUXAxQKoA5zBbL3G4558oLuBZgh7n9ZpK8ShZKK7r4K5VUorztd7zNJcGe5xbY7exM4h",
+      "time": "2026-02-04T13:59:37.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "61BL6yMvNDQBYE1VDmTHbp5qhobfTySi8YC8VRtraKcYR8YafWKNZugJDGKevAi2vePUPKgkstZK6hsE7ysN34b5",
+      "time": "2026-02-04T13:59:31.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "51688DSzKryaV4y6bp8L3xGY2RnFPNyTWW9c7nF782Rcp1rXMpFC5M9B28xAG8nGibwMtkqHqeiQVPgun1SC89EA",
+      "time": "2026-02-04T13:58:51.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "cZs5HUdSVLwPfxSd3FbJJScPdNBvu1T8JZScK1hAVNsQXCm6VHCBr78fR5rERJ6Na6bHD74LveAN9SeLxSZNVz1",
+      "time": "2026-02-04T13:58:48.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "44Y9RgKAPNh3CzWonvzNqRuXe9uG9ZdKTJE2dr2W4M85xKAjx3KkR37XMUN8XH1gwN1fEcWgygtnk62ryQaeAHy2",
+      "time": "2026-02-04T13:58:36.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "43Rw1ydP6AuKezMjLQ2TrS4QjtSDtuxPqpnb6y13ADLaXPgPFJwdZ5bcz1gqHdp2DSvsLfZ4iu1NQZokqAqeGYSN",
+      "time": "2026-02-04T13:58:34.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2qr2wWGSUS5856VKaRP5G26qVZ33BHJ3Bv79nrk3eQgoqUiyhrxsiBCW8JaHdHa1ddQ8gFnFxSh9qCLmwGKdhZv5",
+      "time": "2026-02-04T13:58:06.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "mCfwfzaE5QLBQ6LTisNieyhFxGK7U3fuCLdJmHddKmZxTPJWTQYQeGFzDpdjZuLvn8dNYMQZroGr2ioS1MGT8Y2",
+      "time": "2026-02-04T13:57:54.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2MAe5bftg8XnXi6UiFVt1p1AgBr9tuaSuQfJuyiE3mKoyqYaG2SqU3qxSkDeXWk3Vmz3JL7s2QXbLZYARiy3CBCF",
+      "time": "2026-02-04T13:57:37.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3r9NDvi3QcmhMch3s54gDXJXwfUXtF3ndtcSc3qG83FYADQ6irWwD8CEcVhz73GX764B8qdTmGftXosgohkV2JXK",
+      "time": "2026-02-04T13:57:20.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5VBy3tCAathNxtBWWPWyWWfLGp1MKaxZ1y24yDJXSakVZjcMnBsuE1vYx5wK9HUABGP2S1Jg8DRr3qXbzoaugWJU",
+      "time": "2026-02-04T13:57:19.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2do6vmEmhj1jswu8YqSYFRJ1ExoaeYJ3Csj8SSD7ef7V6SZasP4yayx3yHHSpKGj91yBX7KYB4tnUxR5yYyanshQ",
+      "time": "2026-02-04T13:57:18.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3tgK3VQ6dLaeNfQnRh3Aihc1pL55aCv4GVFfETdvwaxvcAB8zNmsoBXxDdckf6WzwQisNtkjZaB2s2E74DGouegY",
+      "time": "2026-02-04T13:56:50.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "bUTVQDGoUK9t2zFBuvPfHtNhWK27zMeL9rQeq4uoX5PTsDi154q6dr1WrjtJtrtvvHBpgi2vQ1TY86tGYhRjcHh",
+      "time": "2026-02-04T13:56:17.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2ZfHGrhyyLcRbCgR2cJ2PTcNJeXBWVQFWuVh6HzNGRvWJDk2XRsP9EQigQLnt14qsTy1qLscdYj4yUVDjPP7mXFh",
+      "time": "2026-02-04T13:56:16.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "TBcWKWMAn7dtm4csctCMasNzaCnhpSD8JCMjf2rRttEnnhd8XWNtVtoHPLc4bmbHUMisFKpDXiHhv6Bd4G1DnS4",
+      "time": "2026-02-04T13:55:51.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2LsTADYwXRTQoEW6VxvbVuDPU8gqknBYmmgZUYyJsgFQHBeqCKb9pBduAfW5jCteTwG3Geekj1GyE8BwBXY6nKrp",
+      "time": "2026-02-04T13:55:28.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "53FL6UW3jWh1Hv57F1Hnzvh7rqptmk1eNrQ9hidEnA6dC6vuab9AtJEoqBbqwrRTK3WPRhuHKofSmtKEH3HXBLib",
+      "time": "2026-02-04T13:55:07.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "527GfYM5QjjQety1BXtCQddL1JNL8vaBww6yBBxvLtfoJP5wp29oaQqcdK9jDz8ibSdHfwBEwXCWbn1oTG7moVar",
+      "time": "2026-02-04T13:55:06.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4dfComau5ShqqTRaHY9FVvGwzbXqxv7X5L73RZWfDKvvMCqwQzBv9GoQ68kHJc8yF8rreBEomwx1cELjGahLcFxj",
+      "time": "2026-02-04T13:54:37.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "626dKuDDGZ9PW7NwJRmo5N4EF5neeq6C8KpHC1LfMZgWMYC4tV4M6uNZJ1NBCas2SKAqSDnDnXMotookBQbTaaaZ",
+      "time": "2026-02-04T13:54:23.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2djxUa7Lweb9ZrkLtDvR52LVgQVhATfW4p5EryjnimXokiTiSP7KMc6mqAuBnxirFVEEGYf9RhzLaczbMMozi3gs",
+      "time": "2026-02-04T13:54:21.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5LGzzutTBXKB4BB2CffqyWmpJHPdEikWPSh3UUShY5yekA2XXnwqDAGTYHjsNkC1jBZJ1RVosGheHdbuWKb1d3uX",
+      "time": "2026-02-04T13:54:13.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4hPWxKsSHPE3Vs8aq2WjvUz33A6FogpS96h2nmbqNhGFGQi1v67BDH4CJQWgbsBei2HHdRmzaPM2SLBpuUNiR3jH",
+      "time": "2026-02-04T13:54:10.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4LVP1M8Do7TZ8SGrALNVmQpfnCHhNDoyDpnDXy6yCNzs39Mo7BmKvmyZtx1gq89WWcgNf94FKWgMxHoNVFeHJt3Z",
+      "time": "2026-02-04T13:53:58.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "bbFyKijn3ha8fA37oM7g4K3SHgy6BWh99KjWFNsx1BkkDfafTeK5ZuydjDK56BziVNiM1pgk1AkqhYDVvYYJaEw",
+      "time": "2026-02-04T13:53:56.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2LuexDQSX3WPKVeeA3FgSBJ5udDYvnwkcXTg2MkZTNCc67S93t4Ggehy9fW6JSYrMMkXftebpDRRA2dpxhquMyn",
+      "time": "2026-02-04T13:53:55.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2EgZmusVBohgJ9Bx9ytNJY4qL1KwFUR6V1mFsYTQ1Axki7TVpD1GmGr2noAJVNZqfiyFiuGqMFvcSemyY9cFJwoS",
+      "time": "2026-02-04T13:53:51.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2wAjUWBpfCNptqBJ4XQaNyH5FkA2W5WbUdVp68iijVU3D4xpoiHa7dfQjs8vxkxbjDtZ2XNnZgMDjhdNeKifoMPB",
+      "time": "2026-02-04T13:53:50.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "7XDnnnbFHQfHDpzpw9XgTAhCVJngesCPC1GEoMWzdJBUfybFAQcU9LuSPd7KhFk77eNeZvLd5qV213SgcXLMT1G",
+      "time": "2026-02-04T13:53:41.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5f3jXzaL4Th1YHPDpjDcw56vG7B5k9Z5bU65JXWfSqxXVYXb18EWWCYCKFD5Ya2CsgP7sW6xFxhS4kaxRuQ9XmFM",
+      "time": "2026-02-04T13:53:23.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5Azxksh9F72nKmQxgGCkLP3JKBgyV63C1pmbaBJN44ujwnKjhryjMHvxxZLXCxELR2a7szqnAEggWSDrg7HFaGq9",
+      "time": "2026-02-04T13:53:14.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "67gLB9p9cC13XyRu7hWThmqayQoBrvJu5c8jxUwwgb8y4uP3w5dZiMzYwtuHDoRN82gHNVXx67217JHc7HD7Y6jH",
+      "time": "2026-02-04T13:52:56.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "aKut52tLrFKkCGKPeP24ti7xS22maF316KM261Zi632oNmrCvesANmS8TLvApbT4pu1YQPcF7CFncU51wTdcYF4",
+      "time": "2026-02-04T13:52:40.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "MVxM3Ht8pA5QMrpVJpSNz166vGTiLCk96o54oDQTepZihBUPRkJUe73bKXpCWEGsP1uBvJcUFWX9mBizk5eNUkY",
+      "time": "2026-02-04T13:52:09.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5TmwK9opfLoSQieSVZTg69zPiGAuxrCiVkCrgWdz7AMBTqES6e98RabX6nMSRSdeNSH2PHZL94PsYNHX8texaJCj",
+      "time": "2026-02-04T13:51:49.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "22j2yLJUPXEkp7rTrVR2yiA7LBeUEozKnbPJ6rqbdBwwitp7KBzW7CoR2xeYBcftsHZovoMMdnxJUf2W9inhRWBQ",
+      "time": "2026-02-04T13:51:22.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3nPENqoC1EDj72tpw7enm3c2CCfjds3sM8kFSS6BzueT9YQSJT7yaK7fv6xzgVGFSdFKh46tXihs44F1jvRVCaf9",
+      "time": "2026-02-04T13:51:18.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "oSXehsQqPxdk2Nrc2W9V7iAEE6Wfnw2tMeGBw8g7SRhQBwx3NuiWJh84ueKmnvZWBVLWK4iMb99qvV9QPVsVMUP",
+      "time": "2026-02-04T13:50:45.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "54DK1wT1Dskw1D1mp3BFeGuhz8XopfEsKGPN34NsMeRvciN1XhPhtfLBxcWgJNBurU2GUJRc4XyjG23uArYEyu13",
+      "time": "2026-02-04T13:50:43.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "22MKD91AdCQ3Byidfd2S1kLVJSmZ48a1fGE5315QTQfeb4dyZ2wQfTVheidjdWT6HfpewAMA7JAYuAq2J3infoF5",
+      "time": "2026-02-04T13:50:41.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4nsTjj5YLRGw5s7L4uCUMpWwjfHvhepBG1NNaD2NGNYTy5pL44gUokQ8WDdtx3EeWUNaTkc3zCUysLR5PQsBpCiw",
+      "time": "2026-02-04T13:50:23.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2MXeruyh5hYWQyPschSWGR2NvTgWgemyR1MX3tCk4AjBYYkrkkQb61KJSbESEZhpCRr4aZQevntgkvaFsGkCks5N",
+      "time": "2026-02-04T13:49:53.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "26R7qHXSQtrUtmNbi89APDgcCiYcauNi2YdkJM5vVdkGGgfXuLKnvxcFkUHKnjpryxxGdPn29NDRcey4rPQpxdJv",
+      "time": "2026-02-04T13:49:32.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3A2qNA9wnjZdW8UwiRD4moaceVWEkHsMkJsYSHPJB6GnxQg2qci5rJ45J2N8uhsmiyxYFf6tHWXpzKRFLBc2GJiC",
+      "time": "2026-02-04T13:49:30.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "43RR1HNYyo2JAk4Fo7AfzE6eterrBCr2Q8542My7U48AiSrmU4ixwpZk6odoK21CNxR4WHHV9gPnk5btxePDgWRt",
+      "time": "2026-02-04T13:48:24.000Z",
+      "status": "failed",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "LM5AvgCg7K7NV3jRNP6YhMaPo3jeoUGcemdFLyqstjx6rTjtBLSEMY565GfMRGnJNGRabZdgmuzRpptvEQu3wpZ",
+      "time": "2026-02-04T13:47:59.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4iMs8oAUmUxPgj45M6sSRAoFJQ86tVpH9Bs3KVeCqiKiQSVkqnRXUFVQRE71gY47o6VZ2TbjgNKtwDWtr9cEaBUg",
+      "time": "2026-02-04T13:47:42.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5kCEDqEZ7cktd2vySB7dGkEQcbLqzqtba7bcCu9mMr5Du5tHBLsQWSA845mWPtb2fzwmFpYycn2UGG3jQWCXQc5R",
+      "time": "2026-02-04T13:47:24.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3yCcqWix2HXiX5CUm3Ju2nRpmPeHWX7KnzVj7dveZTb16SYuKeFQxuxiJJTyWfN6tXwChG8LSdB2ZAcsrEZrZiBt",
+      "time": "2026-02-04T13:47:05.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2hxLb8LJfZSG1z2FLQRjV7PaKxtpn5zN8x5PgcMYrRL1359dXvbCB814NusZuaRF3e6zBADRDVetsHqGsX1hiGoN",
+      "time": "2026-02-04T13:46:50.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3C4MGBATUXtymJSpwSkb29m2HzHCY6BdbdnYBPcLd7KshLVsmNs5ErL8bWb2CpCZGmKTR2sdHj5PtiX3mu1s4eUX",
+      "time": "2026-02-04T13:46:49.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3nKM24L2XpAVCcCh1Hsbx912crLzcUjgkdPM6ouRFbtHneBFPYEpt71Zk7hsUqa9a1WB2K23ARp43iK1PMmxL9m7",
+      "time": "2026-02-04T13:46:33.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2x3yV45QjZ51r5gEgY1snGL8ZFQ6WozojGbmyvbitQAHXhbs2ZQ2JUFeRHFyxd8cf79p8WDqtfbbk8wy1CKtqokb",
+      "time": "2026-02-04T13:46:16.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3YsKVtG6h4DVehnr7dvnP7t44tWU5iNLFuuFBVRQf47X44ML6VwP9wcicmfEHGwYZgjBjA2PG7eWdC4Rs98k9uQy",
+      "time": "2026-02-04T13:46:06.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2dCq9P9ZY1d8S8QdFmJU66eos3heRqPMf1Q7axFh5WFExBKVVVk45HUH2RmHebiuVXEmTxbk6qSYDqeYEegFKw8H",
+      "time": "2026-02-04T13:44:17.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5jsFD9fUpuTef4B7LrmboJJJDESDqg7ECtQkbUiEtgTdNu1BKnU5jejcWsD2xRWnLuNBRgYBsXpMXq7QkiduJ9yC",
+      "time": "2026-02-04T13:43:55.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "VHQhG52gKPmooixrZ3PD45ej3kvf57Vr5z3Lt5iGB5aBpdPtWe5PWFqP3TFtCfBBwTCHKZcyTotwTHT6ULXwGRD",
+      "time": "2026-02-04T13:43:46.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5ZhZkiCVhb3H1pvp8Z7FoRhX8sDFcjayZYBEicciqdMqVfsyvGRY53Xacn1gxmZo923VZzFALbjquqPjuZV1JN5A",
+      "time": "2026-02-04T13:43:44.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "x7XQEuwJwpXwojdoqEEjvrnSrrkmXdvhQe5PWaktmsSwUy811TGtWqipNUH1q7wX2m5zFT8vfCcUuztRxUf1x2F",
+      "time": "2026-02-04T13:43:25.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "52k2qf6uPBeSbxbJT4RUKB2oirvcmvUa9hTNM6DeEp8b92qGdLwH25SCBUVvncPkb6151x5Sr9f5FYvzMstcQ4eJ",
+      "time": "2026-02-04T13:43:24.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5AQ6ULBYTy23HbzKqUD518zrn5mKFrquJGRQdtyPxXUkd1BCviRu3ufsVpksrjWb2ZaHwR4gvzL8Ng5A8tw5LQeu",
+      "time": "2026-02-04T13:43:14.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5ynZGpxUCgM9vMvjWwMmugwLEtTJdJXDxUHceFfeT7zahR1DUqH4pHv2EtG4N8inQ68guF7U3jf4XN53KSSMQwWY",
+      "time": "2026-02-04T13:43:05.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3opkjedS8h2jCgcmofLP2oYRD1n4Q51HLRTW9za8zsynCt6Kp4pCLLdcgpqzLfUZZXoNLXRmMgGKvRpUvGX9aEaL",
+      "time": "2026-02-04T13:43:04.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3EvfHVYmH8MWWDA1EgXbtXto6MxMJrYdfBLbKmLKeMYY5jQ1ky3MxzHeyLgXQim9nYJCBJ5MNeS9CUcroVY7FhZw",
+      "time": "2026-02-04T13:43:02.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "dr4gjqzpuZyRdcvdCvdGMq5hmAAvCvSoMqgoKReK8FztEhswpFKQsjjw4NdNY5gtxPKMjZAM7e4zZZAniU84ov5",
+      "time": "2026-02-04T13:42:51.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4QGhi9M67aRK3G5MWCuyExiwtAuNMzdUc1AHGouBdr2JFEW7Hny1oDksZRHvgwYJdaRYWTdxXT6iVoj82DQmfayh",
+      "time": "2026-02-04T13:42:47.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "236EBZtN1RLJy6xehSUmsuD6rR2dE8eafbPcJ7aCHe4vhjCmoUcKDqKCmwAUdQku2ndqm5oa71B3YuifWPsuVdma",
+      "time": "2026-02-04T13:42:22.000Z",
+      "status": "failed",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5ZjcF6cMnxC5Wm8LGJPqi1W1DZV7yDxznGHeZrBn71g5DjYDsFuSSFf6VJBAGGv5jcWuE3YGThnAVWNZnrGnTVh7",
+      "time": "2026-02-04T13:41:38.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "38HmuxPpL5ugrMKHSfxtDd3xUVTwuGAr2gdMWT9ELeapmSPaBdgbnYBUmT3E65Gsm2SrSe5eu86fow9M1epT5919",
+      "time": "2026-02-04T13:41:37.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3UDxjMDxMUEZRsGa97wSg28U7wvYnmAmmrd36ALY3Duz7vxJHQ2dEUY1DCy7CUN53oX2mAUq6SqTgMFR1h8wYHF6",
+      "time": "2026-02-04T13:41:23.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "uPSc5yup4n3T7cFfgTyjNgriMd2Q9HPK5SmV8NP22WvC67cVTQwXh9LV6vqdia7DAyZPUzhb6BceEv7RjaNV4fn",
+      "time": "2026-02-04T13:41:21.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "XSqnvkh8pDxfJV3kFiHhauSUSEQdYHgJ7wzPX9yZTkyKYu3KB9BQ6WUJANwgJ2mLhSrd8Q9uDC12AVdxF2dubdM",
+      "time": "2026-02-04T13:41:00.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2v3SoqgyN5LjRwy1iy8hC1gY6e91id1WjDPEt6xbY5S9NkFGhJfavbPf8RHSg69Xqb14hoK1mtiY7hFyaXYV1Uzu",
+      "time": "2026-02-04T13:40:26.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "XmU3LQPRfFDXCVG9AC9RvbvhxFzSunNvvf9LwNdcmauKsCBpmTHQsjGUerzYvxsq1uJLHejrfgHSdPsPcjHSSCR",
+      "time": "2026-02-04T13:40:25.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5N1CUY88eCCiAnHCfbFCYekuayzdKsvYyc623JwoQUr4UbbU6KdMJjcxCqo5W5YFJt67XthkY9mX2qqGPAh1XR48",
+      "time": "2026-02-04T13:40:06.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "aVJwKsCvvJE2KNSXtvNF1KQnjadsCn7JNsPeJ5mqtPNahRgwRP8We4GSF5maxqwW8g1sTkxzuqeNHERB1vHTVq7",
+      "time": "2026-02-04T13:39:41.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4gLufz15S5Tvmt5D9GL7npRXHnPNat893UmffVfLbLQReUmS7u8ZQweAs99oZ96pzc2XurizBmP279vb2nUjx9qo",
+      "time": "2026-02-04T13:39:39.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "48HbkpwZbfTJ9ZeDbSbj4QfQfkC4VEBnWCUCcTn62nnnqdTXkkwkwBRVLLmujdQ4hSwtQebwYoAgz3m8SxGBuDzF",
+      "time": "2026-02-04T13:39:38.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "FXhCznuaxN8MagLsoZrh6KRYGntSsN4VPZAxDouZjUeRsEKTgnt6WRzKLaq3gmiXhrVs4UpHqY3LAYjAHcRGXjF",
+      "time": "2026-02-04T13:39:17.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "W7vyZbJPCXkaZeLETcB3CTT1dBBPqF3LnsPiYeeuw4jv4KjahfkPD8a2ec9YWM1UVzFGohYumzUB1p1izNpGzNT",
+      "time": "2026-02-04T13:39:15.000Z",
+      "status": "failed",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5NechKo1Vs8EgMyW9mQH7wEvmPiCAF1ryUWbs5dkhtTCTGC8uKXgMM1euoeLBee8uixuqBay9fDtQ7p3Gg6Ai46W",
+      "time": "2026-02-04T13:39:06.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2QEDidiuLKn9rsJPvXQQ6nzMWMMzAG8f6Xg5rc6h5Sus7jpHsujjxWMusKzEWSRNn9oabpbFU4Zx2tWZJ42UaQA4",
+      "time": "2026-02-04T13:39:03.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "GpuNmBbnXTmVxTuS6qowmrG9xipKmYvTf3ueoYpsauq8sszLhB6s8aLzevKGsZTWu7A6SMpD1TgtXmvK37vs2ea",
+      "time": "2026-02-04T13:39:02.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5KBiyDd2ikdNVxfktAooy2A2uhhH4z2gQV8e8ocRsv3piDzhgXVuAbGpJhmW1s45AKXp2c61A3J4HamBAJAmQCHX",
+      "time": "2026-02-04T13:37:31.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2Yd99L8oySPex9aYJPA41YtgnmSrHdfpzJfzqedCTLusQp1D9z4dR8BdsCNiiGBXWPUV3cpMJjnAr4gzRLG33v19",
+      "time": "2026-02-04T13:37:04.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2sTAL7gM2kLkLVNmQtQM95XTnBZB34usMX6TY96KXjcpYBDBRythgoSAKNr8NAYNaRR19CMPa8jr7pTPwWaoD8VT",
+      "time": "2026-02-04T13:36:33.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3zZ9K95y1dxvXnu3scRiScJDsyaeVYYCBwSJ7M7UF7t3zUwYtZVL6AKVG5zJXFbEQ23KzBXuHuse8ZxHoAgmDaYV",
+      "time": "2026-02-04T13:27:46.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5AxdqpzxDzDCVZzYM7McKE9NDJmM3dHfeDmCGKqhCc1ZW5EfyBMhmwL9rx51tdYSR111KhqZhUCNVRYTyDDHSPt1",
+      "time": "2026-02-04T13:27:37.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2U8gEAwDjo8Gez4q4TpZ7NrkcNctk3hqkyQ7JaZ9fgEEtnvyaSMBhBZoscrawjh5VzJyQ8ApuDdj6b1mAkLFhWS3",
+      "time": "2026-02-04T13:27:34.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3xTVPu91u34bxfe1UsF2ZzkXQ5uRnmJrmvRypzE7b6z5j8PKqKuwcGq1zPFmaDcyRcY8ns1Wm8RYGS4jqp2hGhd6",
+      "time": "2026-02-04T13:27:17.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4NYe2b6izEfVeDBtGW8ef8qfNTjLSkK8pwn7woh9JeZ8b8S2ov69eLjZqJvkek8R6g3VunJw1CGd2sFq4qq9dNLZ",
+      "time": "2026-02-04T13:27:07.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2QDp8eWv6DfPvyTApqBNHge8UGXxFfccyxdwKSkUrqt6Fcy8rdEGZBQijody7WQLuqwDBEnvokXz8TSNrjRJNFtj",
+      "time": "2026-02-04T13:26:58.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5sQyEqR9uvZXYKQnrj59Akpp6Ao8JJATJGCNmZPLio9GXukU9pGNYR8stWV2pa8Nk4WExr7BDfUU344iEobNZjt5",
+      "time": "2026-02-04T13:26:42.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4oHF4oXw5bTRzCc5Yt1VBxfDUroQ7jY2yVpiFAu1d71SDeGi14n2GTWbafizd7dTHFEabX6kjzR7G87AASSxcGxr",
+      "time": "2026-02-04T13:26:31.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4MNJate4VVHEKyxiDpDg4tKW2BvuBpFuvvZGa26MdMx4gGw1mKe56xMTroPPZjWbnqcBfyQtTV5fHGneek2DzUS3",
+      "time": "2026-02-04T13:26:27.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4sawDnZDo6tfLU892fkao1aRJjYvuYMWYpigeJXuvfwNXEepEDA15YRKpJqXGu3Be8VPm5o7zSaQcxdP51KMwbFg",
+      "time": "2026-02-04T13:25:59.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "42fbtMJjiVHo6pohjEcmPEVfSEcn4hcREGjPUTuY71BfLMg8EMtnZ4EFFtzFrgayb66wQDqrKYF9jedW85hKDnQ6",
+      "time": "2026-02-04T13:25:50.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "49YMQCmAmV7QnWsPqs8E6aa65cUsVupsFZER8r1nXpiWSpPbaC8JXFEjWeQmNHsMt2meHRbgpkmuPcMGSzeQXTZU",
+      "time": "2026-02-04T13:25:26.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3ct8Nh4cEoaChH2BimUZH9pBLQggumNhdGTkTq76wiZZ8pyXMQk9Hgm9Bar45qqpXMs6oFHmeSCvyHTjbcDeS7pF",
+      "time": "2026-02-04T13:25:11.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2EJGJ4zHAmSm4p6fMY2hnH6WrnMzCX4MT936K8BpynCiRxtooc47A7d4f6rCEJTwieTVYdbAhE9PteaUAA7Gkn7i",
+      "time": "2026-02-04T12:10:00.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4EUA7nqYKJgLrpfnMRJ68TUnq12qLD6Bo6jd6dGLr56J9RiYgAYaYiTuW5U4a5kfT43oVLZRqfWUoGLFXBRCrmEC",
+      "time": "2026-02-04T12:09:36.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4iD7SZRetty4LHUKvr63GWyGEZJrAD3u2J5ZPTtA1fjmJgpCd17zd2RVas3ZAuWN7PLfdHkgZzVYA1AYdqkRBqne",
+      "time": "2026-02-04T12:09:18.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "23xFyS3K2jyaYTWsfRZ95XJoD8YaawJqunyh8UYUU1L9YGYAYGETGeUyxy9EGQVwsZyjZ3MmAM6153PcEj94rZy6",
+      "time": "2026-02-04T11:35:12.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "c9X877hPcTbnr6MMiG8uoF3Ph9hMceWufdrfAFXq7ztUQ3YEDYuuakCC9JtTowg9ySjpy8oFpDBhLuT9C3hEAUQ",
+      "time": "2026-02-04T11:34:53.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5dVW5a2BY9jPhAYd8wytMhJK1J8dkFHEZrZGL4BpuManqZLP8KcTLS6amdQNi9e67EGYEwpaBvvvyPvNPpnSCcE5",
+      "time": "2026-02-04T11:34:42.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2iHqnNr5DCzHX8XWi3rtC6EaB2cXyGJ1qswKmh936HeXSGFpxuh4GyvS3vuqTzp7BwomQiwuhkAEccu7tntqYNou",
+      "time": "2026-02-04T11:34:37.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2pyUTKz1peyshhd3xB6Ts6XSqFCA1To55AfJgn3xyoKBTp7NQahzLGVRoshNVbwnq9pxd8XSjU9Srw6UqP365hy9",
+      "time": "2026-02-04T11:34:35.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4qwt79HxD7txSayxEcfqmaxK8HYXgwysyL15paAvVS1VE2HhfucT6YYbjyjrmbzAN7ynTLkTJeFtfKtL154E7UW5",
+      "time": "2026-02-04T11:34:21.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5R5qu9BA2ndUkNgLnE6QYJ5eQEeCTUpCDvnNwKUmBf571S2y2MkpHMMnM56UqABk4hVqRFkPPV6TyFLwrcAEAP95",
+      "time": "2026-02-04T11:34:12.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3QH5UdBcT6KdGojECsNiToFp7sFMGNtVaThRAuvAeKZf5jUTQrZge9VTWGiBtqQuECnR5NCdBZFXeoBJLGperDfW",
+      "time": "2026-02-04T11:34:02.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4YHvTVk2bvJyMZHth5utTLFuCWuz5yrwzWWXWMYtSyrLsYHRArdcscDpnoFyW8DRMA2eW9tGdoWAz62GAZd4qtF6",
+      "time": "2026-02-04T11:33:39.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3k4yFazZ2qY13weBNuTnRG6s196a9hhgabjBkEVKkJnD6ED9isxgUqJ2j3QD1zesoFVEzjnDKa9bKd3CETnKMrDE",
+      "time": "2026-02-04T11:33:35.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5syos5oJSB4zSc7kYNKbEJPbjSFhG1xci9NgVFJ5d8W3x1u1LmmKWbPDEZ4UEkDDbhwdYZJMB2YrntVa6YPuXY4L",
+      "time": "2026-02-04T11:32:56.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3DZu8oEfJfU6WWeJ6Q2VcrAbeNTH3b7UvZ2bfMZQAAhfWnTpxERAt3eVBn2N92Z56MMESzGzqRFkkqaRZiQWfmVb",
+      "time": "2026-02-04T11:32:54.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "41z2Us18TTwn4pJe9Py1petF3uV6Nf1gzcGi2wJ8gVfhWvS3Qz2vSxeWb238SxTxa2ZkDPymEP3TjvhWpTkXNRWM",
+      "time": "2026-02-04T11:32:43.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4ooAgRV52SNd9Xu8iLduWNjR5JbUM6bTCvnC6U9jzvdWNVwHgWRNA4MAcy2HR9daEHJ8LJBXyM3btKfxybUUGJdD",
+      "time": "2026-02-04T11:32:14.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "54ZeRdFAPRaLihbmT7Ek51Y3pPmUfHgj4HPVi7zyt2YUYZLLSZqVfw6vt9L5ccXZA6FqmZKmVSJoz8uM1f2DZxsL",
+      "time": "2026-02-04T11:32:11.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2NFfZLwXdri7cB9eeuobcj7ysW36Rans4ZuMNbf39khFP3RT5Dw3rAwqQsbQ2GXgAuGJNrkxQa75cgPUcVFS9eu1",
+      "time": "2026-02-04T11:22:11.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3FXoQd9kPgpDy8L34LN3mFGAyuS8CddELQPFLXmH4q6aakCyrr9oHFBG4bSU7fYM3xhcmi8GnKo3G6fHzY7CsXnZ",
+      "time": "2026-02-04T11:21:54.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4FSJRaMztURAm8eeuQBF1uvudTmwXjR4rVQjAhqNrzU9Xy564WyrVq4GoaMV7qPd5epGFC6G2VzV83d23AqLZFaZ",
+      "time": "2026-02-04T11:20:34.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5ivDUK2iSPvRi1hcbZZF6HZ38XUfNsug93vhzC5fGgiL4eRnHWNLxAH8Brt9MNDQNvQn192ZfdiagWiq56EXZe81",
+      "time": "2026-02-04T11:20:14.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5cRFJV61BbSVX98cLq8DKK44ptiwLT96AkjbtRoZrWGvNL2W2S7cmu5wAqrW2mLzhv89U6ZxMLLhVhLo2ERWWtyD",
+      "time": "2026-02-04T11:19:47.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2sKv5RmnJo5RPUMHtLo3S21HcGDhW1fPrNAJQJ4YvpGe5M79iN348TPTA23q4uDF6r7NYatgQQU4FAxk7gBk2GhB",
+      "time": "2026-02-04T11:19:18.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4i44H47MTPHdLuN6986HFHA7n9b7JifBwqS7CqnVxWc7ConpwDKa8PKZBfAhszcYx14T5jpg1DHDXNC86arWY5Bg",
+      "time": "2026-02-04T11:19:11.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4f5LawT41PpttDzmFEydjm9cKZWhnMxqvzdHhfkbv4T9f9ihFiFjYwdrCjSKsJC2zkfMXeCMmx2SByLrStQcDxMD",
+      "time": "2026-02-04T11:19:10.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "NS1M36xZmxw3NxsoZrLtrSfJtgBi2689cz93sS7fsp6u2UC7aDQtBEZnaNfQyP6KJ48g7AS7C796Xrk4bFXSp9H",
+      "time": "2026-02-04T11:18:30.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "57BCfJJC3GnJaM2rETmofkxCozBeDJdPCTVpbZ2GoKGbyga82GkxwsbxbeRA7fSxybPNKL3Wy7k3kvFfNZzjnoSY",
+      "time": "2026-02-04T11:18:14.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3fpsD87G4jbabZfYwhA7QqEmzK3mLnu8b4TTmDzDA7Jd71PyF1g4wZP6raNgTu3sdCrdh3H9dy1ZwG2X3eLmqN49",
+      "time": "2026-02-04T11:18:05.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "53Mg9YyqC4jbFBFRrUQZVctG3NttJH3bD8qgoPG3SXGb5KftFBCnTt82QUFiENvWjDuY4e8td5rjadngtD7L3rsQ",
+      "time": "2026-02-04T11:18:02.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "65ynK3t9HjQbJstWFwvQYvWGHhb2XUKNiJQiDYzWCYBjLibNUx9WUKY3PbEnScxmUxvBYVThTcdwMeremezKPjHG",
+      "time": "2026-02-04T11:17:50.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2AkSBHpLcRJtjCWUF3TkzHvzEqQpJ7dhaJQXXdgGKhEYWoDesHV7N2jPZSWw8pp3TcY3gBJjp8TF6xU7Mf59hPF3",
+      "time": "2026-02-04T11:17:41.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3VB92gsvdBy7PH7TohqurTBkEHDx2hUPK1U1UxEsGko2ZTjpBrYPqvxGUDG3EseSt7qQh8NfC5SVNvWc87u5SYgn",
+      "time": "2026-02-04T11:17:05.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "58Qj1R3jwAH3nY9ZeRT2D2nnvKX9AhU4ujGJeu9eYWRFbmJ7Z8sRYxJsDj4XqsJjp8LGf1mKE7BtrgMBuVv1k95o",
+      "time": "2026-02-04T11:16:33.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "HYwnMnvyuhpGVkUfSwVDyYVXHtdBRPZ91Ye3mbAByVMEvKKMCriGStbg1JHSGbwjVtou5ipYwK98mhW1FLg9oiy",
+      "time": "2026-02-04T11:16:30.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4DsDQXpQDsEA6AQCH7Ntc58dsJUe5jKJXdiveGCCjrHJbTq9Htxc9kNARyfTRr3ttim19H8JHwLtDFm5ubxtnCBb",
+      "time": "2026-02-04T11:16:07.000Z",
+      "status": "failed",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "22neDWih9rNBv6TAsuxyu5mpJpXzsQntB7VD5C6RDJLPt2nYgqAMHgsLSaB7VU7UU3fi4F7qLuCve2cw4wWJ6mkW",
+      "time": "2026-02-04T11:15:48.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5KzgMZWxXPLtMzySQ5FRAVaTyFCNCfAakjcgJ4uoc4Hu8Nuk9bxBzha6JRet4tEZdQvggvfRLubCCEHNi2iaQczf",
+      "time": "2026-02-04T11:15:18.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "66GGqDbXp4Dbxn4XYphKBrwhLQiSy6W1yzGzP3xAnmm1feCs17vq1FRzu7aTHgEX4vKUGmf535PabAmWQhcHiLjK",
+      "time": "2026-02-04T11:15:14.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "JghvUwXk7nY3Vx1zFKymbCzjkgYesqv8uHZR6dJJyxeoGoYS665SjeP1SENdnhYc2Y1D9UisUKpUtGUeJLDRBoE",
+      "time": "2026-02-04T11:15:05.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4222Emq8m5WnA3buA4W6tiLznfMVjB5XV4vJGgDaRq3ukyP2GL4MVzZ7B6kSdRAVZcrfCXfZCTkZGtZ5sx3tgUm1",
+      "time": "2026-02-04T11:14:59.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2K2e2Fk18wLgqPRu1LxqMfy8edGm4Z2UW9LZJqeUu9TpBJdmrEbeneNmhDWycXgt8udrX7sCygtkasZ4MWNJfy8o",
+      "time": "2026-02-04T11:14:42.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "y5dYFggJpvv8pqX5RWCJ46oVBiqgHGyEZRh9fyYoeXtK4hpGUdWZeanyNXL5mRLqvn6Ca2VbUD4fix5biXzU16a",
+      "time": "2026-02-04T11:14:42.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2TpSC362qxw9DLVfbXPjSJ5FRbx2zA1Bcvf8x8knwmHnmupvJJp2HGH6UjXTyUxNecXUJFajEokdxCq8z5qSjdiB",
+      "time": "2026-02-04T11:14:32.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2KqjHimrUdzTBNtTwbxUrcogi4u391dKGT5tLbAX4jWKdmi9grCb6sS6QWATdN9FJ4twLjeeQmtkALMevtKNaKaE",
+      "time": "2026-02-04T11:14:31.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2WETUbwVtiqc9TZXGU8n9X1w6M3mSWj7wUT7mWXAtZD6WN3obi2Fq6oVthhg5as8PbABH3HmnnttMpuCMkf3Qb5T",
+      "time": "2026-02-04T11:14:20.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "vgycfxep7GKBJXq51zCo62qg9bsW19esHZAXccUwhdNtJc8Rn7pckKJzyuE6BrECjYd1WDHA7xVcLRZ2h2VSNrx",
+      "time": "2026-02-04T11:14:04.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2nBNbmgoNdrkNNie3q1JJbgCeYDH7bFaAC4SSR15GisLsNKqGj1s8QfKnAHdvZsmbtTjGhCoyT7gd5jXXpFgTSCA",
+      "time": "2026-02-04T11:14:02.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4Miby5USAjt8oM3T6DpDPEPyfFfdXQ6MwDBnNDUZG2EYog9Vwod1dJG5ZhLrbhrkqAEX7rEkAkfh6QNJoYJVUWML",
+      "time": "2026-02-04T11:14:01.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "ZFf4XLaVNXuoWyJtfRpG8thJGcUj9ybovENYHVw1NnWk1B9x1XkysemtK9wME5LihG1MHfiTkaCzFukX4CaAP93",
+      "time": "2026-02-04T11:14:00.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4sBJ2owrtkEwWiDEJrt7wGk2kPFjZ8y65SbfkbSuYFLxPVm96r2GwyEFm4r3AXbTjHJy6DCKteMx4HRFwTBoYrMY",
+      "time": "2026-02-04T11:13:50.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3wxLXjrLtg1oB1K5hhNWRkQvpEzNrsqLV8Qkm9usoACsadLFqw6rkUrqrFju8efhcK4Ew3bD9suXj48xA1BUboX5",
+      "time": "2026-02-04T11:13:19.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4AiCkbyEeswKYeseS4uwzoUFSsXXyRgFf9agVv4G6bcGSXRQnLgz6WHH7eGcZm967wMu697d21HdsZNUvWaBto7y",
+      "time": "2026-02-04T11:13:00.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "XAdvxv2iCq4DqFZAhCSLx4X1Hi9JadA8vEvg6PsYcgHydYypxA5pMdTuiZsXxeHUdLnJCsPwpt2ijdLN74GgPA5",
+      "time": "2026-02-04T11:12:58.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4JqSMBxPhL1PHk1E5uNMWCmBUAbfWYPoDPXBGt7HkR34Szy5LK2cZtJHGS5f4qMmGattRiQe5uNUVBtqyvjc7cea",
+      "time": "2026-02-04T11:12:29.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5gtyuoK9yvAjxBBxb7gbNXtftF8nVH5wo7bc5fge9G9KZ7EyZaoYT75RjVro9c9vZpnfqLvf1xPGushLE1K7EM1A",
+      "time": "2026-02-04T11:12:20.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "poSP8a4jTmS9xsQfsEXM99vFmA9oF5gpeQZqdhYsuxgaTnqn2mhJja1Z1BQFG5dz1ZcMMqYEifXG1nEXS5fLQ42",
+      "time": "2026-02-04T11:11:53.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5mseTb36jqgzyvLDGFPGMwMhrhDgJUJAWgoMC8QqqfNFEbrqcxEMo9V5QuWJ1WtCKcUFNQTHQ5fweXsExvGshX6r",
+      "time": "2026-02-04T11:11:52.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "55aHjEEoqhHgtTwQevZB7CKf12PDrvga6r29P5FUNehXtP9CwStpsbGVpy2oBV5FyBLx6nhmGzXQpxFmiSEUYiHu",
+      "time": "2026-02-04T11:11:38.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5WnVaKSmdcmx4Sjt1TJ99gZ3B2M79jSHU7c4sb98jm8zG3GLJg4ZnmqZSs4vn8mVDGAcdAZVrjfxz3ztQKnBasPX",
+      "time": "2026-02-04T11:11:36.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "23xDEiqXvE3NaBEP7PbKmYkowDpnPc8nAdTCcwWndc5huRYTEKstQcqbtCNGzYXRwdBbRSXQVJ8mSZhFUrFkySML",
+      "time": "2026-02-04T11:11:25.000Z",
+      "status": "failed",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5kUETt3pYPicxnYugR9uf7ru8odKvHKYAGzwb6j2X2PKjHaEhrK8EEBp1xrLHSGXJLN6vkYMcq6WcquHM89tZR8h",
+      "time": "2026-02-04T11:11:06.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3EAD6L5VRXTNnCCT6GCnxmx677AofTU5VpJMUcUMtASty3Mqp7YMg9BejXhtnurNkJB6vi9bg6ATcDsx1Qvgh1sg",
+      "time": "2026-02-04T11:10:42.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5C9PRurPA7dZy3EvcwyrVAUUSV2sXgN1vCVAfAnF65ggzverWRSw3kza3SM1p7FVabH9muufxoXZanJJ98B6DyXg",
+      "time": "2026-02-04T11:09:56.000Z",
+      "status": "failed",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2EzVeqecHdfPWH9WoQkUYAn2fD31wLTyxT3FN9fnjd7TFTku8UkbpRD6hTWc5M7bxvg5RcTnmvy7ewkPtHvR1nen",
+      "time": "2026-02-04T11:09:23.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "ynbNS4mK29cZDaGMFGE52oBqUPo5g11bcd8N9k212BN8rJFCRRbrpvxvCz3dvbZ6cwt16dLkWs1pD1j5yY5htJe",
+      "time": "2026-02-04T11:06:47.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "47LzNDspH6dDEdLEUC3y1h2r2TCpwFJxrPtoCgo9mYAVycdmojZA7vdQd7Lm49fpopiXQvMLsdmm9VY6kN2pEaqi",
+      "time": "2026-02-04T11:06:46.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3zPGnr5vv7CoejATicE3QympjF72yXw6mkvHeCnXv3tjuzN6rTbgxVP4SuTNMMSuNE3FZJmyJHkRvfapJtdHVXWY",
+      "time": "2026-02-04T11:06:39.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "57qbRW8AGYFasdDbwUug5ozY4kMgcEeDaGkbq9c9EZzauPZSprqRsX3oAnJjoMthQgCignbMMrKUGAxs4K6pQQU2",
+      "time": "2026-02-04T11:06:23.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5ykcx6fX3TnPNLtwTNUV5wxBZRvXyGUaFCXz8kKzoxmnhwx4y4UNPvTsrTCYk2woeQ69zjf57hHBQgafCxyNpmNo",
+      "time": "2026-02-04T11:05:46.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2UnmehM8NRDvZbZEY8QkcJhsLgD3E5BpCbicEWxdUUjLMH5tqn37cHWB914cFy4BgB5Nus8ULRucxeHZe4rqz7LX",
+      "time": "2026-02-04T11:05:19.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4e7zBh4YCeMioVk27BmqsNXZy4vduWNJ5joc5KoNV1h6uBHx51h6LsjbPuhvmMbuF9PrWREQiGJqKUpG5hxjCDoy",
+      "time": "2026-02-04T08:16:02.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3CZgS4nBMUPhGQF3SiQMBV9PfEw4kJvU8cm22gZoCtZgSifjiqN6raJDi2jrKcuk1i8YHMaiKAu3THzXqPATGCQh",
+      "time": "2026-02-04T08:15:47.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3sD4FJk6TtVit1mXuCtNKa8YFZSkFurSubYbQaRUBLjK5nsLHvsrwneWhPtF9QD2RmR3oDMGRfFPwkyBUZrsbwJ5",
+      "time": "2026-02-04T08:15:24.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "33zxQoiZGSVxBrhe6BjgxRqm47JYyFyxDfQtwyfvgzyYuwYp12ViWvm1yX9Zrthh8exChv2uwgehEKZsuNvj9dtg",
+      "time": "2026-02-04T08:14:44.000Z",
+      "status": "success",
+      "instruction": "Titan"
+    },
+    {
+      "signature": "mhcCgM61tFGTNSVpQW2K9jnfnLY15Q6XxASCsFyky789XFpyBEuyn5FWUQwrUdP11rRogRtmxCaUkY81EDpdkp8",
+      "time": "2026-02-04T08:14:18.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5udDXnZLt5b76MoLKYKRpB5bhajDjKqxzD41mhbFGoWdkqbzr6LaaiQKcVobdLsWaELbqVZ8co846LssnChn74xf",
+      "time": "2026-02-04T05:55:09.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "VjHUag64cHUWgQQsvECDXAHxLTAAjAUHZpUD6sSHe1ghuJuFjvRSsWsfi3VwRaUnys2qeLeXd6zodW8Q8Lzuotm",
+      "time": "2026-02-04T05:54:50.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2ros2WPUK5gYNHAfu2aRF6SYAuPDKXAdFqwXqyr9S49yZ1KRQWkMFhbWWLtb9ay7CLLiVCAh29wwkvDBxeTXpNbk",
+      "time": "2026-02-03T23:48:39.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4mgW7KRr3CxUSWj3VKH9sbGRVtif7P2obY89Aj49pNn4YbnZeW1778ujDgHga3UuML9RngQRo1ijfQ7EMe8wbmVi",
+      "time": "2026-02-03T23:48:23.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4pgy1ZYQ9kErFuaqeDJF7oz3YLhbR8WwGmdEiN7KQTSvs2ffBHLmq1g3zG8LkJazGj5bSPtJnZKqpqqPRj3TCZeA",
+      "time": "2026-02-03T23:47:38.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "34EdhfCshXuKBn2ueApyUJPsySXNXVw7CMEvJdNGXgtRr9AtwES9xcZUcTUFJYyNLLNu8ZojrHKdgV9BNgYu2jEn",
+      "time": "2026-02-03T23:47:26.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4C9BEqhGPBtuChQ7GWHmSGeUkJtG8UkQkd5ByVxj55jWgRp38ihKQvZZspamAcjb78wC2LRPkFGthSgiakNd6rff",
+      "time": "2026-02-03T22:50:55.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5voAokPVavrUoyoHP6t8xgVzexsFyP41TZoAQSxiabFtpJk8mTRQty6fh6xsxk6heGUxAqZbGgHHeC4EBCYqReui",
+      "time": "2026-02-03T22:50:28.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4c6LWC3kWV4nUxJ4mzsV1PEWmTs8aM8mdMF3U9QBKFDTaAMLs43UAbUDmp47Zw1DNP5knFMkv6xvrf9jeYKNWDXq",
+      "time": "2026-02-03T22:50:23.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2gqqXJoj67U5aCRxwwg8zKmmTVASu3oB95wYtqujiFTvK3T3dqQ6XHfmEaoVzL1RJSapqRJYvv7vgnnBhM43Kf9F",
+      "time": "2026-02-03T20:08:18.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5e4FLiyqejHKZT9LcjzX92sZtCJHDBfvNsSHZTc4L9JQ73fZKLARipqtqsnEG7hDoHgnKCQkjbsWfeYWStAujBqN",
+      "time": "2026-02-03T20:07:47.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "47oq6s32jwzTUtiipzZ7xq8MQMe4TYp2TTybBkpTFFRT7M3ZJuqngSJh2QnD6RJPZDM5gJ91kX7Xto4Vh1gZUwJ5",
+      "time": "2026-02-03T20:07:25.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5ma6SwTxV8bEqbhrHwygKxEaVm6v3duGKFCm99nYYkdapL6nbkudDiaGojbJcDjktnpG6pFmjkWEBtXCgUmj1KAJ",
+      "time": "2026-02-03T19:15:57.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3DCw16xMR1BtvdSUqDx9Evcn2Anfavkjo1Kw4dxspE2317uqJHYWW7AzcL9PgEvAecLs8njhR39b3Z2gSNsyDEbf",
+      "time": "2026-02-03T19:14:44.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3r2VCvf7qr5edZ3jvqTc12Si7bjkp6oi5A9FBhARrgGR9YpThwELDeWt1h7KgBLrA7dtystWNJPEoEujntmZ6Eap",
+      "time": "2026-02-03T19:04:01.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3mnWoFkgH9odRatLWGdq6cE7SKFmU7UZaXj6KpzhZUjQCpaiYMHrWWwwPHkXg28Tyd1sum2gay2mMEJm6gm9mrux",
+      "time": "2026-02-03T19:03:52.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "6jCCwMdN4tUrY44dmMiD7136ssFTXpntxo4bYNU9QE1SPzRX57NpQSi69J7RvyfJE88j12g9rgrFxSmPQPLS2wP",
+      "time": "2026-02-03T19:03:37.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "ohT54eN95b6c8QcEvoxJUc8HVq1GKRFEixen4gz8d7TiLVjKMKUehKWPa5rQN3755Hk6aeKDGbTvzR91195o4Ab",
+      "time": "2026-02-03T18:59:18.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5NybCvkAHPRe2YRhT43RR4C3i9yhtPvuZS7crjJLUPJiYVnfdnjSTnv2AgxeQ8WxMGYZhCT9GoQrEmZujGhibDSC",
+      "time": "2026-02-03T18:58:45.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3uhcfpSQSMGVYMmir9NfvfcoGMmwrxoxNVaPqSuMQ6JvbUBJEDQ75nREp7imcxVW2T4Z7WBn6jugGkqxNDMbZxKM",
+      "time": "2026-02-03T18:58:30.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3i54nSMHffbfq8y2dQorDr3ZMzp7DjHimdYjj3aspMxaviw8fqPRvhCnviqBsjSwTCf4RxyshVUNfuGmPW6VWTyB",
+      "time": "2026-02-03T18:58:10.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3MKYqokvj7xhaFZE5TDtEfCZBURXNy49wy1Sz3RHUpPR7D2LY9Xws3DH2183mdkLJG2mYFXcwPrqYdcvcfJPkdZ4",
+      "time": "2026-02-03T18:55:59.000Z",
+      "status": "failed",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5utNQPna3E7a4irehKVKt6UucEr3dbKBKbe7cqDtv9Zwoe7mY1xAdQ1jsPtjegTFq3j4ZwDaHbUFVNWbNLmZhsTT",
+      "time": "2026-02-03T18:54:17.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5yKdfgou5L2eWHs8RFBPwTtWaSkVxYtMp7AvafwKk8ygEaBRLbooRTeNNGdt6WPXAAVJ8bzyCkt22xF9Yxs9mWTx",
+      "time": "2026-02-03T18:53:55.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "vGXCVwk3xbuBvkEU1HAHx9GC8iP1DB5PuQYbKUsGm92gdEbNaYvK8vQdwpmrrG7rR1dVjBdgxJ7DwxrtazP3nRq",
+      "time": "2026-02-03T18:53:52.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "jhhDKVVPkU5MdrK6Lz5bxSEkWovbVsPNTHYDXiwF4S9YxufasV24m9pNPwd3CdpWyE6GqNNZvEZSXBF7gy62J2q",
+      "time": "2026-02-03T18:53:41.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5z7WXBeHNfYjvL2nqqWQp36js3BArfsdVhiQaNH8yb2NkJKWkDkBucUxgRcFyySS7UdjoT7RoHpMDfqgig3zKCxi",
+      "time": "2026-02-03T18:53:21.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5UJDaBeAGSiEgdLdTCvejRwKD7dkAM6BkwD7p5d5LgKVPLB6BvPgdas3rpasZARxkhfJFSAj2e8cxU3XMiYhzVv7",
+      "time": "2026-02-03T18:53:20.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5qapBYL4iAeff2BPurDkmZaDoxouo6J3pkyF4JLZPaXKuhQBvZy1iU3qXXa8K7N7ftoVzDzydrCkpdcKLfF7Q16q",
+      "time": "2026-02-03T18:52:07.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "KWRcHUQQLZbPTrPiz8KUJDpnhBVyM5vcCXUrfShf5nHBMQ8zQwtQ2B534dZWnBAfRrftwAhqbQ21hyJoiKAUz8a",
+      "time": "2026-02-03T18:51:50.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "39intEUphCj51JWrtgTcicErLU5Df3vJKpWovH6e1juN8Cj8zMr5mvCZuadjKjQMdumaUFpJn5zkYi8NLp2TNV2U",
+      "time": "2026-02-03T18:51:32.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2RJssH43gFwQzx7bMjpZrt9xaaFMioWMrjwXT8JyQgDVyjASkb3toF1Dbbs8wzsWyFgmvub81XGrP1EsRyXafysJ",
+      "time": "2026-02-03T18:50:16.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3Y3dZoWpxD4jXTxfHYYnZhA1ckSdGNSKNan5UYBCykMxsPT11WDdsVxjeVa4x6n4xSSMw8YMo5t4yofgY9GAy75X",
+      "time": "2026-02-03T18:48:11.000Z",
+      "status": "failed",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4zdfZXZGFG21XmLYeKivM4WtopfRXN8VDcDdk8h6i6b638kaXKFrunV6XoDAXDtsEwtYoVk5rhQ8nDyAUc1V1Gz6",
+      "time": "2026-02-03T18:47:03.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "JUiFuSgbyxKvmSnrADXxShhkrJ1BdVuCwikPfr24fVdx83T1uRhBYGwEQzravUpqwBLwcNgKhhuwfo9kyLxFczx",
+      "time": "2026-02-03T18:46:35.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2jd8avnUWxBkrCAnPMTymF6F1AqaLCNrJ3memr7oYqwDeN8nQPVn55Rjf88FWbKqSLZ3cohi3SPCtrw8xrCeCTCu",
+      "time": "2026-02-03T18:46:16.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3i7QtgrSJLf3Y1FDtsRDzZcWBgVeD2SdfrESSWYaR8hYng28sHnqc5nwnnGcRzixkuVtRejRMdHZGHwXdrP7j8ma",
+      "time": "2026-02-03T18:46:02.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2pbNexFStg6Feigo1RDgbnsEQjt4tZXKHupx5Q5gKv2UjVg474QTXFzN3LAqzXfZGsMMHDQdVJDYaUu9rFZsn7PG",
+      "time": "2026-02-03T18:45:59.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2sMguaFaPQSMBMEg5NLRujTEQ1bFvDjygw7VGTxj8UEF9mf4XshxhjDKNFumrwoeJWeemcJrjrCxDTqDK5YyiP8G",
+      "time": "2026-02-03T18:45:47.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "pAuAnv6vSu1LrJL8emrmuRUVQZaW1RyTj7PE6DDg9FnVjfU4EfKhD59mmM9qsrera24qSEqvocUA3XuagzYDsda",
+      "time": "2026-02-03T18:45:24.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5BwdNQLiAte8eZCiKjuXyEo7atdqK9GzaftMzxXuLmBzvnp1MxSxkLn5sNkqd36QHWmTgyKyY6Cg7KhgjN8xt2yq",
+      "time": "2026-02-03T18:44:54.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "jZM5vzxCdm3M6Z6ssiEZTTRVVJLqPuK6t8mqtRApzkjyS3VXLhYpkr4vNx2EStzmGPK7GG45mGh3LBBCY6Pca1f",
+      "time": "2026-02-03T18:44:41.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5A8dvvbdxMgu8sytDYwSTjH3nDQumevdwqdQ73grLG9SnDMCfo4m96xuAVnPna1FwpDFFR5J2a6Q5isKqBVTzJmZ",
+      "time": "2026-02-03T18:44:29.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "36qGbptV9YSqDPscfZ45KSFFtMCPGociJcnpYZxW9JW9fjFSREKr9amnwvdHHTokrTq7VozNe83sWUhmBf9UiHhW",
+      "time": "2026-02-03T18:44:24.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "TYhsTXpF8Hiv9P7YkntfaNssR8r4N1FSZmX5ubUTURxq6cEiMZauaearknKN4srME7jGgYFrtRujtEXZtm6iVTu",
+      "time": "2026-02-03T18:44:11.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3zrKGN2QT5twaRUd8ts17cuDhfK1pQUxWqn6kRkQXP4Kz1A5G7vB2v4gHJLsPCHtrazYt6FeB6HfhPYLWc72jJTb",
+      "time": "2026-02-03T18:43:06.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "Sq9fiaaed9Q5APenedWJZC2V3nNPkk6rLZdxWr6KR4V3reuJR5obNpFt77GcSQwSgWPJsQgd1g7kE26KguPKXwh",
+      "time": "2026-02-03T18:40:58.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2239Ebtbem2tSgbV7DJiTBMRR2dbyjSKBr6vQkHP8cRJykTh6m7qVhr3drurFfuHAuynUK7c9XjwkuUvAAy7jezu",
+      "time": "2026-02-03T18:40:23.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3VpFbDVGaGgScBMX3PqzAyShKhXtggSRqrMVoXB2MCJXayLX1MB8uCrWPfMHFJnNj6PAKo57CKe1WLdpT2u7hqT9",
+      "time": "2026-02-03T18:40:07.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3HmezYi3tgP6Q77TExz4yjHxbLRyYSKg1fFfZf8fzNy9Tamu91frEaiZg4aDNyA32Q8b8tuYXZQnvfQSFtZki3q6",
+      "time": "2026-02-03T18:39:33.000Z",
+      "status": "failed",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2dbTdfhbA3Nxid5DAdjacLd3bR1KVvNqfGeN75yKK2quzNBrYuMJenHWUeGriETC3hNCf1wTcr6ESgKSgm4tVwse",
+      "time": "2026-02-03T18:39:16.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "99oYswKatJyLWEXPBSCdoenXkqaZHLgFVHvvDvVoacnu6jfvbmwkGZ683zcGFrLjKoE26TxH23MyQ64jR8y8R47",
+      "time": "2026-02-03T18:38:56.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2g2SZvcqqiiMXQzBaU122ohtjqcLtEpuCz2eqJN7Dmm6b96mBDQuUbNkzc9oNyx8gD9vNwXi769nBxQ3vsfNgsuQ",
+      "time": "2026-02-03T18:31:07.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "25dyZtoYLEhu2DdNMn2kKNYt7JowhX2ZtbXfJhbhEsB9ofzrJ9k2WQfaxDTJmhyMRf9kMNDBrJWue3j8TWCsczZB",
+      "time": "2026-02-03T18:30:29.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "PiCVAqUDiTWzh5fv45adgkShnr9z4JgebLVKSD1PYZToYgLPwfpUGE26yRPFvm42ndNJVjnaUaX6u3bwY9h3auL",
+      "time": "2026-02-03T18:30:01.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3WhErTjWm1GP8TkK5RPCQYSG57HKq7bZz8pn7VgzZJx3RhATF2MUfariutSqtED4oMM1QQVH7YRLafxcHcjgyVgQ",
+      "time": "2026-02-03T18:29:58.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2vvmYzrJgBrRABLeqQYcMWqNk4r6sYeD8pwJ3PW8p1kPatUPejawWfpjQ78SXXzqPiFMJNSdgMEq9rKbm4Tydfok",
+      "time": "2026-02-03T18:29:57.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "42gZvtgwPNMhc7EasXQ7hwWuhRQJuwpBET46Lpx3tg4175kaGLFmqDQu1ERN2sxupoD32yicrfuZ3epxY31T4Qth",
+      "time": "2026-02-03T18:29:49.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2EaiGYGdRohQmyu5XF36TZGzPE1k17oBxaaqDoYpAit8MMmfkFsNpBn3TjvCsitBQwzbLUycZS2opFjNdrFM8pmM",
+      "time": "2026-02-03T18:29:48.000Z",
+      "status": "failed",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2B7RK8ia1zDENfE7tRGjJcigma85cS9Zb5U3sCjG54Xr1GrLfTcSADGXbFdENq6XJU4tH1ZTKrZSpYiJG5PXFGCR",
+      "time": "2026-02-03T18:28:23.000Z",
+      "status": "failed",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3VNEwn6Kz2qkChSScd5uHCGgRLwVKr9dPbPRPUnspcME4TesXe1dmrk6i4cWPb9seEnurNnUBmds1JDeLQeLDLf",
+      "time": "2026-02-03T18:27:30.000Z",
+      "status": "failed",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2eawumgFDUA42exJBfWPNtJdsWxCVeDb5RSh61xh4Y51bdDVZomRtTQWgtZDpsjjjiHSp8YGaFGEutyHB4J41rev",
+      "time": "2026-02-03T18:27:05.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "psyTG1fKtwkvmaisdVB7UKNyMP8k29PcHne8sSSWK4brhWSEg6FWSTuuPZbWXoW6K3MGRE5bMPSCVZ9os3xPNLj",
+      "time": "2026-02-03T18:26:39.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "2mMhns3k6LrBbkuWwB4dVr6zvEdF2j9Gpnp4NoXXKbXSXSWdPxpYUNU79X36GqKcHyqJLh8jrBNKgxu2vE2WB2YW",
+      "time": "2026-02-03T18:23:42.000Z",
+      "status": "failed",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3a7fgi8BydxBczDXcFjDxG4Y8qo6bkjHrNE8VpTbaS7ugDW8K74vXnLNaE3zkMo1hPrVXz5d6KNK3zGPdg51NrMD",
+      "time": "2026-02-03T18:19:02.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "22gPxHt6sWB3N6gLQr41ZDSJKxBvJaqGgyVDkJjxRD9b12TrkwpXfNwvWi1JMkrWosryAhyWHqf4mp4xoQk4GbJz",
+      "time": "2026-02-03T14:44:47.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "33Gj38Nvwrtx8hB6mDfyx2MmdadLYDvvQGLV8tJGc8d7AYEatoLZuRdwmaLawoNo5XTp3LWVKikfDGT4DzqKdJH5",
+      "time": "2026-02-03T14:44:21.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "aocra2M5G2ah3n9H2Py8H4HUCYH4YGuK5RUm47uvCf6eZ1P5ryRUgn1wJ6TSCHJBas22ceVMsK1PXGKp5CHyjP7",
+      "time": "2026-02-03T02:51:18.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "67P3BT8TRTYpAxBnow8GNtnX4jcsYZzetB3iLswsJVTWfNJGkVKsVWmycMXFPjm2RWSodP1jbSqe6eEKYrHNgYCC",
+      "time": "2026-02-02T20:01:06.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2Gsr1ozKgznt6rTTNTEatos7rLYmUprwTV1fNTsbwpToifkyiV6DihxDZFD7VhQPry6Y8VcKUPK8WihGCoNy6KTm",
+      "time": "2026-02-02T15:16:31.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2dRx7MNw56GzE2SvkEmEZeZgBAaFaDZHyEKVxnVzPVHctaBzc8n72PimjZ2tjymuKr1zMZLqX41SH1csanUVdWNt",
+      "time": "2026-02-02T15:15:36.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "jfb8eaoESG4FbAkzRYSL5MhWuiTMPPdiiadbXq9XsUuEAzY62dxojyidKz3rApEpTjpESEzTLpX6j4aEJhjwRJ3",
+      "time": "2026-02-02T15:02:57.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "NArcv3nLsU1rA68cK9vNm1Me52fkfCNmkfHSGNeD63N6qMh3T3nB77fcRQZ6vZ8hxyS6zUntDYNzJsXTL4jVtw1",
+      "time": "2026-02-02T15:02:36.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "5KfeesuDy1SpQVdqMkTCnNbqttKEU1yab1tzdBkF1zHVS7wKBLyy8Sn5iU7gXyLBRZLAhaj3jHH5xwhEfoss2w7K",
+      "time": "2026-02-02T14:46:37.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "5JB3xmCjsvCqVXqvh2Cfk5P9ZhmcdaKfCT3SY4BaRsdXpmT8Edrz3t9d7ACfc8os6w466yUDaFBLMAEPwiRcJG96",
+      "time": "2026-02-02T14:46:33.000Z",
+      "status": "failed",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3y2JNCSfpmfTbWBR7dJ2V2Ho62fBvBcXtKaRSCfPsx14mppNmetfcw3R3FXGDcNEyQkVvEH4Xs9W7fAcuaySrtnn",
+      "time": "2026-02-02T14:45:53.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "57vNfZzqXW8ecghkEwWzMdV4ASfY3oLw85xwbLvJdXz1a9okuJTbAe8s1xJ9eifDGYRH3e65tr6UBBfUSM9y3P3p",
+      "time": "2026-02-02T14:45:41.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2fdqRHzksnbGQnjsfKUNUCB9nAKHwxvy8U567ASxM1WEMVc7ZYW69G1SRXN9sXSH8b8kHu8cSb9tRjfHUZhsbiBM",
+      "time": "2026-02-02T14:44:49.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "PiqPwbFDLsWcyUTTcDxd2dnWmaaHJNkGwye6p5EWakeKaovAJkNXBKm336WynKcCDZowUUPjuZQThWfGrKAazUk",
+      "time": "2026-02-02T14:44:38.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "Xo67nDE9Fq8bobdpeamduqWWPU6ifLYym8vofQtc5nd9TMzrMtAQsBvjG53pPJLvQ2VkhNv6wLG69bqrb9QjQSX",
+      "time": "2026-02-02T14:44:20.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3jGkFEY3K7xUQEE7x9nhCVwpHSRQDZeYiDTLSPnY9nrBP6Demy5pjnHkeJshLSXcihmqqeNsHVymA7gBhJrtgiEp",
+      "time": "2026-02-02T14:42:28.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "3pg8fjTWsCieWR9TqUFd4X14ive8RGGCne7G1wtxb4eyN192ZnU3P5p9hP8s3zVQKLmzFaHA8rtgWFEBGSygwerU",
+      "time": "2026-02-02T14:38:28.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4DmfMJLv2MqvyLpPBhmW3y1eXpGo136cCzsZdm5VfAJW1CGDoCuEhwmQtB4b8mBfsAGH6RguCXRSMDrM99rYXuGP",
+      "time": "2026-02-02T14:37:55.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2bAEshmqBtjBBBYKsLYe5GLiHkWkcoe1br57gFTpJPuDXxgxN7MjgzoN2QxgFqUbGD1hQJKtJ1Zv6jp118jc3h53",
+      "time": "2026-02-02T14:37:37.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2cDTH8ji5A9orVmeM5cViNQc2NsP5ynvHhTJpCZQduU66yYX1WMhpmSoFpWjGx5acFSTCewCk4G9g4oRZ616Eucn",
+      "time": "2026-02-02T14:37:32.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "4mVq548YD6dGCDFFHCpw3c7dNcR1vjrAu3nsJ5MACRn1wbiWRd4zLMP2Dji8n8vFiCbG4YTNVZe1KqnpmjmQ9htc",
+      "time": "2026-02-02T14:36:55.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "636Td4j4rnGDxX5w6W3GQZTydXaTTDPYxiYjeWhsmKGTJ2Z1UWhxZGWfA3frkMaNS2P9Bmkq5gPNXbQ6NGP2jcZu",
+      "time": "2026-02-02T14:34:55.000Z",
+      "status": "failed",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "2WVfnBQYSsGPsQMEN8S1dt51GGbWh5PZBt483ooRHRFfZwMqQE1vQkBjF4LNbiK213RD3rmKVPEF7kiE9zA5Ywij",
+      "time": "2026-02-02T14:34:08.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    },
+    {
+      "signature": "4LWoEnahW5JvUCHAYPx6V9wCMcRjWDk1euoXxvF2nJ9FkMw2yh66MB815F36e1uE6yWMCtYFpFCrKZPixvFyBBAE",
+      "time": "2026-02-02T14:33:28.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "F6EScDCEbh23rHiVp3UwtVF8ZogdXrerY7vXxR8VehpFk6C1K2oJ3rYczVrJjSC182643fzhmr8EvzxWbwaLF6k",
+      "time": "2026-02-02T09:30:06.000Z",
+      "status": "success",
+      "instruction": "startLiquidation"
+    },
+    {
+      "signature": "3MvYQEfFsAfLfewJKgqo88SqW1Za8JPSaHC6JKRBmnqxbXou2bsCBR73r1dkVeKY12xNioFxG2mtzKqbkgZ3aYUB",
+      "time": "2026-02-02T09:22:28.000Z",
+      "status": "success",
+      "instruction": "Jupiter"
+    }
+  ],
+  "withdraw": {
+    "CCKtUs6Cgwo4aaQUmBPmyoApH2gUDErxNZCAntD6LYGh": "23282816002",
+    "Bohoc1ikHLD7xKJuzTyiTyCwzaL5N7ggJQu75A8mKYM8": "3438198162",
+    "6hS9i46WyTq1KXcoa2Chas2Txh9TJAVr6n1t3tnrE23K": "4498833806",
+    "4kNXetv8hSv9PzvzPZzEs1CTH6ARRRi2b8h6jk1ad1nP": "104836054183",
+    "E4td8i8PT2BZkMygzW4MGHCv2KPPs57dvz5W2ZXf9Twu": "309586887",
+    "BeNBJrAh1tZg5sqgt8D6AWKJLD5KkBrfZvtcgd7EuiAR": "263174148",
+    "Amtw3n7GZe5SWmyhMhaFhDTi39zbTkLeWErBsmZXwpDa": "11024197",
+    "AwLRW3aPMMftXEjgWhTkYwM9CGBHdtKecvahCJZBwAqY": "196421818",
+    "2s37akK2eyBbp8DZgCm7RtsaEz8eJP3Nxd4urLHQv7yB": "12948722",
+    "DeyH7QxWvnbbaVB4zFrf4hoq7Q8z1ZT14co42BGwGtfM": "8618611062846",
+    "DMoqjmsuoru986HgfjqrKEvPv8YBufvBGADHUonkadC5": "8789699773",
+    "EdB7YADw4XUt6wErT8kHGCUok4mnTpWGzPUU9rWDebzb": "105656588289",
+    "22DcjMZrMwC5Bpa5AGBsmjc5V9VuQrXG6N9ZtdUNyYGE": "2587705249",
+    "EbuSnXdFz1R4VPdaJ96KQQQmeYgZTHSzpNW94Tw1PE3H": "271589422",
+    "JBcir4DPRPYVUpks9hkS1jtHMXejfeBo4xJGv3AYYHg6": "603109403",
+    "8LaUZadNqtzuCG7iCvZd7d5cbquuYfv19KjAg6GPuuCb": "567556473",
+    "Ac4KV5K5isDqtABtg6h5DiwzZMe3Sp9bc3pBiCUvUpaQ": "195370",
+    "FVVKPocxQqJNjDTjzvT3HFXte5oarfp29vJ9tqjAPUW4": "9896921",
+    "Gj72XAUuNxNeDnW4tUh3H1U2Jbzshz27vtH8KvB972gi": "105071",
+    "BKsfDJCMbYep6gr9pq8PsmJbb5XGLHbAJzUV8vmorz7a": "14071"
+  },
+  "repay": {
+    "2s37akK2eyBbp8DZgCm7RtsaEz8eJP3Nxd4urLHQv7yB": "3898016503",
+    "HmpMfL8942u22htC4EMiWgLX931g3sacXFR6KjuLgKLV": "1345725150",
+    "8UEiPmgZHXXEDrqLS3oiTxQxTbeYTtPbeMBxAd2XGbpu": "36475572",
+    "Bohoc1ikHLD7xKJuzTyiTyCwzaL5N7ggJQu75A8mKYM8": "136044481",
+    "FDsf8sj6SoV313qrA91yms3u5b3P4hBxEPvanVs8LtJV": "87498744",
+    "BeNBJrAh1tZg5sqgt8D6AWKJLD5KkBrfZvtcgd7EuiAR": "263174148",
+    "6hS9i46WyTq1KXcoa2Chas2Txh9TJAVr6n1t3tnrE23K": "119655711",
+    "22DcjMZrMwC5Bpa5AGBsmjc5V9VuQrXG6N9ZtdUNyYGE": "343336082",
+    "Amtw3n7GZe5SWmyhMhaFhDTi39zbTkLeWErBsmZXwpDa": "516590",
+    "EbuSnXdFz1R4VPdaJ96KQQQmeYgZTHSzpNW94Tw1PE3H": "19573303",
+    "CCKtUs6Cgwo4aaQUmBPmyoApH2gUDErxNZCAntD6LYGh": "42642710",
+    "Dj2CwMF3GM7mMT5hcyGXKuYSQ2kQ5zaVCkA1zX1qaTva": "18365470"
+  },
+  "liquidationClassicProfit": {},
+  "liquidationClassicAssetsSeized": {}
+}

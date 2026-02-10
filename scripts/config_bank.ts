@@ -69,7 +69,7 @@ const config: Config = {
           hundredUtilRate: null,
           points: null,
         },
-        operationalState: null,
+        operationalState: { reduceOnly: {} },
         oracleMaxAge: null,
         oracleMaxConfidence: null,
         permissionlessBadDebtSettlement: null,
@@ -113,14 +113,14 @@ export function bankConfigOptDefault(): BankConfigOptRaw {
 }
 
 async function main() {
-  await configBank(sendTx, config, "/keys/staging-deploy.json");
+  await configBank(sendTx, config, "/.keys/staging-deploy.json");
 }
 
 export async function configBank(
   sendTx: boolean,
   config: Config,
   walletPath: string,
-  version?: "current"
+  version?: "current",
 ) {
   if (config.BANKS.length === 0) {
     throw new Error("Config.BANKS is empty - nothing to do.");
@@ -131,7 +131,7 @@ export async function configBank(
     config.PROGRAM_ID,
     walletPath,
     config.MULTISIG_PAYER,
-    version
+    version,
   );
 
   const program = user.program;
@@ -142,7 +142,7 @@ export async function configBank(
   const lutLookup = await connection.getAddressLookupTable(config.LUT);
   if (!lutLookup || !lutLookup.value) {
     console.warn(
-      `Warning: LUT ${config.LUT.toBase58()} not found on-chain. Proceeding without it.`
+      `Warning: LUT ${config.LUT.toBase58()} not found on-chain. Proceeding without it.`,
     );
     luts = [];
   } else {
@@ -155,10 +155,10 @@ export async function configBank(
     // Choose payer: if broadcasting now, use the local wallet; otherwise, use multisig payer.
     const payerKey = sendTx
       ? user.wallet.publicKey
-      : config.MULTISIG_PAYER ??
+      : (config.MULTISIG_PAYER ??
         (() => {
           throw new Error("MULTISIG_PAYER must be set when sendTx = false");
-        })();
+        })());
 
     const { blockhash, lastValidBlockHeight } =
       await connection.getLatestBlockhash();
@@ -187,7 +187,7 @@ export async function configBank(
       });
       await connection.confirmTransaction(
         { signature, blockhash, lastValidBlockHeight },
-        "confirmed"
+        "confirmed",
       );
 
       console.log("tx signature:", signature);

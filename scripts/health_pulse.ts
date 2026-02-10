@@ -22,13 +22,13 @@ export type Config = {
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  ACCOUNT: new PublicKey("GejbL5sSi53QA6tzaBsnPsiNg2Jpm8zs7NN891PomGvu"),
+  ACCOUNT: new PublicKey("3JgMGpqb7YXDppz5iAzuUk8mXzHCA8Da7D3A8zt3F6mz"),
 
   LUT: new PublicKey("CQ8omkUwDtsszuJLo9grtXCeEyDU4QqBLRv9AjRDaUZ3"),
 };
 
 async function main() {
-  await pulseHealth(config, "/.config/stage/id.json");
+  await pulseHealth(config, "/.config/solana/id.json");
 }
 
 export async function pulseHealth(

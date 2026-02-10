@@ -6,16 +6,16 @@ import {
 } from "@solana/web3.js";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 import { commonSetup } from "../lib/common-setup";
+import { configs } from "../lib/config";
+import { Environment } from "../lib/types";
+import yargs from "yargs";
+import { hideBin } from "yargs/helpers";
 
 const sendTx = true;
 
 export type BankMetadataEntry = {
   bank: PublicKey;
   ticker: string;
-  /**
-   * For staked collateral banks, include validator vote account here.
-   * Example: "validatorVoteAccount:5ZWgXcyqrrNpQHCme5SdC5hCeYb2o3fEJhF7Gok3bTVN"
-   */
   description: string;
 };
 
@@ -34,19 +34,125 @@ export type Config = {
   BANKS: BankMetadataEntry[];
 };
 
-const config: Config = {
-  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-  GROUP: new PublicKey("Diu1q9gniR1qR4Daaej3rcHd6949HMmxLGsnQ94Z3rLz"),
-  // GROUP: new PublicKey("Diu1q9gniR1qR4Daaej3rcHd6949HMmxLGsnQ94Z3rLz"),
-
-  BANKS: [
-    {
-      bank: new PublicKey("4VruFgvunJcU1C23tAXWQbfuXT4P97vDm9fXzTvMrFLG"),
-      ticker: "TEST",
-      description: "Test Bank - Staging",
-    },
-  ],
+// Staging metadata format
+type StagingBankMetadata = {
+  bankAddress: string;
+  tokenAddress: string;
+  tokenName: string;
+  tokenSymbol: string;
 };
+
+// Mainnet metadata format
+type MainnetBankMetadata = {
+  bank_address: string;
+  symbol: string;
+  name: string;
+  venue?: string;
+  venue_identifier?: string;
+  asset_tag?: number;
+};
+
+// Banks not yet in the metadata cache (manually added)
+const ADDITIONAL_STAGING_BANKS: BankMetadataEntry[] = [
+  {
+    bank: new PublicKey("GFMZQWGdfvcXQd6PM3ZTtMjYhEFh9gBEogfKsZKBsKjs"),
+    ticker: "ptBulkSOL | PT-bulkSOL-26FEB26",
+    description: "Exponent Principal Token for BulkSOL | PT | ptBulkSOL - P0",
+  },
+];
+
+/**
+ * Fetches bank metadata from the appropriate source based on environment.
+ */
+async function fetchBankMetadata(env: Environment): Promise<BankMetadataEntry[]> {
+  let url: string;
+
+  if (env === "staging") {
+    url = "https://storage.googleapis.com/mrgn-public/mrgn-bank-metadata-cache-stage.json";
+  } else {
+    url = "https://app.0.xyz/api/banks/db";
+  }
+
+  console.log(`Fetching bank metadata from: ${url}`);
+  const response = await fetch(url);
+  const data = await response.json();
+
+  if (env === "staging") {
+    // Parse staging format
+    const stagingData = data as StagingBankMetadata[];
+    const banks = stagingData.map((item) => {
+      const assetGroup = getAssetGroup(item.tokenSymbol);
+      return {
+        bank: new PublicKey(item.bankAddress),
+        // ticker = "symbol | name"
+        ticker: `${item.tokenSymbol} | ${item.tokenName}`,
+        // description = "description | asset_group | venue_identifier"
+        description: `${item.tokenName} | ${assetGroup} | ${item.tokenSymbol} - P0`,
+      };
+    });
+    // Add banks not yet in metadata cache
+    return [...banks, ...ADDITIONAL_STAGING_BANKS];
+  } else {
+    // Parse mainnet format
+    const mainnetData = data as MainnetBankMetadata[];
+    return mainnetData.map((item) => {
+      const assetGroup = getAssetGroupFromTag(item.asset_tag) || getAssetGroup(item.symbol);
+      // Use actual venue from API (P0, Kamino, Drift, etc.)
+      const venue = item.venue || "P0";
+      const venueIdentifier = item.venue_identifier || `${item.symbol} - ${venue}`;
+      return {
+        bank: new PublicKey(item.bank_address),
+        // ticker = "symbol | name"
+        ticker: `${item.symbol} | ${item.name}`,
+        // description = "description | asset_group | venue_identifier"
+        description: `${item.name} | ${assetGroup} | ${venueIdentifier}`,
+      };
+    });
+  }
+}
+
+/**
+ * Determines asset group based on symbol patterns.
+ */
+function getAssetGroup(symbol: string): string {
+  const lowerSymbol = symbol.toLowerCase();
+
+  // Stablecoins
+  if (["usdc", "usdt", "pyusd", "uxd", "usdy", "usdh"].includes(lowerSymbol)) {
+    return "Stablecoin";
+  }
+
+  // LSTs (Liquid Staking Tokens)
+  if (lowerSymbol.includes("sol") && lowerSymbol !== "sol") {
+    return "LST";
+  }
+
+  // Principal Tokens
+  if (lowerSymbol.startsWith("pt")) {
+    return "PT";
+  }
+
+  // Native
+  if (lowerSymbol === "sol") {
+    return "Native";
+  }
+
+  return "Other";
+}
+
+/**
+ * Determines asset group from asset_tag number.
+ */
+function getAssetGroupFromTag(assetTag?: number): string | null {
+  if (assetTag === undefined) return null;
+
+  switch (assetTag) {
+    case 0: return "Default";
+    case 1: return "Native";
+    case 2: return "Native Stake";
+    default: return null;
+  }
+}
 
 /**
  * Derives the metadata PDA for a given bank.
@@ -63,7 +169,72 @@ function deriveBankMetadataPda(
 }
 
 async function main() {
-  await writeBankMetadata(sendTx, config, "/.config/stage/id.json");
+  const argv = yargs(hideBin(process.argv))
+    .option("env", {
+      type: "string",
+      choices: ["production", "staging"] as Environment[],
+      default: "staging",
+      description: "Marginfi environment",
+    })
+    .option("limit", {
+      type: "number",
+      default: 5,
+      description: "Number of banks to process (for testing)",
+    })
+    .option("wallet", {
+      type: "string",
+      default: "/.config/solana/id.json",
+      description: "Path to wallet keypair",
+    })
+    .option("dry-run", {
+      type: "boolean",
+      default: false,
+      description: "Print config without executing transactions",
+    })
+    .parseSync();
+
+  const env = argv.env as Environment;
+  const limit = argv.limit;
+  const walletPath = argv.wallet;
+  const dryRun = argv["dry-run"];
+
+  console.log(`\nEnvironment: ${env}`);
+  console.log(`Limit: ${limit} banks`);
+  console.log(`Wallet: ${walletPath}`);
+  console.log(`Dry run: ${dryRun}\n`);
+
+  // Fetch metadata from API
+  const allBanks = await fetchBankMetadata(env);
+  console.log(`Fetched ${allBanks.length} banks from metadata API\n`);
+
+  // Limit banks for testing
+  const banks = allBanks.slice(0, limit);
+
+  // Build config
+  const envConfig = configs[env];
+  const config: Config = {
+    PROGRAM_ID: envConfig.PROGRAM_ID,
+    GROUP: new PublicKey(envConfig.GROUP_ADDRESS),
+    BANKS: banks,
+  };
+
+  // Print config for review
+  console.log("Banks to process:");
+  console.log("─".repeat(80));
+  banks.forEach((bank, i) => {
+    console.log(`[${i + 1}] ${bank.bank.toBase58()}`);
+    console.log(`    Ticker: ${bank.ticker}`);
+    console.log(`    Description: ${bank.description}`);
+  });
+  console.log("─".repeat(80));
+
+  if (dryRun) {
+    console.log("\nDry run - no transactions will be sent.");
+    return;
+  }
+
+  // Execute
+  await writeBankMetadata(sendTx, config, walletPath);
 }
 
 export async function writeBankMetadata(
@@ -87,7 +258,7 @@ export async function writeBankMetadata(
   const connection = user.connection;
   const programId = new PublicKey(config.PROGRAM_ID);
 
-  console.log(`Processing ${config.BANKS.length} banks...`);
+  console.log(`\nProcessing ${config.BANKS.length} banks...`);
   console.log(`Group: ${config.GROUP.toBase58()}`);
   console.log(`Wallet: ${user.wallet.publicKey.toBase58()}`);
   console.log("");
@@ -145,6 +316,7 @@ export async function writeBankMetadata(
           "confirmed",
         );
         console.log(`  initBankMetadata tx: ${signature}`);
+        console.log(`  https://solscan.io/tx/${signature}`);
       } else {
         let transaction = new Transaction().add(initIx);
         transaction.feePayer = config.MULTISIG_PAYER;
@@ -202,6 +374,7 @@ export async function writeBankMetadata(
         "confirmed",
       );
       console.log(`  writeBankMetadata tx: ${signature}`);
+      console.log(`  https://solscan.io/tx/${signature}`);
     } else {
       let transaction = new Transaction().add(writeIx);
       transaction.feePayer = config.MULTISIG_PAYER;
