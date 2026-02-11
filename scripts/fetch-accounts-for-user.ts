@@ -9,7 +9,7 @@ type Config = {
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  WALLET: new PublicKey("6DdJqQYD8AizuXiCkbn19LiyWRwUsRMzy2Sgyoyasyj7"),
+  WALLET: new PublicKey("H5U6dy9ch6puEFPY3t8jEaVQnVfYPUDANQkA4XG6peUo"),
 };
 
 async function main() {

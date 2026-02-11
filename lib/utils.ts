@@ -407,6 +407,7 @@ export async function getOraclesAndCrankSwb(
         console.log(`[${i}] other oracle: ${oracle}`);
         activeBalances.push([bal.bankPk, oracle]);
       }
+      // TODO drift
     }
   }
 
@@ -422,15 +423,14 @@ export async function getOraclesAndCrankSwb(
         (pubkey) => new sb.PullFeed(swbProgram, pubkey),
       );
 
-      const gateway = await (process.env.CROSSBAR_API_URL
-        ? pullFeedInstances[0].fetchGatewayUrl(
-            new CrossbarClient(process.env.CROSSBAR_API_URL),
-          )
-        : pullFeedInstances[0].fetchGatewayUrl());
+      // TODO env var
+      const crossbarClient = new CrossbarClient(
+        "https://integrator-crossbar.prod.mrgn.app",
+      );
 
       const [pullIx, luts] = await sb.PullFeed.fetchUpdateManyIx(swbProgram, {
         feeds: pullFeedInstances,
-        gateway,
+        crossbarClient,
         numSignatures: 1,
         payer: payer.publicKey,
       });
