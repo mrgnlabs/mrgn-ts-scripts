@@ -8,18 +8,19 @@ import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 import { commonSetup } from "../lib/common-setup";
 import { configs } from "../lib/config";
 import { Environment } from "../lib/types";
+import { loadEnvFile } from "./utils";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 
 const sendTx = true;
 
-export type BankMetadataEntry = {
+ type BankMetadataEntry = {
   bank: PublicKey;
   ticker: string;
   description: string;
 };
 
-export type Config = {
+ type Config = {
   PROGRAM_ID: string;
   GROUP: PublicKey;
 
@@ -57,7 +58,7 @@ const ADDITIONAL_STAGING_BANKS: BankMetadataEntry[] = [
   {
     bank: new PublicKey("GFMZQWGdfvcXQd6PM3ZTtMjYhEFh9gBEogfKsZKBsKjs"),
     ticker: "ptBulkSOL | PT-bulkSOL-26FEB26",
-    description: "Exponent Principal Token for BulkSOL | PT | ptBulkSOL - P0",
+    description: "Exponent Principal Token for BulkSOL | PT | ptBulkSOL | P0",
   },
 ];
 
@@ -87,11 +88,11 @@ async function fetchBankMetadata(env: Environment): Promise<BankMetadataEntry[]>
         // ticker = "symbol | name"
         ticker: `${item.tokenSymbol} | ${item.tokenName}`,
         // description = "description | asset_group | venue_identifier"
-        description: `${item.tokenName} | ${assetGroup} | ${item.tokenSymbol} - P0`,
+        description: `${item.tokenName} | ${assetGroup} | ${item.tokenSymbol} | P0`,
       };
     });
     // Add banks not yet in metadata cache
-    return [...banks, ...ADDITIONAL_STAGING_BANKS];
+    return [...ADDITIONAL_STAGING_BANKS, ...banks,];
   } else {
     // Parse mainnet format
     const mainnetData = data as MainnetBankMetadata[];
@@ -99,13 +100,12 @@ async function fetchBankMetadata(env: Environment): Promise<BankMetadataEntry[]>
       const assetGroup = getAssetGroupFromTag(item.asset_tag) || getAssetGroup(item.symbol);
       // Use actual venue from API (P0, Kamino, Drift, etc.)
       const venue = item.venue || "P0";
-      const venueIdentifier = item.venue_identifier || `${item.symbol} - ${venue}`;
       return {
         bank: new PublicKey(item.bank_address),
         // ticker = "symbol | name"
         ticker: `${item.symbol} | ${item.name}`,
-        // description = "description | asset_group | venue_identifier"
-        description: `${item.name} | ${assetGroup} | ${venueIdentifier}`,
+        // description = "name | asset_group | symbol | venue"
+        description: `${item.name} | ${assetGroup} | ${item.symbol} | ${venue}`,
       };
     });
   }
@@ -169,6 +169,8 @@ function deriveBankMetadataPda(
 }
 
 async function main() {
+  loadEnvFile(".env");
+
   const argv = yargs(hideBin(process.argv))
     .option("env", {
       type: "string",
@@ -183,34 +185,38 @@ async function main() {
     })
     .option("wallet", {
       type: "string",
-      default: "/.config/solana/id.json",
-      description: "Path to wallet keypair",
+      description: "Path to wallet keypair (defaults to MARGINFI_WALLET from .env)",
     })
     .option("dry-run", {
       type: "boolean",
       default: false,
       description: "Print config without executing transactions",
     })
+    .option("delay", {
+      type: "number",
+      default: 2000,
+      description: "Delay in ms between transactions (to avoid rate limiting)",
+    })
     .parseSync();
 
   const env = argv.env as Environment;
   const limit = argv.limit;
-  const walletPath = argv.wallet;
+  const walletPath = process.env.MARGINFI_WALLET;
   const dryRun = argv["dry-run"];
+  const delay = argv.delay;
 
   console.log(`\nEnvironment: ${env}`);
   console.log(`Limit: ${limit} banks`);
   console.log(`Wallet: ${walletPath}`);
+  console.log(`Delay: ${delay}ms`);
   console.log(`Dry run: ${dryRun}\n`);
 
-  // Fetch metadata from API
   const allBanks = await fetchBankMetadata(env);
   console.log(`Fetched ${allBanks.length} banks from metadata API\n`);
 
   // Limit banks for testing
   const banks = allBanks.slice(0, limit);
 
-  // Build config
   const envConfig = configs[env];
   const config: Config = {
     PROGRAM_ID: envConfig.PROGRAM_ID,
@@ -218,7 +224,6 @@ async function main() {
     BANKS: banks,
   };
 
-  // Print config for review
   console.log("Banks to process:");
   console.log("─".repeat(80));
   banks.forEach((bank, i) => {
@@ -233,15 +238,17 @@ async function main() {
     return;
   }
 
-  // Execute
-  await writeBankMetadata(sendTx, config, walletPath);
+  await writeBankMetadata(sendTx, config, walletPath, undefined, delay);
 }
+
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export async function writeBankMetadata(
   sendTx: boolean,
   config: Config,
   walletPath: string,
   version?: "current",
+  delay: number = 2000,
 ) {
   if (config.BANKS.length === 0) {
     throw new Error("Config.BANKS is empty - nothing to do.");
@@ -388,6 +395,11 @@ export async function writeBankMetadata(
     }
 
     console.log(`  Done with bank ${entry.bank.toBase58()}`);
+
+    if (i < config.BANKS.length - 1 && delay > 0) {
+      console.log(`  Waiting ${delay}ms...`);
+      await sleep(delay);
+    }
   }
 
   console.log("\nAll banks processed.");
