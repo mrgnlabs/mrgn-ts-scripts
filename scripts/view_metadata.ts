@@ -56,8 +56,8 @@ async function main() {
     metadataPda
   );
 
-  const ticker = Buffer.from(metadataAccount.ticker).toString("utf-8");
-  const description = Buffer.from(metadataAccount.description).toString("utf-8");
+  const ticker = decodeUtf8Field(metadataAccount.ticker);
+  const description = decodeUtf8Field(metadataAccount.description);
 
   console.log(`Bank:        ${(metadataAccount.bank as PublicKey).toBase58()}`);
   console.log(`Ticker:      ${ticker}`);
