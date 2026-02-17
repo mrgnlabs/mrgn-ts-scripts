@@ -17,7 +17,6 @@ import {
   deriveSpotMarketPDA,
   deriveDriftStatePDA,
   deriveSpotMarketVaultPDA,
-  I80F48_ONE,
   DriftConfigCompact,
   deriveDriftUserPDA,
   deriveDriftUserStatsPDA,
@@ -40,6 +39,7 @@ type Config = {
   PROGRAM_ID: string;
   GROUP_KEY: PublicKey;
   BANK_MINT: PublicKey;
+  // Can be found here: https://github.com/drift-labs/protocol-v2/blob/53166fa2702db1bac1ae9c025a7e28bbe35fab30/sdk/src/constants/spotMarkets.ts
   DRIFT_MARKET_INDEX: number;
   ORACLE: PublicKey;
   /** 9 (DriftPythPush) or 10 (DriftSwitchboardPull) */
@@ -88,7 +88,6 @@ async function main() {
   await addDriftBank(sendTx, config, "/keys/staging-deploy.json");
 }
 
-// (SOL, USDC, USDS, PYUSD, dSOL)
 export async function addDriftBank(
   sendTx: boolean,
   config: Config,
@@ -133,8 +132,8 @@ export async function addDriftBank(
   // Build drift bank config
   const driftConfig: DriftConfigCompact = {
     oracle: config.ORACLE,
-    assetWeightInit: bigNumberToWrappedI80F48(0.9), // 90%
-    assetWeightMaint: bigNumberToWrappedI80F48(0.95), // 95%
+    assetWeightInit: bigNumberToWrappedI80F48(0.65), // 65%
+    assetWeightMaint: bigNumberToWrappedI80F48(0.8), // 80%
     depositLimit: new BN(config.DEPOSIT_LIMIT ?? 10_000_000_000),
     oracleSetup: config.ORACLE_SETUP,
     operationalState: {
@@ -152,10 +151,10 @@ export async function addDriftBank(
   };
 
   console.log("Bank Configuration:");
-  console.log("  Deposit Limit:", driftConfig.depositLimit);
+  console.log("  Deposit Limit:", driftConfig.depositLimit.toString());
   console.log(
     "  Total Asset Value Limit:",
-    driftConfig.totalAssetValueInitLimit,
+    driftConfig.totalAssetValueInitLimit.toString(),
   );
   console.log();
 
@@ -226,6 +225,7 @@ export async function addDriftBank(
   const [driftUserStats] = deriveDriftUserStatsPDA(liquidityVaultAuthority);
 
   console.log("Derived accounts:");
+  console.log("  spotMarket:", driftSpotMarket.toString());
   console.log("  liquidityVaultAuthority:", liquidityVaultAuthority.toString());
   console.log("  driftUser:", driftUser.toString());
   console.log("  driftUserStats:", driftUserStats.toString());
@@ -253,28 +253,12 @@ export async function addDriftBank(
     })
     .instruction();
 
-  const transaction = new Transaction().add(addBankIx);
+  const transaction = new Transaction().add(addBankIx, initUserIx);
 
   // Simulate
   transaction.feePayer = feePayer;
   const { blockhash } = await connection.getLatestBlockhash();
   transaction.recentBlockhash = blockhash;
-
-  // console.log("Simulating lendingPoolAddBankDrift & driftInitUser...");
-  //const simulation = await connection.simulateTransaction(transaction);
-
-  // console.log("\nProgram Logs:");
-  // simulation.value.logs?.forEach((log) => console.log("  " + log));
-
-  // if (simulation.value.err) {
-  //   console.log("\nSimulation failed:");
-  //   console.log(JSON.stringify(simulation.value.err, null, 2));
-  //   process.exit(1);
-  // }
-
-  // console.log("\nSimulation successful!");
-  // console.log("Compute units:", simulation.value.unitsConsumed);
-  // console.log();
 
   if (sendTx) {
     try {
@@ -301,6 +285,15 @@ export async function addDriftBank(
     const base58Transaction = bs58.encode(serializedTransaction);
     console.log("bank key: " + bank);
     console.log("Base58-encoded transaction:", base58Transaction);
+    // console.log();
+    // console.log("ALL accounts:");
+    // for (let ix of transaction.instructions)
+    // {
+    //   for (let account of ix.keys)
+    //   {
+    //     console.log(account.pubkey.toString());
+    //   }
+    // }
   }
 
   console.log();
