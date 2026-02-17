@@ -3,6 +3,7 @@ import path from "path";
 import dotenv from "dotenv";
 import BigNumber from "bignumber.js";
 import {
+  AddressLookupTableAccount,
   Connection,
   Keypair,
   PublicKey,
@@ -419,8 +420,8 @@ export async function getOraclesAndCrankSwb(
         connection,
       );
 
-      const pullFeedInstances: sb.PullFeed[] = swbPullFeeds.map(
-        (pubkey) => new sb.PullFeed(swbProgram, pubkey),
+      const pullFeedInstances: string[] = swbPullFeeds.map((pubkey) =>
+        pubkey.toString(),
       );
 
       // TODO env var
@@ -428,12 +429,27 @@ export async function getOraclesAndCrankSwb(
         "https://integrator-crossbar.prod.mrgn.app",
       );
 
-      const [pullIx, luts] = await sb.PullFeed.fetchUpdateManyIx(swbProgram, {
-        feeds: pullFeedInstances,
-        crossbarClient,
-        numSignatures: 1,
-        payer: payer.publicKey,
-      });
+      const [{ pullIxns, lookupTables }] =
+        await crossbarClient.fetchSolanaUpdates(
+          "mainnet",
+          pullFeedInstances,
+          payer.publicKey.toString(),
+          1,
+        );
+
+      let luts: AddressLookupTableAccount[] = [];
+      for (let i = 0; i < lookupTables.length; i++) {
+        const lut = await connection.getAddressLookupTable(
+          new PublicKey(lookupTables[i]),
+        );
+        if (!lut || !lut.value) {
+          console.warn(
+            `Warning: LUT ${lookupTables[i]} not found on-chain. Proceeding without it.`,
+          );
+        } else {
+          luts.push(lut.value);
+        }
+      }
 
       const { blockhash, lastValidBlockHeight } =
         await connection.getLatestBlockhash();
@@ -441,8 +457,8 @@ export async function getOraclesAndCrankSwb(
       const v0Message = new TransactionMessage({
         payerKey: payer.publicKey,
         recentBlockhash: blockhash,
-        instructions: pullIx,
-      }).compileToV0Message(luts ?? []);
+        instructions: pullIxns,
+      }).compileToV0Message(luts);
 
       const v0Tx = new VersionedTransaction(v0Message);
       v0Tx.sign([payer]);
