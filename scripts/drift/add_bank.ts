@@ -132,8 +132,8 @@ export async function addDriftBank(
   // Build drift bank config
   const driftConfig: DriftConfigCompact = {
     oracle: config.ORACLE,
-    assetWeightInit: bigNumberToWrappedI80F48(0.65), // 65%
-    assetWeightMaint: bigNumberToWrappedI80F48(0.8), // 80%
+    assetWeightInit: bigNumberToWrappedI80F48(0.75), // 75%
+    assetWeightMaint: bigNumberToWrappedI80F48(0.85), // 85%
     depositLimit: new BN(config.DEPOSIT_LIMIT ?? 10_000_000_000),
     oracleSetup: config.ORACLE_SETUP,
     operationalState: {
@@ -285,15 +285,15 @@ export async function addDriftBank(
     const base58Transaction = bs58.encode(serializedTransaction);
     console.log("bank key: " + bank);
     console.log("Base58-encoded transaction:", base58Transaction);
-    // console.log();
-    // console.log("ALL accounts:");
-    // for (let ix of transaction.instructions)
-    // {
-    //   for (let account of ix.keys)
-    //   {
-    //     console.log(account.pubkey.toString());
-    //   }
-    // }
+    console.log();
+    console.log("ALL accounts:");
+    for (let ix of transaction.instructions)
+    {
+      for (let account of ix.keys)
+      {
+        console.log(account.pubkey.toString());
+      }
+    }
   }
 
   console.log();
