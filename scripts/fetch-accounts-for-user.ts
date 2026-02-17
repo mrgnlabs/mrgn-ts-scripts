@@ -9,11 +9,11 @@ type Config = {
 
 const config: Config = {
   PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  WALLET: new PublicKey("H5U6dy9ch6puEFPY3t8jEaVQnVfYPUDANQkA4XG6peUo"),
+  WALLET: new PublicKey("CS3NzMknNWtjo2pq5dqp67hQYQ8wdLPt5m67oa5mBZUX"),
 };
 
 async function main() {
-  const user = commonSetup(true, config.PROGRAM_ID, "/.config/solana/id.json");
+  const user = commonSetup(true, config.PROGRAM_ID, "/.config/stage/id.json");
   const program = user.program;
 
   const acc = await program.account.marginfiAccount.all([

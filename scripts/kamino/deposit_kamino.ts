@@ -32,27 +32,21 @@ type Config = {
   ACCOUNT: PublicKey;
   AMOUNT: BN;
 
-  BANK_MINT: PublicKey;
-  KAMINO_RESERVE: PublicKey;
   KAMINO_MARKET: PublicKey;
   /** Oracle address the Kamino Reserve uses. Typically read from reserve.config.tokenInfo.scope */
   RESERVE_ORACLE: PublicKey;
-  RESERVE: PublicKey;
   TOKEN_PROGRAM?: PublicKey; // If omitted, defaults to TOKEN_PROGRAM_ID
   MULTISIG_PAYER?: PublicKey; // May be omitted if not using squads
 };
 
 const config: Config = {
-  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-  BANK: new PublicKey("8qPLKaKb4F5BC6mVncKAryMp78yp5ZRGYnPkQbt9ikKt"),
-  ACCOUNT: new PublicKey("89ViS63BocuvZx5NE5oS9tBJ4ZbKZe3GkvurxHuSqFhz"),
-  AMOUNT: new BN(1 * 10 ** 5), // 0.1 USDC
+  PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
+  BANK: new PublicKey("24gdUT9SNqeizCD1dHXWgjpa6NnWSFD6TWPAnCFSJnAk"),
+  ACCOUNT: new PublicKey("985eLETmzwJB14K6EpVZ3V33xqxBQBX7zCTLgMamfuwq"),
+  AMOUNT: new BN(0.001 * 10 ** 9), // 0.001 STKESOL
 
-  BANK_MINT: new PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"),
-  KAMINO_RESERVE: new PublicKey("D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59"),
   KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"),
   RESERVE_ORACLE: new PublicKey("3t4JZcueEzTbVP6kLxXrL3VpWx45jDer4eqysweBchNH"),
-  RESERVE: new PublicKey("2gFjdQLFaFqTKMv4nFGMAP4bX2F5KAsyiJn8yZQHPKSE"),
 };
 
 async function main() {
@@ -71,6 +65,10 @@ export async function depositKamino(sendTx: boolean, config: Config, walletPath:
   const program = user.program;
   const connection = user.connection;
 
+  const bank = await program.account.bank.fetch(config.BANK);
+  const mint = bank.mint;
+  const reserve = bank.integrationAcc1;
+
   const [lendingVaultAuthority] = deriveLiquidityVaultAuthority(
     program.programId,
     config.BANK
@@ -82,16 +80,16 @@ export async function depositKamino(sendTx: boolean, config: Config, walletPath:
   );
 
   const ata = getAssociatedTokenAddressSync(
-    config.BANK_MINT,
+    mint,
     user.wallet.publicKey,
     true,
     config.TOKEN_PROGRAM ?? TOKEN_PROGRAM_ID
   );
 
-  const reserve = await user.kaminoProgram.account.reserve.fetch(
-    config.RESERVE,
+  const reserveAcc = await user.kaminoProgram.account.reserve.fetch(
+    reserve,
   );
-  const reserveFarmState = reserve.farmCollateral;
+  const reserveFarmState = reserveAcc.farmCollateral;
 
   const [userState] = deriveUserState(
     FARMS_PROGRAM_ID,
@@ -102,7 +100,7 @@ export async function depositKamino(sendTx: boolean, config: Config, walletPath:
   let depositTx = new Transaction().add(
     await simpleRefreshReserve(
       user.kaminoProgram,
-      config.KAMINO_RESERVE,
+      reserve,
       config.KAMINO_MARKET,
       config.RESERVE_ORACLE
     ),
@@ -110,7 +108,7 @@ export async function depositKamino(sendTx: boolean, config: Config, walletPath:
       user.kaminoProgram,
       config.KAMINO_MARKET,
       baseObligation,
-      [config.KAMINO_RESERVE]
+      [reserve]
     ),
     await makeKaminoDepositIx(
       program,
@@ -119,7 +117,7 @@ export async function depositKamino(sendTx: boolean, config: Config, walletPath:
         bank: config.BANK,
         signerTokenAccount: ata,
         lendingMarket: config.KAMINO_MARKET,
-        reserve: config.KAMINO_RESERVE,
+        reserve: reserve,
         reserveFarmState,
         obligationFarmUserState: userState,
       },
