@@ -146,7 +146,7 @@ export async function addDriftBank(
     totalAssetValueInitLimit: new BN(
       config.TOTAL_ASSET_VALUE_INIT_LIMIT ?? 10_000_000_000,
     ),
-    oracleMaxAge: 300,
+    oracleMaxAge: 70,
     oracleMaxConfidence: 0, // Default: 10% confidence
   };
 
