@@ -13,38 +13,76 @@ import {
   getMint,
   createAssociatedTokenAccountIdempotentInstruction,
 } from "@solana/spl-token";
+import { readFileSync } from "fs";
+import { join } from "path";
 import {
+  parseConfig,
+  Config,
   deriveJuplendCpiAccounts,
   findJuplendLendingAdminPda,
   JUPLEND_LENDING_PROGRAM_ID,
 } from "./lib/utils";
+import { deriveBankWithSeed } from "../common/pdas";
 import { commonSetup } from "../../lib/common-setup";
 import { bs58 } from "@switchboard-xyz/common";
 
-const sendTx = true;
-
-type Config = {
-  PROGRAM_ID: string;
-  BANK: PublicKey;
-  ACCOUNT: PublicKey;
-  AMOUNT: BN;
-  MULTISIG_PAYER?: PublicKey;
-};
-
-const config: Config = {
-  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-  BANK: new PublicKey("8qPLKaKb4F5BC6mVncKAryMp78yp5ZRGYnPkQbt9ikKt"),
-  ACCOUNT: new PublicKey("89ViS63BocuvZx5NE5oS9tBJ4ZbKZe3GkvurxHuSqFhz"),
-  AMOUNT: new BN(1 * 10 ** 5),
-};
+const sendTx = false;
 
 async function main() {
-  await depositJuplend(sendTx, config, "/keys/staging-deploy.json");
+  const configFile = process.argv[2];
+  const accountStr = process.argv[3];
+  const amountStr = process.argv[4];
+  if (!configFile || !accountStr || !amountStr) {
+    console.error(
+      "Usage: tsx scripts/juplend/deposit.ts"
+      + " <config-file> <marginfi-account> <amount>",
+    );
+    console.error(
+      "Example: tsx scripts/juplend/deposit.ts"
+      + " configs/stage/usdc.json"
+      + " 89ViS63Bo... 100000",
+    );
+    process.exit(1);
+  }
+
+  const configPath = join(__dirname, configFile);
+  const rawConfig = readFileSync(configPath, "utf8");
+  const config = parseConfig(rawConfig);
+  const account = new PublicKey(accountStr);
+  const amount = new BN(amountStr);
+
+  const programId = new PublicKey(config.PROGRAM_ID);
+  const [bank] = deriveBankWithSeed(
+    programId,
+    config.GROUP_KEY,
+    config.BANK_MINT,
+    config.SEED,
+  );
+
+  console.log("=== JupLend Deposit ===\n");
+  console.log("Config:", configFile);
+  console.log("Bank:", bank.toString());
+  console.log("Account:", account.toString());
+  console.log("Mint:", config.BANK_MINT.toString());
+  console.log("Amount:", amount.toString(), "base units");
+  console.log();
+
+  await depositJuplend(
+    sendTx,
+    config,
+    bank,
+    account,
+    amount,
+    "/keys/staging-deploy.json",
+  );
 }
 
 export async function depositJuplend(
   sendTx: boolean,
   config: Config,
+  bank: PublicKey,
+  account: PublicKey,
+  amount: BN,
   walletPath: string,
   version?: "current",
 ) {
@@ -59,22 +97,32 @@ export async function depositJuplend(
   const wallet = user.wallet;
   const program = user.program;
 
+  const payerKey = sendTx
+    ? wallet.publicKey
+    : config.MULTISIG_PAYER;
+
+  if (!payerKey) {
+    throw new Error(
+      "MULTISIG_PAYER must be set when sendTx = false",
+    );
+  }
+
   // Fetch bank to get mint and integration accounts
-  const bankData = await program.account.bank.fetch(config.BANK);
+  const bankData = await program.account.bank.fetch(bank);
   const mint = bankData.mint;
   const juplendLending = bankData.integrationAcc1;
   const juplendFTokenVault = bankData.integrationAcc2;
   const group = bankData.group;
 
-  console.log("=== JupLend Deposit ===\n");
-  console.log("Bank mint:", mint.toString());
-  console.log("Amount:", config.AMOUNT.toString(), "base units");
-  console.log();
-
   // Detect token program
   let tokenProgram = TOKEN_PROGRAM_ID;
   try {
-    await getMint(connection, mint, "confirmed", TOKEN_2022_PROGRAM_ID);
+    await getMint(
+      connection,
+      mint,
+      "confirmed",
+      TOKEN_2022_PROGRAM_ID,
+    );
     tokenProgram = TOKEN_2022_PROGRAM_ID;
     console.log("Detected Token-2022 mint");
   } catch {
@@ -83,15 +131,23 @@ export async function depositJuplend(
 
   // Derive JupLend CPI accounts
   const [lendingAdmin] = findJuplendLendingAdminPda();
-  const juplendAccounts = deriveJuplendCpiAccounts(mint, tokenProgram);
+  const juplendAccounts = deriveJuplendCpiAccounts(
+    mint,
+    tokenProgram,
+  );
 
-  // Fetch Lending account for supplyTokenReservesLiquidity and
-  // lendingSupplyPositionOnLiquidity
-  const lendingInfo = await connection.getAccountInfo(juplendLending);
+  // Fetch Lending account
+  const lendingInfo =
+    await connection.getAccountInfo(juplendLending);
   if (!lendingInfo) {
-    throw new Error(`JupLend Lending not found: ${juplendLending.toString()}`);
+    throw new Error(
+      "JupLend Lending not found: "
+      + juplendLending.toString(),
+    );
   }
-  const fTokenMint = new PublicKey(lendingInfo.data.slice(40, 72));
+  const fTokenMint = new PublicKey(
+    lendingInfo.data.slice(40, 72),
+  );
   const supplyTokenReservesLiquidity = new PublicKey(
     lendingInfo.data.slice(131, 163),
   );
@@ -101,7 +157,7 @@ export async function depositJuplend(
 
   const signerTokenAccount = getAssociatedTokenAddressSync(
     mint,
-    wallet.publicKey,
+    payerKey,
     false,
     tokenProgram,
   );
@@ -111,20 +167,20 @@ export async function depositJuplend(
   // Create ATA idempotently
   transaction.add(
     createAssociatedTokenAccountIdempotentInstruction(
-      wallet.publicKey,
+      payerKey,
       signerTokenAccount,
-      wallet.publicKey,
+      payerKey,
       mint,
       tokenProgram,
     ),
   );
 
   const depositIx = await program.methods
-    .juplendDeposit(config.AMOUNT)
+    .juplendDeposit(amount)
     .accounts({
       group,
-      marginfiAccount: config.ACCOUNT,
-      bank: config.BANK,
+      marginfiAccount: account,
+      bank,
       signerTokenAccount,
       mint,
       integrationAcc1: juplendLending,
@@ -148,56 +204,60 @@ export async function depositJuplend(
   transaction.add(depositIx);
 
   // Simulate
-  transaction.feePayer = wallet.publicKey;
-  const { blockhash } = await connection.getLatestBlockhash();
+  transaction.feePayer = payerKey;
+  const { blockhash } =
+    await connection.getLatestBlockhash();
   transaction.recentBlockhash = blockhash;
 
   console.log("Simulating juplendDeposit...");
-  const simulation = await connection.simulateTransaction(transaction);
+  const simulation =
+    await connection.simulateTransaction(transaction);
 
   console.log("\nProgram Logs:");
-  simulation.value.logs?.forEach((log) => console.log("  " + log));
+  simulation.value.logs?.forEach((log) =>
+    console.log("  " + log),
+  );
 
   if (simulation.value.err) {
     console.log("\nSimulation failed:");
-    console.log(JSON.stringify(simulation.value.err, null, 2));
+    console.log(
+      JSON.stringify(simulation.value.err, null, 2),
+    );
     process.exit(1);
   }
 
   console.log("\nSimulation successful!");
-  console.log("Compute units:", simulation.value.unitsConsumed);
+  console.log(
+    "Compute units:",
+    simulation.value.unitsConsumed,
+  );
   console.log();
 
   if (sendTx) {
-    try {
-      console.log("Executing transaction...");
-      const signature = await sendAndConfirmTransaction(
-        connection,
-        transaction,
-        [wallet.payer],
-      );
-      console.log("Signature:", signature);
-      console.log("Deposit successful!");
-    } catch (error) {
-      console.error("Transaction failed:", error);
-    }
+    const signature = await sendAndConfirmTransaction(
+      connection,
+      transaction,
+      [wallet.payer],
+    );
+    console.log("Signature:", signature);
+    console.log("Deposit successful!");
   } else {
-    transaction.feePayer = config.MULTISIG_PAYER;
-    const { blockhash } = await connection.getLatestBlockhash();
-    transaction.recentBlockhash = blockhash;
-    const serializedTransaction = transaction.serialize({
+    const serialized = transaction.serialize({
       requireAllSignatures: false,
       verifySignatures: false,
     });
-    const base58Transaction = bs58.encode(serializedTransaction);
-    console.log("deposit to: " + config.BANK);
-    console.log("by account: " + config.ACCOUNT);
-    console.log("Base58-encoded transaction:", base58Transaction);
+    console.log("deposit to:", bank.toString());
+    console.log("by account:", account.toString());
+    console.log(
+      "Base58-encoded transaction:",
+      bs58.encode(serialized),
+    );
   }
 }
 
 if (require.main === module) {
   main().catch((err) => {
     console.error(err);
+    process.exit(1);
   });
 }

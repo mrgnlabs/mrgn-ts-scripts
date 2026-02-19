@@ -3,29 +3,59 @@ import {
   Transaction,
   sendAndConfirmTransaction,
 } from "@solana/web3.js";
+import { readFileSync } from "fs";
+import { join } from "path";
+import { parseConfig, Config } from "./lib/utils";
+import { deriveBankWithSeed } from "../common/pdas";
 import { commonSetup } from "../../lib/common-setup";
 import { bs58 } from "@switchboard-xyz/common";
 
-const sendTx = true;
-
-type Config = {
-  PROGRAM_ID: string;
-  BANK: PublicKey;
-  MULTISIG_PAYER?: PublicKey;
-};
-
-const config: Config = {
-  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-  BANK: new PublicKey("8qPLKaKb4F5BC6mVncKAryMp78yp5ZRGYnPkQbt9ikKt"),
-};
+const sendTx = false;
 
 async function main() {
-  await closeJuplendBank(sendTx, config, "/.config/stage/id.json");
+  const configFile = process.argv[2];
+  if (!configFile) {
+    console.error(
+      "Usage: tsx scripts/juplend/close_bank.ts"
+      + " <config-file>",
+    );
+    console.error(
+      "Example: tsx scripts/juplend/close_bank.ts"
+      + " configs/stage/usdc.json",
+    );
+    process.exit(1);
+  }
+
+  const configPath = join(__dirname, configFile);
+  const rawConfig = readFileSync(configPath, "utf8");
+  const config = parseConfig(rawConfig);
+
+  const programId = new PublicKey(config.PROGRAM_ID);
+  const [bank] = deriveBankWithSeed(
+    programId,
+    config.GROUP_KEY,
+    config.BANK_MINT,
+    config.SEED,
+  );
+
+  console.log("=== Close JupLend Bank ===\n");
+  console.log("Config:", configFile);
+  console.log("Bank:", bank.toString());
+  console.log("Mint:", config.BANK_MINT.toString());
+  console.log();
+
+  await closeJuplendBank(
+    sendTx,
+    config,
+    bank,
+    "/keys/staging-deploy.json",
+  );
 }
 
 export async function closeJuplendBank(
   sendTx: boolean,
   config: Config,
+  bank: PublicKey,
   walletPath: string,
   version?: "current",
 ) {
@@ -39,47 +69,41 @@ export async function closeJuplendBank(
   const program = user.program;
   const connection = user.connection;
 
-  console.log("=== Close JupLend Bank ===\n");
-  console.log("Bank:", config.BANK.toString());
-  console.log();
-
   const transaction = new Transaction().add(
     await program.methods
       .lendingPoolCloseBank()
-      .accounts({
-        bank: config.BANK,
-      })
+      .accounts({ bank })
       .instruction(),
   );
 
   if (sendTx) {
-    try {
-      const signature = await sendAndConfirmTransaction(
-        connection,
-        transaction,
-        [user.wallet.payer],
-      );
-      console.log("Transaction signature:", signature);
-      console.log("Bank closed!");
-    } catch (error) {
-      console.error("Transaction failed:", error);
-    }
+    const signature = await sendAndConfirmTransaction(
+      connection,
+      transaction,
+      [user.wallet.payer],
+    );
+    console.log("Signature:", signature);
+    console.log("Bank closed!");
   } else {
     transaction.feePayer = config.MULTISIG_PAYER;
-    const { blockhash } = await connection.getLatestBlockhash();
+    const { blockhash } =
+      await connection.getLatestBlockhash();
     transaction.recentBlockhash = blockhash;
-    const serializedTransaction = transaction.serialize({
+    const serialized = transaction.serialize({
       requireAllSignatures: false,
       verifySignatures: false,
     });
-    const base58Transaction = bs58.encode(serializedTransaction);
-    console.log("bank key: " + config.BANK);
-    console.log("Base58-encoded transaction:", base58Transaction);
+    console.log("bank:", bank.toString());
+    console.log(
+      "Base58-encoded transaction:",
+      bs58.encode(serialized),
+    );
   }
 }
 
 if (require.main === module) {
   main().catch((err) => {
     console.error(err);
+    process.exit(1);
   });
 }

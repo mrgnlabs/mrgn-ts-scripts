@@ -185,48 +185,104 @@ Each file (e.g. `configs/stage/wsol.json`) contains everything needed by
 
 ## Bank Lifecycle
 
+All scripts take a **config file** as the first argument. The bank PDA is
+derived from `programId`, `group`, `bankMint`, and `seed` in the config.
+
 All scripts have a `sendTx` flag at the top. When `false` (default), they
-output an unsigned base58-encoded transaction for multisig signing.
+output an unsigned base58-encoded transaction for multisig signing. When
+`true`, they sign and broadcast directly.
 
 ### 1. Create bank
+
+```bash
+npx tsx scripts/juplend/add_bank.ts <config-file>
+```
 
 ```bash
 npx tsx scripts/juplend/add_bank.ts configs/stage/wsol.json
 ```
 
+Calls `lendingPoolAddBankJuplend` with the full bank config (oracle, risk
+weights, deposit limits, JupLend CPI accounts).
+
 ### 2. Write metadata
+
+```bash
+npx tsx scripts/juplend/bank_metadata.ts <config-file>
+```
 
 ```bash
 npx tsx scripts/juplend/bank_metadata.ts configs/stage/wsol.json
 ```
 
 Two steps: `initBankMetadata` (permissionless, pays rent) then
-`writeBankMetadata` (metadata admin only). Both use the same config file.
+`writeBankMetadata` (metadata admin only). Reads `ticker` and `description`
+from the config file.
 
 ### 3. Init position (seed deposit)
 
 ```bash
-npx tsx scripts/juplend/init_position.ts
+npx tsx scripts/juplend/init_position.ts <config-file> <amount>
 ```
 
-Edit the script to set bank address, amount, and program ID.
-
-### 4. Deposit / Withdraw
-
 ```bash
-npx tsx scripts/juplend/deposit.ts
-npx tsx scripts/juplend/withdraw.ts
+npx tsx scripts/juplend/init_position.ts configs/stage/wsol.json 10000
 ```
 
-Edit the script to set bank, account, and amount.
+Amount is in base units (lamports for SOL, smallest unit for SPL tokens).
+Handles WSOL wrapping automatically when the mint is native SOL.
 
-### 5. Close bank
+### 4. Deposit
 
 ```bash
-npx tsx scripts/juplend/close_bank.ts
+npx tsx scripts/juplend/deposit.ts <config-file> <marginfi-account> <amount>
+```
+
+```bash
+npx tsx scripts/juplend/deposit.ts configs/stage/usdc.json 89ViS63B... 100000
+```
+
+Detects token program (SPL Token vs Token-2022) and creates the ATA
+automatically.
+
+### 5. Withdraw
+
+```bash
+npx tsx scripts/juplend/withdraw.ts <config-file> <marginfi-account> <amount> [--all]
+```
+
+```bash
+npx tsx scripts/juplend/withdraw.ts configs/stage/usdc.json 89ViS63B... 100000
+npx tsx scripts/juplend/withdraw.ts configs/stage/usdc.json 89ViS63B... 0 --all
+```
+
+Pass `--all` to withdraw the entire balance (amount is required but ignored).
+
+### 6. Close bank
+
+```bash
+npx tsx scripts/juplend/close_bank.ts <config-file>
+```
+
+```bash
+npx tsx scripts/juplend/close_bank.ts configs/stage/usdc.json
 ```
 
 Bank must have zero deposits.
+
+### Script Reference
+
+| Script | Args | Description |
+|--------|------|-------------|
+| `add_bank.ts` | `<config>` | Create a new bank |
+| `bank_metadata.ts` | `<config>` | Write ticker/description metadata |
+| `init_position.ts` | `<config> <amount>` | Seed deposit to activate bank |
+| `deposit.ts` | `<config> <account> <amount>` | Deposit into bank |
+| `withdraw.ts` | `<config> <account> <amount> [--all]` | Withdraw from bank |
+| `close_bank.ts` | `<config>` | Close empty bank |
+
+All `<config>` paths are relative to `scripts/juplend/`
+(e.g. `configs/stage/wsol.json`).
 
 ## Environment
 
