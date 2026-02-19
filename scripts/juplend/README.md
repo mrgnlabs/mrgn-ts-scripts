@@ -1,157 +1,200 @@
-# Alt Staging Ops
+# JupLend Integration Scripts
 
-This folder contains **self-contained** scripts to:
+Scripts for managing JupLend banks on Marginfi. 
 
-1) Build your program with the **alt-staging** compile tag/features.
-2) Deploy/upgrade the program to the **alt staging** cluster.
-3) Initialize the on-chain state needed to list assets:
-   - init global fee state (once per program deployment)
-   - init group/pool (once per group)
-   - init a user marginfi account (for manual testing)
-4) Add banks (assets) one-by-one from JSON configs (oracle + limits).
+## Prerequisites
 
-These scripts intentionally live under `ops/` so they are easy to delete or move later.
+- `.env.api` at repo root with `API_URL` (Solana RPC endpoint)
+- Wallet keypair file (path passed to each script)
 
----
+## Program IDs
 
-## Prereqs
+| Environment | Program ID |
+|---|---|
+| Production | `MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA` |
+| Staging | `stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct` |
 
-- `solana` CLI installed + on PATH
-- `anchor` CLI installed + on PATH
-- Node + your repo's root dependencies installed (`pnpm i` / `npm i`)
-- A funded **admin keypair** (SOL for rent + fees) and (optionally) a funded user keypair
+JupLend program addresses (same on all environments):
+- Lending: `jup3YeL8QhtSx1e253b2FDvsMNC87fDrgQZivbrndc9`
+- Liquidity: `jupeiUmn818Jg1ekPURTpr4mFo29p46vygyykFJ3wZC`
+- Earn Rewards: `jup7TthsMgcR9Y3L277b8Eo9uboVSmu1utkuXHNUKar`
 
----
+## Workflow
 
-## Setup
+Typical order when adding a new JupLend asset:
 
-1) Create an env file:
-
-```bash
-cp ops/alt-staging/.env.example ops/alt-staging/.env
+```
+1. add_bank.ts       Create the bank (admin)
+2. init_position.ts  Seed deposit + activate (permissionless)
+3. bank_metadata.ts  Init + write on-chain metadata (metadata admin)
+4. deposit.ts        Deposit funds (user)
+5. withdraw.ts       Withdraw funds (user)
+6. close_bank.ts     Close empty bank (admin)
 ```
 
-2) Fill in at least:
+## Scripts
 
-- `ALT_STAGING_RPC_URL`
-- `ALT_STAGING_PROGRAM_ID`
-- `ALT_STAGING_UPGRADE_AUTHORITY_KEYPAIR`
-- `ALT_STAGING_ADMIN_KEYPAIR`
-- `ALT_STAGING_IDL_PATH`
+### add_bank.ts
 
----
-
-## 1) Build the program for alt staging
+Create a JupLend bank from a JSON config file.
 
 ```bash
-bash ops/alt-staging/scripts/program-build-alt-staging.sh
+tsx scripts/juplend/add_bank.ts configs/banks/usdc.json
 ```
 
-By default this runs:
+The script reads config from a JSON file under `configs/banks/`. Set `sendTx = true` in the script to execute, or leave `false` to output a base58-encoded transaction for multisig signing.
+
+**Config JSON fields:**
+
+```json
+{
+  "programId": "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
+  "group": "<GROUP_PUBKEY>",
+  "bankMint": "<TOKEN_MINT>",
+  "juplendLending": "<JUPLEND_LENDING_PDA>",
+  "fTokenMint": "<JUPLEND_FTOKEN_MINT>",
+  "seed": 600,
+  "oracle": "<ORACLE_PUBKEY>",
+  "oracleSetup": "juplendPythPull",
+  "assetWeightInit": "0.9",
+  "assetWeightMaint": "0.95",
+  "depositLimit": "1000000000000",
+  "totalAssetValueInitLimit": "1000000000",
+  "riskTier": "collateral",
+  "oracleMaxAge": 60,
+  "admin": "<OPTIONAL_ADMIN_PUBKEY>",
+  "feePayer": "<OPTIONAL_FEE_PAYER>",
+  "multisigPayer": "<OPTIONAL_SQUADS_PUBKEY>"
+}
+```
+
+- `oracleSetup`: `"juplendPythPull"` or `"juplendSwitchboardPull"`
+- `riskTier`: `"collateral"` or `"isolated"`
+- Lending PDAs and fToken mints for each asset are listed in `configs/juplend-assets.json`
+
+### init_position.ts
+
+Activate a bank with a seed deposit. Edit the inline `config` object:
+
+```typescript
+const config: Config = {
+  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
+  BANK: new PublicKey("<BANK_ADDRESS>"),
+  AMOUNT: new BN(10000), // seed deposit in native units
+};
+```
 
 ```bash
-anchor build -p marginfi -- --no-default-features --features stagingalt
+tsx scripts/juplend/init_position.ts
 ```
 
-**IMPORTANT**: The `--no-default-features` flag is required because:
-- Default feature is `mainnet-beta` (see `programs/marginfi/Cargo.toml`)
-- Without it, both `mainnet-beta` AND `stagingalt` would be enabled
-- This would compile in the wrong program ID
+The script fetches the bank on-chain to get mint, lending, and fToken vault addresses. Handles WSOL wrapping automatically.
 
-Valid feature values (see `id-crate/src/lib.rs`):
-- `mainnet-beta` → `MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA`
-- `staging` → `stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct`
-- `stagingalt` → `5UDghkpgW1HfYSrmEj2iAApHShqU44H6PKTAar9LL9bY`
-- `devnet` → `neetcne3Ctrrud7vLdt2ypMm21gZHGN2mCmqWaMVcBQ`
+### deposit.ts
 
-To use a different feature, set `ALT_STAGING_BUILD_FEATURES=...` in `ops/alt-staging/.env`.
+Deposit into a JupLend bank. Edit the inline `config` object:
 
----
-
-## 2) Deploy / upgrade the program on alt staging
+```typescript
+const config: Config = {
+  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
+  BANK: new PublicKey("<BANK_ADDRESS>"),
+  ACCOUNT: new PublicKey("<MARGINFI_ACCOUNT>"),
+  AMOUNT: new BN(100000), // in native token units
+};
+```
 
 ```bash
-bash ops/alt-staging/scripts/program-deploy-alt-staging.sh
+tsx scripts/juplend/deposit.ts
 ```
 
-Notes:
-- This uses `solana program deploy` directly to avoid Anchor.toml cluster mapping headaches.
-- It will auto-detect the `.so` under `target/deploy/*.so` if you don't set `ALT_STAGING_PROGRAM_SO_PATH`.
+### withdraw.ts
 
----
+Withdraw from a JupLend bank. Edit the inline `config` object:
 
-## 3) One-time program state init
-
-### 3a) Init global fee state (once per program id)
-
-If this is a **fresh program deployment**, you must create the global fee state PDA before creating a group.
+```typescript
+const config: Config = {
+  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
+  BANK: new PublicKey("<BANK_ADDRESS>"),
+  ACCOUNT: new PublicKey("<MARGINFI_ACCOUNT>"),
+  AMOUNT: new BN(100000),
+  WITHDRAW_ALL: false, // set true to withdraw entire position
+};
+```
 
 ```bash
-npx ts-node ops/alt-staging/scripts/init-global-fee-state.ts --send
+tsx scripts/juplend/withdraw.ts
 ```
 
-Defaults are configured via env vars in `ops/alt-staging/.env` (all zero is fine for staging).
+### bank_metadata.ts
 
-### 3b) Init the group/pool
+Initialize and write on-chain metadata (ticker + description) for JupLend banks. This runs two instructions per bank:
+
+1. `initBankMetadata` — pays rent to create the metadata PDA (permissionless, skipped if already exists)
+2. `writeBankMetadata` — writes ticker and description bytes (requires metadata admin)
+
+Edit the inline `config` object with the bank addresses and metadata:
+
+```typescript
+const config: Config = {
+  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
+  GROUP: new PublicKey("<GROUP_ADDRESS>"),
+  BANKS: [
+    {
+      bank: new PublicKey("<BANK_ADDRESS>"),
+      ticker: "USDC | USD Coin",
+      description: "USD Coin | Stablecoin | USDC | JupLend",
+    },
+  ],
+};
+```
 
 ```bash
-npx ts-node ops/alt-staging/scripts/init-group.ts --send
+tsx scripts/juplend/bank_metadata.ts
 ```
 
-This prints the new group pubkey. Copy it into your env:
+The metadata PDA is derived as `["metadata", bank_pubkey]`. Bank addresses for deployed banks can be found in `configs/created-banks.json`.
+
+### close_bank.ts
+
+Close an empty JupLend bank. Edit the inline `config` object:
+
+```typescript
+const config: Config = {
+  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
+  BANK: new PublicKey("<BANK_ADDRESS>"),
+};
+```
 
 ```bash
-# ops/alt-staging/.env
-ALT_STAGING_GROUP=<printed group pubkey>
+tsx scripts/juplend/close_bank.ts
 ```
 
----
+## Multisig Mode
 
-## 4) Init a user account (for local testing)
+All scripts support multisig (Squads) by setting `sendTx = false`. When disabled, the script simulates the transaction and outputs a base58-encoded transaction that can be imported into Squads for signing. Set `MULTISIG_PAYER` in the config to the Squads vault address.
 
-This creates a marginfi account PDA (no extra keypair needed).
+## Directory Layout
 
-```bash
-npx ts-node ops/alt-staging/scripts/init-user.ts --send
+```
+scripts/juplend/
+├── add_bank.ts          # Create bank (config file driven)
+├── init_position.ts     # Seed deposit + activate
+├── bank_metadata.ts     # Init + write on-chain metadata
+├── deposit.ts           # User deposit
+├── withdraw.ts          # User withdraw
+├── close_bank.ts        # Close empty bank
+├── lib/
+│   └── utils.ts         # PDA derivers, constants, config parser
+└── configs/
+    ├── juplend-assets.json   # Asset/mint/lending PDA mapping
+    ├── oracles.json          # Cached oracle addresses
+    ├── created-banks.json    # Deployed bank records
+    └── banks/
+        └── example.json      # Bank config template
 ```
 
----
+## Supported Assets
 
-## 5) Add banks (assets) one by one
+See `configs/juplend-assets.json` for the full list. Current assets:
 
-Create a config file per asset under `ops/alt-staging/configs/banks/`.
-
-Start from:
-
-- `ops/alt-staging/configs/banks/example.json`
-
-Then run:
-
-```bash
-npx ts-node ops/alt-staging/scripts/add-bank.ts ops/alt-staging/configs/banks/usdc.json --send
-```
-
-The script:
-- derives the bank PDA from `{group, mint, seed}`
-- auto-detects SPL vs Token-2022 mint
-- simulates first (prints logs)
-- sends only if you pass `--send`
-
----
-
-## Did we forget anything?
-
-For a brand-new program deployment, the usual order is:
-
-1. **Deploy/upgrade** program
-2. `init-global-fee-state` (once per program)
-3. `init-group` (once per group)
-4. Add banks (one per asset)
-5. `init-user` (only needed for manual testing)
-
-Other things you *might* need depending on what you test next:
-
-- `marginfi_group_configure` (if your client expects non-default group settings)
-- test mints / token faucets on alt staging for deposits
-- emissions setup (only if you're testing emissions)
-
+WSOL, USDC, USDT, EURC, USDG, USDS, USDV, EURCV, JUPUSD
