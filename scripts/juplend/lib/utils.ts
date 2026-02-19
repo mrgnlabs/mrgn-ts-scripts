@@ -225,6 +225,9 @@ type Config = {
   RISK_TIER?: string;
   ORACLE_MAX_AGE?: number;
   CONFIG_FLAGS?: number;
+
+  TICKER?: string;
+  DESCRIPTION?: string;
 };
 
 export { Config };
@@ -263,5 +266,7 @@ export function parseConfig(rawConfig: string): Config {
     RISK_TIER: json.riskTier,
     ORACLE_MAX_AGE: json.oracleMaxAge,
     CONFIG_FLAGS: json.configFlags,
+    TICKER: json.ticker,
+    DESCRIPTION: json.description,
   };
 }

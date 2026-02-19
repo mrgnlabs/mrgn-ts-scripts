@@ -42,7 +42,7 @@ async function main() {
   const configFile = process.argv[2];
   if (!configFile) {
     console.error("Usage: tsx scripts/juplend/add_bank.ts <config-file>");
-    console.error("Example: tsx scripts/juplend/add_bank.ts configs/usdc.json");
+    console.error("Example: tsx scripts/juplend/add_bank.ts configs/stage/usdc.json");
     process.exit(1);
   }
 

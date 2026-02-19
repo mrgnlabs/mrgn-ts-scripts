@@ -1,200 +1,234 @@
-# JupLend Integration Scripts
+# JupLend Bank Management
 
-Scripts for managing JupLend banks on Marginfi. 
+Scripts for creating and managing JupLend banks on the Marginfi protocol.
 
-## Prerequisites
+## Config Generation
 
-- `.env.api` at repo root with `API_URL` (Solana RPC endpoint)
-- Wallet keypair file (path passed to each script)
+Bank configs are **generated, not hand-written**. A single generator script
+combines four data sources into per-bank JSON files for each environment.
 
-## Program IDs
-
-| Environment | Program ID |
-|---|---|
-| Production | `MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA` |
-| Staging | `stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct` |
-
-JupLend program addresses (same on all environments):
-- Lending: `jup3YeL8QhtSx1e253b2FDvsMNC87fDrgQZivbrndc9`
-- Liquidity: `jupeiUmn818Jg1ekPURTpr4mFo29p46vygyykFJ3wZC`
-- Earn Rewards: `jup7TthsMgcR9Y3L277b8Eo9uboVSmu1utkuXHNUKar`
-
-## Workflow
-
-Typical order when adding a new JupLend asset:
+### Data Sources
 
 ```
-1. add_bank.ts       Create the bank (admin)
-2. init_position.ts  Seed deposit + activate (permissionless)
-3. bank_metadata.ts  Init + write on-chain metadata (metadata admin)
-4. deposit.ts        Deposit funds (user)
-5. withdraw.ts       Withdraw funds (user)
-6. close_bank.ts     Close empty bank (admin)
+environments.json ──┐
+bank-params.json ───┤
+juplend-assets.json ┼──▶ generate_configs.ts ──▶ configs/<env>/<symbol>.json
+oracles.json ───────┘
 ```
 
-## Scripts
-
-### add_bank.ts
-
-Create a JupLend bank from a JSON config file.
-
-```bash
-tsx scripts/juplend/add_bank.ts configs/banks/usdc.json
-```
-
-The script reads config from a JSON file under `configs/banks/`. Set `sendTx = true` in the script to execute, or leave `false` to output a base58-encoded transaction for multisig signing.
-
-**Config JSON fields:**
+**`configs/environments.json`** — environment-specific program and group:
 
 ```json
 {
-  "programId": "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  "group": "<GROUP_PUBKEY>",
-  "bankMint": "<TOKEN_MINT>",
-  "juplendLending": "<JUPLEND_LENDING_PDA>",
-  "fTokenMint": "<JUPLEND_FTOKEN_MINT>",
-  "seed": 600,
-  "oracle": "<ORACLE_PUBKEY>",
-  "oracleSetup": "juplendPythPull",
-  "assetWeightInit": "0.9",
-  "assetWeightMaint": "0.95",
-  "depositLimit": "1000000000000",
-  "totalAssetValueInitLimit": "1000000000",
-  "riskTier": "collateral",
-  "oracleMaxAge": 60,
-  "admin": "<OPTIONAL_ADMIN_PUBKEY>",
-  "feePayer": "<OPTIONAL_FEE_PAYER>",
-  "multisigPayer": "<OPTIONAL_SQUADS_PUBKEY>"
+  "stage": {
+    "programId": "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
+    "group": "FCPfpHA69EbS8f9KKSreTRkXbzFpunsKuYf5qNmnJjpo"
+  },
+  "prod": {
+    "programId": "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
+    "group": "<prod-group-address>"
+  }
 }
 ```
 
-- `oracleSetup`: `"juplendPythPull"` or `"juplendSwitchboardPull"`
-- `riskTier`: `"collateral"` or `"isolated"`
-- Lending PDAs and fToken mints for each asset are listed in `configs/juplend-assets.json`
+**`configs/bank-params.json`** — per-asset risk parameters and metadata
+(shared across all environments):
 
-### init_position.ts
-
-Activate a bank with a seed deposit. Edit the inline `config` object:
-
-```typescript
-const config: Config = {
-  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-  BANK: new PublicKey("<BANK_ADDRESS>"),
-  AMOUNT: new BN(10000), // seed deposit in native units
-};
-```
-
-```bash
-tsx scripts/juplend/init_position.ts
-```
-
-The script fetches the bank on-chain to get mint, lending, and fToken vault addresses. Handles WSOL wrapping automatically.
-
-### deposit.ts
-
-Deposit into a JupLend bank. Edit the inline `config` object:
-
-```typescript
-const config: Config = {
-  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-  BANK: new PublicKey("<BANK_ADDRESS>"),
-  ACCOUNT: new PublicKey("<MARGINFI_ACCOUNT>"),
-  AMOUNT: new BN(100000), // in native token units
-};
-```
-
-```bash
-tsx scripts/juplend/deposit.ts
-```
-
-### withdraw.ts
-
-Withdraw from a JupLend bank. Edit the inline `config` object:
-
-```typescript
-const config: Config = {
-  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-  BANK: new PublicKey("<BANK_ADDRESS>"),
-  ACCOUNT: new PublicKey("<MARGINFI_ACCOUNT>"),
-  AMOUNT: new BN(100000),
-  WITHDRAW_ALL: false, // set true to withdraw entire position
-};
-```
-
-```bash
-tsx scripts/juplend/withdraw.ts
-```
-
-### bank_metadata.ts
-
-Initialize and write on-chain metadata (ticker + description) for JupLend banks. This runs two instructions per bank:
-
-1. `initBankMetadata` — pays rent to create the metadata PDA (permissionless, skipped if already exists)
-2. `writeBankMetadata` — writes ticker and description bytes (requires metadata admin)
-
-Edit the inline `config` object with the bank addresses and metadata:
-
-```typescript
-const config: Config = {
-  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-  GROUP: new PublicKey("<GROUP_ADDRESS>"),
-  BANKS: [
+```json
+{
+  "defaults": {
+    "seed": 600,
+    "riskTier": "collateral",
+    "configFlags": 1
+  },
+  "banks": [
     {
-      bank: new PublicKey("<BANK_ADDRESS>"),
-      ticker: "USDC | USD Coin",
-      description: "USD Coin | Stablecoin | USDC | JupLend",
-    },
-  ],
-};
+      "symbol": "WSOL",
+      "mint": "So11111111111111111111111111111111111111112",
+      "fullName": "Wrapped SOL",
+      "category": "Native",
+      "tokenProgram": "SPL Token",
+      "decimals": 9,
+      "assetWeightInit": "0.75",
+      "assetWeightMaint": "0.85",
+      "depositLimit": "150000000000000",
+      "totalAssetValueInitLimit": "20000000",
+      "oracleMaxAge": 70
+    }
+  ]
+}
 ```
+
+Fields in `defaults` apply to all banks unless overridden per-bank. Each bank
+entry requires:
+
+| Field | Description |
+|-------|-------------|
+| `symbol` | Token symbol, must match `juplend-assets.json` |
+| `mint` | SPL token mint address |
+| `fullName` | Human-readable name (used in metadata ticker/description) |
+| `category` | `Native`, `Stablecoin`, etc. (used in metadata description) |
+| `tokenProgram` | `SPL Token` or `Token-2022` (informational, in comments) |
+| `decimals` | Token decimals (informational, in comments) |
+| `assetWeightInit` | Initial collateral weight (e.g. `"0.75"`) |
+| `assetWeightMaint` | Maintenance collateral weight (e.g. `"0.85"`) |
+| `depositLimit` | Max deposit in native units as string |
+| `totalAssetValueInitLimit` | Max total asset value in USD as string |
+| `oracleMaxAge` | Max oracle staleness in seconds |
+
+Optional per-bank overrides: `riskTier` (`"collateral"` or `"isolated"`),
+`configFlags`.
+
+**`configs/juplend-assets.json`** — JupLend lending PDAs per mint (fetched
+from on-chain). Provides `juplendLending` and `fTokenMint` for each asset:
+
+```json
+{
+  "juplendProgram": "jup3YeL8QhtSx1e253b2FDvsMNC87fDrgQZivbrndc9",
+  "lendingAdmin": "5nmGjA4s7ATzpBQXC5RNceRpaJ7pYw2wKsNBWyuSAZV6",
+  "bankSeed": 600,
+  "assets": [
+    {
+      "symbol": "WSOL",
+      "lending": "BeAqbxfr...",
+      "fTokenMint": "2uQsyo1f...",
+      "mint": "So111111..."
+    }
+  ]
+}
+```
+
+Refresh from on-chain with:
 
 ```bash
-tsx scripts/juplend/bank_metadata.ts
+npx tsx scripts/juplend/helpers/dump_juplend_assets.ts
 ```
 
-The metadata PDA is derived as `["metadata", bank_pubkey]`. Bank addresses for deployed banks can be found in `configs/created-banks.json`.
+**`dumps/artefacts/oracles.json`** — oracle addresses and types per mint
+(fetched from on-chain Marginfi banks). Provides `oracle`, `oracleSetup`.
 
-### close_bank.ts
-
-Close an empty JupLend bank. Edit the inline `config` object:
-
-```typescript
-const config: Config = {
-  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-  BANK: new PublicKey("<BANK_ADDRESS>"),
-};
-```
+### Running the Generator
 
 ```bash
-tsx scripts/juplend/close_bank.ts
+npx tsx scripts/juplend/helpers/generate_configs.ts stage
+npx tsx scripts/juplend/helpers/generate_configs.ts prod
 ```
 
-## Multisig Mode
+Output: `configs/stage/wsol.json`, `configs/stage/usdc.json`, etc.
 
-All scripts support multisig (Squads) by setting `sendTx = false`. When disabled, the script simulates the transaction and outputs a base58-encoded transaction that can be imported into Squads for signing. Set `MULTISIG_PAYER` in the config to the Squads vault address.
+The generator validates that each asset has entries in both
+`juplend-assets.json` and `oracles.json`, skipping any that are missing.
+Each generated config includes a derived `bankAddress` in the `comments`
+field for verification.
 
-## Directory Layout
+### Generated Config Format
 
+Each file (e.g. `configs/stage/wsol.json`) contains everything needed by
+`add_bank.ts` and `bank_metadata.ts`:
+
+```json
+{
+  "programId": "stag8sTK...",
+  "group": "FCPfpHA6...",
+  "bankMint": "So111111...",
+  "juplendLending": "BeAqbxfr...",
+  "fTokenMint": "2uQsyo1f...",
+  "oracle": "4Hmd6Pdj...",
+  "oracleSetup": "juplendSwitchboardPull",
+  "seed": 600,
+  "assetWeightInit": "0.75",
+  "assetWeightMaint": "0.85",
+  "depositLimit": "150000000000000",
+  "totalAssetValueInitLimit": "20000000",
+  "riskTier": "collateral",
+  "oracleMaxAge": 70,
+  "configFlags": 1,
+  "ticker": "WSOL | Wrapped SOL",
+  "description": "Wrapped SOL | Native | WSOL | JupLend",
+  "comments": {
+    "asset": "Wrapped SOL",
+    "tokenProgram": "SPL Token",
+    "decimals": 9,
+    "bankAddress": "E3C8YBqd..."
+  }
+}
 ```
-scripts/juplend/
-├── add_bank.ts          # Create bank (config file driven)
-├── init_position.ts     # Seed deposit + activate
-├── bank_metadata.ts     # Init + write on-chain metadata
-├── deposit.ts           # User deposit
-├── withdraw.ts          # User withdraw
-├── close_bank.ts        # Close empty bank
-├── lib/
-│   └── utils.ts         # PDA derivers, constants, config parser
-└── configs/
-    ├── juplend-assets.json   # Asset/mint/lending PDA mapping
-    ├── oracles.json          # Cached oracle addresses
-    ├── created-banks.json    # Deployed bank records
-    └── banks/
-        └── example.json      # Bank config template
+
+| Field | Source | Description |
+|-------|--------|-------------|
+| `programId` | environments.json | Marginfi program for this env |
+| `group` | environments.json | Marginfi group for this env |
+| `bankMint` | bank-params.json | Token mint address |
+| `juplendLending` | juplend-assets.json | JupLend lending PDA |
+| `fTokenMint` | juplend-assets.json | JupLend fToken mint PDA |
+| `oracle` | oracles.json | Oracle feed address |
+| `oracleSetup` | oracles.json | `juplendPythPull` or `juplendSwitchboardPull` |
+| `seed` | bank-params.json defaults | Bank PDA seed (600) |
+| `assetWeightInit` | bank-params.json | Initial collateral weight |
+| `assetWeightMaint` | bank-params.json | Maintenance collateral weight |
+| `depositLimit` | bank-params.json | Max deposit (native units) |
+| `totalAssetValueInitLimit` | bank-params.json | Max total value (USD) |
+| `riskTier` | bank-params.json | `collateral` or `isolated` |
+| `oracleMaxAge` | bank-params.json | Max oracle staleness (seconds) |
+| `configFlags` | bank-params.json | Bank config flags |
+| `ticker` | generated | `"SYMBOL \| Full Name"` |
+| `description` | generated | `"Full Name \| Category \| Symbol \| JupLend"` |
+| `comments.bankAddress` | derived | Bank PDA (for verification) |
+
+### Adding a New Asset
+
+1. Ensure the JupLend lending pool exists on-chain
+2. Run `helpers/dump_juplend_assets.ts` to refresh `juplend-assets.json`
+3. Run `dumps/dump_oracles.ts` to refresh oracle data
+4. Add the asset entry to `bank-params.json` with risk parameters
+5. Run `helpers/generate_configs.ts <env>`
+
+## Bank Lifecycle
+
+All scripts have a `sendTx` flag at the top. When `false` (default), they
+output an unsigned base58-encoded transaction for multisig signing.
+
+### 1. Create bank
+
+```bash
+npx tsx scripts/juplend/add_bank.ts configs/stage/wsol.json
 ```
 
-## Supported Assets
+### 2. Write metadata
 
-See `configs/juplend-assets.json` for the full list. Current assets:
+```bash
+npx tsx scripts/juplend/bank_metadata.ts configs/stage/wsol.json
+```
 
-WSOL, USDC, USDT, EURC, USDG, USDS, USDV, EURCV, JUPUSD
+Two steps: `initBankMetadata` (permissionless, pays rent) then
+`writeBankMetadata` (metadata admin only). Both use the same config file.
+
+### 3. Init position (seed deposit)
+
+```bash
+npx tsx scripts/juplend/init_position.ts
+```
+
+Edit the script to set bank address, amount, and program ID.
+
+### 4. Deposit / Withdraw
+
+```bash
+npx tsx scripts/juplend/deposit.ts
+npx tsx scripts/juplend/withdraw.ts
+```
+
+Edit the script to set bank, account, and amount.
+
+### 5. Close bank
+
+```bash
+npx tsx scripts/juplend/close_bank.ts
+```
+
+Bank must have zero deposits.
+
+## Environment
+
+Scripts load RPC from `.env.api` (`API_URL` key). Falls back to public
+mainnet RPC. Wallet path is set per-script (default: `/keys/staging-deploy.json`).
