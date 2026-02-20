@@ -12,17 +12,17 @@ type Config = {
 };
 
 const config: Config = {
-  PROGRAM_ID: "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
-  BANK: new PublicKey("E4td8i8PT2BZkMygzW4MGHCv2KPPs57dvz5W2ZXf9Twu"),
+  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
+  BANK: new PublicKey("GM98Qmzdoc7PSD64t7bG5Gqt4XEcZV9RKGcgsFCxTY4e"),
 };
 
 async function main() {
   const user = commonSetup(
     true,
     config.PROGRAM_ID,
-    "/keys/zerotrade_admin.json",
+    "/.keys/zerotrade_admin.json",
     undefined,
-    "1.6",
+    "current",
   );
   const program = user.program;
   const connection = user.connection;
