@@ -1,6 +1,6 @@
 {
   "programId": "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-  "group": "FCPfpHA69EbS8f9KKSreTRkXbzFpunsKuYf5qNmnJjpo",
+  "group": "Diu1q9gniR1qR4Daaej3rcHd6949HMmxLGsnQ94Z3rLz",
   "bankMint": "So11111111111111111111111111111111111111112",
   "juplendLending": "BeAqbxfrcXmzEYT2Ra62oW2MqkuFDHaCtps47Mzg6Zj3",
   "fTokenMint": "2uQsyo1fXXQkDtcpXnLofWy88PxcvnfH2L8FPSE62FVU",
@@ -20,6 +20,6 @@
     "asset": "Wrapped SOL",
     "tokenProgram": "SPL Token",
     "decimals": 9,
-    "bankAddress": "E3C8YBqdr8vFpYyGPUoa7KNHp5EzThp4j37Vat8RkWaY"
+    "bankAddress": "EC1T1SWsT81MdrGWdrwesDs1vApJNtjDXibcBX4GFsEH"
   }
 }

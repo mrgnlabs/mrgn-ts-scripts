@@ -31,7 +31,7 @@ import {
 import { commonSetup } from "../../lib/common-setup";
 import { bs58 } from "@switchboard-xyz/common";
 
-const sendTx = false;
+const sendTx = true;
 
 async function main() {
   const configFile = process.argv[2];

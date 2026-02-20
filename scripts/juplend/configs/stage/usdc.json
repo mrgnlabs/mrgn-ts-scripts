@@ -1,6 +1,6 @@
 {
   "programId": "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-  "group": "FCPfpHA69EbS8f9KKSreTRkXbzFpunsKuYf5qNmnJjpo",
+  "group": "Diu1q9gniR1qR4Daaej3rcHd6949HMmxLGsnQ94Z3rLz",
   "bankMint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
   "juplendLending": "2vVYHYM8VYnvZqQWpTJSj8o8DBf1wM8pVs3bsTgYZiqJ",
   "fTokenMint": "9BEcn9aPEmhSPbPQeFGjidRiEKki46fVQDyPpSQXPA2D",
@@ -20,6 +20,6 @@
     "asset": "USD Coin",
     "tokenProgram": "SPL Token",
     "decimals": 6,
-    "bankAddress": "AicY52M5DNkibsRH4nTSk5kMrwCtxL1nmbfq7Rz5QSUb"
+    "bankAddress": "2mPDpFXRDXguzz29rhSsnAUd23ZU5MzqYXyU5dvLLx9q"
   }
 }

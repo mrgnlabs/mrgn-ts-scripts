@@ -36,7 +36,7 @@ import { bigNumberToWrappedI80F48 } from "@mrgnlabs/mrgn-common";
 /**
  * If true, send the tx. If false, output the unsigned b58 tx to console.
  */
-const sendTx = false;
+const sendTx = true;
 
 async function main() {
   const configFile = process.argv[2];

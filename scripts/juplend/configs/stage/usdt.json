@@ -1,6 +1,6 @@
 {
   "programId": "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
-  "group": "FCPfpHA69EbS8f9KKSreTRkXbzFpunsKuYf5qNmnJjpo",
+  "group": "Diu1q9gniR1qR4Daaej3rcHd6949HMmxLGsnQ94Z3rLz",
   "bankMint": "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB",
   "juplendLending": "F7tLdeF2YZZex9MR8HgGggyFiz7UU2UgUube2tmfwNPE",
   "fTokenMint": "Cmn4v2wipYV41dkakDvCgFJpxhtaaKt11NyWV8pjSE8A",
@@ -20,6 +20,6 @@
     "asset": "Tether USD",
     "tokenProgram": "SPL Token",
     "decimals": 6,
-    "bankAddress": "BKjPAKPzSFiS6fLEoKxeASorASxyarExbiWgruprysJs"
+    "bankAddress": "C8xW2QAizzCaxAacAEHxnQUa3rXnRdTHXuTRNwHjTi8e"
   }
 }

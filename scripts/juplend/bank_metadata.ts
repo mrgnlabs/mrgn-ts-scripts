@@ -12,7 +12,7 @@ import { commonSetup } from "../../lib/common-setup";
 import { parseConfig, Config } from "./lib/utils";
 import { deriveBankWithSeed } from "../common/pdas";
 
-const sendTx = false;
+const sendTx = true;
 
 function deriveBankMetadataPda(
   programId: PublicKey,
