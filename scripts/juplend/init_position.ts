@@ -12,6 +12,7 @@ import {
   getMint,
   getAssociatedTokenAddressSync,
   createAssociatedTokenAccountInstruction,
+  createAssociatedTokenAccountIdempotentInstruction,
   createSyncNativeInstruction,
   NATIVE_MINT,
 } from "@solana/spl-token";
@@ -223,6 +224,32 @@ export async function initJuplendPosition(
       ),
     );
   }
+
+  // Create withdraw intermediary ATA (integration_acc_3)
+  // This ATA is owned by liquidityVaultAuthority and is
+  // required for juplend_withdraw to work.
+  const withdrawIntermediaryAta =
+    getAssociatedTokenAddressSync(
+      mint,
+      liquidityVaultAuthority,
+      true,
+      tokenProgram,
+      ASSOCIATED_TOKEN_PROGRAM_ID,
+    );
+  transaction.add(
+    createAssociatedTokenAccountIdempotentInstruction(
+      payerKey,
+      withdrawIntermediaryAta,
+      liquidityVaultAuthority,
+      mint,
+      tokenProgram,
+    ),
+  );
+  console.log(
+    "  withdrawIntermediaryAta:",
+    withdrawIntermediaryAta.toString(),
+  );
+  console.log();
 
   const initPositionIx = await program.methods
     .juplendInitPosition(amount)
