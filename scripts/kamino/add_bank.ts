@@ -63,7 +63,7 @@ const config: Config = {
   KAMINO_RESERVE: new PublicKey("2gFjdQLFaFqTKMv4nFGMAP4bX2F5KAsyiJn8yZQHPKSE"),
   KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"),
 
-  SEED: 0,
+  SEED: 42,
   MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 };
 

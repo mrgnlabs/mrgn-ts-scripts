@@ -26,19 +26,23 @@ type Config = {
 };
 
 const config: Config = {
-  LUT: new PublicKey("CQ8omkUwDtsszuJLo9grtXCeEyDU4QqBLRv9AjRDaUZ3"),
+  LUT: new PublicKey("7mTGsbaXnNpdcP2jdStswRx8rdH8cVCdj2xKKENDsJHH"),
   KEYS: [
-    new PublicKey("Ffe4RTL4oYrzA9QKQVJ3PCATXnp3mS3s7buDKnnmHYGX"),
-    new PublicKey("HaF6jK16UwZZt9iFXRUqpSMWUFzhUJaU8rmVtXcokoTZ"),
-    new PublicKey("stke7uu3fXHsGqKVVjKnkmj65LRPVrqr4bLG2SJg7rh"),
-    // new PublicKey("Dpw1EAVrSB1ibxiDQyTAW6Zip3J4Btk2x4SgApQCeFbX"),
-    // new PublicKey("6gMq3mRCKf8aP3ttTyYhuijVZ2LGi14oDsBbkgubfLB3"),
-    // new PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"),
+    new PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"),
+    new PublicKey("SysvarRent111111111111111111111111111111111"),
+    // new PublicKey("5oVNBeEEQvYi1cX3ir8Dx5n1P7pdxydbGF2X4TxVusJm"),
+    // new PublicKey("CuG9VXiEps4tMdZPzm7x4TJDEtCQNRLBFuyk5GmX4BWg"),
+    // new PublicKey("2qnzecL2r35LM51S9EZVrPcdvCSqsg8r2QWcJJqyDuH3"),
+    // new PublicKey("5zpq7DvB6UdFFvpmBPspGPNfUGoBRRCE2HHg5u3gxcsN"),
+    // new PublicKey("B62ErTornx9tSVwcLwGh9RqvfFCen4cfWkArYdRpRy91"),
+    // new PublicKey("58ACj986huaXwNUHD6YKJ88gZzyUY4rhSTizyaGvnyAy"),
+    // new PublicKey("7SAxf2SCJe5c72rZNo4etpGjz5TaEAqi8QkbfpRbouuT"),
+    // new PublicKey("dRiftyHA39MWEi3m9aunc5MzRF1JYuBsbn6VPcn33UH"),
   ],
 };
 
 async function main() {
-  await updateLut(sendTx, config, "/.keys/BURNED_phantom-wallet.json");
+  await updateLut(sendTx, config, "/.config/stage/id.json");
 }
 
 export async function updateLut(
