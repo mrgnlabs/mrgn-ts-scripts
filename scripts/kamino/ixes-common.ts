@@ -41,7 +41,7 @@ export interface AddKaminoBankAccounts {
 export const makeAddKaminoBankIx = (
   program: Program<Marginfi>,
   accounts: AddKaminoBankAccounts,
-  args: AddKaminoBankArgs
+  args: AddKaminoBankArgs,
 ): Promise<TransactionInstruction> => {
   const oracleMeta: AccountMeta = {
     pubkey: accounts.oracle,
@@ -58,16 +58,16 @@ export const makeAddKaminoBankIx = (
     program.programId,
     accounts.group,
     accounts.bankMint,
-    args.seed
+    args.seed,
   );
   console.log("key to be init: " + bankKey);
   const [liquidityVaultAuthority] = deriveLiquidityVaultAuthority(
     program.programId,
-    bankKey
+    bankKey,
   );
   const [kaminoObligation] = deriveBaseObligation(
     liquidityVaultAuthority,
-    accounts.kaminoMarket
+    accounts.kaminoMarket,
   );
 
   const ix = program.methods
@@ -102,8 +102,7 @@ export interface InitObligationAccounts {
   bank: PublicKey;
   signerTokenAccount: PublicKey;
   lendingMarket: PublicKey;
-  reserveLiquidityMint: PublicKey;
-  reserve?: PublicKey;
+  reserve: PublicKey;
   liquidityTokenProgram?: PublicKey;
 
   obligationFarmUserState?: PublicKey | null;
@@ -134,7 +133,7 @@ export interface InitObligationAccounts {
 export const makeInitObligationIx = async (
   program: Program<Marginfi>,
   accounts: InitObligationAccounts,
-  amount?: BN
+  amount?: BN,
 ): Promise<TransactionInstruction> => {
   // Merge with defaults...
   const accs = {
@@ -144,39 +143,31 @@ export const makeInitObligationIx = async (
 
   const [liquidityVault] = deriveLiquidityVault(
     program.programId,
-    accounts.bank
+    accounts.bank,
   );
   const [liquidityVaultAuthority] = deriveLiquidityVaultAuthority(
     program.programId,
-    accounts.bank
+    accounts.bank,
   );
   const [userMetadata] = deriveUserMetadata(
     KLEND_PROGRAM_ID,
-    liquidityVaultAuthority
+    liquidityVaultAuthority,
   );
   const [lendingMarketAuthority] = deriveLendingMarketAuthority(
     KLEND_PROGRAM_ID,
-    accounts.lendingMarket
+    accounts.lendingMarket,
   );
   const [reserveLiquiditySupply] = deriveReserveLiquiditySupply(
     KLEND_PROGRAM_ID,
-    accounts.lendingMarket,
-    accounts.reserveLiquidityMint
+    accounts.reserve,
   );
   const [reserveCollateralMint] = deriveReserveCollateralMint(
     KLEND_PROGRAM_ID,
-    accounts.lendingMarket,
-    accounts.reserveLiquidityMint
+    accounts.reserve,
   );
   const [reserveCollateralSupply] = deriveReserveCollateralSupply(
     KLEND_PROGRAM_ID,
-    accounts.lendingMarket,
-    accounts.reserveLiquidityMint
-  );
-  const [baseObligation] = deriveBaseObligation(
-    accounts.bank,
-    accounts.lendingMarket,
-    KLEND_PROGRAM_ID
+    accounts.reserve,
   );
 
   const ix = await program.methods
@@ -216,7 +207,7 @@ export interface KaminoDepositAccounts {
   bank: PublicKey;
   signerTokenAccount: PublicKey;
   lendingMarket: PublicKey;
-  reserveLiquidityMint: PublicKey;
+  reserve: PublicKey;
 
   obligationFarmUserState?: PublicKey | null;
   reserveFarmState?: PublicKey | null;
@@ -225,7 +216,7 @@ export interface KaminoDepositAccounts {
 export const makeKaminoDepositIx = async (
   program: Program<Marginfi>,
   accounts: KaminoDepositAccounts,
-  amount: BN
+  amount: BN,
 ): Promise<TransactionInstruction> => {
   // Merge with defaults...
   const accs = {
@@ -235,22 +226,19 @@ export const makeKaminoDepositIx = async (
 
   const [lendingMarketAuthority] = deriveLendingMarketAuthority(
     KLEND_PROGRAM_ID,
-    accounts.lendingMarket
+    accounts.lendingMarket,
   );
   const [reserveLiquiditySupply] = deriveReserveLiquiditySupply(
     KLEND_PROGRAM_ID,
-    accounts.lendingMarket,
-    accounts.reserveLiquidityMint
+    accounts.reserve,
   );
   const [reserveCollateralMint] = deriveReserveCollateralMint(
     KLEND_PROGRAM_ID,
-    accounts.lendingMarket,
-    accounts.reserveLiquidityMint
+    accounts.reserve,
   );
   const [reserveCollateralSupply] = deriveReserveCollateralSupply(
     KLEND_PROGRAM_ID,
-    accounts.lendingMarket,
-    accounts.reserveLiquidityMint
+    accounts.reserve,
   );
 
   return program.methods
@@ -276,7 +264,7 @@ export interface KaminoWithdrawAccounts {
   bank: PublicKey;
   destinationTokenAccount: PublicKey;
   lendingMarket: PublicKey;
-  reserveLiquidityMint: PublicKey;
+  reserve: PublicKey;
 
   obligationFarmUserState?: PublicKey | null;
   reserveFarmState?: PublicKey | null;
@@ -287,7 +275,7 @@ export const makeKaminoWithdrawIx = async (
   accounts: KaminoWithdrawAccounts,
   amount: BN,
   withdraw_all: boolean,
-  remaining: AccountMeta[]
+  remaining: AccountMeta[],
 ): Promise<TransactionInstruction> => {
   // Merge with defaults...
   const accs = {
@@ -297,22 +285,19 @@ export const makeKaminoWithdrawIx = async (
 
   const [lendingMarketAuthority] = deriveLendingMarketAuthority(
     KLEND_PROGRAM_ID,
-    accounts.lendingMarket
+    accounts.lendingMarket,
   );
   const [reserveLiquiditySupply] = deriveReserveLiquiditySupply(
     KLEND_PROGRAM_ID,
-    accounts.lendingMarket,
-    accounts.reserveLiquidityMint
+    accounts.reserve,
   );
   const [reserveCollateralMint] = deriveReserveCollateralMint(
     KLEND_PROGRAM_ID,
-    accounts.lendingMarket,
-    accounts.reserveLiquidityMint
+    accounts.reserve,
   );
   const [reserveCollateralSupply] = deriveReserveCollateralSupply(
     KLEND_PROGRAM_ID,
-    accounts.lendingMarket,
-    accounts.reserveLiquidityMint
+    accounts.reserve,
   );
 
   return program.methods
@@ -343,7 +328,7 @@ export const simpleRefreshReserve = (
   program: Program<KaminoLending>,
   reserve: PublicKey,
   market: PublicKey,
-  oracle: PublicKey
+  oracle: PublicKey,
 ) => {
   const ix = program.methods
     .refreshReserve()
@@ -374,7 +359,7 @@ export const simpleRefreshObligation = (
   program: Program<KaminoLending>,
   market: PublicKey,
   obligation: PublicKey,
-  remaining: PublicKey[] = []
+  remaining: PublicKey[] = [],
 ) => {
   const accMeta: AccountMeta[] = remaining.map((pubkey) => ({
     pubkey,

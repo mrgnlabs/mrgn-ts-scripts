@@ -42,9 +42,6 @@ type Config = {
   KAMINO_MARKET: PublicKey;
   /** Oracle address the Kamino Reserve uses. Typically read from reserve.config.tokenInfo.scope */
   RESERVE_ORACLE: PublicKey;
-  /** Reserve Farm state. Can be read from reserve.farmCollateral. Technically optional, but almost
-   * every (perhaps every?) Kamino reserve in prod has one. */
-  FARM_STATE: PublicKey;
   TOKEN_PROGRAM?: PublicKey; // If omitted, defaults to TOKEN_PROGRAM_ID
   LUT: PublicKey;
   MULTISIG_PAYER?: PublicKey; // May be omitted if not using squads
@@ -63,7 +60,6 @@ const prodKaminoTestconfig: Config = {
   KAMINO_RESERVE: new PublicKey("D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59"),
   KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"),
   RESERVE_ORACLE: new PublicKey("3t4JZcueEzTbVP6kLxXrL3VpWx45jDer4eqysweBchNH"),
-  FARM_STATE: new PublicKey("JAvnB9AKtgPsTEoKmn24Bq64UMoYcrtWtq42HHBdsPkh"),
 
   LUT: new PublicKey("FtQ5uKQvFoKQ27SWY15tgBeJQnGKmKGzWqDz7kGUbeiq"),
 
@@ -131,9 +127,14 @@ export async function withdrawKamino(
     config.TOKEN_PROGRAM ?? TOKEN_PROGRAM_ID
   );
 
+  const reserve = await user.kaminoProgram.account.reserve.fetch(
+    config.KAMINO_RESERVE,
+  );
+  const reserveFarmState = reserve.farmCollateral;
+
   const [userState] = deriveUserState(
     FARMS_PROGRAM_ID,
-    config.FARM_STATE,
+    reserveFarmState,
     baseObligation
   );
 
@@ -167,8 +168,8 @@ export async function withdrawKamino(
         bank: config.BANK,
         destinationTokenAccount: ata,
         lendingMarket: config.KAMINO_MARKET,
-        reserveLiquidityMint: config.BANK_MINT,
-        reserveFarmState: config.FARM_STATE,
+        reserve: config.KAMINO_RESERVE,
+        reserveFarmState,
         obligationFarmUserState: userState,
       },
       config.AMOUNT,
