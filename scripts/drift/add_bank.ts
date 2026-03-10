@@ -45,11 +45,11 @@ type Config = {
   /** 9 (DriftPythPush) or 10 (DriftSwitchboardPull) */
   ORACLE_SETUP: { driftPythPull: {} } | { driftSwitchboardPull: {} };
   DRIFT_ORACLE: PublicKey;
+  SEED: BN;
   /** Group admin (generally the MS on mainnet) */
   ADMIN?: PublicKey; // If omitted, defaults to wallet.pubkey
   /** Pays flat sol fee to init and rent (generally the MS on mainnet) */
   FEE_PAYER?: PublicKey; // If omitted, defaults to ADMIN
-  SEED: BN;
   MULTISIG_PAYER?: PublicKey; // May be omitted if not using squads
 
   // Optional Bank Config fields
@@ -255,7 +255,6 @@ export async function addDriftBank(
 
   const transaction = new Transaction().add(addBankIx, initUserIx);
 
-  // Simulate
   transaction.feePayer = feePayer;
   const { blockhash } = await connection.getLatestBlockhash();
   transaction.recentBlockhash = blockhash;

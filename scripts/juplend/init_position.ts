@@ -16,17 +16,11 @@ import {
   createSyncNativeInstruction,
   NATIVE_MINT,
 } from "@solana/spl-token";
-import { readFileSync } from "fs";
-import { join } from "path";
 import {
-  parseConfig,
-  Config,
   deriveJuplendCpiAccounts,
   findJuplendLendingAdminPda,
-  JUPLEND_LENDING_PROGRAM_ID,
 } from "./lib/utils";
 import {
-  deriveBankWithSeed,
   deriveLiquidityVaultAuthority,
 } from "../common/pdas";
 import { commonSetup } from "../../lib/common-setup";
@@ -34,55 +28,29 @@ import { bs58 } from "@switchboard-xyz/common";
 
 const sendTx = true;
 
+type Config = {
+  PROGRAM_ID: string;
+  BANK: PublicKey;
+
+  /** Pays flat sol fee to init and rent (generally the MS on mainnet) */
+  FEE_PAYER?: PublicKey; // If omitted, defaults to wallet.pubkey
+  MULTISIG_PAYER?: PublicKey; // May be omitted if not using squads
+
+  INIT_DEPOSIT_AMOUNT?: BN; // Default: 100
+};
+
+const config: Config = {
+  PROGRAM_ID: "stag8sTKds2h4KzjUw3zKTsxbqvT4XKHdaR9X9E6Rct",
+  BANK: new PublicKey("Ay8kyX7q2G9Yp3T6Nt8Z3p8xcMeaC19xLQjmGjTX2niq"),
+};
+
 async function main() {
-  const configFile = process.argv[2];
-  const amountStr = process.argv[3];
-  if (!configFile || !amountStr) {
-    console.error(
-      "Usage: tsx scripts/juplend/init_position.ts"
-      + " <config-file> <amount>",
-    );
-    console.error(
-      "Example: tsx scripts/juplend/init_position.ts"
-      + " configs/stage/wsol.json 10000",
-    );
-    process.exit(1);
-  }
-
-  const configPath = join(__dirname, configFile);
-  const rawConfig = readFileSync(configPath, "utf8");
-  const config = parseConfig(rawConfig);
-  const amount = new BN(amountStr);
-
-  const programId = new PublicKey(config.PROGRAM_ID);
-  const [bank] = deriveBankWithSeed(
-    programId,
-    config.GROUP_KEY,
-    config.BANK_MINT,
-    config.SEED,
-  );
-
-  console.log("=== JupLend Init Position ===\n");
-  console.log("Config:", configFile);
-  console.log("Bank:", bank.toString());
-  console.log("Mint:", config.BANK_MINT.toString());
-  console.log("Amount:", amount.toString(), "base units");
-  console.log();
-
-  await initJuplendPosition(
-    sendTx,
-    config,
-    bank,
-    amount,
-    "/keys/staging-deploy.json",
-  );
+  await initJuplendPosition(sendTx, config, "/keys/staging-deploy.json");
 }
 
 export async function initJuplendPosition(
   sendTx: boolean,
   config: Config,
-  bank: PublicKey,
-  amount: BN,
   walletPath: string,
   version?: "current",
 ) {
@@ -97,31 +65,17 @@ export async function initJuplendPosition(
   const wallet = user.wallet;
   const program = user.program;
 
-  const payerKey = sendTx
-    ? wallet.publicKey
-    : config.MULTISIG_PAYER;
-
-  if (!payerKey) {
-    throw new Error(
-      "MULTISIG_PAYER must be set when sendTx = false",
-    );
-  }
+  const feePayer = config.FEE_PAYER ?? wallet.publicKey;
 
   // Fetch bank to get mint and integration accounts
-  const bankData = await program.account.bank.fetch(bank);
+  const bankData = await program.account.bank.fetch(config.BANK);
   const mint = bankData.mint;
   const juplendLending = bankData.integrationAcc1;
-  const juplendFTokenVault = bankData.integrationAcc2;
 
   // Detect token program
   let tokenProgram = TOKEN_PROGRAM_ID;
   try {
-    await getMint(
-      connection,
-      mint,
-      "confirmed",
-      TOKEN_2022_PROGRAM_ID,
-    );
+    await getMint(connection, mint, "confirmed", TOKEN_2022_PROGRAM_ID);
     tokenProgram = TOKEN_2022_PROGRAM_ID;
     console.log("Detected Token-2022 mint");
   } catch {
@@ -129,26 +83,19 @@ export async function initJuplendPosition(
   }
 
   // Derive accounts
-  const [liquidityVaultAuthority] =
-    deriveLiquidityVaultAuthority(program.programId, bank);
-  const [lendingAdmin] = findJuplendLendingAdminPda();
-  const juplendAccounts = deriveJuplendCpiAccounts(
-    mint,
-    tokenProgram,
+  const [liquidityVaultAuthority] = deriveLiquidityVaultAuthority(
+    program.programId,
+    config.BANK,
   );
+  const [lendingAdmin] = findJuplendLendingAdminPda();
+  const juplendAccounts = deriveJuplendCpiAccounts(mint, tokenProgram);
 
   // Fetch JupLend Lending account
-  const lendingInfo =
-    await connection.getAccountInfo(juplendLending);
+  const lendingInfo = await connection.getAccountInfo(juplendLending);
   if (!lendingInfo) {
-    throw new Error(
-      "JupLend Lending not found: "
-      + juplendLending.toString(),
-    );
+    throw new Error("JupLend Lending not found: " + juplendLending.toString());
   }
-  const fTokenMint = new PublicKey(
-    lendingInfo.data.slice(40, 72),
-  );
+  const fTokenMint = new PublicKey(lendingInfo.data.slice(40, 72));
   const supplyTokenReservesLiquidity = new PublicKey(
     lendingInfo.data.slice(131, 163),
   );
@@ -158,109 +105,84 @@ export async function initJuplendPosition(
 
   const signerTokenAccount = getAssociatedTokenAddressSync(
     mint,
-    payerKey,
+    feePayer,
     false,
     tokenProgram,
     ASSOCIATED_TOKEN_PROGRAM_ID,
   );
 
   console.log("Derived accounts:");
-  console.log(
-    "  liquidityVaultAuthority:",
-    liquidityVaultAuthority.toString(),
-  );
-  console.log(
-    "  lendingAdmin:",
-    lendingAdmin.toString(),
-  );
-  console.log(
-    "  fTokenMint:",
-    fTokenMint.toString(),
-  );
+  console.log("  liquidityVaultAuthority:", liquidityVaultAuthority.toString());
+  console.log("  lendingAdmin:", lendingAdmin.toString());
+  console.log("  fTokenMint:", fTokenMint.toString());
   console.log(
     "  supplyTokenReserves:",
     supplyTokenReservesLiquidity.toString(),
   );
-  console.log(
-    "  supplyPosition:",
-    lendingSupplyPositionOnLiquidity.toString(),
-  );
+  console.log("  supplyPosition:", lendingSupplyPositionOnLiquidity.toString());
   console.log();
 
   const transaction = new Transaction();
 
+  const amount = config.INIT_DEPOSIT_AMOUNT ?? new BN(100);
+
   // Handle WSOL wrapping if needed
   const isWsol = mint.equals(NATIVE_MINT);
   if (isWsol) {
-    const ataInfo = await connection.getAccountInfo(
-      signerTokenAccount,
-    );
+    const ataInfo = await connection.getAccountInfo(signerTokenAccount);
     if (!ataInfo) {
       transaction.add(
         createAssociatedTokenAccountInstruction(
-          payerKey,
+          feePayer,
           signerTokenAccount,
-          payerKey,
+          feePayer,
           mint,
           tokenProgram,
           ASSOCIATED_TOKEN_PROGRAM_ID,
         ),
       );
     }
-    console.log(
-      `Wrapping ${amount.toString()} lamports as WSOL...`,
-    );
+    console.log(`Wrapping ${amount.toString()} lamports as WSOL...`);
     transaction.add(
       SystemProgram.transfer({
-        fromPubkey: payerKey,
+        fromPubkey: feePayer,
         toPubkey: signerTokenAccount,
         lamports: amount.toNumber(),
       }),
     );
     transaction.add(
-      createSyncNativeInstruction(
-        signerTokenAccount,
-        tokenProgram,
-      ),
+      createSyncNativeInstruction(signerTokenAccount, tokenProgram),
     );
   }
 
   // Create withdraw intermediary ATA (integration_acc_3)
   // This ATA is owned by liquidityVaultAuthority and is
   // required for juplend_withdraw to work.
-  const withdrawIntermediaryAta =
-    getAssociatedTokenAddressSync(
-      mint,
-      liquidityVaultAuthority,
-      true,
-      tokenProgram,
-      ASSOCIATED_TOKEN_PROGRAM_ID,
-    );
+  const withdrawIntermediaryAta = getAssociatedTokenAddressSync(
+    mint,
+    liquidityVaultAuthority,
+    true,
+    tokenProgram,
+    ASSOCIATED_TOKEN_PROGRAM_ID,
+  );
   transaction.add(
     createAssociatedTokenAccountIdempotentInstruction(
-      payerKey,
+      feePayer,
       withdrawIntermediaryAta,
       liquidityVaultAuthority,
       mint,
       tokenProgram,
     ),
   );
-  console.log(
-    "  withdrawIntermediaryAta:",
-    withdrawIntermediaryAta.toString(),
-  );
+  console.log("  withdrawIntermediaryAta:", withdrawIntermediaryAta.toString());
   console.log();
 
   const initPositionIx = await program.methods
     .juplendInitPosition(amount)
     .accounts({
-      feePayer: payerKey,
+      feePayer,
       signerTokenAccount,
-      bank,
-      mint,
-      integrationAcc1: juplendLending,
-      fTokenMint,
-      integrationAcc2: juplendFTokenVault,
+      bank: config.BANK,
       lendingAdmin,
       supplyTokenReservesLiquidity,
       lendingSupplyPositionOnLiquidity,
@@ -269,63 +191,50 @@ export async function initJuplendPosition(
       liquidity: juplendAccounts.liquidity,
       liquidityProgram: juplendAccounts.liquidityProgram,
       rewardsRateModel: juplendAccounts.rewardsRateModel,
-      juplendProgram: JUPLEND_LENDING_PROGRAM_ID,
       tokenProgram,
-      associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-      systemProgram: SystemProgram.programId,
+    })
+    .accountsPartial({
+      fTokenMint,
     })
     .instruction();
 
   transaction.add(initPositionIx);
 
   // Simulate + send
-  transaction.feePayer = payerKey;
-  const { blockhash } =
-    await connection.getLatestBlockhash();
+  transaction.feePayer = feePayer;
+  const { blockhash } = await connection.getLatestBlockhash();
   transaction.recentBlockhash = blockhash;
 
   console.log("Simulating juplendInitPosition...");
-  const simulation =
-    await connection.simulateTransaction(transaction);
+  const simulation = await connection.simulateTransaction(transaction);
 
   console.log("\nProgram Logs:");
-  simulation.value.logs?.forEach((log) =>
-    console.log("  " + log),
-  );
+  simulation.value.logs?.forEach((log) => console.log("  " + log));
 
   if (simulation.value.err) {
     console.log("\nSimulation failed:");
-    console.log(
-      JSON.stringify(simulation.value.err, null, 2),
-    );
+    console.log(JSON.stringify(simulation.value.err, null, 2));
     process.exit(1);
   }
 
   console.log("\nSimulation successful!");
-  console.log(
-    "Compute units:",
-    simulation.value.unitsConsumed,
-  );
+  console.log("Compute units:", simulation.value.unitsConsumed);
   console.log();
 
   if (sendTx) {
-    const signature = await sendAndConfirmTransaction(
-      connection,
-      transaction,
-      [wallet.payer],
-    );
+    const signature = await sendAndConfirmTransaction(connection, transaction, [
+      wallet.payer,
+    ]);
     console.log("Signature:", signature);
     console.log("Position initialized!");
   } else {
+    transaction.feePayer = config.MULTISIG_PAYER; // Set the fee payer to Squads wallet
     const serialized = transaction.serialize({
       requireAllSignatures: false,
       verifySignatures: false,
     });
-    console.log("bank:", bank.toString());
-    console.log(
-      "Base58-encoded transaction:",
-      bs58.encode(serialized),
-    );
+    console.log("bank:", config.BANK.toString());
+    console.log("Base58-encoded transaction:", bs58.encode(serialized));
   }
 }
 

@@ -14,20 +14,11 @@ import {
 } from "@solana/spl-token";
 import { readFileSync } from "fs";
 import { join } from "path";
-import {
-  JuplendConfigCompact,
-  parseConfig,
-  Config,
-  JUPLEND_LENDING_PROGRAM_ID,
-} from "./lib/utils";
+import { JuplendConfigCompact } from "./lib/utils";
 import {
   deriveBankWithSeed,
   deriveLiquidityVault,
   deriveLiquidityVaultAuthority,
-  deriveInsuranceVault,
-  deriveInsuranceVaultAuthority,
-  deriveFeeVault,
-  deriveFeeVaultAuthority,
 } from "../common/pdas";
 import { commonSetup } from "../../lib/common-setup";
 import { bs58 } from "@switchboard-xyz/common";
@@ -38,11 +29,38 @@ import { bigNumberToWrappedI80F48 } from "@mrgnlabs/mrgn-common";
  */
 const sendTx = true;
 
+type Config = {
+  PROGRAM_ID: string;
+  GROUP_KEY: PublicKey;
+  BANK_MINT: PublicKey;
+  JUPLEND_LENDING: PublicKey;
+  F_TOKEN_MINT: PublicKey;
+  ORACLE: PublicKey;
+  /** 15 (JuplendPythPull) or 16 (JuplendSwitchboardPull) */
+  ORACLE_SETUP: { juplendPythPull: {} } | { juplendSwitchboardPull: {} };
+  SEED: BN;
+  ADMIN?: PublicKey; // If omitted, defaults to wallet.pubkey
+  /** Pays flat sol fee to init and rent (generally the MS on mainnet) */
+  FEE_PAYER?: PublicKey; // If omitted, defaults to ADMIN
+  MULTISIG_PAYER?: PublicKey; // May be omitted if not using squads
+
+  // Optional Bank Config fields
+  ASSET_WEIGHT_INIT?: string;
+  ASSET_WEIGHT_MAINT?: string;
+  DEPOSIT_LIMIT?: string;
+  TOTAL_ASSET_VALUE_INIT_LIMIT?: string;
+  RISK_TIER?: string;
+  ORACLE_MAX_AGE?: number;
+  CONFIG_FLAGS?: number;
+};
+
 async function main() {
   const configFile = process.argv[2];
   if (!configFile) {
     console.error("Usage: tsx scripts/juplend/add_bank.ts <config-file>");
-    console.error("Example: tsx scripts/juplend/add_bank.ts configs/stage/usdc.json");
+    console.error(
+      "Example: tsx scripts/juplend/add_bank.ts configs/stage/usdc.json",
+    );
     process.exit(1);
   }
 
@@ -119,11 +137,11 @@ export async function addJuplendBank(
     depositLimit: new BN(config.DEPOSIT_LIMIT ?? "1000000000000"),
     oracleSetup: config.ORACLE_SETUP,
     riskTier,
-    configFlags: config.CONFIG_FLAGS ?? 1,
+    configFlags: config.CONFIG_FLAGS ?? 0,
     totalAssetValueInitLimit: new BN(
       config.TOTAL_ASSET_VALUE_INIT_LIMIT ?? "1000000000",
     ),
-    oracleMaxAge: config.ORACLE_MAX_AGE ?? 60,
+    oracleMaxAge: config.ORACLE_MAX_AGE ?? 70,
     oracleMaxConfidence: 0,
   };
 
@@ -141,13 +159,6 @@ export async function addJuplendBank(
     bank,
   );
   const [liquidityVault] = deriveLiquidityVault(program.programId, bank);
-  const [insuranceVaultAuthority] = deriveInsuranceVaultAuthority(
-    program.programId,
-    bank,
-  );
-  const [insuranceVault] = deriveInsuranceVault(program.programId, bank);
-  const [feeVaultAuthority] = deriveFeeVaultAuthority(program.programId, bank);
-  const [feeVault] = deriveFeeVault(program.programId, bank);
 
   // fToken vault is an ATA of liquidityVaultAuthority for fTokenMint
   const juplendFTokenVault = getAssociatedTokenAddressSync(
@@ -186,7 +197,6 @@ export async function addJuplendBank(
       feePayer,
       bankMint: config.BANK_MINT,
       integrationAcc1: config.JUPLEND_LENDING,
-      fTokenMint: config.F_TOKEN_MINT,
       tokenProgram,
     })
     .accountsPartial({
@@ -197,7 +207,6 @@ export async function addJuplendBank(
 
   const transaction = new Transaction().add(addBankIx);
 
-  // Simulate
   transaction.feePayer = feePayer;
   const { blockhash } = await connection.getLatestBlockhash();
   transaction.recentBlockhash = blockhash;
@@ -238,4 +247,36 @@ if (require.main === module) {
   main().catch((err) => {
     console.error(err);
   });
+}
+
+export function parseConfig(rawConfig: string): Config {
+  const json = JSON.parse(rawConfig);
+
+  let ORACLE_SETUP: Config["ORACLE_SETUP"];
+  if (
+    json.oracleSetup === "juplendSwitchboardPull" ||
+    json.oracleSetup === "switchboardPull"
+  ) {
+    ORACLE_SETUP = { juplendSwitchboardPull: {} };
+  } else {
+    ORACLE_SETUP = { juplendPythPull: {} };
+  }
+
+  return {
+    PROGRAM_ID: json.programId,
+    GROUP_KEY: new PublicKey(json.group),
+    BANK_MINT: new PublicKey(json.bankMint),
+    JUPLEND_LENDING: new PublicKey(json.juplendLending),
+    F_TOKEN_MINT: new PublicKey(json.fTokenMint),
+    ORACLE: new PublicKey(json.oracle),
+    ORACLE_SETUP,
+    SEED: new BN(json.seed),
+    ASSET_WEIGHT_INIT: json.assetWeightInit,
+    ASSET_WEIGHT_MAINT: json.assetWeightMaint,
+    DEPOSIT_LIMIT: json.depositLimit,
+    TOTAL_ASSET_VALUE_INIT_LIMIT: json.totalAssetValueInitLimit,
+    RISK_TIER: json.riskTier,
+    ORACLE_MAX_AGE: json.oracleMaxAge,
+    CONFIG_FLAGS: json.configFlags,
+  };
 }

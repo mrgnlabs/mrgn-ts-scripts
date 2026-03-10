@@ -1,7 +1,5 @@
 import {
   PublicKey,
-  Transaction,
-  sendAndConfirmTransaction,
   AccountMeta,
   TransactionInstruction,
   ComputeBudgetProgram,
