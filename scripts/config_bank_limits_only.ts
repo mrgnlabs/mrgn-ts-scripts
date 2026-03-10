@@ -38,10 +38,22 @@ export type BankLimitsEntry = {
  */
 const bankLimits: BankLimitsEntry[] = [
   {
-    bank: new PublicKey("6zN8tRxMpuqruDF4ChjeNGCVggqWBMQQ9KmiNhYeiqXb"),
-    depositLimit: cap(120_000, 9),
-    borrowLimit: cap(20000, 9),
-    initValue: new BN(24_000_000),
+    bank: new PublicKey("HSWzj4oipYaMD7DtpiFcBs3oH5ZwDp4PUTtzPCJNMSd4"),
+    depositLimit: cap(20_000, 9),
+    borrowLimit: cap(0, 9),
+    initValue: new BN(3_000_000),
+  },
+  {
+    bank: new PublicKey("8yH6soQM2SUFjkRQiBo5UDLbLTWPCYEsyT22Xdi1sfh7"),
+    depositLimit: cap(20_000, 9),
+    borrowLimit: cap(0, 9),
+    initValue: new BN(3_000_000),
+  },
+  {
+    bank: new PublicKey("2D1dc9jo8CNjgVG4qTKpRuGA83zrXv9iuSHV9BWZ7Js9"),
+    depositLimit: cap(20_000, 9),
+    borrowLimit: cap(0, 9),
+    initValue: new BN(3_000_000),
   },
 ];
 
@@ -51,7 +63,7 @@ async function main() {
     config.PROGRAM_ID,
     "/keys/staging-deploy.json",
     config.MULTISIG_PAYER,
-    "current"
+    "current",
   );
   const program = user.program;
   const connection = user.connection;
@@ -78,7 +90,7 @@ async function main() {
       const signature = await sendAndConfirmTransaction(
         connection,
         transaction,
-        [user.wallet.payer]
+        [user.wallet.payer],
       );
       console.log("Transaction signature:", signature);
     } catch (error) {

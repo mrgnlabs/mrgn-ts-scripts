@@ -10,6 +10,7 @@ import { configs } from "../lib/config";
 import { Environment } from "../lib/types";
 import { loadEnvFile } from "./utils";
 import yargs from "yargs";
+import { buildMintToGroupMap } from "./asset_groups";
 import { hideBin } from "yargs/helpers";
 
 const sendTx = true;
@@ -46,11 +47,13 @@ type StagingBankMetadata = {
 // Mainnet metadata format
 type MainnetBankMetadata = {
   bank_address: string;
+  mint: string;
   symbol: string;
   name: string;
   venue?: string;
   venue_identifier?: string;
   asset_tag?: number;
+  risk_tier_name?: string;
 };
 
 // Banks not yet in the metadata cache (manually added)
@@ -82,7 +85,7 @@ async function fetchBankMetadata(env: Environment): Promise<BankMetadataEntry[]>
     // Parse staging format
     const stagingData = data as StagingBankMetadata[];
     const banks = stagingData.map((item) => {
-      const assetGroup = getAssetGroup(item.tokenSymbol);
+      const assetGroup = getAssetGroup(item.tokenAddress);
       return {
         bank: new PublicKey(item.bankAddress),
         // ticker = "symbol | name"
@@ -97,61 +100,37 @@ async function fetchBankMetadata(env: Environment): Promise<BankMetadataEntry[]>
     // Parse mainnet format
     const mainnetData = data as MainnetBankMetadata[];
     return mainnetData.map((item) => {
-      const assetGroup = getAssetGroupFromTag(item.asset_tag) || getAssetGroup(item.symbol);
-      // Use actual venue from API (P0, Kamino, Drift, etc.)
+      const assetGroup = getAssetGroup(item.mint, item.risk_tier_name);
       const venue = item.venue || "P0";
+      let marketType: string | undefined;
+      if (item.venue_identifier) {
+        const afterDash = item.venue_identifier.split(" - ")[1];
+        if (afterDash && afterDash !== venue) {
+          marketType = afterDash.startsWith(venue) ? afterDash.slice(venue.length).trim() : afterDash;
+        }
+      }
+      const marketSuffix = marketType ? ` | ${marketType}` : " | -";
       return {
         bank: new PublicKey(item.bank_address),
         // ticker = "symbol | name"
         ticker: `${item.symbol} | ${item.name}`,
-        // description = "name | asset_group | symbol | venue"
-        description: `${item.name} | ${assetGroup} | ${item.symbol} | ${venue}`,
+        // description = "name | asset_group | symbol | venue | market_type"
+        description: `${item.name} | ${assetGroup} | ${item.symbol} | ${venue}${marketSuffix}`,
       };
     });
   }
 }
 
-/**
- * Determines asset group based on symbol patterns.
- */
-function getAssetGroup(symbol: string): string {
-  const lowerSymbol = symbol.toLowerCase();
-
-  // Stablecoins
-  if (["usdc", "usdt", "pyusd", "uxd", "usdy", "usdh"].includes(lowerSymbol)) {
-    return "Stablecoin";
-  }
-
-  // LSTs (Liquid Staking Tokens)
-  if (lowerSymbol.includes("sol") && lowerSymbol !== "sol") {
-    return "LST";
-  }
-
-  // Principal Tokens
-  if (lowerSymbol.startsWith("pt")) {
-    return "PT";
-  }
-
-  // Native
-  if (lowerSymbol === "sol") {
-    return "Native";
-  }
-
-  return "Other";
-}
+const MINT_TO_GROUP = buildMintToGroupMap();
 
 /**
- * Determines asset group from asset_tag number.
+ * Determines asset group based on mint address, with "W/E" override for isolated risk tier.
  */
-function getAssetGroupFromTag(assetTag?: number): string | null {
-  if (assetTag === undefined) return null;
-
-  switch (assetTag) {
-    case 0: return "Default";
-    case 1: return "Native";
-    case 2: return "Native Stake";
-    default: return null;
+function getAssetGroup(mint: string, riskTierName?: string): string {
+  if (riskTierName?.toLowerCase() === "isolated") {
+    return "W/E";
   }
+  return MINT_TO_GROUP[mint] || "W/E";
 }
 
 /**
@@ -180,7 +159,7 @@ async function main() {
     })
     .option("limit", {
       type: "number",
-      default: 5,
+      default: 200,
       description: "Number of banks to process (for testing)",
     })
     .option("wallet", {
@@ -197,6 +176,11 @@ async function main() {
       default: 2000,
       description: "Delay in ms between transactions (to avoid rate limiting)",
     })
+    .option("fresh-only", {
+      type: "boolean",
+      default: false,
+      description: "Only process banks that do not have an existing metadata account",
+    })
     .parseSync();
 
   const env = argv.env as Environment;
@@ -204,18 +188,46 @@ async function main() {
   const walletPath = process.env.MARGINFI_WALLET;
   const dryRun = argv["dry-run"];
   const delay = argv.delay;
+  const freshOnly = argv["fresh-only"];
 
   console.log(`\nEnvironment: ${env}`);
   console.log(`Limit: ${limit} banks`);
   console.log(`Wallet: ${walletPath}`);
   console.log(`Delay: ${delay}ms`);
-  console.log(`Dry run: ${dryRun}\n`);
+  console.log(`Dry run: ${dryRun}`);
+  console.log(`Fresh only: ${freshOnly}\n`);
 
   const allBanks = await fetchBankMetadata(env);
   console.log(`Fetched ${allBanks.length} banks from metadata API\n`);
 
-  // Limit banks for testing
-  const banks = allBanks.slice(0, limit);
+  let banks: BankMetadataEntry[];
+
+  if (freshOnly) {
+    const envConfig = configs[env];
+    const programId = new PublicKey(envConfig.PROGRAM_ID);
+    const { connection } = commonSetup(
+      false,
+      envConfig.PROGRAM_ID,
+      walletPath,
+    );
+
+    console.log("Filtering for banks without metadata accounts...");
+    const freshBanks: BankMetadataEntry[] = [];
+
+    for (const bank of allBanks) {
+      const [metadataPda] = deriveBankMetadataPda(programId, bank.bank);
+      const accountInfo = await connection.getAccountInfo(metadataPda);
+      if (accountInfo === null) {
+        freshBanks.push(bank);
+      }
+    }
+
+    console.log(`Found ${freshBanks.length} banks without metadata accounts\n`);
+    banks = freshBanks.slice(0, limit);
+  } else {
+    // Limit banks for testing
+    banks = allBanks.slice(0, limit);
+  }
 
   const envConfig = configs[env];
   const config: Config = {
