@@ -45,7 +45,7 @@ const config: Config = {
 
   // BANK: new PublicKey("44WmBHm3bKvrwy1jnf9EkgX8hBT61Dz7Z9yfLCSmdEyy"), // USDS
   // BANK: new PublicKey("8u7NuUBxckF2ouC3XKFkuxurinBYQTQiTcXVyqqoyRgM"), // USDC
-  BANK: new PublicKey("6AVFnZoP5BxthgKsKzoZomtpguJLnLSLR96Mc8gNb7kQ"), // USD1
+  BANK: new PublicKey("8y23ks4ZdoKf6G4aiamXSXWerkEbo4U9Zdi2WmqbqSJY"), // USD1
   ADMIN: new PublicKey("CS3NzMknNWtjo2pq5dqp67hQYQ8wdLPt5m67oa5mBZUX"),
   FEE_PAYER: new PublicKey("FbfXs6D1BGUqyz6ya5AfVi3eoyfhin6hfM9d7yt1WK3L"),
 
