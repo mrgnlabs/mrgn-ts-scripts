@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/marginfi.json`.
  */
 export type Marginfi = {
-  "address": "",
+  "address": "2jGhuVUuy3umdzByFx8sNWUAaf5vaeuDm78RDPEnhrMr",
   "metadata": {
     "name": "marginfi",
     "version": "0.1.8",
@@ -1218,7 +1218,7 @@ export type Marginfi = {
           "name": "programFeeFixed",
           "type": {
             "defined": {
-              "name": "wrappedI80f48"
+              "name": "wrappedI80F48"
             }
           }
         },
@@ -1226,7 +1226,7 @@ export type Marginfi = {
           "name": "programFeeRate",
           "type": {
             "defined": {
-              "name": "wrappedI80f48"
+              "name": "wrappedI80F48"
             }
           }
         },
@@ -1234,7 +1234,7 @@ export type Marginfi = {
           "name": "liquidationMaxFee",
           "type": {
             "defined": {
-              "name": "wrappedI80f48"
+              "name": "wrappedI80F48"
             }
           }
         },
@@ -1242,7 +1242,7 @@ export type Marginfi = {
           "name": "orderExecutionMaxFee",
           "type": {
             "defined": {
-              "name": "wrappedI80f48"
+              "name": "wrappedI80F48"
             }
           }
         }
@@ -1550,7 +1550,7 @@ export type Marginfi = {
           "name": "programFeeFixed",
           "type": {
             "defined": {
-              "name": "wrappedI80f48"
+              "name": "wrappedI80F48"
             }
           }
         },
@@ -1558,7 +1558,7 @@ export type Marginfi = {
           "name": "programFeeRate",
           "type": {
             "defined": {
-              "name": "wrappedI80f48"
+              "name": "wrappedI80F48"
             }
           }
         },
@@ -1566,7 +1566,7 @@ export type Marginfi = {
           "name": "liquidationMaxFee",
           "type": {
             "defined": {
-              "name": "wrappedI80f48"
+              "name": "wrappedI80F48"
             }
           }
         },
@@ -1574,7 +1574,7 @@ export type Marginfi = {
           "name": "orderExecutionMaxFee",
           "type": {
             "defined": {
-              "name": "wrappedI80f48"
+              "name": "wrappedI80F48"
             }
           }
         }
@@ -1684,6 +1684,7 @@ export type Marginfi = {
       "accounts": [
         {
           "name": "group",
+          "writable": true,
           "relations": [
             "marginfiAccount",
             "bank"
@@ -1695,10 +1696,7 @@ export type Marginfi = {
         },
         {
           "name": "authority",
-          "signer": true,
-          "relations": [
-            "marginfiAccount"
-          ]
+          "signer": true
         },
         {
           "name": "bank",
@@ -3181,10 +3179,36 @@ export type Marginfi = {
       ]
     },
     {
+      "name": "lendingAccountClearEmissions",
+      "docs": [
+        "(permissionless) Zero out `emissions_outstanding` on a balance after emissions are disabled",
+        "on the bank."
+      ],
+      "discriminator": [
+        239,
+        4,
+        221,
+        98,
+        45,
+        167,
+        201,
+        244
+      ],
+      "accounts": [
+        {
+          "name": "marginfiAccount",
+          "writable": true
+        },
+        {
+          "name": "bank"
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "lendingAccountCloseBalance",
       "docs": [
-        "(account authority) Close a balance position with dust-level amounts. Claims outstanding",
-        "emissions before closing."
+        "(account authority) Close a balance position with dust-level amounts."
       ],
       "discriminator": [
         245,
@@ -3582,33 +3606,6 @@ export type Marginfi = {
       ]
     },
     {
-      "name": "lendingAccountSettleEmissions",
-      "docs": [
-        "(permissionless) Settle unclaimed emissions into a user's balance without withdrawing."
-      ],
-      "discriminator": [
-        161,
-        58,
-        136,
-        174,
-        242,
-        223,
-        156,
-        176
-      ],
-      "accounts": [
-        {
-          "name": "marginfiAccount",
-          "writable": true
-        },
-        {
-          "name": "bank",
-          "writable": true
-        }
-      ],
-      "args": []
-    },
-    {
       "name": "lendingAccountStartFlashloan",
       "docs": [
         "(account authority) Start a flash loan. Must have a corresponding `end_flashloan` ix in the",
@@ -3755,283 +3752,6 @@ export type Marginfi = {
           }
         }
       ]
-    },
-    {
-      "name": "lendingAccountWithdrawEmissions",
-      "docs": [
-        "(account authority) Settle and withdraw emissions rewards to a destination token account."
-      ],
-      "discriminator": [
-        234,
-        22,
-        84,
-        214,
-        118,
-        176,
-        140,
-        170
-      ],
-      "accounts": [
-        {
-          "name": "group",
-          "relations": [
-            "marginfiAccount",
-            "bank"
-          ]
-        },
-        {
-          "name": "marginfiAccount",
-          "writable": true
-        },
-        {
-          "name": "authority",
-          "signer": true
-        },
-        {
-          "name": "bank",
-          "writable": true
-        },
-        {
-          "name": "emissionsMint",
-          "relations": [
-            "bank"
-          ]
-        },
-        {
-          "name": "emissionsAuth",
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  101,
-                  109,
-                  105,
-                  115,
-                  115,
-                  105,
-                  111,
-                  110,
-                  115,
-                  95,
-                  97,
-                  117,
-                  116,
-                  104,
-                  95,
-                  115,
-                  101,
-                  101,
-                  100
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "bank"
-              },
-              {
-                "kind": "account",
-                "path": "emissionsMint"
-              }
-            ]
-          }
-        },
-        {
-          "name": "emissionsVault",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  101,
-                  109,
-                  105,
-                  115,
-                  115,
-                  105,
-                  111,
-                  110,
-                  115,
-                  95,
-                  116,
-                  111,
-                  107,
-                  101,
-                  110,
-                  95,
-                  97,
-                  99,
-                  99,
-                  111,
-                  117,
-                  110,
-                  116,
-                  95,
-                  115,
-                  101,
-                  101,
-                  100
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "bank"
-              },
-              {
-                "kind": "account",
-                "path": "emissionsMint"
-              }
-            ]
-          }
-        },
-        {
-          "name": "destinationAccount",
-          "writable": true
-        },
-        {
-          "name": "tokenProgram"
-        }
-      ],
-      "args": []
-    },
-    {
-      "name": "lendingAccountWithdrawEmissionsPermissionless",
-      "docs": [
-        "(permissionless) Withdraw emissions to the user's pre-configured emissions destination ATA."
-      ],
-      "discriminator": [
-        4,
-        174,
-        124,
-        203,
-        44,
-        49,
-        145,
-        150
-      ],
-      "accounts": [
-        {
-          "name": "group",
-          "relations": [
-            "marginfiAccount",
-            "bank"
-          ]
-        },
-        {
-          "name": "marginfiAccount",
-          "writable": true
-        },
-        {
-          "name": "bank",
-          "writable": true
-        },
-        {
-          "name": "emissionsMint",
-          "relations": [
-            "bank"
-          ]
-        },
-        {
-          "name": "emissionsAuth",
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  101,
-                  109,
-                  105,
-                  115,
-                  115,
-                  105,
-                  111,
-                  110,
-                  115,
-                  95,
-                  97,
-                  117,
-                  116,
-                  104,
-                  95,
-                  115,
-                  101,
-                  101,
-                  100
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "bank"
-              },
-              {
-                "kind": "account",
-                "path": "emissionsMint"
-              }
-            ]
-          }
-        },
-        {
-          "name": "emissionsVault",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  101,
-                  109,
-                  105,
-                  115,
-                  115,
-                  105,
-                  111,
-                  110,
-                  115,
-                  95,
-                  116,
-                  111,
-                  107,
-                  101,
-                  110,
-                  95,
-                  97,
-                  99,
-                  99,
-                  111,
-                  117,
-                  110,
-                  116,
-                  95,
-                  115,
-                  101,
-                  101,
-                  100
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "bank"
-              },
-              {
-                "kind": "account",
-                "path": "emissionsMint"
-              }
-            ]
-          }
-        },
-        {
-          "name": "destinationAccount",
-          "docs": [
-            "registered on `marginfi_account`"
-          ],
-          "writable": true
-        },
-        {
-          "name": "tokenProgram"
-        }
-      ],
-      "args": []
     },
     {
       "name": "lendingPoolAccrueBankInterest",
@@ -7336,78 +7056,26 @@ export type Marginfi = {
       "args": []
     },
     {
-      "name": "lendingPoolSetFixedOraclePrice",
+      "name": "lendingPoolReclaimEmissionsVault",
       "docs": [
-        "(admin only)"
-      ],
-      "discriminator": [
-        28,
-        126,
-        127,
-        127,
-        60,
-        37,
-        211,
-        125
-      ],
-      "accounts": [
-        {
-          "name": "group",
-          "relations": [
-            "bank"
-          ]
-        },
-        {
-          "name": "admin",
-          "signer": true,
-          "relations": [
-            "group"
-          ]
-        },
-        {
-          "name": "bank",
-          "writable": true
-        }
-      ],
-      "args": [
-        {
-          "name": "price",
-          "type": {
-            "defined": {
-              "name": "wrappedI80f48"
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "lendingPoolSetupEmissions",
-      "docs": [
-        "(delegate_emissions_admin only)"
+        "(permissionless) Reclaim all remaining tokens from the emissions vault",
+        "to the global fee wallet ATA, and disable emissions on the bank."
       ],
       "discriminator": [
         206,
-        97,
-        120,
-        172,
-        113,
-        204,
-        169,
-        70
+        67,
+        186,
+        225,
+        41,
+        30,
+        95,
+        216
       ],
       "accounts": [
         {
           "name": "group",
           "relations": [
             "bank"
-          ]
-        },
-        {
-          "name": "delegateEmissionsAdmin",
-          "writable": true,
-          "signer": true,
-          "relations": [
-            "group"
           ]
         },
         {
@@ -7457,7 +7125,7 @@ export type Marginfi = {
           }
         },
         {
-          "name": "emissionsTokenAccount",
+          "name": "emissionsVault",
           "writable": true,
           "pda": {
             "seeds": [
@@ -7506,50 +7174,52 @@ export type Marginfi = {
           }
         },
         {
-          "name": "emissionsFundingAccount",
+          "name": "feeState",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  101,
+                  101,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "destinationAccount",
           "docs": [
-            "NOTE: This is a TokenAccount, spl transfer will validate it.",
-            ""
+            "emissions mint (validated in handler)."
           ],
           "writable": true
         },
         {
           "name": "tokenProgram"
-        },
-        {
-          "name": "systemProgram",
-          "address": "11111111111111111111111111111111"
         }
       ],
-      "args": [
-        {
-          "name": "flags",
-          "type": "u64"
-        },
-        {
-          "name": "rate",
-          "type": "u64"
-        },
-        {
-          "name": "totalEmissions",
-          "type": "u64"
-        }
-      ]
+      "args": []
     },
     {
-      "name": "lendingPoolUpdateEmissionsParameters",
+      "name": "lendingPoolSetFixedOraclePrice",
       "docs": [
-        "(delegate_emissions_admin only)"
+        "(admin only)"
       ],
       "discriminator": [
-        55,
-        213,
-        224,
-        168,
-        153,
-        53,
-        197,
-        40
+        28,
+        126,
+        127,
+        127,
+        60,
+        37,
+        211,
+        125
       ],
       "accounts": [
         {
@@ -7559,8 +7229,7 @@ export type Marginfi = {
           ]
         },
         {
-          "name": "delegateEmissionsAdmin",
-          "writable": true,
+          "name": "admin",
           "signer": true,
           "relations": [
             "group"
@@ -7569,84 +7238,15 @@ export type Marginfi = {
         {
           "name": "bank",
           "writable": true
-        },
-        {
-          "name": "emissionsMint"
-        },
-        {
-          "name": "emissionsTokenAccount",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  101,
-                  109,
-                  105,
-                  115,
-                  115,
-                  105,
-                  111,
-                  110,
-                  115,
-                  95,
-                  116,
-                  111,
-                  107,
-                  101,
-                  110,
-                  95,
-                  97,
-                  99,
-                  99,
-                  111,
-                  117,
-                  110,
-                  116,
-                  95,
-                  115,
-                  101,
-                  101,
-                  100
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "bank"
-              },
-              {
-                "kind": "account",
-                "path": "emissionsMint"
-              }
-            ]
-          }
-        },
-        {
-          "name": "emissionsFundingAccount",
-          "writable": true
-        },
-        {
-          "name": "tokenProgram"
         }
       ],
       "args": [
         {
-          "name": "emissionsFlags",
+          "name": "price",
           "type": {
-            "option": "u64"
-          }
-        },
-        {
-          "name": "emissionsRate",
-          "type": {
-            "option": "u64"
-          }
-        },
-        {
-          "name": "additionalEmissions",
-          "type": {
-            "option": "u64"
+            "defined": {
+              "name": "wrappedI80F48"
+            }
           }
         }
       ]
@@ -8352,7 +7952,7 @@ export type Marginfi = {
               },
               {
                 "kind": "arg",
-                "path": "third_party_id.unwrap_or(0)"
+                "path": "thirdPartyId.unwrapOr(0)"
               }
             ]
           }
@@ -8710,8 +8310,7 @@ export type Marginfi = {
     {
       "name": "marginfiAccountUpdateEmissionsDestinationAccount",
       "docs": [
-        "(account authority) Set the wallet whose canonical ATA will receive permissionless emissions",
-        "withdrawals."
+        "(account authority) Set the wallet whose canonical ATA will receive off-chain emissions."
       ],
       "discriminator": [
         73,
@@ -8730,16 +8329,12 @@ export type Marginfi = {
         },
         {
           "name": "authority",
-          "signer": true,
-          "relations": [
-            "marginfiAccount"
-          ]
+          "signer": true
         },
         {
           "name": "destinationAccount",
           "docs": [
-            "User's earned emissions will be sent to the canonical ATA of this wallet.",
-            ""
+            "the canonical ATA for each emissions mint."
           ]
         }
       ],
@@ -8823,7 +8418,7 @@ export type Marginfi = {
           "type": {
             "option": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           }
@@ -8833,7 +8428,7 @@ export type Marginfi = {
           "type": {
             "option": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           }
@@ -9990,7 +9585,7 @@ export type Marginfi = {
               },
               {
                 "kind": "arg",
-                "path": "third_party_id.unwrap_or(0)"
+                "path": "thirdPartyId.unwrapOr(0)"
               }
             ]
           }
@@ -10838,7 +10433,7 @@ export type Marginfi = {
     {
       "code": 6042,
       "name": "unauthorized",
-      "msg": "unauthorized"
+      "msg": "Unauthorized"
     },
     {
       "code": 6043,
@@ -10893,12 +10488,12 @@ export type Marginfi = {
     {
       "code": 6053,
       "name": "vacated2",
-      "msg": "vacated2"
+      "msg": "Vacated2"
     },
     {
       "code": 6054,
       "name": "vacated3",
-      "msg": "vacated3"
+      "msg": "Vacated3"
     },
     {
       "code": 6055,
@@ -11668,7 +11263,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -11680,7 +11275,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -11691,7 +11286,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -11766,7 +11361,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -11780,7 +11375,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -11842,7 +11437,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -11883,7 +11478,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -11895,7 +11490,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -11910,7 +11505,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -11962,7 +11557,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -11980,7 +11575,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -12174,7 +11769,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -12189,7 +11784,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -12212,7 +11807,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -12224,8 +11819,10 @@ export type Marginfi = {
               "Liquidate as an additional safeguard, if the liquidation prices stored here were to be",
               "edited between start and end, it would completely break the risk engine. End validates that",
               "the lock is set, panics if not, and removes it - which prevents footguns if the cache was",
-              "e.g. accidently set to default. The lock is also removed when a Balance is closed with",
-              "repay_all or withdraw_all, since those Balances can be omitted from the risk check at End."
+              "e.g. accidently set to default. The lock is also removed when a Balance is closed via",
+              "withdraw_all, repay_all, or close_balance, but only when the account has",
+              "ACCOUNT_IN_RECEIVERSHIP set, so that operations on unrelated accounts sharing the same",
+              "bank do not interfere with an in-progress liquidation."
             ],
             "type": "u8"
           },
@@ -12245,7 +11842,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -12256,7 +11853,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -12267,7 +11864,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -12278,7 +11875,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           }
@@ -12301,7 +11898,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -12313,7 +11910,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -12325,7 +11922,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -12337,7 +11934,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -12503,7 +12100,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -12531,7 +12128,7 @@ export type Marginfi = {
             "name": "assetWeightInit",
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -12539,7 +12136,7 @@ export type Marginfi = {
             "name": "assetWeightMaint",
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -12547,7 +12144,7 @@ export type Marginfi = {
             "name": "liabilityWeightInit",
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -12555,7 +12152,7 @@ export type Marginfi = {
             "name": "liabilityWeightMaint",
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -12670,7 +12267,7 @@ export type Marginfi = {
             "type": {
               "option": {
                 "defined": {
-                  "name": "wrappedI80f48"
+                  "name": "wrappedI80F48"
                 }
               }
             }
@@ -12680,7 +12277,7 @@ export type Marginfi = {
             "type": {
               "option": {
                 "defined": {
-                  "name": "wrappedI80f48"
+                  "name": "wrappedI80F48"
                 }
               }
             }
@@ -12690,7 +12287,7 @@ export type Marginfi = {
             "type": {
               "option": {
                 "defined": {
-                  "name": "wrappedI80f48"
+                  "name": "wrappedI80F48"
                 }
               }
             }
@@ -12700,7 +12297,7 @@ export type Marginfi = {
             "type": {
               "option": {
                 "defined": {
-                  "name": "wrappedI80f48"
+                  "name": "wrappedI80F48"
                 }
               }
             }
@@ -12998,7 +12595,7 @@ export type Marginfi = {
             "name": "assetWeightInit",
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -13006,7 +12603,7 @@ export type Marginfi = {
             "name": "assetWeightMaint",
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -13163,7 +12760,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -13174,7 +12771,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           }
@@ -13277,7 +12874,7 @@ export type Marginfi = {
             "name": "shares",
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           }
@@ -13335,7 +12932,7 @@ export type Marginfi = {
             "name": "orderStartHealth",
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           }
@@ -13410,7 +13007,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -13422,7 +13019,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -13434,7 +13031,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -13479,7 +13076,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -13520,7 +13117,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -13531,7 +13128,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -13623,7 +13220,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -13637,7 +13234,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -13652,7 +13249,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -13667,7 +13264,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -13682,7 +13279,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -13697,7 +13294,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -13854,7 +13451,7 @@ export type Marginfi = {
             "name": "optimalUtilizationRate",
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -13862,7 +13459,7 @@ export type Marginfi = {
             "name": "plateauInterestRate",
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -13870,7 +13467,7 @@ export type Marginfi = {
             "name": "maxInterestRate",
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -13881,7 +13478,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -13892,7 +13489,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -13903,7 +13500,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -13914,7 +13511,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -13922,7 +13519,7 @@ export type Marginfi = {
             "name": "protocolOriginationFee",
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -14021,7 +13618,7 @@ export type Marginfi = {
             "name": "insuranceFeeFixedApr",
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -14029,7 +13626,7 @@ export type Marginfi = {
             "name": "insuranceIrFee",
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -14037,7 +13634,7 @@ export type Marginfi = {
             "name": "protocolFixedFeeApr",
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -14045,7 +13642,7 @@ export type Marginfi = {
             "name": "protocolIrFee",
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -14053,7 +13650,7 @@ export type Marginfi = {
             "name": "protocolOriginationFee",
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -14106,7 +13703,7 @@ export type Marginfi = {
             "type": {
               "option": {
                 "defined": {
-                  "name": "wrappedI80f48"
+                  "name": "wrappedI80F48"
                 }
               }
             }
@@ -14116,7 +13713,7 @@ export type Marginfi = {
             "type": {
               "option": {
                 "defined": {
-                  "name": "wrappedI80f48"
+                  "name": "wrappedI80F48"
                 }
               }
             }
@@ -14126,7 +13723,7 @@ export type Marginfi = {
             "type": {
               "option": {
                 "defined": {
-                  "name": "wrappedI80f48"
+                  "name": "wrappedI80F48"
                 }
               }
             }
@@ -14136,7 +13733,7 @@ export type Marginfi = {
             "type": {
               "option": {
                 "defined": {
-                  "name": "wrappedI80f48"
+                  "name": "wrappedI80F48"
                 }
               }
             }
@@ -14146,7 +13743,7 @@ export type Marginfi = {
             "type": {
               "option": {
                 "defined": {
-                  "name": "wrappedI80f48"
+                  "name": "wrappedI80F48"
                 }
               }
             }
@@ -14216,7 +13813,7 @@ export type Marginfi = {
             "name": "assetWeightInit",
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -14224,7 +13821,7 @@ export type Marginfi = {
             "name": "assetWeightMaint",
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -14302,7 +13899,7 @@ export type Marginfi = {
             "name": "assetWeightInit",
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -14310,7 +13907,7 @@ export type Marginfi = {
             "name": "assetWeightMaint",
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -14411,7 +14008,7 @@ export type Marginfi = {
         "(i.e. no implicit padding). This is important because `Pubkey` has alignment=1 while `u64`",
         "has alignment=8; using plain `repr(C)` would insert padding before the first `u64`."
       ],
-      "serialization": "bytemuckunsafe",
+      "serialization": "bytemuck",
       "repr": {
         "kind": "c",
         "packed": true
@@ -14975,7 +14572,7 @@ export type Marginfi = {
             "name": "price",
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           }
@@ -15025,7 +14622,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -15039,7 +14636,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -15054,7 +14651,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -15069,7 +14666,7 @@ export type Marginfi = {
             ],
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -15320,10 +14917,7 @@ export type Marginfi = {
           {
             "name": "emissionsDestinationAccount",
             "docs": [
-              "Set with `update_emissions_destination_account`. Emissions rewards can be withdrawn to the",
-              "canonical ATA of this wallet without the user's input (withdraw_emissions_permissionless).",
-              "If pubkey default, the user has not opted into this feature, and must claim emissions",
-              "manually (withdraw_emissions)."
+              "Wallet whose canonical ATA receives off-chain emissions distributions."
             ],
             "type": "pubkey"
           },
@@ -15501,7 +15095,7 @@ export type Marginfi = {
             "name": "stopLoss",
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -15509,7 +15103,7 @@ export type Marginfi = {
             "name": "takeProfit",
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -15926,7 +15520,7 @@ export type Marginfi = {
             }
           },
           {
-            "name": "paddingPart5a",
+            "name": "paddingPart5A",
             "type": {
               "array": [
                 "u8",
@@ -15935,7 +15529,7 @@ export type Marginfi = {
             }
           },
           {
-            "name": "paddingPart5c",
+            "name": "paddingPart5C",
             "type": {
               "array": [
                 "u8",
@@ -16778,7 +16372,7 @@ export type Marginfi = {
             "name": "stopLoss",
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -16786,7 +16380,7 @@ export type Marginfi = {
             "name": "takeProfit",
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -16904,7 +16498,7 @@ export type Marginfi = {
                 "name": "threshold",
                 "type": {
                   "defined": {
-                    "name": "wrappedI80f48"
+                    "name": "wrappedI80F48"
                   }
                 }
               },
@@ -16921,7 +16515,7 @@ export type Marginfi = {
                 "name": "threshold",
                 "type": {
                   "defined": {
-                    "name": "wrappedI80f48"
+                    "name": "wrappedI80F48"
                   }
                 }
               },
@@ -16938,7 +16532,7 @@ export type Marginfi = {
                 "name": "stopLoss",
                 "type": {
                   "defined": {
-                    "name": "wrappedI80f48"
+                    "name": "wrappedI80F48"
                   }
                 }
               },
@@ -16946,7 +16540,7 @@ export type Marginfi = {
                 "name": "takeProfit",
                 "type": {
                   "defined": {
-                    "name": "wrappedI80f48"
+                    "name": "wrappedI80F48"
                   }
                 }
               },
@@ -17236,7 +16830,7 @@ export type Marginfi = {
             "name": "assetWeightInit",
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -17244,7 +16838,7 @@ export type Marginfi = {
             "name": "assetWeightMaint",
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -17628,7 +17222,7 @@ export type Marginfi = {
             "name": "assetWeightInit",
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -17636,7 +17230,7 @@ export type Marginfi = {
             "name": "assetWeightMaint",
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -17716,7 +17310,7 @@ export type Marginfi = {
             "name": "assetWeightInit",
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -17724,7 +17318,7 @@ export type Marginfi = {
             "name": "assetWeightMaint",
             "type": {
               "defined": {
-                "name": "wrappedI80f48"
+                "name": "wrappedI80F48"
               }
             }
           },
@@ -17772,7 +17366,7 @@ export type Marginfi = {
             "type": {
               "option": {
                 "defined": {
-                  "name": "wrappedI80f48"
+                  "name": "wrappedI80F48"
                 }
               }
             }
@@ -17782,7 +17376,7 @@ export type Marginfi = {
             "type": {
               "option": {
                 "defined": {
-                  "name": "wrappedI80f48"
+                  "name": "wrappedI80F48"
                 }
               }
             }
@@ -17888,7 +17482,7 @@ export type Marginfi = {
       }
     },
     {
-      "name": "wrappedI80f48",
+      "name": "wrappedI80F48",
       "serialization": "bytemuck",
       "repr": {
         "kind": "c",

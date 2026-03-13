@@ -30,11 +30,6 @@ type Config = {
   AMOUNT: BN;
   WITHDRAW_ALL: boolean;
 
-  DRIFT_MARKET_INDEX: number;
-
-  /** Oracle address the Drift User uses. Can be read from bank.integrationAcc1 (spot market) */
-  DRIFT_ORACLE: PublicKey;
-
   LUT: PublicKey;
   MULTISIG_PAYER?: PublicKey; // May be omitted if not using squads
   NEW_REMAINING: BankAndOracles;
@@ -52,9 +47,6 @@ const config: Config = {
   ACCOUNT: new PublicKey("FvRj5WiHZh6mU9TSsgAeJinDeSAkBmPvbJHJCqXAxCsH"),
   AMOUNT: new BN(40 * 10 ** 6), // 40 USDC
   WITHDRAW_ALL: true,
-
-  DRIFT_MARKET_INDEX: 0, // USDC
-  DRIFT_ORACLE: new PublicKey("3t4JZcueEzTbVP6kLxXrL3VpWx45jDer4eqysweBchNH"),
 
   LUT: new PublicKey("FtQ5uKQvFoKQ27SWY15tgBeJQnGKmKGzWqDz7kGUbeiq"),
 

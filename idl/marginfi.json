@@ -1,5 +1,5 @@
 {
-  "address": "",
+  "address": "2jGhuVUuy3umdzByFx8sNWUAaf5vaeuDm78RDPEnhrMr",
   "metadata": {
     "name": "marginfi",
     "version": "0.1.8",
@@ -1678,6 +1678,7 @@
       "accounts": [
         {
           "name": "group",
+          "writable": true,
           "relations": [
             "marginfi_account",
             "bank"
@@ -1689,10 +1690,7 @@
         },
         {
           "name": "authority",
-          "signer": true,
-          "relations": [
-            "marginfi_account"
-          ]
+          "signer": true
         },
         {
           "name": "bank",
@@ -3175,10 +3173,36 @@
       ]
     },
     {
+      "name": "lending_account_clear_emissions",
+      "docs": [
+        "(permissionless) Zero out `emissions_outstanding` on a balance after emissions are disabled",
+        "on the bank."
+      ],
+      "discriminator": [
+        239,
+        4,
+        221,
+        98,
+        45,
+        167,
+        201,
+        244
+      ],
+      "accounts": [
+        {
+          "name": "marginfi_account",
+          "writable": true
+        },
+        {
+          "name": "bank"
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "lending_account_close_balance",
       "docs": [
-        "(account authority) Close a balance position with dust-level amounts. Claims outstanding",
-        "emissions before closing."
+        "(account authority) Close a balance position with dust-level amounts."
       ],
       "discriminator": [
         245,
@@ -3576,33 +3600,6 @@
       ]
     },
     {
-      "name": "lending_account_settle_emissions",
-      "docs": [
-        "(permissionless) Settle unclaimed emissions into a user's balance without withdrawing."
-      ],
-      "discriminator": [
-        161,
-        58,
-        136,
-        174,
-        242,
-        223,
-        156,
-        176
-      ],
-      "accounts": [
-        {
-          "name": "marginfi_account",
-          "writable": true
-        },
-        {
-          "name": "bank",
-          "writable": true
-        }
-      ],
-      "args": []
-    },
-    {
       "name": "lending_account_start_flashloan",
       "docs": [
         "(account authority) Start a flash loan. Must have a corresponding `end_flashloan` ix in the",
@@ -3749,283 +3746,6 @@
           }
         }
       ]
-    },
-    {
-      "name": "lending_account_withdraw_emissions",
-      "docs": [
-        "(account authority) Settle and withdraw emissions rewards to a destination token account."
-      ],
-      "discriminator": [
-        234,
-        22,
-        84,
-        214,
-        118,
-        176,
-        140,
-        170
-      ],
-      "accounts": [
-        {
-          "name": "group",
-          "relations": [
-            "marginfi_account",
-            "bank"
-          ]
-        },
-        {
-          "name": "marginfi_account",
-          "writable": true
-        },
-        {
-          "name": "authority",
-          "signer": true
-        },
-        {
-          "name": "bank",
-          "writable": true
-        },
-        {
-          "name": "emissions_mint",
-          "relations": [
-            "bank"
-          ]
-        },
-        {
-          "name": "emissions_auth",
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  101,
-                  109,
-                  105,
-                  115,
-                  115,
-                  105,
-                  111,
-                  110,
-                  115,
-                  95,
-                  97,
-                  117,
-                  116,
-                  104,
-                  95,
-                  115,
-                  101,
-                  101,
-                  100
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "bank"
-              },
-              {
-                "kind": "account",
-                "path": "emissions_mint"
-              }
-            ]
-          }
-        },
-        {
-          "name": "emissions_vault",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  101,
-                  109,
-                  105,
-                  115,
-                  115,
-                  105,
-                  111,
-                  110,
-                  115,
-                  95,
-                  116,
-                  111,
-                  107,
-                  101,
-                  110,
-                  95,
-                  97,
-                  99,
-                  99,
-                  111,
-                  117,
-                  110,
-                  116,
-                  95,
-                  115,
-                  101,
-                  101,
-                  100
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "bank"
-              },
-              {
-                "kind": "account",
-                "path": "emissions_mint"
-              }
-            ]
-          }
-        },
-        {
-          "name": "destination_account",
-          "writable": true
-        },
-        {
-          "name": "token_program"
-        }
-      ],
-      "args": []
-    },
-    {
-      "name": "lending_account_withdraw_emissions_permissionless",
-      "docs": [
-        "(permissionless) Withdraw emissions to the user's pre-configured emissions destination ATA."
-      ],
-      "discriminator": [
-        4,
-        174,
-        124,
-        203,
-        44,
-        49,
-        145,
-        150
-      ],
-      "accounts": [
-        {
-          "name": "group",
-          "relations": [
-            "marginfi_account",
-            "bank"
-          ]
-        },
-        {
-          "name": "marginfi_account",
-          "writable": true
-        },
-        {
-          "name": "bank",
-          "writable": true
-        },
-        {
-          "name": "emissions_mint",
-          "relations": [
-            "bank"
-          ]
-        },
-        {
-          "name": "emissions_auth",
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  101,
-                  109,
-                  105,
-                  115,
-                  115,
-                  105,
-                  111,
-                  110,
-                  115,
-                  95,
-                  97,
-                  117,
-                  116,
-                  104,
-                  95,
-                  115,
-                  101,
-                  101,
-                  100
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "bank"
-              },
-              {
-                "kind": "account",
-                "path": "emissions_mint"
-              }
-            ]
-          }
-        },
-        {
-          "name": "emissions_vault",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  101,
-                  109,
-                  105,
-                  115,
-                  115,
-                  105,
-                  111,
-                  110,
-                  115,
-                  95,
-                  116,
-                  111,
-                  107,
-                  101,
-                  110,
-                  95,
-                  97,
-                  99,
-                  99,
-                  111,
-                  117,
-                  110,
-                  116,
-                  95,
-                  115,
-                  101,
-                  101,
-                  100
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "bank"
-              },
-              {
-                "kind": "account",
-                "path": "emissions_mint"
-              }
-            ]
-          }
-        },
-        {
-          "name": "destination_account",
-          "docs": [
-            "registered on `marginfi_account`"
-          ],
-          "writable": true
-        },
-        {
-          "name": "token_program"
-        }
-      ],
-      "args": []
     },
     {
       "name": "lending_pool_accrue_bank_interest",
@@ -7330,78 +7050,26 @@
       "args": []
     },
     {
-      "name": "lending_pool_set_fixed_oracle_price",
+      "name": "lending_pool_reclaim_emissions_vault",
       "docs": [
-        "(admin only)"
-      ],
-      "discriminator": [
-        28,
-        126,
-        127,
-        127,
-        60,
-        37,
-        211,
-        125
-      ],
-      "accounts": [
-        {
-          "name": "group",
-          "relations": [
-            "bank"
-          ]
-        },
-        {
-          "name": "admin",
-          "signer": true,
-          "relations": [
-            "group"
-          ]
-        },
-        {
-          "name": "bank",
-          "writable": true
-        }
-      ],
-      "args": [
-        {
-          "name": "price",
-          "type": {
-            "defined": {
-              "name": "WrappedI80F48"
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "lending_pool_setup_emissions",
-      "docs": [
-        "(delegate_emissions_admin only)"
+        "(permissionless) Reclaim all remaining tokens from the emissions vault",
+        "to the global fee wallet ATA, and disable emissions on the bank."
       ],
       "discriminator": [
         206,
-        97,
-        120,
-        172,
-        113,
-        204,
-        169,
-        70
+        67,
+        186,
+        225,
+        41,
+        30,
+        95,
+        216
       ],
       "accounts": [
         {
           "name": "group",
           "relations": [
             "bank"
-          ]
-        },
-        {
-          "name": "delegate_emissions_admin",
-          "writable": true,
-          "signer": true,
-          "relations": [
-            "group"
           ]
         },
         {
@@ -7451,7 +7119,7 @@
           }
         },
         {
-          "name": "emissions_token_account",
+          "name": "emissions_vault",
           "writable": true,
           "pda": {
             "seeds": [
@@ -7500,50 +7168,52 @@
           }
         },
         {
-          "name": "emissions_funding_account",
+          "name": "fee_state",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  101,
+                  101,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "destination_account",
           "docs": [
-            "NOTE: This is a TokenAccount, spl transfer will validate it.",
-            ""
+            "emissions mint (validated in handler)."
           ],
           "writable": true
         },
         {
           "name": "token_program"
-        },
-        {
-          "name": "system_program",
-          "address": "11111111111111111111111111111111"
         }
       ],
-      "args": [
-        {
-          "name": "flags",
-          "type": "u64"
-        },
-        {
-          "name": "rate",
-          "type": "u64"
-        },
-        {
-          "name": "total_emissions",
-          "type": "u64"
-        }
-      ]
+      "args": []
     },
     {
-      "name": "lending_pool_update_emissions_parameters",
+      "name": "lending_pool_set_fixed_oracle_price",
       "docs": [
-        "(delegate_emissions_admin only)"
+        "(admin only)"
       ],
       "discriminator": [
-        55,
-        213,
-        224,
-        168,
-        153,
-        53,
-        197,
-        40
+        28,
+        126,
+        127,
+        127,
+        60,
+        37,
+        211,
+        125
       ],
       "accounts": [
         {
@@ -7553,8 +7223,7 @@
           ]
         },
         {
-          "name": "delegate_emissions_admin",
-          "writable": true,
+          "name": "admin",
           "signer": true,
           "relations": [
             "group"
@@ -7563,84 +7232,15 @@
         {
           "name": "bank",
           "writable": true
-        },
-        {
-          "name": "emissions_mint"
-        },
-        {
-          "name": "emissions_token_account",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  101,
-                  109,
-                  105,
-                  115,
-                  115,
-                  105,
-                  111,
-                  110,
-                  115,
-                  95,
-                  116,
-                  111,
-                  107,
-                  101,
-                  110,
-                  95,
-                  97,
-                  99,
-                  99,
-                  111,
-                  117,
-                  110,
-                  116,
-                  95,
-                  115,
-                  101,
-                  101,
-                  100
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "bank"
-              },
-              {
-                "kind": "account",
-                "path": "emissions_mint"
-              }
-            ]
-          }
-        },
-        {
-          "name": "emissions_funding_account",
-          "writable": true
-        },
-        {
-          "name": "token_program"
         }
       ],
       "args": [
         {
-          "name": "emissions_flags",
+          "name": "price",
           "type": {
-            "option": "u64"
-          }
-        },
-        {
-          "name": "emissions_rate",
-          "type": {
-            "option": "u64"
-          }
-        },
-        {
-          "name": "additional_emissions",
-          "type": {
-            "option": "u64"
+            "defined": {
+              "name": "WrappedI80F48"
+            }
           }
         }
       ]
@@ -8704,8 +8304,7 @@
     {
       "name": "marginfi_account_update_emissions_destination_account",
       "docs": [
-        "(account authority) Set the wallet whose canonical ATA will receive permissionless emissions",
-        "withdrawals."
+        "(account authority) Set the wallet whose canonical ATA will receive off-chain emissions."
       ],
       "discriminator": [
         73,
@@ -8724,16 +8323,12 @@
         },
         {
           "name": "authority",
-          "signer": true,
-          "relations": [
-            "marginfi_account"
-          ]
+          "signer": true
         },
         {
           "name": "destination_account",
           "docs": [
-            "User's earned emissions will be sent to the canonical ATA of this wallet.",
-            ""
+            "the canonical ATA for each emissions mint."
           ]
         }
       ],
@@ -12218,8 +11813,10 @@
               "Liquidate as an additional safeguard, if the liquidation prices stored here were to be",
               "edited between start and end, it would completely break the risk engine. End validates that",
               "the lock is set, panics if not, and removes it - which prevents footguns if the cache was",
-              "e.g. accidently set to default. The lock is also removed when a Balance is closed with",
-              "repay_all or withdraw_all, since those Balances can be omitted from the risk check at End."
+              "e.g. accidently set to default. The lock is also removed when a Balance is closed via",
+              "withdraw_all, repay_all, or close_balance, but only when the account has",
+              "ACCOUNT_IN_RECEIVERSHIP set, so that operations on unrelated accounts sharing the same",
+              "bank do not interfere with an in-progress liquidation."
             ],
             "type": "u8"
           },
@@ -14405,7 +14002,7 @@
         "(i.e. no implicit padding). This is important because `Pubkey` has alignment=1 while `u64`",
         "has alignment=8; using plain `repr(C)` would insert padding before the first `u64`."
       ],
-      "serialization": "bytemuckunsafe",
+      "serialization": "bytemuck",
       "repr": {
         "kind": "c",
         "packed": true
@@ -15314,10 +14911,7 @@
           {
             "name": "emissions_destination_account",
             "docs": [
-              "Set with `update_emissions_destination_account`. Emissions rewards can be withdrawn to the",
-              "canonical ATA of this wallet without the user's input (withdraw_emissions_permissionless).",
-              "If pubkey default, the user has not opted into this feature, and must claim emissions",
-              "manually (withdraw_emissions)."
+              "Wallet whose canonical ATA receives off-chain emissions distributions."
             ],
             "type": "pubkey"
           },

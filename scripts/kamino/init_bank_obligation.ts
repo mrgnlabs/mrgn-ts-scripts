@@ -16,7 +16,7 @@ import {
   getMint,
   TOKEN_2022_PROGRAM_ID,
 } from "@solana/spl-token";
-import { deriveBaseObligation, deriveUserState } from "./pdas";
+import { deriveBaseObligation, deriveReserveCollateralMint, deriveReserveCollateralSupply, deriveReserveLiquiditySupply, deriveUserState } from "./pdas";
 import { deriveLiquidityVaultAuthority } from "../common/pdas";
 
 /**
@@ -93,14 +93,13 @@ export async function initKaminoObligation(
   console.log(
     "init obligation for bank: " + config.BANK + " (mint: " + mint + ")",
   );
-  const [lendingVaultAuthority] = deriveLiquidityVaultAuthority(
+  const [liquidityVaultAuthority] = deriveLiquidityVaultAuthority(
     program.programId,
     config.BANK,
   );
   const [baseObligation] = deriveBaseObligation(
-    lendingVaultAuthority,
+    liquidityVaultAuthority,
     config.KAMINO_MARKET,
-    KLEND_PROGRAM_ID,
   );
 
   const reserveAcc = await user.kaminoProgram.account.reserve.fetch(reserve);

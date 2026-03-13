@@ -110,7 +110,7 @@ export async function withdrawDrift(
   }
 
   console.log("=== Drift Withdraw ===\n");
-  console.log("Bank mint:", mint);
+  console.log("Bank:", config.BANK.toString());
   console.log("Amount:", config.AMOUNT, "base units");
   console.log("Withdraw all:", config.WITHDRAW_ALL);
   console.log();

@@ -65,7 +65,7 @@ export async function depositDrift(
   const mint = bank.mint;
 
   console.log("=== Drift Deposit ===\n");
-  console.log("Bank mint:", mint);
+  console.log("Bank:", config.BANK.toString());
   console.log("Amount:", config.AMOUNT.toString(), "base units");
   console.log();
 

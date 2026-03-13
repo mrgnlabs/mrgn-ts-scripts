@@ -78,7 +78,7 @@ async function main() {
 
   console.log("=== Add Drift Bank ===\n");
   console.log("Config:", configFile);
-  console.log("Bank mint:", config.BANK_MINT);
+  console.log("Bank mint:", config.BANK_MINT.toString());
   console.log("Drift market index:", config.DRIFT_MARKET_INDEX);
   console.log();
   config.ADMIN = new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw");

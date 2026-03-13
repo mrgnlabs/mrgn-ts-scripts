@@ -77,7 +77,7 @@ export async function harvestDriftRewards(
   const mint = bank.mint;
 
   console.log("=== Drift Harvest Rewards ===\n");
-  console.log("Bank mint:", mint);
+  console.log("Bank:", config.BANK.toString());
   console.log();
 
   const [driftState] = deriveDriftStatePDA();

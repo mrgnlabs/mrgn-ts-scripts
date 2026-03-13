@@ -200,7 +200,7 @@ export async function addJuplendBank(
       tokenProgram,
     })
     .accountsPartial({
-      admin,
+      fTokenMint: config.F_TOKEN_MINT,
     })
     .remainingAccounts([oracleMeta, lendingMeta])
     .instruction();

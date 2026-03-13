@@ -110,14 +110,13 @@ export async function withdrawKamino(
     }
   );
 
-  const [lendingVaultAuthority] = deriveLiquidityVaultAuthority(
+  const [liquidityVaultAuthority] = deriveLiquidityVaultAuthority(
     program.programId,
     config.BANK
   );
   const [baseObligation] = deriveBaseObligation(
-    lendingVaultAuthority,
+    liquidityVaultAuthority,
     config.KAMINO_MARKET,
-    KLEND_PROGRAM_ID
   );
 
   const ata = getAssociatedTokenAddressSync(

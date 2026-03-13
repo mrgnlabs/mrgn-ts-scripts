@@ -11,9 +11,6 @@ import DriftIdl from "../idl/drift.json";
 import { Marginfi as MarginfiCurrent } from "../idl/marginfi";
 import marginfiIdlCurrent from "../idl/marginfi.json";
 
-import { Marginfi as MarginfiV1_6 } from "../idl/marginfi1.6";
-import marginfiIdlV1_6 from "../idl/marginfi1.6.json";
-
 import { loadKeypairFromFile, ReadOnlyWallet } from "../lib/utils";
 import { DEFAULT_API_URL, loadEnvFile } from "../scripts/utils";
 
@@ -34,13 +31,11 @@ export type User<IDL extends Idl> = {
  */
 type Versions = {
   current: MarginfiCurrent;
-  "1.6": MarginfiV1_6;
 };
 
 // Map each version to its corresponding JSON IDL object.
 const idlJsonMap: Record<keyof Versions, Idl> = {
   current: marginfiIdlCurrent as Idl,
-  "1.6": marginfiIdlV1_6 as Idl,
 };
 
 /**
@@ -63,17 +58,9 @@ export function commonSetup(
   programId: string,
   walletPath?: string,
   multisig?: PublicKey,
-  version?: "1.6"
-): User<MarginfiV1_6>;
-export function commonSetup(
-  sendTx: boolean,
-  programId: string,
-  walletPath?: string,
-  multisig?: PublicKey,
   version: keyof Versions = "current"
 ):
-  | User<MarginfiCurrent>
-  | User<MarginfiV1_6> {
+  | User<MarginfiCurrent> {
   const selectedJsonIdl = idlJsonMap[version];
   selectedJsonIdl.address = programId;
 
@@ -101,16 +88,7 @@ export function commonSetup(
   }
 
   // Instantiate the program with the selected IDL
-  if (version === "1.6") {
-    return {
-      program: new Program<MarginfiV1_6>(selectedJsonIdl as any, provider),
-      kaminoProgram: undefined,
-      driftProgram: undefined,
-      wallet,
-      provider,
-      connection,
-    };
-  } else {
+ {
     return {
       program: new Program<MarginfiCurrent>(selectedJsonIdl as any, provider),
       kaminoProgram: undefined,
