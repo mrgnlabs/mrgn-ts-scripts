@@ -60,10 +60,10 @@ const config: Config = {
   // USD1
   ORACLE: new PublicKey("FxdT3KvBU4Ect6BqcJPvRRzKXDjk9PVc3ybb874k7M5j"),
   BANK_MINT: new PublicKey("USD1ttGY1N17NEEHLmELoaybftRBUSErhqYiQzvEmuB"),
-  KAMINO_RESERVE: new PublicKey("6vKCRnEzrxRS1NybsMVEyNE3ztFAxCz6WusiiGft1PbA"),
-  KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"),
+  KAMINO_RESERVE: new PublicKey("6ekGhgbrVyL86SkFUjvoMyVNY4sFrfDbu6KCRhWkTUwS"),
+  KAMINO_MARKET: new PublicKey("DxXdAyU3kCjnyggvHmY5nAwg5cRbbmdyX3npfDMjjMek"),
 
-  SEED: 42,
+  SEED: 43,
   MULTISIG_PAYER: new PublicKey("CYXEgwbPHu2f9cY3mcUkinzDoDcsSan7myh1uBvYRbEw"),
 };
 
