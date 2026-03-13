@@ -132,8 +132,8 @@ export async function addDriftBank(
   // Build drift bank config
   const driftConfig: DriftConfigCompact = {
     oracle: config.ORACLE,
-    assetWeightInit: bigNumberToWrappedI80F48(0.75), // 75%
-    assetWeightMaint: bigNumberToWrappedI80F48(0.85), // 85%
+    assetWeightInit: bigNumberToWrappedI80F48(0.55),
+    assetWeightMaint: bigNumberToWrappedI80F48(0.65),
     depositLimit: new BN(config.DEPOSIT_LIMIT ?? 10_000_000_000),
     oracleSetup: config.ORACLE_SETUP,
     operationalState: {
