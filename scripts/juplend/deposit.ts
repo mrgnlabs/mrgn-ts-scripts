@@ -11,22 +11,20 @@ import {
   getMint,
   createAssociatedTokenAccountIdempotentInstruction,
 } from "@solana/spl-token";
-import { deriveDriftStatePDA, deriveSpotMarketVaultPDA } from "./lib/utils";
+import {
+  deriveJuplendCpiAccounts,
+  findJuplendLendingAdminPda,
+} from "./lib/utils";
 import { commonSetup } from "../../lib/common-setup";
 import { bs58 } from "@switchboard-xyz/common";
 
-const sendTx = true;
+const sendTx = false;
 
 type Config = {
   PROGRAM_ID: string;
   BANK: PublicKey;
   ACCOUNT: PublicKey;
   AMOUNT: BN;
-
-  DRIFT_MARKET_INDEX: number;
-
-  /** Oracle address the Drift User uses. Can be read from bank.integrationAcc1 */
-  DRIFT_ORACLE: PublicKey;
 
   MULTISIG_PAYER?: PublicKey; // May be omitted if not using squads
 };
@@ -36,15 +34,13 @@ const config: Config = {
   BANK: new PublicKey("8qPLKaKb4F5BC6mVncKAryMp78yp5ZRGYnPkQbt9ikKt"),
   ACCOUNT: new PublicKey("89ViS63BocuvZx5NE5oS9tBJ4ZbKZe3GkvurxHuSqFhz"),
   AMOUNT: new BN(1 * 10 ** 5), // 0.1 USDC
-  DRIFT_MARKET_INDEX: 0, // USDC
-  DRIFT_ORACLE: new PublicKey("3t4JZcueEzTbVP6kLxXrL3VpWx45jDer4eqysweBchNH"),
 };
 
 async function main() {
-  await depositDrift(sendTx, config, "/keys/staging-deploy.json");
+  await depositJuplend(sendTx, config, "/keys/staging-deploy.json");
 }
 
-export async function depositDrift(
+export async function depositJuplend(
   sendTx: boolean,
   config: Config,
   walletPath: string,
@@ -61,18 +57,16 @@ export async function depositDrift(
   const wallet = user.wallet;
   const program = user.program;
 
-  const bank = await program.account.bank.fetch(config.BANK);
-  const mint = bank.mint;
+  const payerKey = sendTx ? wallet.publicKey : config.MULTISIG_PAYER;
 
-  console.log("=== Drift Deposit ===\n");
-  console.log("Bank:", config.BANK.toString());
-  console.log("Amount:", config.AMOUNT.toString(), "base units");
-  console.log();
+  if (!payerKey) {
+    throw new Error("MULTISIG_PAYER must be set when sendTx = false");
+  }
 
-  const [driftState] = deriveDriftStatePDA();
-  const [driftSpotMarketVault] = deriveSpotMarketVaultPDA(
-    config.DRIFT_MARKET_INDEX,
-  );
+  // Fetch bank to get mint and integration accounts
+  const bankData = await program.account.bank.fetch(config.BANK);
+  const mint = bankData.mint;
+  const juplendLending = bankData.integrationAcc1;
 
   // Detect token program
   let tokenProgram = TOKEN_PROGRAM_ID;
@@ -84,47 +78,72 @@ export async function depositDrift(
     console.log("Detected SPL Token mint");
   }
 
+  // Derive JupLend CPI accounts
+  const [lendingAdmin] = findJuplendLendingAdminPda();
+  const juplendAccounts = deriveJuplendCpiAccounts(mint, tokenProgram);
+
+  // Fetch Lending account
+  const lendingInfo = await connection.getAccountInfo(juplendLending);
+  if (!lendingInfo) {
+    throw new Error("JupLend Lending not found: " + juplendLending.toString());
+  }
+  const fTokenMint = new PublicKey(lendingInfo.data.slice(40, 72));
+  const supplyTokenReservesLiquidity = new PublicKey(
+    lendingInfo.data.slice(131, 163),
+  );
+  const lendingSupplyPositionOnLiquidity = new PublicKey(
+    lendingInfo.data.slice(163, 195),
+  );
+
   const signerTokenAccount = getAssociatedTokenAddressSync(
     mint,
-    wallet.publicKey,
+    payerKey,
     false,
     tokenProgram,
   );
 
-  // Create transaction with ATA creation
   const transaction = new Transaction();
 
+  // Create ATA idempotently
   transaction.add(
     createAssociatedTokenAccountIdempotentInstruction(
-      wallet.publicKey,
+      payerKey,
       signerTokenAccount,
-      wallet.publicKey,
+      payerKey,
       mint,
       tokenProgram,
     ),
   );
 
   const depositIx = await program.methods
-    .driftDeposit(config.AMOUNT)
+    .juplendDeposit(config.AMOUNT)
     .accounts({
       marginfiAccount: config.ACCOUNT,
+      signerTokenAccount,
       bank: config.BANK,
-      signerTokenAccount: signerTokenAccount,
-      driftState,
-      driftSpotMarketVault,
-      driftOracle: config.DRIFT_ORACLE,
-      tokenProgram: tokenProgram,
+      lendingAdmin,
+      supplyTokenReservesLiquidity,
+      lendingSupplyPositionOnLiquidity,
+      rateModel: juplendAccounts.rateModel,
+      vault: juplendAccounts.vault,
+      liquidity: juplendAccounts.liquidity,
+      liquidityProgram: juplendAccounts.liquidityProgram,
+      rewardsRateModel: juplendAccounts.rewardsRateModel,
+      tokenProgram,
+    })
+    .accountsPartial({
+      fTokenMint,
     })
     .instruction();
 
   transaction.add(depositIx);
 
   // Simulate
-  transaction.feePayer = wallet.publicKey;
+  transaction.feePayer = payerKey;
   const { blockhash } = await connection.getLatestBlockhash();
   transaction.recentBlockhash = blockhash;
 
-  console.log("Simulating driftDeposit...");
+  console.log("Simulating juplendDeposit...");
   const simulation = await connection.simulateTransaction(transaction);
 
   console.log("\nProgram Logs:");
@@ -141,35 +160,25 @@ export async function depositDrift(
   console.log();
 
   if (sendTx) {
-    try {
-      console.log("Executing transaction...");
-      const signature = await sendAndConfirmTransaction(
-        connection,
-        transaction,
-        [wallet.payer],
-      );
-      console.log("Signature:", signature);
-      console.log("✓ Deposit successful!");
-    } catch (error) {
-      console.error("Transaction failed:", error);
-    }
+    const signature = await sendAndConfirmTransaction(connection, transaction, [
+      wallet.payer,
+    ]);
+    console.log("Signature:", signature);
+    console.log("Deposit successful!");
   } else {
-    transaction.feePayer = config.MULTISIG_PAYER; // Set the fee payer to Squads wallet
-    const { blockhash } = await connection.getLatestBlockhash();
-    transaction.recentBlockhash = blockhash;
-    const serializedTransaction = transaction.serialize({
+    const serialized = transaction.serialize({
       requireAllSignatures: false,
       verifySignatures: false,
     });
-    const base58Transaction = bs58.encode(serializedTransaction);
-    console.log("deposit to: " + config.BANK);
-    console.log("by account: " + config.ACCOUNT);
-    console.log("Base58-encoded transaction:", base58Transaction);
+    console.log("deposit to:", config.BANK.toString());
+    console.log("by account:", config.ACCOUNT.toString());
+    console.log("Base58-encoded transaction:", bs58.encode(serialized));
   }
 }
 
 if (require.main === module) {
   main().catch((err) => {
     console.error(err);
+    process.exit(1);
   });
 }

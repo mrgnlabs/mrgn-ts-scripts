@@ -69,14 +69,13 @@ export async function depositKamino(sendTx: boolean, config: Config, walletPath:
   const mint = bank.mint;
   const reserve = bank.integrationAcc1;
 
-  const [lendingVaultAuthority] = deriveLiquidityVaultAuthority(
+  const [liquidityVaultAuthority] = deriveLiquidityVaultAuthority(
     program.programId,
     config.BANK
   );
   const [baseObligation] = deriveBaseObligation(
-    lendingVaultAuthority,
+    liquidityVaultAuthority,
     config.KAMINO_MARKET,
-    KLEND_PROGRAM_ID
   );
 
   const ata = getAssociatedTokenAddressSync(

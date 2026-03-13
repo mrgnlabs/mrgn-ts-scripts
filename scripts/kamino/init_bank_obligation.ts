@@ -22,7 +22,7 @@ import { deriveLiquidityVaultAuthority } from "../common/pdas";
 /**
  * If true, send the tx. If false, output the unsigned b58 tx to console.
  */
-const sendTx = false;
+const sendTx = true;
 
 type Config = {
   PROGRAM_ID: string;
@@ -33,7 +33,7 @@ type Config = {
   /** Pays flat sol fee to init and rent (generally the MS on mainnet) */
   FEE_PAYER?: PublicKey; // If omitted, defaults to ADMIN
   BANK: PublicKey;
-  KAMINO_MARKET: PublicKey;
+
   /** Oracle address the Kamino Reserve uses. Typically read from reserve.config.tokenInfo.scope */
   RESERVE_ORACLE: PublicKey;
   MULTISIG_PAYER?: PublicKey; // May be omitted if not using squads
@@ -45,16 +45,15 @@ const config: Config = {
 
   // BANK: new PublicKey("44WmBHm3bKvrwy1jnf9EkgX8hBT61Dz7Z9yfLCSmdEyy"), // USDS
   // BANK: new PublicKey("8u7NuUBxckF2ouC3XKFkuxurinBYQTQiTcXVyqqoyRgM"), // USDC
-  BANK: new PublicKey("24gdUT9SNqeizCD1dHXWgjpa6NnWSFD6TWPAnCFSJnAk"), // STKESOL
+  BANK: new PublicKey("8y23ks4ZdoKf6G4aiamXSXWerkEbo4U9Zdi2WmqbqSJY"), // USD1
   ADMIN: new PublicKey("CS3NzMknNWtjo2pq5dqp67hQYQ8wdLPt5m67oa5mBZUX"),
-  // KAMINO_MARKET: new PublicKey("6WEGfej9B9wjxRs6t4BYpb9iCXd8CpTpJ8fVSNzHCC5y"), // maple
-  KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"), // main
+  FEE_PAYER: new PublicKey("FbfXs6D1BGUqyz6ya5AfVi3eoyfhin6hfM9d7yt1WK3L"),
 
   RESERVE_ORACLE: new PublicKey("3t4JZcueEzTbVP6kLxXrL3VpWx45jDer4eqysweBchNH"),
 };
 
 async function main() {
-  await initKaminoObligation(sendTx, config, "/.config/stage/id.json");
+  await initKaminoObligation(sendTx, config, "/.config/arena/id.json");
 }
 
 export async function initKaminoObligation(
@@ -93,19 +92,19 @@ export async function initKaminoObligation(
   console.log(
     "init obligation for bank: " + config.BANK + " (mint: " + mint + ")",
   );
-  const [lendingVaultAuthority] = deriveLiquidityVaultAuthority(
+  const [liquidityVaultAuthority] = deriveLiquidityVaultAuthority(
     program.programId,
     config.BANK,
-  );
-  const [baseObligation] = deriveBaseObligation(
-    lendingVaultAuthority,
-    config.KAMINO_MARKET,
-    KLEND_PROGRAM_ID,
   );
 
   const reserveAcc = await user.kaminoProgram.account.reserve.fetch(reserve);
   const reserveFarmState = reserveAcc.farmCollateral;
+  const lendingMarket = reserveAcc.lendingMarket;
 
+  const [baseObligation] = deriveBaseObligation(
+    liquidityVaultAuthority,
+    lendingMarket,
+  );
   const ata = getAssociatedTokenAddressSync(
     mint,
     user.wallet.publicKey,
@@ -126,7 +125,7 @@ export async function initKaminoObligation(
         feePayer: config.FEE_PAYER ?? config.ADMIN,
         bank: config.BANK,
         signerTokenAccount: ata,
-        lendingMarket: config.KAMINO_MARKET,
+        lendingMarket,
         reserve: bank.integrationAcc1,
         scopePrices: config.RESERVE_ORACLE,
         reserveFarmState,
