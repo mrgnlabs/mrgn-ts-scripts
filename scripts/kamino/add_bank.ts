@@ -57,10 +57,10 @@ const config: Config = {
   // KAMINO_RESERVE: new PublicKey("D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59"), // usdc
   // KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"), // main
 
-  // STKESOL
-  ORACLE: new PublicKey("HaF6jK16UwZZt9iFXRUqpSMWUFzhUJaU8rmVtXcokoTZ"),
-  BANK_MINT: new PublicKey("stke7uu3fXHsGqKVVjKnkmj65LRPVrqr4bLG2SJg7rh"),
-  KAMINO_RESERVE: new PublicKey("2gFjdQLFaFqTKMv4nFGMAP4bX2F5KAsyiJn8yZQHPKSE"),
+  // USD1
+  ORACLE: new PublicKey("FxdT3KvBU4Ect6BqcJPvRRzKXDjk9PVc3ybb874k7M5j"),
+  BANK_MINT: new PublicKey("USD1ttGY1N17NEEHLmELoaybftRBUSErhqYiQzvEmuB"),
+  KAMINO_RESERVE: new PublicKey("6vKCRnEzrxRS1NybsMVEyNE3ztFAxCz6WusiiGft1PbA"),
   KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"),
 
   SEED: 42,
@@ -89,12 +89,12 @@ export async function addKaminoBank(
   const connection = user.connection;
 
   const bankConfig: KaminoConfigCompact = {
-    assetWeightInit: bigNumberToWrappedI80F48(0.65),
-    assetWeightMaint: bigNumberToWrappedI80F48(0.8),
-    depositLimit: new BN(2000000 * 10 ** 9),
+    assetWeightInit: bigNumberToWrappedI80F48(0.85),
+    assetWeightMaint: bigNumberToWrappedI80F48(0.9),
+    depositLimit: new BN(2500000 * 10 ** 6),
     operationalState: { operational: {} },
     riskTier: { collateral: {} },
-    totalAssetValueInitLimit: new BN(200000000),
+    totalAssetValueInitLimit: new BN(2500000),
     oracleMaxAge: 70,
     oracleMaxConfidence: 0,
     oracle: config.ORACLE,

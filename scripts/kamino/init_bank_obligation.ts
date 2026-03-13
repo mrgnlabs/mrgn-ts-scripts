@@ -16,13 +16,13 @@ import {
   getMint,
   TOKEN_2022_PROGRAM_ID,
 } from "@solana/spl-token";
-import { deriveBaseObligation, deriveReserveCollateralMint, deriveReserveCollateralSupply, deriveReserveLiquiditySupply, deriveUserState } from "./pdas";
+import { deriveBaseObligation, deriveUserState } from "./pdas";
 import { deriveLiquidityVaultAuthority } from "../common/pdas";
 
 /**
  * If true, send the tx. If false, output the unsigned b58 tx to console.
  */
-const sendTx = false;
+const sendTx = true;
 
 type Config = {
   PROGRAM_ID: string;
@@ -45,8 +45,9 @@ const config: Config = {
 
   // BANK: new PublicKey("44WmBHm3bKvrwy1jnf9EkgX8hBT61Dz7Z9yfLCSmdEyy"), // USDS
   // BANK: new PublicKey("8u7NuUBxckF2ouC3XKFkuxurinBYQTQiTcXVyqqoyRgM"), // USDC
-  BANK: new PublicKey("24gdUT9SNqeizCD1dHXWgjpa6NnWSFD6TWPAnCFSJnAk"), // STKESOL
+  BANK: new PublicKey("BtfZEcMywgzmQ1fj1mSzXPj2jpQX5Lpr2zZz6cV5WwXw"), // USD1
   ADMIN: new PublicKey("CS3NzMknNWtjo2pq5dqp67hQYQ8wdLPt5m67oa5mBZUX"),
+  FEE_PAYER: new PublicKey("FbfXs6D1BGUqyz6ya5AfVi3eoyfhin6hfM9d7yt1WK3L"),
   // KAMINO_MARKET: new PublicKey("6WEGfej9B9wjxRs6t4BYpb9iCXd8CpTpJ8fVSNzHCC5y"), // maple
   KAMINO_MARKET: new PublicKey("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF"), // main
 
@@ -54,7 +55,7 @@ const config: Config = {
 };
 
 async function main() {
-  await initKaminoObligation(sendTx, config, "/.config/stage/id.json");
+  await initKaminoObligation(sendTx, config, "/.config/arena/id.json");
 }
 
 export async function initKaminoObligation(
